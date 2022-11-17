@@ -1,4 +1,4 @@
-# Footnotes and citations 
+# Embracing uncertainty: The Bayesian approach {#embracing}
 
 ## Footnotes
 

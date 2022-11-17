@@ -1,0 +1,131 @@
+# The Bayesian approach in practice {#Bayesian} {-}
+
+## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England
+
+We now look at example into the hospital admission rates for chronic obstructive pulmonary disease (COPD) in England between 2001–2010. 
+
+In England, there are 324 local authority administrative areas each with an observed and expected number of cases. The expected numbers were calculated using indirect standardization by applying the age–sex specific rates for the whole of England to the age–sex population profile of each of
+the areas.
+
+
+### Reading in data and shapefiles
+To create SMR maps, we need to read in the relevant shapefiles. The files
+ `englandlocalauthority.shp` and `englandlocalauthority.dbf` contain the location, shape, and attributes of English local authorities. The functions `read.shp` and `read.dbf()` will read these shapefiles into `R`
+
+```{r read files}
+# Reading in borders
+# copd_shp <- read.shp(shp.name= "englandlocalauthority.shp")
+# copd_dbf <- read.dbf(dbf.name= "englandlocalauthority.dbf")
+
+```
+
+## Example 5.3: Fitting a Poisson regression model in Nimble
+
+```{r setup, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
+
+rm(list=ls())
+
+library("nimble")
+
+```
+
+The following code is used to fit the Poisson log-linear model seen in Chapter 2 Section ... using `Nimble`
+
+First, define the model in Nimble. 
+
+```{r Ex 5.3 model nimble, results='hide'}
+
+Example5_3Code <- nimbleCode({
+  for (i in 1:N) {
+    Y[i] ~ dpois(mu[i])
+    log(mu[i]) <- log(E[i]) + beta0 + beta1 * X1[i] + betad * X2[i]
+  }
+  
+  # Priors
+  beta0 ~ dnorm (0 , sd = 100)
+  beta1 ~ dnorm (0 , sd = 100)
+  betad ~ dnorm (0 , sd = 100)
+  
+  # Functions of interest:
+  base <- exp(beta0)
+  RR <- exp(beta1)
+})
+
+```
+
+Read the data and define the constants, data and initials lists for the `Nimble` model.
+
+```{r Ex 5.3 read data}
+
+data <- read.csv("data/DataExample53.csv", sep = ",")
+
+ex.const <- list(
+  N = 393,
+  E = data$exp_lungc65pls,
+  X1 = as.vector(scale(data$k3)),
+  X2 = as.vector(scale(data$k2))
+)
+
+ex.data <- list(Y = data$lungc65pls)
+
+inits <- function()
+  list(beta0 = rnorm(1),
+       beta1 = rnorm(1),
+       betad = rnorm(1))
+
+```
+
+
+Define the parameters' monitors and run the model.
+
+```{r Ex 5.3 run model, include = FALSE, results='hide'}
+
+#parameters to monitor
+params<-c("beta0","beta1","betad","base","RR")
+
+samples <- nimbleMCMC(
+  code = Example5_3Code,
+  data = ex.data,
+  constants = ex.const,
+  inits = inits,
+  monitors = params,
+  niter = 22000,
+  nburnin = 2000,
+  thin = 10,
+  WAIC = TRUE,
+  nchains = 2,
+  samplesAsCodaMCMC = TRUE
+)
+
+```
+
+Check the WAIC. 
+
+```{r Ex 5.3 WAIC}
+samples$WAIC
+```
+
+Show the trace plots and posterior summaries for each of the parameters.
+
+```{r Ex 5.3 traceplots}
+
+mvSamples <- samples$samples
+
+#trace plots of beta1
+plot(mvSamples[, c("beta1")])
+
+#trace plots of base
+plot(mvSamples[, c("base")])
+
+#trace plots of RR
+plot(mvSamples[, c("RR")])
+
+#posterior summary of base
+summary(mvSamples[, c("base")])
+
+#posterior summary of RR
+summary(mvSamples[, c("RR")])
+
+```
+
+
