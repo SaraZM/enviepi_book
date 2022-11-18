@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 The Bayesian approach in practice | Spatio-temporal methods in environmental epidemiology</title>
+  <meta name="description" content="Chapter 5 The Bayesian approach in practice | Spatio-temporal methods in environmental epidemiology" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 The Bayesian approach in practice | Spatio-temporal methods in environmental epidemiology" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/img/cover.jpg" />
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 The Bayesian approach in practice | Spatio-temporal methods in environmental epidemiology" />
+  
+  
+  <meta name="twitter:image" content="/img/cover.jpg" />
+
+<meta name="author" content="Gavin Shaddick and James V Zidek" />
+
+
+<meta name="date" content="2022-11-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="embracing.html"/>
+<link rel="next" href="sharing-your-book.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="preface-2nd-edition.html"><a href="preface-2nd-edition.html"><i class="fa fa-check"></i>Preface (2nd edition)</a></li>
+<li class="chapter" data-level="1" data-path="why.html"><a href="why.html"><i class="fa fa-check"></i><b>1</b> Why spatio-temporal epidemiology?</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="why.html"><a href="why.html#a-section"><i class="fa fa-check"></i><b>1.1</b> A section</a>
+<ul>
+<li class="chapter" data-level="" data-path="why.html"><a href="why.html#an-unnumbered-section"><i class="fa fa-check"></i>An unnumbered section</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="health-risks.html"><a href="health-risks.html"><i class="fa fa-check"></i><b>2</b> Modelling health risks</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="health-risks.html"><a href="health-risks.html#chapters-and-sub-chapters"><i class="fa fa-check"></i><b>2.1</b> Chapters and sub-chapters</a></li>
+<li class="chapter" data-level="2.2" data-path="health-risks.html"><a href="health-risks.html#captioned-figures-and-tables"><i class="fa fa-check"></i><b>2.2</b> Captioned figures and tables</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="importance.html"><a href="importance.html"><i class="fa fa-check"></i><b>3</b> Importance of uncertainty</a></li>
+<li class="chapter" data-level="4" data-path="embracing.html"><a href="embracing.html"><i class="fa fa-check"></i><b>4</b> Embracing uncertainty: The Bayesian approach</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="embracing.html"><a href="embracing.html#footnotes"><i class="fa fa-check"></i><b>4.1</b> Footnotes</a></li>
+<li class="chapter" data-level="4.2" data-path="embracing.html"><a href="embracing.html#citations"><i class="fa fa-check"></i><b>4.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="Bayesian.html"><a href="Bayesian.html"><i class="fa fa-check"></i><b>5</b> The Bayesian approach in practice</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="Bayesian.html"><a href="Bayesian.html#example-5.2-chronic-obstructive-pulmonary-disease-copd-in-england"><i class="fa fa-check"></i><b>5.1</b> Example 5.2: Chronic obstructive pulmonary disease (COPD) in England</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="Bayesian.html"><a href="Bayesian.html#reading-in-data-and-shapefiles"><i class="fa fa-check"></i><b>5.1.1</b> Reading in data and shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="Bayesian.html"><a href="Bayesian.html#example-5.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i><b>5.2</b> Example 5.3: Fitting a Poisson regression model in Nimble</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sharing-your-book.html"><a href="sharing-your-book.html"><i class="fa fa-check"></i><b>6</b> Sharing your book</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sharing-your-book.html"><a href="sharing-your-book.html#publishing"><i class="fa fa-check"></i><b>6.1</b> Publishing</a></li>
+<li class="chapter" data-level="6.2" data-path="sharing-your-book.html"><a href="sharing-your-book.html#pages"><i class="fa fa-check"></i><b>6.2</b> 404 pages</a></li>
+<li class="chapter" data-level="6.3" data-path="sharing-your-book.html"><a href="sharing-your-book.html#metadata-for-sharing"><i class="fa fa-check"></i><b>6.3</b> Metadata for sharing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatio-temporal methods in environmental epidemiology</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Bayesian" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> The Bayesian approach in practice<a href="Bayesian.html#Bayesian" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="example-5.2-chronic-obstructive-pulmonary-disease-copd-in-england" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Example 5.2: Chronic obstructive pulmonary disease (COPD) in England<a href="Bayesian.html#example-5.2-chronic-obstructive-pulmonary-disease-copd-in-england" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We now look at example into the hospital admission rates for chronic obstructive pulmonary disease (COPD) in England between 2001–2010.</p>
+<p>In England, there are 324 local authority administrative areas each with an observed and expected number of cases. The expected numbers were calculated using indirect standardisation by applying the age–sex specific rates for the whole of England to the age–sex population profile of each of
+the areas.</p>
+<div id="reading-in-data-and-shapefiles" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Reading in data and shapefiles<a href="Bayesian.html#reading-in-data-and-shapefiles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To create SMR maps, we need to read in the relevant shapefiles. The files
+<code>englandlocalauthority.shp</code> and <code>englandlocalauthority.dbf</code> contain the location, shape, and attributes of English local authorities. The functions <code>read.shp</code> and <code>read.dbf()</code> will read these shapefiles into <code>R</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="Bayesian.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading in borders</span></span>
+<span id="cb3-2"><a href="Bayesian.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># copd_shp &lt;- read.shp(shp.name= &quot;englandlocalauthority.shp&quot;)</span></span>
+<span id="cb3-3"><a href="Bayesian.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># copd_dbf &lt;- read.dbf(dbf.name= &quot;englandlocalauthority.dbf&quot;)</span></span></code></pre></div>
+</div>
+</div>
+<div id="example-5.3-fitting-a-poisson-regression-model-in-nimble" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Example 5.3: Fitting a Poisson regression model in Nimble<a href="Bayesian.html#example-5.3-fitting-a-poisson-regression-model-in-nimble" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>## nimble version 0.12.2 is loaded.
+## For more information on NIMBLE and a User Manual,
+## please visit https://R-nimble.org.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;nimble&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     simulate</code></pre>
+<p>The following code is used to fit the Poisson log-linear model seen in Chapter 2 Section … using <code>Nimble</code></p>
+<p>First, define the model in Nimble.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="Bayesian.html#cb7-1" aria-hidden="true" tabindex="-1"></a>Example5<span class="fl">.3</span>Code <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
+<span id="cb7-2"><a href="Bayesian.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb7-3"><a href="Bayesian.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    Y[i] <span class="sc">~</span> <span class="fu">dpois</span>(mu[i])</span>
+<span id="cb7-4"><a href="Bayesian.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(mu[i]) <span class="ot">&lt;-</span> <span class="fu">log</span>(E[i]) <span class="sc">+</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> X1[i] <span class="sc">+</span> betad <span class="sc">*</span> X2[i]</span>
+<span id="cb7-5"><a href="Bayesian.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-6"><a href="Bayesian.html#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="Bayesian.html#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Priors</span></span>
+<span id="cb7-8"><a href="Bayesian.html#cb7-8" aria-hidden="true" tabindex="-1"></a>  beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
+<span id="cb7-9"><a href="Bayesian.html#cb7-9" aria-hidden="true" tabindex="-1"></a>  beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
+<span id="cb7-10"><a href="Bayesian.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  betad <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
+<span id="cb7-11"><a href="Bayesian.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-12"><a href="Bayesian.html#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Functions of interest:</span></span>
+<span id="cb7-13"><a href="Bayesian.html#cb7-13" aria-hidden="true" tabindex="-1"></a>  base <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta0)</span>
+<span id="cb7-14"><a href="Bayesian.html#cb7-14" aria-hidden="true" tabindex="-1"></a>  RR <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta1)</span>
+<span id="cb7-15"><a href="Bayesian.html#cb7-15" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<p>Read the data and define the constants, data and initials lists for the <code>Nimble</code> model.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="Bayesian.html#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/DataExample53.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb8-2"><a href="Bayesian.html#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="Bayesian.html#cb8-3" aria-hidden="true" tabindex="-1"></a>ex.const <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb8-4"><a href="Bayesian.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="dv">393</span>,</span>
+<span id="cb8-5"><a href="Bayesian.html#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">E =</span> data<span class="sc">$</span>exp_lungc65pls,</span>
+<span id="cb8-6"><a href="Bayesian.html#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">X1 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k3)),</span>
+<span id="cb8-7"><a href="Bayesian.html#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">X2 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k2))</span>
+<span id="cb8-8"><a href="Bayesian.html#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="Bayesian.html#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="Bayesian.html#cb8-10" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> data<span class="sc">$</span>lungc65pls)</span>
+<span id="cb8-11"><a href="Bayesian.html#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="Bayesian.html#cb8-12" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="cf">function</span>()</span>
+<span id="cb8-13"><a href="Bayesian.html#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">beta0 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>),</span>
+<span id="cb8-14"><a href="Bayesian.html#cb8-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">beta1 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>),</span>
+<span id="cb8-15"><a href="Bayesian.html#cb8-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">betad =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>))</span></code></pre></div>
+<p>Define the parameters’ monitors and run the model.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="Bayesian.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#parameters to monitor</span></span>
+<span id="cb9-2"><a href="Bayesian.html#cb9-2" aria-hidden="true" tabindex="-1"></a>params<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;beta1&quot;</span>,<span class="st">&quot;betad&quot;</span>,<span class="st">&quot;base&quot;</span>,<span class="st">&quot;RR&quot;</span>)</span>
+<span id="cb9-3"><a href="Bayesian.html#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="Bayesian.html#cb9-4" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
+<span id="cb9-5"><a href="Bayesian.html#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example5<span class="fl">.3</span>Code,</span>
+<span id="cb9-6"><a href="Bayesian.html#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
+<span id="cb9-7"><a href="Bayesian.html#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> ex.const,</span>
+<span id="cb9-8"><a href="Bayesian.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
+<span id="cb9-9"><a href="Bayesian.html#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
+<span id="cb9-10"><a href="Bayesian.html#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">22000</span>,</span>
+<span id="cb9-11"><a href="Bayesian.html#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">2000</span>,</span>
+<span id="cb9-12"><a href="Bayesian.html#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">10</span>,</span>
+<span id="cb9-13"><a href="Bayesian.html#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-14"><a href="Bayesian.html#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
+<span id="cb9-15"><a href="Bayesian.html#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-16"><a href="Bayesian.html#cb9-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Defining model</code></pre>
+<pre><code>## Building model</code></pre>
+<pre><code>## Setting data and initial values</code></pre>
+<pre><code>## Running calculate on model
+##   [Note] Any error reports that follow may simply reflect missing values in model variables.</code></pre>
+<pre><code>## Checking model sizes and dimensions</code></pre>
+<pre><code>## Checking model calculations</code></pre>
+<pre><code>## Compiling
+##   [Note] This may take a minute.
+##   [Note] Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.</code></pre>
+<pre><code>## Running chain 1 ...</code></pre>
+<pre><code>## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|</code></pre>
+<pre><code>## Running chain 2 ...</code></pre>
+<pre><code>## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+##   [Warning] There are individual pWAIC values that are greater than 0.4. This may indicate that the WAIC estimate is unstable (Vehtari et al., 2017), at least in cases without grouping of data nodes or multivariate data nodes.</code></pre>
+<p>Check the WAIC.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Bayesian.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(samples)</span></code></pre></div>
+<pre><code>## List of 2
+##  $ samples:List of 2
+##   ..$ chain1: &#39;mcmc&#39; num [1:2000, 1:5] 1.02 1.01 1.01 1.02 1.01 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:5] &quot;RR&quot; &quot;base&quot; &quot;beta0&quot; &quot;beta1&quot; ...
+##   .. ..- attr(*, &quot;mcpar&quot;)= num [1:3] 1 2000 1
+##   ..$ chain2: &#39;mcmc&#39; num [1:2000, 1:5] 0.998 0.999 0.999 1.005 0.975 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:5] &quot;RR&quot; &quot;base&quot; &quot;beta0&quot; &quot;beta1&quot; ...
+##   .. ..- attr(*, &quot;mcpar&quot;)= num [1:3] 1 2000 1
+##   ..- attr(*, &quot;class&quot;)= chr &quot;mcmc.list&quot;
+##  $ WAIC   :Reference class &#39;waicList&#39; [package &quot;nimble&quot;] with 7 fields
+##   ..$ .CobjectInterface :Formal class &#39;uninitializedField&#39; [package &quot;methods&quot;] with 2 slots
+##   .. .. ..@ field    : chr &quot;.CobjectInterface&quot;
+##   .. .. ..@ className: chr &quot;ANY&quot;
+##   ..$ .generatorFunction:function (...)  
+##   ..$ nimbleListDef     :Reference class &#39;nimbleListDefClass&#39; [package &quot;nimble&quot;] with 3 fields
+##   .. ..$ types     :List of 3
+##   .. .. ..$ vars : chr [1:3] &quot;WAIC&quot; &quot;lppd&quot; &quot;pWAIC&quot;
+##   .. .. ..$ types: chr [1:3] &quot;double&quot; &quot;double&quot; &quot;double&quot;
+##   .. .. ..$ dims : num [1:3] 0 0 0
+##   .. ..$ className : chr &quot;waicList&quot;
+##   .. ..$ predefined: logi TRUE
+##   .. ..and 14 methods.
+##   ..$ nestedListGenList : list()
+##   ..$ WAIC              : num 3049
+##   ..$ lppd              : num -1514
+##   ..$ pWAIC             : num 10.3
+##   ..and 17 methods, of which 3 are  possibly relevant:
+##   ..  initialize, initialize#nimbleListBase, show#envRefClass</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Bayesian.html#cb23-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
+<pre><code>## nimbleList object of type waicList
+## Field &quot;WAIC&quot;:
+## [1] 3049.435
+## Field &quot;lppd&quot;:
+## [1] -1514.445
+## Field &quot;pWAIC&quot;:
+## [1] 10.27213</code></pre>
+<p>Show the traceplots and posterior summaries for each of the parameters.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="Bayesian.html#cb25-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
+<span id="cb25-2"><a href="Bayesian.html#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="Bayesian.html#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of beta1</span></span>
+<span id="cb25-4"><a href="Bayesian.html#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%205.3%20traceplots-1.png" width="672" /></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Bayesian.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of base</span></span>
+<span id="cb26-2"><a href="Bayesian.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%205.3%20traceplots-2.png" width="672" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="Bayesian.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of RR</span></span>
+<span id="cb27-2"><a href="Bayesian.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%205.3%20traceplots-3.png" width="672" /></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="Bayesian.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of base</span></span>
+<span id="cb28-2"><a href="Bayesian.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:2000
+## Thinning interval = 1 
+## Number of chains = 2 
+## Sample size per chain = 2000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##           Mean             SD       Naive SE Time-series SE 
+##      1.1288535      0.0123609      0.0001954      0.0001954 
+## 
+## 2. Quantiles for each variable:
+## 
+##  2.5%   25%   50%   75% 97.5% 
+## 1.105 1.120 1.128 1.137 1.154</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="Bayesian.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
+<span id="cb30-2"><a href="Bayesian.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:2000
+## Thinning interval = 1 
+## Number of chains = 2 
+## Sample size per chain = 2000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##           Mean             SD       Naive SE Time-series SE 
+##      1.0152654      0.0178661      0.0002825      0.0004574 
+## 
+## 2. Quantiles for each variable:
+## 
+##   2.5%    25%    50%    75%  97.5% 
+## 0.9811 1.0031 1.0154 1.0277 1.0495</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="embracing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sharing-your-book.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-Chpt5.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

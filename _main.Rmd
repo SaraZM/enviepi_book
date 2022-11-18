@@ -1,0 +1,420 @@
+--- 
+title: "Spatio-temporal methods in environmental epidemiology"
+author: "Gavin Shaddick and James V Zidek"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib]
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+cover-image: "img/cover.jpg"
+
+---
+
+# Introduction {-}
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+# Preface (2nd edition) {-}
+
+Lorem ipsum dolor sit amet. Id dolorem aliquam qui sunt quaerat non pariatur nemo vel modi velit. Rem fugiat quis nam voluptatem eius aut consequatur culpa sed quia quia est fugit perferendis qui voluptas reprehenderit aut molestiae adipisci. Et rerum doloribus aut quia atque id voluptas dolorum sed quaerat adipisci ut tempora repudiandae. Est odio officiis nam odit eaque hic adipisci impedit est ducimus vitae. </p><p>Sit molestias quod qui repellat provident sit maxime incidunt a dolor incidunt est dolor molestiae qui libero tempora qui eligendi voluptatibus. Qui commodi possimus id autem ratione aut voluptas inventore qui totam corrupti id repudiandae fuga. </p><p>Ut perferendis sequi ad saepe maiores et dolorum inventore sit quod enim ad quis consequuntur! At distinctio atque non numquam voluptatem ut fugiat fugiat est illum debitis quo saepe rerum nam labore consequatur non odio aperiam. Qui quia mollitia ea eveniet porro et labore exercitationem. Est dolorem voluptas et fugit atque vel adipisci rerum in voluptas debitis ea nemo nostrum? 
+
+<!--chapter:end:00-preface.Rmd-->
+
+# Why spatio-temporal epidemiology? {#why}
+
+All chapters start with a first-level heading followed by your chapter title, like the line above. There should be only one first-level heading (`#`) per .Rmd file.
+
+## A section
+
+All chapter sections start with a second-level (`##`) or higher heading followed by your section title, like the sections above and below here. You can have as many as you want within a chapter.
+
+### An unnumbered section {-}
+
+Chapters and sections are numbered by default. To un-number a heading, add a `{.unnumbered}` or the shorter `{-}` at the end of the heading, like in this section.
+
+<!--chapter:end:01-Chpt1.Rmd-->
+
+
+# Modelling health risks {#health-risks}
+
+Placeholder
+
+
+## Chapters and sub-chapters
+## Captioned figures and tables
+
+<!--chapter:end:02-Chpt2.Rmd-->
+
+# Importance of uncertainty {#importance}
+
+You can add parts to organize one or more book chapters together. Parts can be inserted at the top of an .Rmd file, before the first-level chapter heading in that same file. 
+
+Add a numbered part: `# (PART) Act one {-}` (followed by `# A chapter`)
+
+Add an unnumbered part: `# (PART\*) Act one {-}` (followed by `# A chapter`)
+
+Add an appendix as a special kind of un-numbered part: `# (APPENDIX) Other stuff {-}` (followed by `# A chapter`). Chapters in an appendix are prepended with letters instead of numbers.
+
+
+
+
+<!--chapter:end:03-Chpt3.Rmd-->
+
+# Embracing uncertainty: The Bayesian approach {#embracing}
+
+## Footnotes
+
+Footnotes are put inside the square brackets after a caret `^[]`. Like this one ^[This is a footnote.]. 
+
+## Citations
+
+Reference items in your bibliography file(s) using `@key`.
+
+For example, we are using the **bookdown** package [@R-bookdown] (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and **knitr** [@xie2015] (this citation was added manually in an external file book.bib). 
+Note that the `.bib` files need to be listed in the index.Rmd with the YAML `bibliography` key.
+
+
+The RStudio Visual Markdown Editor can also make it easier to insert citations: <https://rstudio.github.io/visual-markdown-editing/#/citations>
+
+<!--chapter:end:04-Chpt4.Rmd-->
+
+# The Bayesian approach in practice {#Bayesian} 
+
+
+## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-}
+
+We now look at example into the hospital admission rates for chronic obstructive pulmonary disease (COPD) in England between 2001–2010. 
+
+In England, there are 324 local authority administrative areas each with an observed and expected number of cases. The expected numbers were calculated using indirect standardization by applying the age–sex specific rates for the whole of England to the age–sex population profile of each of
+the areas.
+
+### Preliminaries
+
+For this example, the following packages are needed `spdep, shapefiles, CARBayes` and `rgdal`.
+
+To install them you can run the following code
+
+```{r Ex 5.2 prelim install, eval=FALSE}
+
+install.packages("spdep")
+install.packages("shapefiles") 
+install.packages("CARBayes") 
+install.packages("rgdal") 
+
+```
+
+and load them 
+
+```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, results='hide'}
+
+require(spdep)
+require(shapefiles)
+require(CARBayes)
+require(rgdal)
+
+```
+
+### Reading in data and shapefiles {-}
+To create SMR maps, we need to read in the relevant shape files. 
+
+- `englandlocalauthority.shp` and `englandlocalauthority.dbf` contain the location, shape, and attributes of English local authorities. The functions `read.shp` and `read.dbf()` will read these shape files into `R`.
+- `copdmortalityobserved.csv` contains the **observed**  number of hospital admissions in England by local authority.
+- `copdmortalityexpected.csv` contains the **expected** number of hospital admissions in England by local authority.
+
+```{r read files }
+# Reading in borders
+shp <- read.shp("data/englandlocalauthority.shp")
+dbf <- read.dbf(dbf.name= "data/englandlocalauthority.dbf")
+
+# Reading in data
+observed <- read.csv(file="data/copdmortalityobserved.csv", row.names=1)
+expected <- read.csv(file="data/copdmortalityexpected.csv", row.names=1)
+
+```
+
+Print summaries of the observed and expected counts.
+
+```{r Ex 5.2 expected counts}
+
+# Printing first six rows of the observed counts 
+head(observed)
+
+# Printing first six rows of the expected counts 
+head(expected)
+
+# Summarising the observed counts 
+summary(observed)
+
+# Summarising the expected counts 
+summary(expected)
+
+```
+
+### Modelling the raw  standardized mortality rates (SMRs) 
+
+Calculate the raw SMRs as.
+
+$$ \text{SMR} = \dfrac{observed}{expected}$$
+
+```{r Ex 5.2 SMRs}
+
+SMR_raw <- observed[ ,-1]/expected
+
+# rename columns 
+names(SMR_raw) <- c("SMR2001", "SMR2002", "SMR2003", "SMR2004", "SMR2005", 
+                    "SMR2006", "SMR2007", "SMR2008", "SMR2009", "SMR2010")
+
+# Printing first six rows of raw SMRs
+head(SMR_raw)
+
+# Summarising raw SMRs
+summary(SMR_raw)
+
+```
+
+### Mapping the raw SMRs
+
+To plot the SMRs to a map we attach the values to the shapefiles. The function `combine.data.shapefile()` allows us to combine shapefiles to plot later.
+
+```{r Ex 5.2 combine smr and shapefiles}
+# TODO: WE need to find another function to combine the data, combine.data.shapefile
+# has been deprecated
+
+# Combine raw SMRs and shapefiles
+# 
+# SMRspatial_raw <-
+#   combine.data.shapefile(data = SMR_raw, # Dataset to attach
+#                          shp = shp, # Shapefile
+#                          dbf = dbf) # Database file
+
+```
+
+The function `spplot()` allows us to create map which colours the local authorities by the raw SMR estimate.
+
+```{r Ex 5.2 map}
+# TODO we cannot plot this until we fix the previous chunk
+
+# Creating breaks for legend in plot
+# range <- seq(min(SMR_raw$SMR2010)-0.01, max(SMR_raw$SMR2010)+0.01, length.out=11)
+# 
+# # Creating map of Raw SMRs in England in 2010
+# spplot(obj  = SMRspatial_raw,    # Spatial object to be plotted
+#        zcol = c("SMR2010"),  # Choice of the column  the object you are plotting. 
+#        at   = range,         # Break points for colours
+#        col  = "transparent", # Choice of colour
+#        col.regions = hsv(0.6, seq(0.2, 1, length.out=10), 1)) # Create a set of colours
+```
+
+### Modelling the smoothed SMRs with `CARBayes`
+ 
+To calculate the smoother SMRs, we first need to create a *neighborhood* strucure. The functions `poly2nb()` and `nb2mat()` can be used to create this
+
+```{r Ex 5.2 munge data}
+
+# Create the neighborhood
+W.nb <-
+  poly2nb(SMRspatial_raw, row.names = rownames(SMRspatial_raw))
+
+# Creates a matrix for following function call
+W.mat <- nb2mat(W.nb, style = "B")
+
+```
+
+Here, we use *first neighbors* to define the structure, so any local authority sharing a border are considered neighbors.
+
+The function `S.CARleroux()` allows us to use the neighborhood structure and performs a Bayesian analysis to create a smoothed set of observed values.
+
+
+```{r Ex 5.2 run CARBayes}
+# Running smoothing model
+model <-
+  S.CARleroux(
+    formula = observed$Y2010 ~ offset(log(expected$E2010)), # Model Formula
+    family = "poisson", # Choosing Poisson Regression
+    W = W.mat, # Neighborhood matrix
+    burnin = 20000, # Number of burn in samples
+    n.sample = 100000, # Number of MCMC samples
+    thin = 10,
+    fix.rho = TRUE,
+    rho = 1
+  )
+
+```
+
+We can extract the new smoother values from the model output and divide them by the expected values in order to compare both methods.
+
+ 
+```{r Ex 5.2 df smoothed SMRs }
+
+# Creating a dataset with smoothed SMRs in 2010
+SMR2010 <- model$fitted.values / expected$E2010
+SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
+```
+ 
+Check that there are no errors and summarize the results
+ 
+```{r EX 5.2 CARBayes summary}
+
+# Printing first six rows of smoothed SMRs
+head(SMR_smooth)
+
+# Summarizing smoothed SMRs
+summary(SMR_smooth)
+```
+
+```{r}
+
+###################################################
+### COPD in England - Mapping the smoothed SMRs ###
+###################################################
+# Combining smoothed SMRs and the shapefile
+SMRspatial_smooth <- combine.data.shapefile(data = SMR_smooth, # Dataset to attach
+                                            shp  = shp,        # Shapefile
+                                            dbf  = dbf)        # Database file
+
+# Creating map of Raw SMRs in England in 2010
+spplot(obj  = SMRspatial_smooth,    # Spatial object to be plotted
+       zcol = c("SMR2010"),         # Choice of the column  the object you are plotting. 
+       at   = range,                # Break points for colours
+       col  = "transparent",        # Choice of colour
+       col.regions = hsv(0.6, seq(0.2, 1, length.out=10), 1)) # Create a set of colours
+```
+
+
+
+## Example 5.3: Fitting a Poisson regression model in Nimble {-}
+
+```{r Ex 5.3 prelim load, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
+
+rm(list=ls())
+
+library("nimble")
+
+```
+
+The following code is used to fit the Poisson log-linear model seen in Chapter 2 Section ... using `Nimble`
+
+First, define the model in Nimble. 
+
+```{r Ex 5.3 model nimble, results='hide'}
+
+Example5_3Code <- nimbleCode({
+  for (i in 1:N) {
+    Y[i] ~ dpois(mu[i])
+    log(mu[i]) <- log(E[i]) + beta0 + beta1 * X1[i] + betad * X2[i]
+  }
+  
+  # Priors
+  beta0 ~ dnorm (0 , sd = 100)
+  beta1 ~ dnorm (0 , sd = 100)
+  betad ~ dnorm (0 , sd = 100)
+  
+  # Functions of interest:
+  base <- exp(beta0)
+  RR <- exp(beta1)
+})
+
+```
+
+Read the data and define the constants, data and initials lists for the `Nimble` model.
+
+```{r Ex 5.3 read data}
+
+data <- read.csv("data/DataExample53.csv", sep = ",")
+
+ex.const <- list(
+  N = 393,
+  E = data$exp_lungc65pls,
+  X1 = as.vector(scale(data$k3)),
+  X2 = as.vector(scale(data$k2))
+)
+
+ex.data <- list(Y = data$lungc65pls)
+
+inits <- function()
+  list(beta0 = rnorm(1),
+       beta1 = rnorm(1),
+       betad = rnorm(1))
+
+```
+
+
+Define the parameters' monitors and run the model.
+
+```{r Ex 5.3 run model, include = FALSE, results='hide'}
+
+#parameters to monitor
+params<-c("beta0","beta1","betad","base","RR")
+
+samples <- nimbleMCMC(
+  code = Example5_3Code,
+  data = ex.data,
+  constants = ex.const,
+  inits = inits,
+  monitors = params,
+  niter = 22000,
+  nburnin = 2000,
+  thin = 10,
+  WAIC = TRUE,
+  nchains = 2,
+  samplesAsCodaMCMC = TRUE
+)
+
+```
+
+Check the WAIC. 
+
+```{r Ex 5.3 WAIC}
+samples$WAIC
+```
+
+Show the trace plots and posterior summaries for each of the parameters.
+
+```{r Ex 5.3 traceplots}
+
+mvSamples <- samples$samples
+
+#trace plots of beta1
+plot(mvSamples[, c("beta1")])
+
+#trace plots of base
+plot(mvSamples[, c("base")])
+
+#trace plots of RR
+plot(mvSamples[, c("RR")])
+
+#posterior summary of base
+summary(mvSamples[, c("base")])
+
+#posterior summary of RR
+summary(mvSamples[, c("RR")])
+
+```
+
+
+
+<!--chapter:end:05-Chpt5.Rmd-->
+
+
+# Sharing your book
+
+Placeholder
+
+
+## Publishing
+## 404 pages
+## Metadata for sharing
+
+<!--chapter:end:06-Chpt6.Rmd-->
+
+`r if (knitr::is_html_output()) '
+# References {-}
+'`
+
+<!--chapter:end:07-references.Rmd-->
+
