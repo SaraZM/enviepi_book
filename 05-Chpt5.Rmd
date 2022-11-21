@@ -10,28 +10,16 @@ the areas.
 
 ### Preliminaries {-}
 
-For this example, the following packages are needed `spdep, shapefiles, CARBayes` and `rgdal`.
+For this example, the following packages are needed `ggplot2, sf` and `nimble`.
 
-To install them you can run the following code and then load them
-
-```{r Ex 5.2 prelim install, eval=FALSE, class.source = 'foldable'}
-
-install.packages("spdep")
-install.packages("shapefiles")
-install.packages("CARBayes")
-install.packages("rgdal")
-
-```
+Load the necessary packages.
 
 
 ```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 
-require(ggplot2)
-require(CARBayes)
-require(rgdal)
-require(spdep)
-require(sf)
-require(shapefiles)
+library(ggplot2)
+library(nimble)
+library(sf)
 
 
 ```
@@ -127,7 +115,7 @@ SMRspatial_raw <- merge(england, SMR_raw, by = "ID")
 
 Use `ggplot()` and `geom_sf()` to create a map which colours the local authorities by the raw SMR estimate.
 
-```{r Ex 5.2 map, class.source = 'foldable'}
+```{r Ex 5.2 map, class.source = 'foldable', fig.align = 'center'}
 
 # Creating breaks for legend in plot
 
@@ -151,99 +139,6 @@ ggplot() +
     rect = element_blank()
   ) 
 
-
-```
-
-### Modelling the smoothed SMRs with `CARBayes` {-}
- 
-To calculate the smoother SMRs, we first need to create a *neighborhood* structure. The functions `poly2nb()` and `nb2mat()` can be used to create this
-
-```{r Ex 5.2 neighborhood}
-
-# Create the neighborhood
-W.nb <-
-  poly2nb(SMRspatial_raw, row.names = rownames(SMRspatial_raw))
-
-# Creates a matrix for following function call
-W.mat <- nb2mat(W.nb, style = "B")
-
-```
-
-Here, we use *first neighbors* to define the structure, so any local authority sharing a border are considered neighbors.
-
-The function `S.CARleroux()` allows us to use the neighborhood structure and performs a Bayesian analysis to create a smoothed set of observed values.
-
-
-```{r Ex 5.2 run CARBayes, results='hide', message = FALSE}
-
-# Running smoothing model
-
-model <-
-  S.CARleroux(
-    # Model Formula
-    formula = observed$Y2010 ~ offset(log(expected$E2010)),
-    # Choosing Poisson Regression
-    family = "poisson",
-    # Neighborhood matrix
-    W = W.mat,
-    # Number of burn in samples
-    burnin = 20000,
-    # Number of MCMC samples
-    n.sample = 100000,
-    thin = 10,
-    rho = 1
-  )
-
-```
-
-We can extract the new smoother values from the model output and divide them by the expected values in order to compare both methods.
-
- 
-```{r Ex 5.2 df smoothed SMRs, class.source = 'foldable' }
-
-# Creating a dataset with smoothed SMRs in 2010
-
-SMR2010 <- model$fitted.values / expected$E2010
-SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
-
-```
- 
-Check that there are no errors and summarize the results
- 
-```{r EX 5.2 CARBayes summary}
-
-# Printing first six rows of smoothed SMRs
-head(SMR_smooth)
-
-# Summarizing smoothed SMRs
-summary(SMR_smooth)
-
-```
-
-
-Use `ggplot()` and `geom_sf()` to plot the map of smoothed SMRs.
-
-
-```{r Ex 5.2 map smoothed SMRs, class.source = 'foldable'}
-
-SMR_smooth <- tibble::rownames_to_column(SMR_smooth, "ID")
-
-# Combining smoothed SMRs and the shapefile
-
-SMRspatial_smooth <- merge(england, SMR_smooth, by = "ID")
-
-ggplot() +
-  # Choose spatial object and column for plotting
-  geom_sf(data = SMRspatial_smooth, aes(fill = SMR2010)) +
-  # Break points for colours
-  scale_y_continuous(breaks = range) +
-  # Clear background and plot borders
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    rect = element_blank()
-  ) 
 
 ```
 
@@ -381,7 +276,7 @@ for (i in 1:9)
 
 Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.
 
-```{r Ex 5.2 MCMC posterior summary}
+```{r Ex 5.2 MCMC posterior summary, fig.align = 'center', fig.align = 'center'}
 
 # Posterior summaries of theta_i
 meantheta <- apply(theta, 2, mean)
@@ -490,7 +385,7 @@ Define the parameter monitors and run the model.
 # parameters to monitor
 params <- c("theta", "a", "b", "Y.fit")
 
-samples <- nimbleMCMC(
+mcmc.out <- nimbleMCMC(
   code = Example5_2Code,
   constants = constants,
   data = ex.data,
@@ -502,6 +397,7 @@ samples <- nimbleMCMC(
   thin = 30,
   WAIC = TRUE,
   nchains = 2,
+  summary = TRUE,
   samplesAsCodaMCMC = TRUE
 )
 
@@ -513,7 +409,7 @@ Check the WAIC.
 
 ```{r Ex 5.2 WAIC}
 
-samples$WAIC
+mcmc.out$WAIC
 
 ```
 
@@ -521,7 +417,7 @@ Show the trace plots and posterior summaries for each of the parameters.
 
 ```{r Ex 5.2 nimble traceplots}
 
-mvSamples <- samples$samples
+mvSamples <- mcmc.out$samples
 
 #trace plots of a
 plot(mvSamples[, c("a")])
@@ -536,9 +432,57 @@ for (i in 1:3)
   plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))])
 
 ```
+Now that we have checked the convergence of the chains we can plot the posterior mean and 95% CIs for each of the parameters.
+
+
+```{r}
+
+# Posterior summaries of theta_i
+
+post_summary <- mcmc.out$summary$all.chains  %>% as.data.frame() %>%
+  tibble::rownames_to_column("variable")
+
+# Plot the mean and 95% CIs for the thetas
+
+post_theta <-  post_summary[grepl("theta\\[", post_summary$variable), ]
+
+par(mfrow = c(1, 1))
+plot(
+  post_theta$Mean,
+  pch = 19,
+  cex = 0.8,
+  bty = "n",
+  xlab = "Borough",
+  ylab = "Posterior Summary Rate",
+  ylim = c(min(post_theta$`95%CI_low`), max(post_theta$`95%CI_upp`))
+)
+for (i in 1:N)
+  segments(i, post_theta$`95%CI_low`[i], i, post_theta$`95%CI_upp`[i])
+abline(h = 1, lwd = 2, lty = 2)
+
+# Posterior summary of fitted values
+post_fitted <-  post_summary[grepl("Y.fit\\[", post_summary$variable), ]
 
 
 
+# Plot mean and 95% CIs for the fitted values
+
+par(mfrow = c(1, 1))
+plot(
+  y,
+  post_fitted$Mean,
+  ylim = c(min(post_fitted$`95%CI_low`), max(post_fitted$`95%CI_upp`)),
+  xlab = "Observed",
+  ylab = "Fitted",
+  pch = 19,
+  cex = 0.7,
+  bty = "n"
+)
+for (i in 1:N)
+  segments(y[i], post_fitted$`95%CI_low`[i], y[i], post_fitted$`95%CI_upp`[i])
+abline(a = 0, b = 1)
+
+```
 
 ## Example 5.3: Fitting a Poisson regression model in `Nimble` {-}
 
