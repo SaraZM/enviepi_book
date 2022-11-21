@@ -37,3 +37,20 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Files constantly modified by bookdown
+*.yml
+*.html
+_main.Rmd
+*.pdf
+*.epub
+*.tex
+*.png
+*.js
+*.css
+
+
+
+
+
+
