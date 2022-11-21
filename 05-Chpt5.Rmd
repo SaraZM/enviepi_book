@@ -8,69 +8,73 @@ We now look at example into the hospital admission rates for chronic obstructive
 In England, there are 324 local authority administrative areas each with an observed and expected number of cases. The expected numbers were calculated using indirect standardization by applying the age–sex specific rates for the whole of England to the age–sex population profile of each of
 the areas.
 
-### Preliminaries
+### Preliminaries {-}
 
 For this example, the following packages are needed `spdep, shapefiles, CARBayes` and `rgdal`.
 
-To install them you can run the following code
+To install them you can run the following code and then load them
 
-```{r Ex 5.2 prelim install, eval=FALSE}
+```{r Ex 5.2 prelim install, eval=FALSE, class.source = 'foldable'}
 
-# install.packages("spdep")
-# install.packages("shapefiles") 
-# install.packages("CARBayes") 
-# install.packages("rgdal") 
+install.packages("spdep")
+install.packages("shapefiles")
+install.packages("CARBayes")
+install.packages("rgdal")
 
 ```
 
-and load them 
 
-```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, results='hide'}
+```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 
+require(ggplot2)
+require(CARBayes)
+require(rgdal)
 require(spdep)
 require(sf)
 require(shapefiles)
-require(CARBayes)
-require(rgdal)
+
 
 ```
 
 ### Reading in data and shapefiles {-}
-To create SMR maps, we need to read in the relevant shape files. 
+To create SMR maps, we need to read in the relevant shapefiles. 
 
-- `englandlocalauthority.shp` and `englandlocalauthority.dbf` contain the location, shape, and attributes of English local authorities. The functions `read.shp` and `read.dbf()` will read these shape files into `R`.
+- `englandlocalauthority.shp` and `englandlocalauthority.dbf` contain the location, shape, and attributes of English local authorities. The function `read_sf()` from the `sf` package  will read these shapefiles into `R`.
 - `copdmortalityobserved.csv` contains the **observed**  number of hospital admissions in England by local authority.
 - `copdmortalityexpected.csv` contains the **expected** number of hospital admissions in England by local authority.
 
-```{r read files }
+```{r Ex 5.2 read files, class.source = 'foldable' }
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
 
 # Reading in data
-observed <- read.csv(file="data/copdmortalityobserved.csv", row.names=1)
-expected <- read.csv(file="data/copdmortalityexpected.csv", row.names=1)
+observed <-
+  read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
+
+expected <-
+  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
 
 ```
 
 Print summaries of the observed and expected counts.
 
-```{r Ex 5.2 expected counts}
+```{r Ex 5.2 expected counts, class.source = 'foldable'}
 
-# Printing first six rows of the observed counts 
+# Printing first six rows of the observed counts
 head(observed)
 
-# Printing first six rows of the expected counts 
+# Printing first six rows of the expected counts
 head(expected)
 
-# Summarising the observed counts 
+# Summarising the observed counts
 summary(observed)
 
-# Summarising the expected counts 
+# Summarising the expected counts
 summary(expected)
 
 ```
 
-### Modelling the raw  standardized mortality rates (SMRs) 
+### Modelling the raw  standardized mortality rates (SMRs) {-}
 
 Calculate the raw SMRs as.
 
@@ -78,11 +82,22 @@ $$ \text{SMR} = \dfrac{observed}{expected}$$
 
 ```{r Ex 5.2 SMRs}
 
-SMR_raw <- observed[ ,-1]/expected
+SMR_raw <- observed[, -1] / expected
 
-# rename columns 
-names(SMR_raw) <- c("SMR2001", "SMR2002", "SMR2003", "SMR2004", "SMR2005", 
-                    "SMR2006", "SMR2007", "SMR2008", "SMR2009", "SMR2010")
+# rename columns
+names(SMR_raw) <-
+  c(
+    "SMR2001",
+    "SMR2002",
+    "SMR2003",
+    "SMR2004",
+    "SMR2005",
+    "SMR2006",
+    "SMR2007",
+    "SMR2008",
+    "SMR2009",
+    "SMR2010"
+  )
 
 # Printing first six rows of raw SMRs
 head(SMR_raw)
@@ -94,51 +109,56 @@ summary(SMR_raw)
 
 ```
 
-### Mapping the raw SMRs
+### Mapping the raw SMRs {-}
 
-To plot the SMRs to a map we attach the values to the shapefiles. The function `combine.data.shapefile()` allows us to combine shapefiles to plot later.
+Attach the values of the raw SMRs to the shapefiles. The function `merge()` allows us to combine a data frame with a shapefile to plot later.
 
-```{r Ex 5.2 combine smr and shapefiles}
-# TODO: WE need to find another function to combine the data, combine.data.shapefile
-# has been deprecated
+```{r Ex 5.2 combine smr and shapefiles, class.source = 'foldable'}
+
+# Convert row names to ID column
+
+SMR_raw <- tibble::rownames_to_column(SMR_raw, "ID")
 
 # Combine raw SMRs and shapefiles
 
-# Convert row names to ID column
-SMR_raw <- tibble::rownames_to_column(SMR_raw, "ID")
-
-
-SMRspatial_raw <- merge(england, SMR_raw, by = "ID") # Database file
+SMRspatial_raw <- merge(england, SMR_raw, by = "ID") 
 
 ```
 
-The function `spplot()` allows us to create map which colours the local authorities by the raw SMR estimate.
+Use `ggplot()` and `geom_sf()` to create a map which colours the local authorities by the raw SMR estimate.
 
-```{r Ex 5.2 map}
-# TODO we cannot plot this until we fix the previous chunk
+```{r Ex 5.2 map, class.source = 'foldable'}
 
 # Creating breaks for legend in plot
 
-range <- seq(min(SMR_raw$SMR2010)-0.01, max(SMR_raw$SMR2010)+0.01, length.out=11)
-# 
-# # Creating map of Raw SMRs in England in 2010
+range <-
+  seq(min(SMR_raw$SMR2010) - 0.01,
+      max(SMR_raw$SMR2010) + 0.01,
+      length.out = 11)
 
-ggplot() + 
-  geom_sf(data = SMRspatial_raw, aes(fill = SMR2010)) + # Choose spatial object and column for plotting
-  scale_y_continuous(breaks = range) + # Break points for colours 
-  theme(axis.text.x = element_blank(), # Clear background and plot borders
-        axis.text.y = element_blank(),
-        axis.ticks = element_blank(),
-        rect = element_blank()) 
+# Creating map of Raw SMRs in England in 2010
+
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = SMRspatial_raw, aes(fill = SMR2010)) + 
+  # Break points for colours
+  scale_y_continuous(breaks = range) + 
+  # Clear background and plot borders
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    rect = element_blank()
+  ) 
 
 
 ```
 
-### Modelling the smoothed SMRs with `CARBayes`
+### Modelling the smoothed SMRs with `CARBayes` {-}
  
-To calculate the smoother SMRs, we first need to create a *neighborhood* strucure. The functions `poly2nb()` and `nb2mat()` can be used to create this
+To calculate the smoother SMRs, we first need to create a *neighborhood* structure. The functions `poly2nb()` and `nb2mat()` can be used to create this
 
-```{r Ex 5.2 munge data}
+```{r Ex 5.2 neighborhood}
 
 # Create the neighborhood
 W.nb <-
@@ -154,15 +174,22 @@ Here, we use *first neighbors* to define the structure, so any local authority s
 The function `S.CARleroux()` allows us to use the neighborhood structure and performs a Bayesian analysis to create a smoothed set of observed values.
 
 
-```{r Ex 5.2 run CARBayes}
+```{r Ex 5.2 run CARBayes, results='hide', message = FALSE}
+
 # Running smoothing model
+
 model <-
   S.CARleroux(
-    formula = observed$Y2010 ~ offset(log(expected$E2010)), # Model Formula
-    family = "poisson", # Choosing Poisson Regression
-    W = W.mat, # Neighborhood matrix
-    burnin = 20000, # Number of burn in samples
-    n.sample = 100000, # Number of MCMC samples
+    # Model Formula
+    formula = observed$Y2010 ~ offset(log(expected$E2010)),
+    # Choosing Poisson Regression
+    family = "poisson",
+    # Neighborhood matrix
+    W = W.mat,
+    # Number of burn in samples
+    burnin = 20000,
+    # Number of MCMC samples
+    n.sample = 100000,
     thin = 10,
     rho = 1
   )
@@ -172,9 +199,10 @@ model <-
 We can extract the new smoother values from the model output and divide them by the expected values in order to compare both methods.
 
  
-```{r Ex 5.2 df smoothed SMRs }
+```{r Ex 5.2 df smoothed SMRs, class.source = 'foldable' }
 
 # Creating a dataset with smoothed SMRs in 2010
+
 SMR2010 <- model$fitted.values / expected$E2010
 SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
 
@@ -189,37 +217,346 @@ head(SMR_smooth)
 
 # Summarizing smoothed SMRs
 summary(SMR_smooth)
+
 ```
 
-```{r map smoothed SMRs}
+
+Use `ggplot()` and `geom_sf()` to plot the map of smoothed SMRs.
+
+
+```{r Ex 5.2 map smoothed SMRs, class.source = 'foldable'}
 
 SMR_smooth <- tibble::rownames_to_column(SMR_smooth, "ID")
 
 # Combining smoothed SMRs and the shapefile
 
-SMRspatial_smooth <- merge(england, SMR_smooth, by = "ID")        # Database file
+SMRspatial_smooth <- merge(england, SMR_smooth, by = "ID")
 
-ggplot() + 
-  geom_sf(data = SMRspatial_smooth, aes(fill = SMR2010)) + # Choose spatial object and column for plotting
-  scale_y_continuous(breaks = range) + # Break points for colours 
-  theme(axis.text.x = element_blank(), # Clear background and plot borders
-        axis.text.y = element_blank(),
-        axis.ticks = element_blank(),
-        rect = element_blank()) 
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = SMRspatial_smooth, aes(fill = SMR2010)) +
+  # Break points for colours
+  scale_y_continuous(breaks = range) +
+  # Clear background and plot borders
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    rect = element_blank()
+  ) 
+
+```
+
+### Modelling a Poisson-Gamma with an MCMC implemented in `R` {-}
+
+The following code shows how to implement the MCMC using only `R` for the COPD example.
+
+First, the constants are defined and the necessary vectors are initialized. 
+
+
+```{r Ex 5.2 MCMC const }
+
+# observations
+y <- observed$Y2010
+# offset
+E <- expected$E2010
+# Number of MCMC iterations
+L <- 80000
+
+## Initialize objects used in MCMC
+# Matrix for sampled values of parameter theta_i 
+theta <-
+  matrix(ncol = length(y), nrow = L)
+# Matrix for fitted values 
+fitted <- theta
+# Vector for sampled values of hyper-parameter a
+a <- c() 
+# Vector for sampled values of hyper-parameter b
+b <- c() 
+
+## Define constants
+
+# Sample size
+N <- length(y)
+# Parameter of exponential prior for a
+lambda_a <- 1
+# Parameter of exponential prior for b
+lambda_b <- 1
+# standard deviation of the proposal distribution of log a
+u <- 0.5 
+
+```
+
+
+Then, the initial values for all the parameters are defined.
+
+
+
+```{r Ex 5.2 MCMC init}
+
+theta[1, ] <- y / E
+# Initial value sampled from the prior for a
+a <- rexp(1, lambda_a)
+# Initial value sampled from the prior for b
+b <- rexp(1, lambda_b) 
+fitted[1, ] <- rpois(N, E * theta[1, ])
+
+```
+
+
+Once all the constants and initial values are set we can run the MCMC. 
+The following code shows the MCMC implementation of a Poisson-Gamma model using only `R`.
+
+
+```{r Ex 5.2 MCMC code}
+
+# Starting from l=2 as l=1 contains the initial values
+
+for(l in 2:L) {
+  # Sampling from the posterior full conditional of each theta_i
+  for (i in 1:N)
+    theta[l, i] <- rgamma(1, (y[i] + a[(l - 1)]), rate = (E[i] + b[(l -
+                                                                      1)]))
+  # Sampling from the posterior full conditional of b
+  # b[l] <- b[l-1]
+  # REVIEW: is this part of the comment?
+  b[l] <- rgamma(1, (N * a[(l - 1)] + 1), rate = (sum(theta[l, ]) + lambda_b))
+  # Metropolis-Hastings step to sample from the full conditional of "a"
+  # the new value receives the current value in case the proposed
+  # value is rejected
+  a[l] <- a[l - 1]
+  # Proposal in the log-scale
+  laprop <- rnorm(1, log(a[l - 1]), u)
+  aprop <- exp(laprop)
+  num <-
+    N * (aprop * (log(b[l])) - lgamma(aprop)) + (aprop - 1) * sum(log(theta[l, ])) -
+    aprop * lambda_a + log(aprop)
+  den <-
+    N * (a[l - 1] * (log(b[l])) - lgamma(a[l - 1])) +
+    (a[(l - 1)] - 1) * sum(log(theta[l, ])) -
+    a[(l - 1)] * lambda_a + log(a[(l - 1)])
+  ratio <- exp(num - den)
+  unif <- runif(1)
+  # Change the current value if the proposed value is accepted
+  if (unif < ratio)
+    a[l] <- aprop
+  fitted[l,] <- rpois(N, E * theta[l,])
+}
+
+```
+
+After running the MCMC, we should check if the chains have converged
+
+```{r Ex 5.2 MCMC convergence}
+
+# Number of burn in samples
+burnin <- 20000
+thin <- 30
+# MCMC samples
+seqaux <- seq(burnin, L, by = thin)
+
+# Trace-plots of the parameters
+xx <- seq(0, 6, length = 2000)
+
+par(mfrow = c(2, 2))
+# Plot for "a"
+plot(a[seqaux], type = "l", bty = "n")
+hist(a[seqaux], prob = 1, main = "")
+lines(xx, dexp(xx, lambda_a), col = 2, lwd = 2)
+
+# COMBAK: This chains are not looking great
+
+# Plot for "b"
+plot(b[seqaux], type = "l", bty = "n")
+hist(b[seqaux], prob = 1, main = "")
+lines(xx, dexp(xx, lambda_b), col = 2, lwd = 2)
+
+# Traceplots of theta's
+
+par(mfrow = c(3, 3))
+for (i in 1:9)
+  plot(theta[seqaux, i], type = "l", bty = "n")
+
+```
+
+Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.
+
+```{r Ex 5.2 MCMC posterior summary}
+
+# Posterior summaries of theta_i
+meantheta <- apply(theta, 2, mean)
+q025theta <- apply(theta, 2, function(x)
+  quantile(x, 0.025))
+q975theta <- apply(theta, 2, function(x)
+  quantile(x, 0.975))
+
+# Plot the mean and 95% CIs for the thetas
+
+par(mfrow = c(1, 1))
+plot(
+  meantheta,
+  pch = 19,
+  cex = 0.8,
+  bty = "n",
+  xlab = "Borough",
+  ylab = "Posterior Summary Rate",
+  ylim = c(min(q025theta), max(q975theta))
+)
+for (i in 1:N)
+  segments(i, q025theta[i], i, q975theta[i])
+abline(h = 1, lwd = 2, lty = 2)
+
+# Posterior summary of fitted values
+
+meanfit <- apply(fitted, 2, mean)
+q025fit <- apply(fitted, 2, function(x)
+  quantile(x, 0.025))
+q975fit <- apply(fitted, 2, function(x)
+  quantile(x, 0.975))
+
+# Plot mean and 95% CIs for the fitted values
+
+par(mfrow = c(1, 1))
+plot(
+  y,
+  meanfit,
+  ylim = c(min(q025fit), max(q975fit)),
+  xlab = "Observed",
+  ylab = "Fitted",
+  pch = 19,
+  cex = 0.7,
+  bty = "n"
+)
+for (i in 1:N)
+  segments(y[i], q025fit[i], y[i], q975fit[i])
+abline(a = 0, b = 1)
+
+```
+
+### Modelling a Poisson-Gamma with an `Nimble` {-}
+
+The following is the code for the Poisson-Gamma model implemented in `Nimble`.
+
+```{r Ex 5.2 model nimble, results='hide', warning=FALSE, message= FALSE}
+
+library("nimble")
+
+Example5_2Code <- nimbleCode({
+  for (i in 1:N) {
+    Y[i] ~ dpois(mu[i])
+    mu[i] <- E[i] * theta[i]
+    theta[i] ~ dgamma(a, b)
+    Y.fit[i] ~ dpois(mu[i])
+  }
+  
+  # Priors
+  a ~ dexp(lambda_a)
+  b ~ dexp(lambda_b)
+  
+  
+})
+
+```
+
+Define the constants, data and initials lists for the `Nimble` model.
+
+```{r Ex 5.2 nimble set constants and inits}
+
+constants <- list(
+  N = N,
+  E = E,
+  lambda_a = lambda_a,
+  lambda_b = lambda_b
+)
+ex.data <- list(Y = y)
+
+# Function to generate initial values
+inits <-
+  function()
+    list(
+      theta = rgamma(N, 1, 1),
+      a = rexp(1, lambda_a),
+      b = rexp(1, lambda_b),
+      Y.fit = rpois(N, E)
+    )
+
+
+```
+
+Define the parameter monitors and run the model.
+
+```{r Ex 5.2 run nimble, error = FALSE, message = FALSE, results='hide'}
+
+# parameters to monitor
+params <- c("theta", "a", "b", "Y.fit")
+
+samples <- nimbleMCMC(
+  code = Example5_2Code,
+  constants = constants,
+  data = ex.data,
+  # provide the combined data & constants as constants
+  inits = inits,
+  monitors = params,
+  niter = 50000,
+  nburnin = 20000,
+  thin = 30,
+  WAIC = TRUE,
+  nchains = 2,
+  samplesAsCodaMCMC = TRUE
+)
+
+
+```
+
+
+Check the WAIC. 
+
+```{r Ex 5.2 WAIC}
+
+samples$WAIC
+
+```
+
+Show the trace plots and posterior summaries for each of the parameters.
+
+```{r Ex 5.2 nimble traceplots}
+
+mvSamples <- samples$samples
+
+#trace plots of a
+plot(mvSamples[, c("a")])
+
+#trace plots of b
+plot(mvSamples[, c("b")])
+
+summary(mvSamples[, c("a", "b")])
+
+#trace plots of theta's
+for (i in 1:3)
+  plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))])
 
 ```
 
 
 
-## Example 5.3: Fitting a Poisson regression model in Nimble {-}
 
-```{r Ex 5.3 prelim load, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
+## Example 5.3: Fitting a Poisson regression model in `Nimble` {-}
+
+
+```{r Ex 5.3 clean, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
 
 rm(list=ls())
+
+```
+
+Load `nimble package`
+
+```{r Ex 5.3 prelim load, class.source = 'foldable', eval=FALSE}
 
 library("nimble")
 
 ```
+
 
 The following code is used to fit the Poisson log-linear model seen in Chapter 2 Section ... using `Nimble`
 
@@ -232,12 +569,12 @@ Example5_3Code <- nimbleCode({
     Y[i] ~ dpois(mu[i])
     log(mu[i]) <- log(E[i]) + beta0 + beta1 * X1[i] + betad * X2[i]
   }
-  
+
   # Priors
   beta0 ~ dnorm (0 , sd = 100)
   beta1 ~ dnorm (0 , sd = 100)
   betad ~ dnorm (0 , sd = 100)
-  
+
   # Functions of interest:
   base <- exp(beta0)
   RR <- exp(beta1)
@@ -268,12 +605,13 @@ inits <- function()
 ```
 
 
-Define the parameters' monitors and run the model.
+Define the parameter monitors and run the model.
 
-```{r Ex 5.3 run model, include = FALSE, results='hide'}
+```{r Ex 5.3 run model, error = FALSE, message = FALSE, results='hide'}
 
-#parameters to monitor
-params<-c("beta0","beta1","betad","base","RR")
+# Define parameters to monitor
+
+params <- c("beta0", "beta1", "betad", "base", "RR")
 
 samples <- nimbleMCMC(
   code = Example5_3Code,
@@ -294,7 +632,9 @@ samples <- nimbleMCMC(
 Check the WAIC. 
 
 ```{r Ex 5.3 WAIC}
+
 samples$WAIC
+
 ```
 
 Show the trace plots and posterior summaries for each of the parameters.

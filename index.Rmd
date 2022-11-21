@@ -3,7 +3,9 @@ title: "Spatio-temporal methods in environmental epidemiology"
 author: "Gavin Shaddick and James V Zidek"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
-documentclass: book
+output:
+  html_document:
+    code_folding: show
 bibliography: [book.bib]
 link-citations: yes
 github-repo: rstudio/bookdown-demo
