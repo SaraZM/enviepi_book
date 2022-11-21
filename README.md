@@ -1,10 +1,9 @@
 Welcome! 
 
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
+This is a repository that contains the code for the examples in Spatio-Temporal Methods in Environmental Epidemiology by Gavin Shaddick, James V. Zidek. 
 
-This template provides a skeleton file structure that you can edit to create your book. 
+The html file was based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
 
-The contents inside the .Rmd files provide some pointers to help you get started, but feel free to also delete the content in each file and start fresh.
 
 Additional resources:
 
