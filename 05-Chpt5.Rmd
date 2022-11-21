@@ -16,10 +16,10 @@ To install them you can run the following code
 
 ```{r Ex 5.2 prelim install, eval=FALSE}
 
-install.packages("spdep")
-install.packages("shapefiles") 
-install.packages("CARBayes") 
-install.packages("rgdal") 
+# install.packages("spdep")
+# install.packages("shapefiles") 
+# install.packages("CARBayes") 
+# install.packages("rgdal") 
 
 ```
 
@@ -28,6 +28,7 @@ and load them
 ```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, results='hide'}
 
 require(spdep)
+require(sf)
 require(shapefiles)
 require(CARBayes)
 require(rgdal)
@@ -43,8 +44,7 @@ To create SMR maps, we need to read in the relevant shape files.
 
 ```{r read files }
 # Reading in borders
-shp <- read.shp("data/englandlocalauthority.shp")
-dbf <- read.dbf(dbf.name= "data/englandlocalauthority.dbf")
+england <- read_sf("data/englandlocalauthority.shp")
 
 # Reading in data
 observed <- read.csv(file="data/copdmortalityobserved.csv", row.names=1)
@@ -90,6 +90,8 @@ head(SMR_raw)
 # Summarising raw SMRs
 summary(SMR_raw)
 
+
+
 ```
 
 ### Mapping the raw SMRs
@@ -101,11 +103,12 @@ To plot the SMRs to a map we attach the values to the shapefiles. The function `
 # has been deprecated
 
 # Combine raw SMRs and shapefiles
-# 
-# SMRspatial_raw <-
-#   combine.data.shapefile(data = SMR_raw, # Dataset to attach
-#                          shp = shp, # Shapefile
-#                          dbf = dbf) # Database file
+
+# Convert row names to ID column
+SMR_raw <- tibble::rownames_to_column(SMR_raw, "ID")
+
+
+SMRspatial_raw <- merge(england, SMR_raw, by = "ID") # Database file
 
 ```
 
@@ -115,14 +118,20 @@ The function `spplot()` allows us to create map which colours the local authorit
 # TODO we cannot plot this until we fix the previous chunk
 
 # Creating breaks for legend in plot
-# range <- seq(min(SMR_raw$SMR2010)-0.01, max(SMR_raw$SMR2010)+0.01, length.out=11)
+
+range <- seq(min(SMR_raw$SMR2010)-0.01, max(SMR_raw$SMR2010)+0.01, length.out=11)
 # 
 # # Creating map of Raw SMRs in England in 2010
-# spplot(obj  = SMRspatial_raw,    # Spatial object to be plotted
-#        zcol = c("SMR2010"),  # Choice of the column  the object you are plotting. 
-#        at   = range,         # Break points for colours
-#        col  = "transparent", # Choice of colour
-#        col.regions = hsv(0.6, seq(0.2, 1, length.out=10), 1)) # Create a set of colours
+
+ggplot() + 
+  geom_sf(data = SMRspatial_raw, aes(fill = SMR2010)) + # Choose spatial object and column for plotting
+  scale_y_continuous(breaks = range) + # Break points for colours 
+  theme(axis.text.x = element_blank(), # Clear background and plot borders
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        rect = element_blank()) 
+
+
 ```
 
 ### Modelling the smoothed SMRs with `CARBayes`
@@ -155,7 +164,6 @@ model <-
     burnin = 20000, # Number of burn in samples
     n.sample = 100000, # Number of MCMC samples
     thin = 10,
-    fix.rho = TRUE,
     rho = 1
   )
 
@@ -169,6 +177,7 @@ We can extract the new smoother values from the model output and divide them by 
 # Creating a dataset with smoothed SMRs in 2010
 SMR2010 <- model$fitted.values / expected$E2010
 SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
+
 ```
  
 Check that there are no errors and summarize the results
@@ -182,22 +191,22 @@ head(SMR_smooth)
 summary(SMR_smooth)
 ```
 
-```{r}
+```{r map smoothed SMRs}
 
-###################################################
-### COPD in England - Mapping the smoothed SMRs ###
-###################################################
+SMR_smooth <- tibble::rownames_to_column(SMR_smooth, "ID")
+
 # Combining smoothed SMRs and the shapefile
-SMRspatial_smooth <- combine.data.shapefile(data = SMR_smooth, # Dataset to attach
-                                            shp  = shp,        # Shapefile
-                                            dbf  = dbf)        # Database file
 
-# Creating map of Raw SMRs in England in 2010
-spplot(obj  = SMRspatial_smooth,    # Spatial object to be plotted
-       zcol = c("SMR2010"),         # Choice of the column  the object you are plotting. 
-       at   = range,                # Break points for colours
-       col  = "transparent",        # Choice of colour
-       col.regions = hsv(0.6, seq(0.2, 1, length.out=10), 1)) # Create a set of colours
+SMRspatial_smooth <- merge(england, SMR_smooth, by = "ID")        # Database file
+
+ggplot() + 
+  geom_sf(data = SMRspatial_smooth, aes(fill = SMR2010)) + # Choose spatial object and column for plotting
+  scale_y_continuous(breaks = range) + # Break points for colours 
+  theme(axis.text.x = element_blank(), # Clear background and plot borders
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        rect = element_blank()) 
+
 ```
 
 
