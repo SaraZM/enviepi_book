@@ -72,7 +72,7 @@ $$ \text{SMR} = \dfrac{observed}{expected}$$
 
 SMR_raw <- observed[, -1] / expected
 
-# rename columns
+# Rename columns
 names(SMR_raw) <-
   c(
     "SMR2001",
@@ -104,11 +104,9 @@ Attach the values of the raw SMRs to the shapefiles. The function `merge()` allo
 ```{r Ex 5.2 combine smr and shapefiles, class.source = 'foldable'}
 
 # Convert row names to ID column
-
 SMR_raw <- tibble::rownames_to_column(SMR_raw, "ID")
 
 # Combine raw SMRs and shapefiles
-
 SMRspatial_raw <- merge(england, SMR_raw, by = "ID") 
 
 ```
@@ -118,14 +116,12 @@ Use `ggplot()` and `geom_sf()` to create a map which colours the local authoriti
 ```{r Ex 5.2 map, class.source = 'foldable', fig.align = 'center'}
 
 # Creating breaks for legend in plot
-
 range <-
   seq(min(SMR_raw$SMR2010) - 0.01,
       max(SMR_raw$SMR2010) + 0.01,
       length.out = 11)
 
 # Creating map of Raw SMRs in England in 2010
-
 ggplot() +
   # Choose spatial object and column for plotting
   geom_sf(data = SMRspatial_raw, aes(fill = SMR2010)) + 
@@ -138,7 +134,6 @@ ggplot() +
     axis.ticks = element_blank(),
     rect = element_blank()
   ) 
-
 
 ```
 
@@ -170,7 +165,6 @@ a <- c()
 b <- c() 
 
 ## Define constants
-
 # Sample size
 N <- length(y)
 # Parameter of exponential prior for a
@@ -206,7 +200,6 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ```{r Ex 5.2 MCMC code}
 
 # Starting from l=2 as l=1 contains the initial values
-
 for(l in 2:L) {
   # Sampling from the posterior full conditional of each theta_i
   for (i in 1:N)
@@ -348,7 +341,6 @@ Example5_2Code <- nimbleCode({
   a ~ dexp(lambda_a)
   b ~ dexp(lambda_b)
   
-  
 })
 
 ```
@@ -374,7 +366,6 @@ inits <-
       b = rexp(1, lambda_b),
       Y.fit = rpois(N, E)
     )
-
 
 ```
 
@@ -435,15 +426,13 @@ for (i in 1:3)
 Now that we have checked the convergence of the chains we can plot the posterior mean and 95% CIs for each of the parameters.
 
 
-```{r}
+```{r Ex 5.2 posterior summary nimble}
 
 # Posterior summaries of theta_i
-
 post_summary <- mcmc.out$summary$all.chains  %>% as.data.frame() %>%
   tibble::rownames_to_column("variable")
 
 # Plot the mean and 95% CIs for the thetas
-
 post_theta <-  post_summary[grepl("theta\\[", post_summary$variable), ]
 
 par(mfrow = c(1, 1))
@@ -463,10 +452,7 @@ abline(h = 1, lwd = 2, lty = 2)
 # Posterior summary of fitted values
 post_fitted <-  post_summary[grepl("Y.fit\\[", post_summary$variable), ]
 
-
-
 # Plot mean and 95% CIs for the fitted values
-
 par(mfrow = c(1, 1))
 plot(
   y,
@@ -554,7 +540,6 @@ Define the parameter monitors and run the model.
 ```{r Ex 5.3 run model, error = FALSE, message = FALSE, results='hide'}
 
 # Define parameters to monitor
-
 params <- c("beta0", "beta1", "betad", "base", "RR")
 
 samples <- nimbleMCMC(
