@@ -181,6 +181,7 @@ Then, the initial values for all the parameters are defined.
 
 theta[1, ] <- y / E
 # Initial value sampled from the prior for a
+# REVIEW: In the example of the book theta ~ Ga(a,a) not Ga(a,b)
 a <- rexp(1, lambda_a)
 # Initial value sampled from the prior for b
 b <- rexp(1, lambda_b) 
