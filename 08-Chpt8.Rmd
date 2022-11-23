@@ -43,8 +43,7 @@ Example8_1Code <- nimbleCode({
   # Priors
   a ~ dexp(lambda_a)
   b ~ dexp(lambda_b)
-  beta0 ~ dnorm(0, 5)
-  
+
 })
 
 ```
