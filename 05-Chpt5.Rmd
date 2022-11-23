@@ -1,7 +1,7 @@
 # The Bayesian approach in practice {#Bayesian} 
 
 
-## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-}
+## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-}{Example-5.2}
 
 We now look at example into the hospital admission rates for chronic obstructive pulmonary disease (COPD) in England between 2001–2010. 
 
@@ -10,17 +10,14 @@ the areas.
 
 ### Preliminaries {-}
 
-For this example, the following packages are needed `ggplot2, sf` and `nimble`.
+For this example, the following packages are needed `ggplot2` and  `sf`.
 
 Load the necessary packages.
-
 
 ```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 
 library(ggplot2)
-library(nimble)
 library(sf)
-
 
 ```
 
@@ -180,7 +177,6 @@ u <- 0.5
 Then, the initial values for all the parameters are defined.
 
 
-
 ```{r Ex 5.2 MCMC init}
 
 theta[1, ] <- y / E
@@ -267,6 +263,8 @@ for (i in 1:9)
 
 ```
 
+<!-- TODO: Add effective size and paragraph about acceptance ratio -->
+
 Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.
 
 ```{r Ex 5.2 MCMC posterior summary, fig.align = 'center', fig.align = 'center'}
@@ -321,154 +319,6 @@ abline(a = 0, b = 1)
 
 ```
 
-### Modelling a Poisson-Gamma with an `Nimble` {-}
-
-The following is the code for the Poisson-Gamma model implemented in `Nimble`.
-
-```{r Ex 5.2 model nimble, results='hide', warning=FALSE, message= FALSE}
-
-library("nimble")
-
-Example5_2Code <- nimbleCode({
-  for (i in 1:N) {
-    Y[i] ~ dpois(mu[i])
-    mu[i] <- E[i] * theta[i]
-    theta[i] ~ dgamma(a, b)
-    Y.fit[i] ~ dpois(mu[i])
-  }
-  
-  # Priors
-  a ~ dexp(lambda_a)
-  b ~ dexp(lambda_b)
-  
-})
-
-```
-
-Define the constants, data and initials lists for the `Nimble` model.
-
-```{r Ex 5.2 nimble set constants and inits}
-
-constants <- list(
-  N = N,
-  E = E,
-  lambda_a = lambda_a,
-  lambda_b = lambda_b
-)
-ex.data <- list(Y = y)
-
-# Function to generate initial values
-inits <-
-  function()
-    list(
-      theta = rgamma(N, 1, 1),
-      a = rexp(1, lambda_a),
-      b = rexp(1, lambda_b),
-      Y.fit = rpois(N, E)
-    )
-
-```
-
-Define the parameter monitors and run the model.
-
-```{r Ex 5.2 run nimble, error = FALSE, message = FALSE, results='hide'}
-
-# parameters to monitor
-params <- c("theta", "a", "b", "Y.fit")
-
-mcmc.out <- nimbleMCMC(
-  code = Example5_2Code,
-  constants = constants,
-  data = ex.data,
-  # provide the combined data & constants as constants
-  inits = inits,
-  monitors = params,
-  niter = 50000,
-  nburnin = 20000,
-  thin = 30,
-  WAIC = TRUE,
-  nchains = 2,
-  summary = TRUE,
-  samplesAsCodaMCMC = TRUE
-)
-
-
-```
-
-
-Check the WAIC. 
-
-```{r Ex 5.2 WAIC}
-
-mcmc.out$WAIC
-
-```
-
-Show the trace plots and posterior summaries for each of the parameters.
-
-```{r Ex 5.2 nimble traceplots}
-
-mvSamples <- mcmc.out$samples
-
-#trace plots of a
-plot(mvSamples[, c("a")])
-
-#trace plots of b
-plot(mvSamples[, c("b")])
-
-summary(mvSamples[, c("a", "b")])
-
-#trace plots of theta's
-for (i in 1:3)
-  plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))])
-
-```
-Now that we have checked the convergence of the chains we can plot the posterior mean and 95% CIs for each of the parameters.
-
-
-```{r Ex 5.2 posterior summary nimble}
-
-# Posterior summaries of theta_i
-post_summary <- mcmc.out$summary$all.chains  %>% as.data.frame() %>%
-  tibble::rownames_to_column("variable")
-
-# Plot the mean and 95% CIs for the thetas
-post_theta <-  post_summary[grepl("theta\\[", post_summary$variable), ]
-
-par(mfrow = c(1, 1))
-plot(
-  post_theta$Mean,
-  pch = 19,
-  cex = 0.8,
-  bty = "n",
-  xlab = "Borough",
-  ylab = "Posterior Summary Rate",
-  ylim = c(min(post_theta$`95%CI_low`), max(post_theta$`95%CI_upp`))
-)
-for (i in 1:N)
-  segments(i, post_theta$`95%CI_low`[i], i, post_theta$`95%CI_upp`[i])
-abline(h = 1, lwd = 2, lty = 2)
-
-# Posterior summary of fitted values
-post_fitted <-  post_summary[grepl("Y.fit\\[", post_summary$variable), ]
-
-# Plot mean and 95% CIs for the fitted values
-par(mfrow = c(1, 1))
-plot(
-  y,
-  post_fitted$Mean,
-  ylim = c(min(post_fitted$`95%CI_low`), max(post_fitted$`95%CI_upp`)),
-  xlab = "Observed",
-  ylab = "Fitted",
-  pch = 19,
-  cex = 0.7,
-  bty = "n"
-)
-for (i in 1:N)
-  segments(y[i], post_fitted$`95%CI_low`[i], y[i], post_fitted$`95%CI_upp`[i])
-abline(a = 0, b = 1)
-
-```
 
 ## Example 5.3: Fitting a Poisson regression model in `Nimble` {-}
 
@@ -515,6 +365,8 @@ Example5_3Code <- nimbleCode({
 Read the data and define the constants, data and initials lists for the `Nimble` model.
 
 ```{r Ex 5.3 read data}
+
+# REVIEW: This is using another data set because I believe there are no covariates for the COPD data, am I right?
 
 data <- read.csv("data/DataExample53.csv", sep = ",")
 
