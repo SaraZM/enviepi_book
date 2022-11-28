@@ -1,14 +1,12 @@
 # The Bayesian approach in practice {#Bayesian} 
 
 
-## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-}{Example-5.2}
-
+## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-} 
 We now look at example into the hospital admission rates for chronic obstructive pulmonary disease (COPD) in England between 2001–2010. 
 
 In England, there are 324 local authority administrative areas each with an observed and expected number of cases. The expected numbers were calculated using indirect standardization by applying the age–sex specific rates for the whole of England to the age–sex population profile of each of
 the areas.
 
-### Preliminaries {-}
 
 For this example, the following packages are needed `ggplot2` and  `sf`.
 
@@ -21,7 +19,6 @@ library(sf)
 
 ```
 
-### Reading in data and shapefiles {-}
 To create SMR maps, we need to read in the relevant shapefiles. 
 
 - `englandlocalauthority.shp` and `englandlocalauthority.dbf` contain the location, shape, and attributes of English local authorities. The function `read_sf()` from the `sf` package  will read these shapefiles into `R`.
@@ -94,7 +91,6 @@ summary(SMR_raw)
 
 ```
 
-### Mapping the raw SMRs {-}
 
 Attach the values of the raw SMRs to the shapefiles. The function `merge()` allows us to combine a data frame with a shapefile to plot later.
 
@@ -431,7 +427,7 @@ samples <- nimbleMCMC(
 
 ```
 
-Compute the WAIC. 
+Check the WAIC. 
 
 ```{r Ex 5.3 WAIC}
 
