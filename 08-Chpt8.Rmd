@@ -4,7 +4,7 @@
 
 Following [Example-5.2] we look back at the hospital admission rates for COPD, in England for 2010. We can implement the same model we used on [Example-5.2] in `nimble`.
 
-```{r Ex 8.1 load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+```{r Ex 8.1 load data, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 
 # Load nimble
 library(nimble)
@@ -24,16 +24,17 @@ expected <-
 ```
 
 
-### Modelling a Poisson-Gamma with an `Nimble` {-}
+### Nimble {-}
 
 The following is the code for the Poisson-Gamma model implemented in `Nimble`.
 
-```{r Ex 8.1 model nimble, results='hide', warning=FALSE, message= FALSE}
+```{r Ex 8.1 nimble model, results='hide', warning=FALSE, message= FALSE}
 
 Example8_1Code <- nimbleCode({
   for (i in 1:N) {
     Y[i] ~ dpois(mu[i])
-    # REVIEW: There is an intercept in the book
+    # REVIEW: There is an intercept in the book, 
+    # but then we wouldn't be able to compare it to example 5.2
     mu[i] <- E[i] * theta[i]
     # REVIEW: Same as before, the example in the book has theta[i] ~ Ga(a,a)
     theta[i] ~ dgamma(a, b)
@@ -84,7 +85,7 @@ inits <-
 
 Define the parameter monitors and run the model.
 
-```{r Ex 8.1 run nimble, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 8.1 nimble run, error = FALSE, message = FALSE, results='hide'}
 
 # parameters to monitor
 params <- c("theta", "a", "b", "Y.fit")
@@ -109,11 +110,15 @@ mcmc.out <- nimbleMCMC(
 ```
 
 
-Check the WAIC. 
+Check the WAIC  and ESS.
 
-```{r Ex 8.1 WAIC}
-
+```{r Ex 8.1 nimble WAIC and ESS}
+print("WAIC")
 mcmc.out$WAIC
+
+print("min ESS")
+min(coda::effectiveSize(mcmc.out$samples))
+
 
 ```
 
@@ -140,7 +145,7 @@ for (i in 1:3)
 Now that we have checked the convergence of the chains we can plot the posterior mean and 95% CIs for each of the parameters.
 
 
-```{r Ex 8.1 posterior summary nimble}
+```{r Ex 8.1 nimble posterior summary}
 
 # Posterior summaries of theta_i
 post_summary <- mcmc.out$summary$all.chains  %>% as.data.frame() %>%
@@ -183,6 +188,144 @@ for (i in 1:N)
 abline(a = 0, b = 1)
 
 ```
+
+### Stan
+
+Load `stan` with options
+
+```{r Ex 8.1 stan load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+
+rm(list=ls())
+
+#loading rstan
+library(rstan) 
+library(loo) # To calculate WAIC and loo later
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+# Load data
+# Reading in borders
+england <- read_sf("data/englandlocalauthority.shp")
+
+# Reading in data
+observed <-
+  read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
+
+expected <-
+  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
+
+
+```
+
+Write the `stan` model. This model is in a separate file called `Example8_1.stan` that will be called later.
+
+```{r Ex 8.1 stan model, echo = FALSE}
+system("cat functions/Example8_1.stan")
+```
+
+
+Define the data for the model, similar to `nimble`. 
+
+```{r Ex 8.1 stan define data, error = FALSE, message = FALSE, results='hide'}
+# observations
+y <- observed$Y2010
+# offset
+E <- expected$E2010
+N <- length(y)
+
+# Define the data list 
+ex.data <- list(
+  N = length(y),
+  Y = y,
+  E = E,
+  lambda_a = 1,
+  lambda_b = 1
+)
+
+# Run the model in Stan
+
+mod0 <- stan(
+  file = "functions/Example8_1.stan",
+  data = ex.data,
+  chains = 3,
+  iter = 10000,
+  warmup = 3000,
+  thin = 14,
+  control = list(adapt_delta = 0.8, max_treedepth = 15),
+  init = "random",
+  pars = c("a", "b", "theta", "log_lik", "yfit"),
+  include = TRUE
+)
+
+```
+
+Compute the WAIC.
+
+```{r Ex 8.1 stan WAIC, message= FALSE, warning=FALSE}
+
+#computing WAIC using the package loo
+loglik0 <- extract_log_lik(mod0)
+waic0 <- waic(loglik0)
+waic0
+
+```
+
+
+Show the trace plots and posterior summaries of the parameters.
+
+```{r Ex 8.1 stan traceplots}
+
+#traceplots of the vector of coefficients beta
+traceplot(mod0,pars=c("a","b"))
+
+traceplot(mod0,pars=c("theta[1]", "theta[2]", "theta[3]"))
+```
+```{r Ex 8.1 stan posterior summary}
+
+summary_theta <-
+  summary(mod0, pars = c("theta"), probs = c(0.05, 0.95))$summary %>% as.data.frame()
+
+
+par(mfrow = c(1, 1))
+plot(
+  summary_theta$mean,
+  pch = 19,
+  cex = 0.8,
+  bty = "n",
+  xlab = "Borough",
+  ylab = "Posterior Summary Rate",
+  ylim = c(min(summary_theta$`5%`), max(summary_theta$`95%`))
+)
+for (i in 1:N)
+  segments(i, summary_theta$`5%`[i], i, summary_theta$`95%`[i])
+abline(h = 1, lwd = 2, lty = 2)
+
+# Posterior summary of fitted values
+
+summary_fit <-
+  summary(mod0, pars = c("yfit"), probs = c(0.05, 0.95))$summary %>% as.data.frame()
+
+
+# Plot mean and 95% CIs for the fitted values
+par(mfrow = c(1, 1))
+plot(
+  y,
+  summary_fit$mean,
+  ylim = c(min(summary_fit$`5%`), max(summary_fit$`95%`)),
+  xlab = "Observed",
+  ylab = "Fitted",
+  pch = 19,
+  cex = 0.7,
+  bty = "n"
+)
+for (i in 1:N)
+  segments(y[i], summary_fit$`5%`[i], y[i], summary_fit$`95%`[i])
+abline(a = 0, b = 1)
+```
+
+# Example 8.3: Fitting a conditional spatial model in NIMBLE
+
+## Nimble
 
 
 

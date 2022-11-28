@@ -266,6 +266,26 @@ for (i in 1:9)
 
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 
+Given the convergence issues, we can also check the estimated sampled size and Rhat using the package `coda`.
+
+```{r Ex 5.2 ESS and Rhat}
+
+print("ESS a:")
+coda::effectiveSize(a[seqaux]) 
+print("ESS b:")
+
+coda::effectiveSize(b[seqaux])
+
+print("ESS theta[1]:")
+coda::effectiveSize(theta[seqaux, 1])
+
+print("ESS theta[10]:")
+coda::effectiveSize(theta[seqaux, 10])
+  
+```
+
+The variances for the parameters `a` and `b` is lower than the recommended minimum of 100. We will go back to this in Chapter 8. 
+
 Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.
 
 ```{r Ex 5.2 MCMC posterior summary, fig.align = 'center', fig.align = 'center'}
@@ -367,7 +387,7 @@ Read the data and define the constants, data and initials lists for the `Nimble`
 
 ```{r Ex 5.3 read data}
 
-# REVIEW: This is using another data set because I believe there are no covariates for the COPD data, am I right?
+# REVIEW: Is this another version of the COPD data? Is there a data dictionary for this dataset?
 
 data <- read.csv("data/DataExample53.csv", sep = ",")
 
@@ -411,7 +431,7 @@ samples <- nimbleMCMC(
 
 ```
 
-Check the WAIC. 
+Compute the WAIC. 
 
 ```{r Ex 5.3 WAIC}
 
