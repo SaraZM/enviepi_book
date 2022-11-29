@@ -12,7 +12,7 @@ For this example, the following packages are needed `ggplot2` and  `sf`.
 
 Load the necessary packages.
 
-```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE}
 
 library(ggplot2)
 library(sf)
@@ -348,7 +348,7 @@ rm(list=ls())
 
 Load `nimble package`
 
-```{r Ex 5.3 prelim load, class.source = 'foldable', eval=FALSE}
+```{r Ex 5.3 prelim load, class.source = 'foldable', message=FALSE, echo = FALSE, warning=FALSE}
 
 library("nimble")
 
