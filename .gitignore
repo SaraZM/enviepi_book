@@ -28,7 +28,6 @@ vignettes/*.pdf
 .Renviron
 # Files constantly modified by bookdown
 *.yml
-*.html
 _main.Rmd
 *.pdf
 *.epub
