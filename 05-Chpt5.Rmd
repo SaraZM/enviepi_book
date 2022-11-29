@@ -1,27 +1,24 @@
 # The Bayesian approach in practice {#Bayesian} 
 
 
-## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-}{Example-5.2}
-
+## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-} 
 We now look at example into the hospital admission rates for chronic obstructive pulmonary disease (COPD) in England between 2001–2010. 
 
 In England, there are 324 local authority administrative areas each with an observed and expected number of cases. The expected numbers were calculated using indirect standardization by applying the age–sex specific rates for the whole of England to the age–sex population profile of each of
 the areas.
 
-### Preliminaries {-}
 
 For this example, the following packages are needed `ggplot2` and  `sf`.
 
 Load the necessary packages.
 
-```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+```{r Ex 5.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE}
 
 library(ggplot2)
 library(sf)
 
 ```
 
-### Reading in data and shapefiles {-}
 To create SMR maps, we need to read in the relevant shapefiles. 
 
 - `englandlocalauthority.shp` and `englandlocalauthority.dbf` contain the location, shape, and attributes of English local authorities. The function `read_sf()` from the `sf` package  will read these shapefiles into `R`.
@@ -94,7 +91,6 @@ summary(SMR_raw)
 
 ```
 
-### Mapping the raw SMRs {-}
 
 Attach the values of the raw SMRs to the shapefiles. The function `merge()` allows us to combine a data frame with a shapefile to plot later.
 
@@ -266,6 +262,26 @@ for (i in 1:9)
 
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 
+Given the convergence issues, we can also check the estimated sampled size and Rhat using the package `coda`.
+
+```{r Ex 5.2 ESS and Rhat}
+
+print("ESS a:")
+coda::effectiveSize(a[seqaux]) 
+print("ESS b:")
+
+coda::effectiveSize(b[seqaux])
+
+print("ESS theta[1]:")
+coda::effectiveSize(theta[seqaux, 1])
+
+print("ESS theta[10]:")
+coda::effectiveSize(theta[seqaux, 10])
+  
+```
+
+The variances for the parameters `a` and `b` is lower than the recommended minimum of 100. We will go back to this in Chapter 8. 
+
 Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.
 
 ```{r Ex 5.2 MCMC posterior summary, fig.align = 'center', fig.align = 'center'}
@@ -332,7 +348,7 @@ rm(list=ls())
 
 Load `nimble package`
 
-```{r Ex 5.3 prelim load, class.source = 'foldable', eval=FALSE}
+```{r Ex 5.3 prelim load, class.source = 'foldable', message=FALSE, echo = FALSE, warning=FALSE}
 
 library("nimble")
 
@@ -367,7 +383,7 @@ Read the data and define the constants, data and initials lists for the `Nimble`
 
 ```{r Ex 5.3 read data}
 
-# REVIEW: This is using another data set because I believe there are no covariates for the COPD data, am I right?
+# REVIEW: Is this another version of the COPD data? Is there a data dictionary for this dataset?
 
 data <- read.csv("data/DataExample53.csv", sep = ",")
 
