@@ -2,7 +2,7 @@
 
 ## Example 8.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010 {-}
 
-Following Example-5.2 we look back at the hospital admission rates for COPD, in England for 2010. We can implement the same model we used on Example-5.2 in `nimble`.
+Following Example 5.2 we look back at the hospital admission rates for COPD, in England for 2010. We can implement the same model we used on Example 5.2 in `nimble`.
 
 ```{r Ex 8.1 load data, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 

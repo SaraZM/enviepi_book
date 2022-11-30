@@ -166,15 +166,7 @@ lambda_a <- 1
 lambda_b <- 1
 # standard deviation of the proposal distribution of log a
 u <- 0.5 
-
-```
-
-
-Then, the initial values for all the parameters are defined.
-
-
-```{r Ex 5.2 MCMC init}
-
+# Initialize theta
 theta[1, ] <- y / E
 # Initial value sampled from the prior for a
 # REVIEW: In the example of the book theta ~ Ga(a,a) not Ga(a,b)
@@ -184,6 +176,7 @@ b <- rexp(1, lambda_b)
 fitted[1, ] <- rpois(N, E * theta[1, ])
 
 ```
+
 
 
 Once all the constants and initial values are set we can run the MCMC. 
@@ -381,7 +374,7 @@ Example5_3Code <- nimbleCode({
 
 Read the data and define the constants, data and initials lists for the `Nimble` model.
 
-```{r Ex 5.3 read data}
+```{r Ex 5.3 read data, error = FALSE, message = FALSE, results='hide'}
 
 # REVIEW: Is this another version of the COPD data? Is there a data dictionary for this dataset?
 
@@ -401,14 +394,8 @@ inits <- function()
        beta1 = rnorm(1),
        betad = rnorm(1))
 
-```
+# Define parameters to monitor and run the model 
 
-
-Define the parameter monitors and run the model.
-
-```{r Ex 5.3 run model, error = FALSE, message = FALSE, results='hide'}
-
-# Define parameters to monitor
 params <- c("beta0", "beta1", "betad", "base", "RR")
 
 samples <- nimbleMCMC(
@@ -426,6 +413,8 @@ samples <- nimbleMCMC(
 )
 
 ```
+
+
 
 Check the WAIC. 
 
