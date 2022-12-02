@@ -1,4 +1,13 @@
-# The Bayesian approach in practice {#Bayesian} 
+# Embracing uncertainty: the Bayesian approach {#embracing} 
+
+This chapter describes methods for implementing Bayesian models when their complexity means that simple, analytic solutions may not be available. From this chapter, the reader will have gained an understanding of the following topics:
+
+- Analytical approximations to the posterior distribution.
+- Using samples from a posterior distribution for inference and Monte Carlo integration.
+- Methods for direct sampling such as importance and rejection sampling.
+- Markov Chain Monte Carlo (MCMC) and methods for obtaining samples from the required posterior distribution including Metropolis–Hastings and Gibbs algorithms.
+- Using `nimble` and `stan` to fit Bayesian models using Gibbs sampling.
+- Integrated Nested Laplace Approximations (INLA) as a method for performing efficient Bayesian inference including the use of R–INLA to implement a wide variety of latent process models.
 
 
 ## Example 5.2: Chronic obstructive pulmonary disease (COPD) in England {-} 
@@ -341,7 +350,7 @@ rm(list=ls())
 
 Load `nimble package`
 
-```{r Ex 5.3 prelim load, class.source = 'foldable', message=FALSE, echo = FALSE, warning=FALSE}
+```{r Ex 5.3 prelim load, class.source = 'foldable', message=FALSE, echo = TRUE, warning=FALSE}
 
 library("nimble")
 

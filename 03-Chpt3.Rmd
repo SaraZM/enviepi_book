@@ -1,3 +1,9 @@
-# Importance of uncertainty {#importance}
+# Uncertainty and its reduction {#uncertainty}
 
-This is empty
+This chapter contains a discussion of uncertainty, both in terms of statistical modelling and quantification but also in the wider setting of sources of uncertainty outside those normally encountered in statistics. From this chapter, the reader will have gained an understanding of the following topics:
+
+- Uncertainty can be dichotomised as either qualitative or quantitative, with the former allowing consideration of a wide variety of sources of uncertainty that would be difficult, if not impossible, to quantify mathematically.
+- Quantitative uncertainty can be thought of as comprising both aleatory and epistemic components, the former representing stochastic uncertainty and the latter subjective uncertainty.
+- Methods for assessing uncertainty including eliciting prior information from experts and sensitivity analysis.
+- Indexing quantitative uncertainty using the variance and entropy of the distribution of a random quantity.
+- Uncertainty in post-normal science derives from a wide variety of issues and can lead to high levels of that uncertainty with serious consequences. Understanding uncertainty is therefore a vital feature of modern environmental epidemiology.

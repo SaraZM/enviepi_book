@@ -1,0 +1,18 @@
+## Course {-}
+
+The following is an example of a structure for a course that might be delivered to epidemiologists with an intermediate level of statistics or statistics students who had an interest in epidemiological analysis.
+
+Reference is given to the material in the chapters in the book together with suggested times that might be dedicated to that material. 
+
++------------------------------------+---------------+--------------------+
+| Chapter                            | Sections      | Suggested timing   |
++====================================+===============+====================+
+| Chapter 1:                         |               | 0.5 Week plus      |
+| Why spatio-temporal epidemiology?  | $1.34         |                    |
+|                                    |               |                    |
+                                                       |
++---------------+---------------+--------------------+
+| Oranges       | $2.10         | - cures scurvy     |
+|               |               | - tasty            |
++---------------+---------------+--------------------+
+

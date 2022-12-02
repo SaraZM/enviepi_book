@@ -1,3 +1,9 @@
-# Modelling health risks {#health-risks}
+# Epidemiology-the basics {#basics}
 
-This is still empty
+This chapter contains the basic principles of epidemiological analysis and how estimates of the risks associated with exposures can be obtained. From this chapter, the reader will have gained an understanding of the following topics:
+
+- Methods for expressing risk and their use with different types of epidemiological study.
+- Calculating risks based on calculations of the expected number of health counts in an area, allowing for the age--sex structure of the underlying population.
+- The use of generalised linear models (GLMS) to model counts of disease and case--control indicators.
+- Modelling the effect of exposures on health and allowing for the possible effects of covariates.
+- Cumulative exposures to environmental hazards.

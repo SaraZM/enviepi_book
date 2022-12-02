@@ -1,6 +1,6 @@
 --- 
 title: "Spatio-temporal methods in environmental epidemiology"
-author: "Gavin Shaddick and James V Zidek"
+author: "Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output:

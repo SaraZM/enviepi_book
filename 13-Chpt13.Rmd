@@ -1,0 +1,16 @@
+# Causality-roadblocks on the way to it  {#causality}
+
+This chapter looks at the emergence of a central purpose; to explore or reduce uncertainty about aspects of the environmental processes of interest. One form of uncertainty, aleatory, cannot be reduced by definition whereas with the other, epistemic, where uncertainty can be reduced (see Chapter 3). However that reduction does not stop the original network from becoming sub-optimal over time, pointing to the need to regularly reassess its performance. From that perspective we see that the design criteria must allow for the possibility of ‘gauging’ (adding monitors to) sites that
+Maximally reduce uncertainty at their space–time points (measuring their responses eliminates their uncertainty);
+Best minimise uncertainty at other locations;
+Best inform about process parameters;
+Best detect non-compliers.
+
+From this chapter, the reader will have gained an understanding of many of the challenges that the network designer may face. These involve the following topics:
+A multiplicity of valid design objectives.
+Unforeseen and changing objectives.
+A multiplicity of responses at each site, i.e. which should be monitored.
+A need to use prior knowledge and to characterise prior uncertainty.
+A need to formulate realistic process models.
+A requirement to take advantage of, and integrate with, existing networks.
+The need to be realistic, meaning to contend with economic as well as administrative demands and constraints.

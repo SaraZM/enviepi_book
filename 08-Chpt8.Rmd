@@ -1,5 +1,14 @@
 # Spatial patterns in disease {#Spatial}
 
+This chapter introduces disease mapping and contains the theory for spatial lattice processes and models for performing smoothing of risks over space. From this chapter, the reader will have gained an understanding of the following topics:
+
+- Disease mapping, where we have seen how to improve estimates of risk by borrowing strength from adjacent regions which can reduce the instability inherent in risk estimates (SMRs) based on small expected numbers.
+- Seen how smoothing can be performed using either the empirical Bayes or fully Bayesian approaches.
+- Been introduced to computational methods for handling areal data.
+- Learned about Besag’s seminal contributions to the field of spatial statistics including the very important concept of a Markov random field.
+- Explored approaches to modelling a real data including the conditional auto regressive models.
+- Seen how Bayesian spatial models for lattice data use `nimble`, `stan`, `R` and `R–INLA`. 
+
 ## Example 8.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010 {-}
 
 Following Example 5.2 we look back at the hospital admission rates for COPD, in England for 2010. We can implement the same model we used on Example 5.2 in `nimble`.
@@ -26,7 +35,7 @@ expected <-
 
 ### Nimble {-}
 
-The following is the code for the Poisson-Gamma model implemented in `Nimble`.
+The following is the code for the Poisson-Gamma model implemented in `nimble`.
 
 ```{r Ex 8.1 nimble model, results='hide', warning=FALSE, message= FALSE}
 
@@ -274,9 +283,9 @@ Show the trace plots and posterior summaries of the parameters.
 ```{r Ex 8.1 stan traceplots}
 
 #traceplots of the vector of coefficients beta
-traceplot(mod0,pars=c("a","b"))
+traceplot(mod0, pars = c("a", "b"))
 
-traceplot(mod0,pars=c("theta[1]", "theta[2]", "theta[3]"))
+traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
 ```
 
 
@@ -408,6 +417,7 @@ mungeCARdata4stan = function(adjBUGS, numBUGS) {
 <!-- REVIEW: I am missing the adjacency matrix but I calculated like they did for the CARBayes example, is that right? -->
 
 Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
+
 ```{r Ex 8.3 stan neighborhood}
 
 # Create the neighborhood
@@ -491,10 +501,14 @@ summary_CAR <-
     probs = c(0.025, 0.975)
   )
 
-print(summary_CAR$summary)
-
 ```
 
+
+```{r Ex 8.3 stan CAR summary, results='asis'}
+
+knitr::kable(summary_CAR$summary)
+
+```
 
 <!-- TODO: Plot map Stan output  -->
 <!-- IDEA: Maybe we should agree on what output we will show for every method -->
@@ -596,7 +610,7 @@ summary(SMR_smooth)
 
 Show the summary of the parameters under the CAR model.
 
-```{r Ex 8.4 carbayes results, echo=FALSE, results='asis'}
+```{r Ex 8.4 carbayes results, results='asis'}
 
 knitr::kable(model$summary.results[])
 

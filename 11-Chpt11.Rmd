@@ -1,0 +1,9 @@
+# Time-why it also matters {#Time}
+
+In this chapter we have seen the many ways in which the time can be added to space in order to characterize random exposure fields. From this chapter, the reader will have gained an understanding of the following topics:
+
+- Additional power that can be gained in an epidemiological study by combining the contrasts in the process over both time and space while characterizing the stochastic dependencies across both space and time for inferential analysis.
+- Criteria that good approaches to spatio–temporal modelling should satisfy.
+- General strategies for developing such approaches.
+- Separability and non-separability in spatio–temporal models, and how these could be characterize using the Kronecker product of correlation matrices.
+- Examples of the use of spatio–temporal models in modelling environmental exposures.

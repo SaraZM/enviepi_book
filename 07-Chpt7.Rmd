@@ -1,3 +1,10 @@
-# Is ‘real’ data always quite so real? {#RealData}
+# But-can the data be trusted  {#trusted}
 
-Empty
+This chapter considers some of the issues that will arise when dealing with ‘real data’. Data will commonly have missing values and may be measured with error. This error might be random or may be due to systematic patterns in how it was collected. From this chapter, the reader will have gained an understanding of the following topics:
+
+- Classification of missing values into missing at random or not at random.
+- Methods for imputing missing values.
+- Various measurement models including classical and Berkson.
+- The attenuation of regression coefficients under measurement error.
+- Preferential sampling, where the process that determines the locations of monitoring sites and the process being modeled are in some ways dependent.
+- How preferential sampling can bias the measurements that arise from environmental monitoring networks.
