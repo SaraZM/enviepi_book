@@ -1,4 +1,4 @@
-## Course {-}
+# Course {-}
 
 The following is an example of a structure for a course that might be delivered to epidemiologists with an intermediate level of statistics or statistics students who had an interest in epidemiological analysis.
 

@@ -11,13 +11,15 @@ This chapter introduces disease mapping and contains the theory for spatial latt
 
 ## Example 8.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010 {-}
 
-Following Example 5.2 we look back at the hospital admission rates for COPD, in England for 2010. We can implement the same model we used on Example 5.2 in `nimble`.
+### Nimble {-}
 
-```{r Ex 8.1 load data, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+Following Example 6.2 we look back at the hospital admission rates for COPD, in England for 2010. We can implement the same model we used on Example 6.2 using `nimble`.
+
+```{r Ex 8.1 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 # Load nimble
 library(nimble)
-library(sf)
+library(sf) # to read shapefile
 
 # Load data
 # Reading in borders
@@ -26,14 +28,10 @@ england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
-
 expected <-
   read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
 
 ```
-
-
-### Nimble {-}
 
 The following is the code for the Poisson-Gamma model implemented in `nimble`.
 
@@ -49,7 +47,6 @@ Example8_1Code <- nimbleCode({
     theta[i] ~ dgamma(a, b)
     Y.fit[i] ~ dpois(mu[i])
   }
-  
   # Priors
   a ~ dexp(lambda_a)
   b ~ dexp(lambda_b)
@@ -58,9 +55,9 @@ Example8_1Code <- nimbleCode({
 
 ```
 
-Define the constants, data and initials lists for the `Nimble` model.
+Define the constants, data and initials lists for the `nimble` model.
 
-```{r Ex 8.1 nimble set constants and inits}
+```{r Ex 8.1 nimble set constants and inits, error = FALSE, message = FALSE, results='hide'}
 
 # observations
 y <- observed$Y2010
@@ -71,39 +68,31 @@ N <- length(y)
 lambda_a <- 1
 # Parameter of exponential prior for b
 lambda_b <- 1
-
+# constants list
 constants <- list(
   N = N,
   E = E,
   lambda_a = lambda_a,
   lambda_b = lambda_b
 )
+# data list
 ex.data <- list(Y = y)
-
-# Function to generate initial values
+# initial values
 inits <-
-  function()
     list(
       theta = rgamma(N, 1, 1),
       a = rexp(1, lambda_a),
       b = rexp(1, lambda_b),
       Y.fit = rpois(N, E)
     )
-
-```
-
-Define the parameter monitors and run the model.
-
-```{r Ex 8.1 nimble run, error = FALSE, message = FALSE, results='hide'}
-
 # parameters to monitor
 params <- c("theta", "a", "b", "Y.fit")
 
+# Run model
 mcmc.out <- nimbleMCMC(
   code = Example8_1Code,
   constants = constants,
   data = ex.data,
-  # provide the combined data & constants as constants
   inits = inits,
   monitors = params,
   niter = 50000,
@@ -115,35 +104,24 @@ mcmc.out <- nimbleMCMC(
   samplesAsCodaMCMC = TRUE
 )
 
-
 ```
 
 
-Check the WAIC  and ESS.
 
-```{r Ex 8.1 nimble WAIC and ESS}
+Show the WAIC, effective sample size, and trace plots for some of the parameters.
+
+```{r Ex 8.1 nimble WAIC, ESS and traceplots}
 
 mcmc.out$WAIC
 min(coda::effectiveSize(mcmc.out$samples))
 
-
-```
-
-Show the trace plots and posterior summaries for each of the parameters.
-
-```{r Ex 8.1 nimble traceplots}
-
 mvSamples <- mcmc.out$samples
 
-#trace plots of a
+#trace plot of a
 plot(mvSamples[, c("a")])
-
-#trace plots of b
+#trace plot of b
 plot(mvSamples[, c("b")])
-
-summary(mvSamples[, c("a", "b")])
-
-#trace plots of theta's
+#trace plots of theta
 for (i in 1:3)
   plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))])
 
@@ -153,6 +131,8 @@ Now that we have checked the convergence of the chains we can plot the posterior
 
 
 ```{r Ex 8.1 nimble posterior summary}
+# Print posterior summary for parameters a and b
+summary(mvSamples[, c("a", "b")])
 
 # Posterior summaries of theta_i
 post_summary <- mcmc.out$summary$all.chains  %>% as.data.frame() %>%
@@ -198,15 +178,15 @@ abline(a = 0, b = 1)
 
 ### Stan {-}
 
-Load `stan` with options
+Load necessary libraries and data.  
 
-```{r Ex 8.1 stan load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+```{r Ex 8.1 stan load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 rm(list=ls())
 
-#loading rstan
 library(rstan) 
-library(loo) # To calculate WAIC and loo later
+library(sf) # to read shapefile
+library(loo) # To calculate WAIC
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 
@@ -217,10 +197,8 @@ england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
-
 expected <-
   read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
-
 
 ```
 
@@ -239,8 +217,7 @@ y <- observed$Y2010
 # offset
 E <- expected$E2010
 N <- length(y)
-
-# Define the data list 
+# data list 
 ex.data <- list(
   N = length(y),
   Y = y,
@@ -250,7 +227,6 @@ ex.data <- list(
 )
 
 # Run the model in Stan
-
 mod0 <- stan(
   file = "functions/Example8_1.stan",
   data = ex.data,
@@ -258,7 +234,8 @@ mod0 <- stan(
   iter = 10000,
   warmup = 3000,
   thin = 14,
-  control = list(adapt_delta = 0.8, max_treedepth = 15),
+  # QUESTION: should we explain this?
+  control = list(adapt_delta = 0.8, max_treedepth = 15), 
   init = "random",
   pars = c("a", "b", "theta", "log_lik", "yfit"),
   include = TRUE
@@ -266,26 +243,19 @@ mod0 <- stan(
 
 ```
 
-Compute the WAIC.
+Compute the WAIC, show the trace plots and posterior summaries of the parameters.
 
-```{r Ex 8.1 stan WAIC, message= FALSE, warning=FALSE}
+```{r Ex 8.1 stan waic and traceplots, message= FALSE, warning=FALSE}
 
-#computing WAIC using the package loo
 loglik0 <- extract_log_lik(mod0)
 waic0 <- waic(loglik0)
 waic0
 
-```
-
-
-Show the trace plots and posterior summaries of the parameters.
-
-```{r Ex 8.1 stan traceplots}
-
-#traceplots of the vector of coefficients beta
+# traceplots of parameters a and b
 traceplot(mod0, pars = c("a", "b"))
-
+# traceplots of parameter theta
 traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
+
 ```
 
 
@@ -293,7 +263,6 @@ traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
 
 summary_theta <-
   summary(mod0, pars = c("theta"), probs = c(0.05, 0.95))$summary %>% as.data.frame()
-
 
 par(mfrow = c(1, 1))
 plot(
@@ -310,10 +279,8 @@ for (i in 1:N)
 abline(h = 1, lwd = 2, lty = 2)
 
 # Posterior summary of fitted values
-
 summary_fit <-
   summary(mod0, pars = c("yfit"), probs = c(0.05, 0.95))$summary %>% as.data.frame()
-
 
 # Plot mean and 95% CIs for the fitted values
 par(mfrow = c(1, 1))
@@ -336,17 +303,11 @@ abline(a = 0, b = 1)
 
 ### Nimble {-}
 
-
 ```{r Ex 8.3 nimble load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 
-library(ggplot2)
-library(ggpubr)
-library(rgdal)
-library(broom) # for tidy: extract geo data
-library(dplyr) # for left_join: add data to geo data
-library(spdep)
+library(ggplot2) # to plot map
+library(spdep) # read the shapefile (read_sf) and build neighbors list (poly2nb)
 library(nimble)
-library(coda)
 
 # Load data
 # Reading in borders
@@ -355,12 +316,12 @@ england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
-
 expected <-
   read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
 
 ```
 
+Define a function to obtain the number of neighbors. 
 
 ```{r Ex 8.3 nimble munge functions, echo = TRUE}
 
@@ -423,12 +384,11 @@ CAR_Code <- nimbleCode({
 
 ```
 
+Define the constants, data and initial values lists and run the model. 
 
-```{r Ex 8.3 nimble car run}
-
-# Defining the constants, data and initial values list
-
-Consts_CAR = list(
+```{r Ex 8.3 nimble car run, error = FALSE, message = FALSE}
+# constants list
+constants = list(
   N = N,
   E = expected$E2010,
   L = length(neigh),
@@ -437,20 +397,21 @@ Consts_CAR = list(
   num = as.vector(numneigh),
   p = 3
 )
-
-Data_CAR = list(y = observed$Y2010)
-Inits_CAR = list(
+# data list
+ex.data = list(y = observed$Y2010)
+inits = list(
   beta0 = rnorm(1),
   fitted = rpois(N, 2),
   sigma_b = 1,
   b = rnorm(N)
 )
 
+# Run model in nimble
 CAR_Model = nimbleModel(
   code = CAR_Code,
-  constants = Consts_CAR,
-  data = Data_CAR,
-  inits = Inits_CAR
+  constants = constants,
+  data = ex.data,
+  inits = inits
 )
 
 CAR_conf <-
@@ -473,22 +434,22 @@ CAR_runMCMC = runMCMC(
   summary = TRUE
 )
 
-# Traceplots for some of the parameters 
-
-plot(CAR_runMCMC$samples[, c("beta0")])
-plot(CAR_runMCMC$samples[, c("b[2]")])
-plot(CAR_runMCMC$samples[, c("sigma_b")])
 
 ```
 
+Show the WAIC, effective sample size, and trace plots for some of the parameters.
 
-```{r Ex 8.3 nimble WAIC and ESS}
+
+```{r Ex 8.3 WAIC, ESS and traceplots }
 
 CAR_runMCMC$WAIC
 min(coda::effectiveSize(CAR_runMCMC$samples))
 
-
+plot(CAR_runMCMC$samples[, c("beta0")])
+plot(CAR_runMCMC$samples[, c("b[2]")])
+plot(CAR_runMCMC$samples[, c("sigma_b")])
 ```
+
 
 ```{r Ex 8.3 nimble CAR summary, echo = TRUE, results='asis'}
 
@@ -501,6 +462,7 @@ knitr::kable(summary_CAR_nimble[variables,])
 
 ```
 
+Map the mean of the posterior estimate for the latent effect.
 
 ```{r plot map nimble}
 
@@ -515,6 +477,8 @@ CAR_nimble_merge <- merge(england, samples_CAR_b, by = "ID")
 ggplot() +
   # Choose spatial object and column for plotting
   geom_sf(data = CAR_nimble_merge, aes(fill = Mean)) + 
+  # Change legend's label
+    labs(fill = 'Latent effects stan') +
   # Clear background and plot borders
   theme(
     axis.text.x = element_blank(),
@@ -537,6 +501,7 @@ Here, we implement the CAR model using `stan`.
 
 rm(list=ls())
 
+library(ggplot2)
 library(loo) # To calculate WAIC and loo later
 library(rstan) 
 library(spdep) 
@@ -551,14 +516,13 @@ england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
-
 expected <-
   read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
 
 ```
 
 
-We will need two function to structure the matrix of neighbors that will be needed in `stan`.
+We will need two functions to structure the matrix of neighbors that will be needed in `stan`.
 
 ```{r Ex 8.3 stan munge functions, echo = TRUE}
 
@@ -666,7 +630,7 @@ COPD_fitCAR  <- stan(
   iter = 20000,
   chains = 2,
   thin = 10,
-  pars = c("beta0","sigma_s", "b"),
+  pars = c("beta0","sigma_s", "b", "log_lik"),
   include = TRUE
 )
 
@@ -678,6 +642,11 @@ COPD_fitCAR  <- stan(
 Show traceplots.
 
 ```{r Ex 8.3 stan CAR traceplots}
+#computing WAIC using the package loo
+
+loglikcar <- extract_log_lik(COPD_fitCAR)
+waiccar <- waic(loglikcar)
+waiccar
 
 traceplot(COPD_fitCAR, pars = c("beta0","sigma_s"))
 
@@ -696,16 +665,45 @@ summary_CAR_stan <-
     probs = c(0.025, 0.975)
   )
 
-```
-
-
-```{r Ex 8.3 stan CAR summary, results='asis'}
-
 knitr::kable(summary_CAR_stan$summary)
 
 ```
 
-<!-- TODO: Plot map Stan output  -->
+
+
+Map the mean of the posterior estimate for the latent effect.
+
+```{r plot map stan}
+
+summary_CAR_stan_b <-
+  summary(
+    COPD_fitCAR,
+    pars = c("b"),
+    probs = c(0.025, 0.975)
+  )
+
+observed <- tibble::rownames_to_column(observed, "ID")
+
+summary_CAR_stan_b$ID <- observed$ID
+
+CAR_stan_merge <- merge(england, summary_CAR_stan_b, by = "ID") 
+
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = CAR_stan_merge, aes(fill = summary.mean)) + 
+  # Change legend's label
+  labs(fill = 'Latent effects stan') +
+  # Clear background and plot borders
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    rect = element_blank()
+  ) 
+
+
+```
+
 <!-- IDEA: Maybe we should agree on what output we will show for every method -->
 
 ## Example 8.4: Fitting a conditional spatial model using CARBayes {-}
