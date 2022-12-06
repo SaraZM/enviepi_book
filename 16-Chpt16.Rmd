@@ -8,11 +8,12 @@ Reference is given to the material in the chapters in the book together with sug
 | Chapter                            | Sections      | Suggested timing   |
 +====================================+===============+====================+
 | Chapter 1:                         |               | 0.5 Week plus      |
-| Why spatio-temporal epidemiology?  | $1.34         |                    |
+| Why spatio-temporal epidemiology?  | All           | background reading |
 |                                    |               |                    |
-                                                       |
-+---------------+---------------+--------------------+
-| Oranges       | $2.10         | - cures scurvy     |
-|               |               | - tasty            |
-+---------------+---------------+--------------------+
-
++------------------------------------+---------------+--------------------+
+| Chapter 2: Modelling health risks  |All, excluding |      1 Week        |
+|                                    |    2.6-2.7    |                    |
++------------------------------------+---------------+--------------------+
+| Chapter 3: The importance          |  3.1-3.4      |    0.5 Week        |
+|            of uncertainty          |    inclusive  |                    |
++------------------------------------+---------------+--------------------+

@@ -336,6 +336,197 @@ abline(a = 0, b = 1)
 
 ### Nimble {-}
 
+
+```{r Ex 8.3 nimble load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+
+library(ggplot2)
+library(ggpubr)
+library(rgdal)
+library(broom) # for tidy: extract geo data
+library(dplyr) # for left_join: add data to geo data
+library(spdep)
+library(nimble)
+library(coda)
+
+# Load data
+# Reading in borders
+england <- read_sf("data/englandlocalauthority.shp")
+
+# Reading in data
+observed <-
+  read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
+
+expected <-
+  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
+
+```
+
+
+```{r Ex 8.3 nimble munge functions, echo = TRUE}
+
+adjlist = function(W, N) {
+  adj = 0
+  for (i in 1:N) {
+    for (j in 1:N) {
+      if (W[i, j] == 1) {
+        adj = append(adj, j)
+      }
+    }
+  }
+  adj = adj[-1]
+  return(adj)
+}
+
+```
+
+Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
+
+```{r Ex 8.3 nimble neighborhood}
+
+# Create the neighborhood
+W.nb <-
+  poly2nb(england, row.names = rownames(england))
+
+# Creates a matrix for following function call
+W.mat <- nb2mat(W.nb, style = "B")
+
+# Define the spatial structure to use in stan
+N <- length(unique(england$ID))
+
+neigh = adjlist(W.mat, N)
+numneigh = apply(W.mat,2,sum)
+
+```
+
+```{r Ex 8.3 nimble car model, warning=FALSE}
+
+CAR_Code <- nimbleCode({
+  # Likelihood
+  for (i in 1:N) {
+    y[i] ~ dpois(lambda[i])
+    log(lambda[i]) <- log(E[i]) + b[i] + beta0
+  }
+  
+  # Priors
+  beta0 ~ dnorm(0, sd = 0.98)
+  
+  b[1:N] ~ dcar_normal(adj[1:L], weights[1:L], num[1:N], tau, zero_mean = 1)
+  
+  tau <- 1 / (sigma_b ^ 2)
+  sigma_b ~ T(dnorm(0, sd = 1), 0,)
+  
+  # Fitted values and likelihood for WAIC
+  for (i in 1:N) {
+    fitted[i] ~ dpois(lambda[i])
+  }
+})
+
+```
+
+
+```{r Ex 8.3 nimble car run}
+
+# Defining the constants, data and initial values list
+
+Consts_CAR = list(
+  N = N,
+  E = expected$E2010,
+  L = length(neigh),
+  adj = neigh,
+  weights = rep(1, length(neigh)),
+  num = as.vector(numneigh),
+  p = 3
+)
+
+Data_CAR = list(y = observed$Y2010)
+Inits_CAR = list(
+  beta0 = rnorm(1),
+  fitted = rpois(N, 2),
+  sigma_b = 1,
+  b = rnorm(N)
+)
+
+CAR_Model = nimbleModel(
+  code = CAR_Code,
+  constants = Consts_CAR,
+  data = Data_CAR,
+  inits = Inits_CAR
+)
+
+CAR_conf <-
+  configureMCMC(CAR_Model, monitors = c("beta0", "fitted", "b", "sigma_b"))
+CAR_MCMC = buildMCMC(
+  CAR_Model,
+  enableWAIC = T,
+  monitors = c("beta0", "fitted", "b", "sigma_b")
+)
+CAR_Cmodel = compileNimble(CAR_Model)
+CAR_Cmcmc = compileNimble(CAR_MCMC, project = CAR_Model)
+CAR_runMCMC = runMCMC(
+  CAR_Cmcmc,
+  nburnin = 20000,
+  niter = 40000,
+  thin = 80,
+  nchains = 2,
+  samplesAsCodaMCMC = TRUE,
+  WAIC = T,
+  summary = TRUE
+)
+
+# Traceplots for some of the parameters 
+
+plot(CAR_runMCMC$samples[, c("beta0")])
+plot(CAR_runMCMC$samples[, c("b[2]")])
+plot(CAR_runMCMC$samples[, c("sigma_b")])
+
+```
+
+
+```{r Ex 8.3 nimble WAIC and ESS}
+
+CAR_runMCMC$WAIC
+min(coda::effectiveSize(CAR_runMCMC$samples))
+
+
+```
+
+```{r Ex 8.3 nimble CAR summary, echo = TRUE, results='asis'}
+
+# Extract samples
+
+variables <- c("beta0", "sigma_b")
+summary_CAR_nimble <- CAR_runMCMC$summary$all.chains
+
+knitr::kable(summary_CAR_nimble[variables,])
+
+```
+
+
+```{r plot map nimble}
+
+samples_CAR_b <- summary_CAR_nimble[grepl("b\\[", rownames(summary_CAR_nimble)),] %>% as.data.frame()
+
+observed <- tibble::rownames_to_column(observed, "ID")
+
+samples_CAR_b$ID <- observed$ID
+
+CAR_nimble_merge <- merge(england, samples_CAR_b, by = "ID") 
+
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = CAR_nimble_merge, aes(fill = Mean)) + 
+  # Clear background and plot borders
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    rect = element_blank()
+  ) 
+
+
+```
+
+
 ### Stan {-}
 
 Here, we implement the CAR model using `stan`.
@@ -441,7 +632,6 @@ N_edges = nbs$N_edges
 ```
 
 
-
 `Stan` model for CAR effects. 
 This model is in a separate file called `Example8_3.stan` that will be called later.
 
@@ -451,7 +641,7 @@ cat functions/Example8_3.stan
 
 
 
-```{r Ex 8.3 car effects, warning=FALSE}
+```{r Ex 8.3 stan car effects, warning=FALSE}
 
 N_edges = N_edges
 node1 = node1
@@ -460,31 +650,36 @@ N = N
 y = observed$Y2010
 E = expected$E2010
 
+ex.data <- list(
+  N = N,
+  y = y,
+  E = E,
+  N_edges = N_edges,
+  node1 = node1,
+  node2 = node2
+)
 
-COPD_fitCAR = stan(
-  "functions/Example8_3.stan",
-  data = list(
-    N = N,
-    y = y,
-    E = E,
-    N_edges = N_edges,
-    node1 = node1,
-    node2 = node2
-  ),
+COPD_fitCAR  <- stan(
+  file = "functions/Example8_3.stan",
+  data = ex.data,
   warmup = 10000,
   iter = 20000,
   chains = 2,
-  thin = 10
+  thin = 10,
+  pars = c("beta0","sigma_s", "b"),
+  include = TRUE
 )
+
+
 
 ```
 
 
 Show traceplots.
 
-```{r Ex 8.3 stan CAR traceplots }
+```{r Ex 8.3 stan CAR traceplots}
 
-traceplot(COPD_fitCAR, pars = c("beta0","sigma_s" ))
+traceplot(COPD_fitCAR, pars = c("beta0","sigma_s"))
 
 ```
 
@@ -494,7 +689,7 @@ Keep in mind that in the stan model the we are sampling the standard deviation o
 ```{r Ex 8.3 stan CAR results, echo = TRUE, results='asis'}
 
 # Extract samples
-summary_CAR <-
+summary_CAR_stan <-
   summary(
     COPD_fitCAR,
     pars = c("beta0", "sigma_s"),
@@ -506,7 +701,7 @@ summary_CAR <-
 
 ```{r Ex 8.3 stan CAR summary, results='asis'}
 
-knitr::kable(summary_CAR$summary)
+knitr::kable(summary_CAR_stan$summary)
 
 ```
 

@@ -1,9 +1,3 @@
-# Data:increasing information and reducing uncertainty  {#data}
+# Data: increasing information and reducing uncertainty  {#data}
 
-This chapter introduces the Bayesian approach which provides a natural framework for dealing with uncertainty and also for fitting the models that will be encountered later in the book. From this chapter, the reader will have gained an understanding of the following topics:
-
-- The use of prior distributions to capture beliefs before data are observed.
-- The combination of prior beliefs and information from data to obtain posterior beliefs.
-- The manipulation of prior distributions with likelihoods to formulate posterior distributions and why conjugate priors are useful in this regard.
-- The difference between informative and non-informative priors.
-- The use of the posterior distribution for inference and methods for calculating summary measures.
+This is a new chapter

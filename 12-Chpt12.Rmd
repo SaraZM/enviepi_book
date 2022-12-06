@@ -1,11 +1,16 @@
 # Exposure assessment-over space and time {#exposure}
 
-This chapter contains a discussion of the differences between causality and association. It also covers specific issues that may be encountered in this area when investigating the effects of environmental hazards on health. From this chapter, the reader will have gained an understanding of the following topics:
+In this chapter we have seen the many ways in which the time can be added to space in order to characterize random exposure fields. From this chapter, the reader will have gained an understanding of the following topics:
 
-- Issues with causality in observational studies.
-- The Bradford–Hill criteria which are a group of minimal conditions necessary to provide adequate evidence of a causal relationship.
-- Ecological bias which may occur when inferences about the nature of individuals are made using aggregated data.
-- The role of exposure variability in determining the extent of ecological bias.
-- Approaches to acknowledging ecological bias in ecological studies.
-- Concentration and exposure response functions.
-- Models for estimating personal exposures including micro-environments.
+- Additional power that can be gained in an epidemiological study by combining the contrasts in the process over both time and space while characterizing the stochastic dependencies across both space and time for inferential analysis.
+- Criteria that good approaches to spatio–temporal modelling should satisfy.
+- General strategies for developing such approaches.
+- Separability and non-separability in spatio–temporal models, and how these could be characterize using the Kronecker product of correlation matrices.
+- Examples of the use of spatio–temporal models in modelling environmental exposures.
+
+
+
+
+
+
+

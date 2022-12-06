@@ -1,3 +1,8 @@
 # Current frontiers  {#frontiers}
 
-as
+
+In this chapter the reader will have encountered a selection of new frontiers in spatio– temporal epidemiology including the following:
+- A number of areas that are currently under active development.
+- Two modern approaches to addressing the problem of non-stationarity in random spatio– temporal fields; warping and dimension expansion.
+- How dimension expansion can be used to dramatically reduce non-stationarity and suggest its possible causes.
+- A powerful approach combining both physical and statistical modelling within a single framework.

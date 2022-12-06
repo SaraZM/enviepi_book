@@ -1,10 +1,3 @@
 # Disease-spatial patterns {#Disease}
 
-This chapter contains the basic theory for spatial processes and a number of approaches to modelling point-referenced spatial data. From this chapter, the reader will have gained an understanding of the following topics:
-
-- Visualization techniques needed for both exploring and analyzing spatial data and communicating its features through the use of maps.
-- Exploring the underlying structure of spatial data and methods for characterizing dependence over space.
-- Second-order theory for spatial processes including the covariance. The variogram for measuring spatial associations.
-- Stationarity and isotropy.
-- Methods for spatial prediction, using both classical methods (kriging) as well as modern methods (Bayesian kriging).
-- Non-stationarity fields.
+This is new
