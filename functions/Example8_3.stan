@@ -35,8 +35,10 @@ model {
 generated quantities {
   vector[N] mu=exp(log_E + beta0 + b);
   vector[N] lik;
+  vector[N] log_lik;
   
   for(i in 1:N){
     lik[i] = exp(poisson_lpmf(y[i] | mu[i] ));
+    log_lik[i] = poisson_lpmf(y[i] | mu[i] );
   }
 }

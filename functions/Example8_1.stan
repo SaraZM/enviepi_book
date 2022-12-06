@@ -6,18 +6,13 @@ data {
   real<lower=0>lambda_b;
 }
 
-
 parameters {
-  
   real<lower=0> theta[N];
   real<lower=0> a;
   real<lower=0> b;
-  
 }
 
-
 transformed parameters{
-  
   real <lower=0> mu[N];
   
   for(i in 1:N){
@@ -26,9 +21,7 @@ transformed parameters{
   
 }
 
-
 model {
-  
   // likelihood function and prior for theta
   for(i in 1:N){
     Y[i] ~ poisson(mu[i]);
@@ -39,8 +32,6 @@ model {
 }
 
 generated quantities {
-  
-  
   vector [N] log_lik;
   int<lower=0> yfit [N];
   

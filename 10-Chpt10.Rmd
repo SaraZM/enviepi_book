@@ -9,3 +9,67 @@ This chapter contains the basic theory for spatial processes and a number of app
 - Methods for spatial prediction, using both classical methods (kriging) as well as modern methods (Bayesian kriging).
 - Non-stationarity fields.
 
+
+## Example 9.1
+
+Map the locations of the monitoring stations in the UK.
+
+```{r Ex 10.1 load data, message = FALSE, warning=FALSE, error=FALSE}
+
+library(ggmap)
+library(spdep)
+
+uk_data <- read.csv("data/uk_ozone_uni.csv")
+
+# create a new variable in "sp" format 
+uk_data_sp <- uk_data
+coordinates(uk_data_sp) <- ~ longitude + latitude
+
+# specify the projection code
+proj4string(uk_data_sp) <- CRS("+proj=longlat +ellps=WGS84")
+
+# Specify the bounding box 
+latLongBox = bbox(uk_data_sp)
+location = c(latLongBox[1, 1] - 0.2,
+             latLongBox[2, 1] - 0,
+             latLongBox[1, 2] + 0.2,
+             latLongBox[2, 2] + 0.2)
+
+# Create map with location dots marked on it in
+UKOzoneMap <-
+  get_stamenmap(
+    bbox = location,
+    zoom = 6
+  )
+
+ggmap(UKOzoneMap) + geom_point(
+  data = uk_data,
+  aes(
+    x = longitude,
+    y = latitude,
+    size = ozone,
+    color = ozone
+  ),
+  alpha = 0.45
+) + theme_void()
+
+```
+Using the `geoR` package we can also plot the following:
+
+-  the locations of the sampling sites 
+-  the concentrations of ozone in relation to the x and y coordinates
+- and a histogram of the concentrations indicating the distribution of concentrations together with an estimate of the density.
+
+```{r Ex 9.1 geoR plot}
+
+library(geoR)
+uk_data_geo <- as.geodata(uk_data,
+                          coords.col = 2:3, data.col = 4)
+
+plot(uk_data_geo)
+
+```
+
+
+
+
