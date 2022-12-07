@@ -9,13 +9,16 @@ This chapter contains the basic theory for spatial processes and a number of app
 - Methods for spatial prediction, using both classical methods (kriging) as well as modern methods (Bayesian kriging).
 - Non-stationarity fields.
 
+<!-- NOTE: I know this might not be what we agreed on but I don't like the codes that are available for this chapter, some of them are incomplete and some of them are repeated so I am doing some of them all over again with the UK ozone data, but you can decide to change it later if you wish. -->
 
-## Example 9.1
+
+## Example 10.1 {-}
 
 Map the locations of the monitoring stations in the UK.
 
 ```{r Ex 10.1 load data, message = FALSE, warning=FALSE, error=FALSE}
 
+library(geoR)
 library(ggmap)
 library(spdep)
 
@@ -54,21 +57,138 @@ ggmap(UKOzoneMap) + geom_point(
 ) + theme_void()
 
 ```
+
 Using the `geoR` package we can also plot the following:
 
 -  the locations of the sampling sites 
 -  the concentrations of ozone in relation to the x and y coordinates
 - and a histogram of the concentrations indicating the distribution of concentrations together with an estimate of the density.
 
-```{r Ex 9.1 geoR plot}
+```{r Ex 10.1 geoR plot}
 
-library(geoR)
 uk_data_geo <- as.geodata(uk_data,
                           coords.col = 2:3, data.col = 4)
 
 plot(uk_data_geo)
 
 ```
+
+
+## Example 10.9 {-}
+
+
+NOTE: This won't be the real example but I need to compare it to something that I know the answer to, so instead of doing a simulation I will keep going by analyzing the meuse river data
+
+### Nimble {-}
+
+```{r Ex 10.9 load data, message = FALSE, warning=FALSE, error=FALSE}
+
+rm(list=ls())
+library(nimble)
+
+```
+
+```{r Ex 10.9 load data sim}
+data(meuse)
+
+attach(meuse)
+meusesample <-
+  data.frame(
+    y = log(zinc),
+    x1 = sqrt(meuse$dist),
+    easting = x / 1000,
+    northing = y / 1000
+  )
+detach(meuse)
+
+Dist <- dist(meusesample[,c("easting", "northing")]) %>% as.matrix()
+
+```
+
+
+```{r Ex 10.9 nimble model}
+
+Example10_9Code <-  nimbleCode ({
+  # Covariance matrix spatial effect
+  Sigma[1:n, 1:n] <-  (sigma ^ 2) * exp(-obs_dist_mat[1:n, 1:n] / phi)
+  m[1:n] ~ dmnorm(zeros[1:n], cov = Sigma[1:n, 1:n])
+  
+  for (site in 1:n) {
+    mean.site[site] <- beta0 + m[site]
+    y[site] ~ dnorm(mean.site[site], sd = tau)
+  }
+  
+  # Set up the priors for the spatial model
+  sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  phi ~ dexp(127.72)
+  
+  # prior for the intercept term
+  beta0 ~ dnorm (0 , 10)
+  
+}) 
+
+```
+
+
+Define the constants, data and initials lists for the `nimble` model.
+
+```{r nimble Ex 10.9 set constants and inits, error = FALSE, message = FALSE, results='hide'}
+
+# Get the distance matrix using by turning it into an sf object
+uk_data_sf <-
+  st_as_sf(uk_data, coords = c("longitude", "latitude")) %>%
+  st_set_crs(4326)
+# Then, calculate the distance matrix
+obs_dist_mat <- st_distance(uk_data_sf)
+# and set the units as kilometers
+obs_dist_mat <- units::set_units(obs_dist_mat, km) %>% as.matrix()
+obs_dist_mat <- units::set_units(obs_dist_mat, NULL)
+
+obs_med_dist <- median(obs_dist_mat)
+
+constants <-
+  list(n = nrow(uk_data), meanPhi = max(obs_dist_mat / 6), zeros = rep(0, nrow(uk_data)))
+ex.data <- list(y = uk_data$ozone, obs_dist_mat = obs_dist_mat)
+inits <-
+  list(tau = 0.1,
+       sigma = 1,
+       phi_inv =  obs_med_dist / 6)
+params <- c("sigma", "tau", "phi", "beta0")
+
+# TODO: I have to check this code with a simulation first 
+mcmc.out <- nimbleMCMC(
+  code = Example10_9Code,
+  constants = constants,
+  data = ex.data,
+  inits = inits,
+  monitors = params,
+  niter = 50000,
+  nburnin = 20000,
+  thin = 30,
+  WAIC = TRUE,
+  nchains = 2,
+  summary = TRUE,
+  samplesAsCodaMCMC = TRUE
+)
+
+```
+
+```{r Ex 10.9 nimble WAIC, ESS and traceplots }
+
+mcmc.out$WAIC
+min(coda::effectiveSize(mcmc.out$samples))
+# REVIEW: the effective size for sigma is really low, look at the traceplot
+# NOTE: there might not be a spatial structure...
+plot(mcmc.out$samples[, c("beta0")])
+plot(mcmc.out$samples[, c("sigma")])
+plot(mcmc.out$samples[, c("tau")])
+plot(mcmc.out$samples[, c("phi")])
+
+```
+
+
+
 
 
 

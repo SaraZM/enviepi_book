@@ -4,6 +4,7 @@ load("data/uk_wind.rda")
 load("data/uk_pollutant_coords.rda")
 load("data/uk_pollutant_date.rda")
 
+library(mvtnorm)
 
 uk_o3_uni <- data.frame(longitude = coords$longitude,
                         latitude = coords$latitude,
@@ -12,3 +13,5 @@ uk_o3_uni <- data.frame(longitude = coords$longitude,
                         wind = wind[,1])
 
 write.csv(uk_o3_uni, "data/uk_ozone_uni.csv")
+
+

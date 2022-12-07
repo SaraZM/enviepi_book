@@ -304,6 +304,7 @@ abline(a = 0, b = 1)
 ### Nimble {-}
 
 ```{r Ex 8.3 nimble load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+rm(list=ls())
 
 library(ggplot2) # to plot map
 library(spdep) # read the shapefile (read_sf) and build neighbors list (poly2nb)
@@ -414,6 +415,7 @@ CAR_Model = nimbleModel(
   inits = inits
 )
 
+# QUESTION: can I run this model without configuring it as I did in the previous examples? 
 CAR_conf <-
   configureMCMC(CAR_Model, monitors = c("beta0", "fitted", "b", "sigma_b"))
 CAR_MCMC = buildMCMC(
