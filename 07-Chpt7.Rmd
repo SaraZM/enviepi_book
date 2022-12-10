@@ -1,4 +1,24 @@
-# But-can the data be trusted  {#trusted}
+#Strategies-implementing uncertainty models  {#strategies}
+
+This chapter considers both some of the wider issues related to modelling and the generalisability of results and more
+technical material on the effect of covariates and model selection. From this chapter, the reader will have gained an
+understanding of the following topics:
+
+- Why having contrasts in the variables of interest is important in assessing the effects they have on the response
+variable.
+- The biases that may arise in the presence of covariates and how covariates can affect variable selection and model
+choice.
+- Hierarchical models and how that can be used to acknowledge dependence between observations.
+- There are issues with using p–values as measures of evidence against a null hypothesis. Basing scientific conclusions
+on it can lead to non-reproducible results.
+- The use of predictions from exposure models including acknowledging the additional uncertainty involved when
+using predictions as inputs to a health model.
+- Methods for performing model selection, including the pros and cons of automatic selection procedures.
+- Model selection within the Bayesian setting and how the models themselves can be incorporated into the estimation
+process using Bayesian Model Averaging.
+
+
+
 
 This chapter considers some of the issues that will arise when dealing with ‘real data’. Data will commonly have missing values and may be measured with error. This error might be random or may be due to systematic patterns in how it was collected. From this chapter, the reader will have gained an understanding of the following topics:
 
