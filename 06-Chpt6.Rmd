@@ -21,7 +21,7 @@ For this example, the following packages are needed `ggplot2` and  `sf`.
 
 Load the necessary packages.
 
-```{r Ex 6.2 prelim load, message=FALSE, echo = FALSE, warning=FALSE}
+```{r Ex 6.2 prelim load, message=FALSE, echo = TRUE, warning=FALSE}
 
 library(ggplot2)
 library(sf)

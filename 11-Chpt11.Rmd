@@ -10,4 +10,49 @@ The chapter contains the theory required for handling time series data. From thi
 - Implementing time series processes within a Bayesian hierarchical framework.
 
 
+## Example 11.1 Ground level ozone concentrations
+
+
+```{r Ex 11.1 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(ggplot2)
+
+# Load data
+# Select one site from the daily data
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
+site_daily$date <- as.Date(site_daily$date)
+
+# load hourly data from that same site
+site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
+
+```
+
+
+
+
+```{r Ex 11.1 plot time series}
+
+ggplot(data = site_daily,) +
+  geom_line(aes(x = date, y = ozone, group = 1)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") + 
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black"), # keep axis line
+    axis.text.x = element_text(angle = 60, hjust = 1) # tilt x axis labels 60 deg
+  )
+
+
+
+ts.plot(site_hourly$value,
+        ylab = "Hourly Ozone Concentration (ppm)",
+        xlab = "Hour in 2013's ozone season")
+abline(h = 0.075, v = 0, col = "gray60")
+```
+
+
+
+
 
