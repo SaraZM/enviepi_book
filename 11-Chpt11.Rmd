@@ -10,8 +10,10 @@ The chapter contains the theory required for handling time series data. From thi
 - Implementing time series processes within a Bayesian hierarchical framework.
 
 
-## Example 11.1 Ground level ozone concentrations
+## Example 11.1 Ground level ozone concentrations {-}
 
+
+Load the daily and hourly data for one site.
 
 ```{r Ex 11.1 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
@@ -20,22 +22,14 @@ library(ggplot2)
 # Load data
 # Select one site from the daily data
 site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
-site_daily$date <- as.Date(site_daily$date)
+site_daily$date <- as.Date(site_daily$date, "%m/%d/%Y")
 
 # load hourly data from that same site
 site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
 
-```
+# Add a theme to clear axes and background in ggplot
 
-
-
-
-```{r Ex 11.1 plot time series}
-
-ggplot(data = site_daily,) +
-  geom_line(aes(x = date, y = ozone, group = 1)) +
-  xlab("Day in 2013 at Los Angeles Site 060379033") + 
-  ylab("Max Daily 8hr Ozone Level (ppm)") +
+theme_clear <- function(){
   theme(
     panel.grid.major = element_blank(), # remove background grid
     panel.grid.minor = element_blank(),
@@ -43,14 +37,198 @@ ggplot(data = site_daily,) +
     axis.line = element_line(colour = "black"), # keep axis line
     axis.text.x = element_text(angle = 60, hjust = 1) # tilt x axis labels 60 deg
   )
-
-
-
-ts.plot(site_hourly$value,
-        ylab = "Hourly Ozone Concentration (ppm)",
-        xlab = "Hour in 2013's ozone season")
-abline(h = 0.075, v = 0, col = "gray60")
+}
+  
 ```
+
+
+Plot the daily and hourly time series. 
+
+```{r Ex 11.1 plot time series}
+
+ggplot(data = site_daily,) +
+  geom_line(aes(x = date, y = max.ozone, group = 1)) +
+  geom_vline(xintercept = as.Date("2013-01-01"), color = "grey") +
+  geom_hline(yintercept = 0.075, color = "grey") +
+  xlab("Day in 2013 at Los Angeles Site 060379033") + 
+  ylab("Max Daily 8hr Ozone Level (ppm)") + theme_clear()
+  
+
+
+ggplot(data = site_hourly,) +
+  geom_line(aes(x = time, y = ozone, group = 1)) +
+  geom_vline(xintercept = 1, color = "grey") +
+   # show the 8 hour regulatory standard of 0.075 (ppm).
+  geom_hline(yintercept = 0.075, color = "grey") +
+  xlab("Hour in 2013's ozone season") + 
+  ylab("Hourly Ozone Concentration (ppm)") +  theme_clear()
+
+```
+
+## Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average {-}
+
+```{r Ex 11.2 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(TTR)
+
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
+
+# Add a theme to clear axes and background in ggplot
+
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black"), # keep axis line
+    axis.text.x = element_text(angle = 60, hjust = 1) # tilt x axis labels 60 deg
+  )
+}
+
+site_daily$day <- 1:nrow(site_daily)
+
+```
+
+
+```{r Ex 11.2 moving averages plot, warning=FALSE}
+
+### Add loess smooth
+# Original data
+ozone.loess <- loess(max.ozone ~ day, span = 0.75, data = site_daily[,c("max.ozone", "day")])
+ozone.predict <- predict(ozone.loess, data.frame(day = 1:nrow(site_daily)))
+ozone.predict_df <- data.frame(day = 1:nrow(site_daily), 
+                               ozone.prediction = ozone.predict)
+
+# Single day
+ggplot(data = site_daily) +
+  geom_line(aes(x = day, y = max.ozone, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") + 
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  ggtitle("Single day") + 
+  theme_clear()
+
+# Three days
+ozone_SMA3 <- data.frame(sma = SMA(site_daily$max.ozone, n = 3),
+                         day = 1:nrow(site_daily))
+
+ggplot(data = ozone_SMA3) +
+  geom_line(aes(x = day, y = sma, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") + 
+  ylab("Max Daily 8hr Ozone Level (ppm)") +  
+  ggtitle("Three day") + 
+  theme_clear()
+
+
+# Six days
+ozone_SMA6 <- data.frame(sma = SMA(site_daily$max.ozone, n = 6),
+                         day = 1:nrow(site_daily))
+
+ggplot(data = ozone_SMA6) +
+  geom_line(aes(x = day, y = sma, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") + 
+  ylab("Max Daily 8hr Ozone Level (ppm)") +  
+  theme_clear()
+
+
+# Twelve days
+ozone_SMA12 <- data.frame(sma = SMA(site_daily$max.ozone, n = 12),
+                         day = 1:nrow(site_daily))
+
+ggplot(data = ozone_SMA12) +
+  geom_line(aes(x = day, y = sma, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") + 
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  ggtitle("Twelve day") + 
+  theme_clear()
+
+```
+
+
+## Example 11.13 Forecasting ozone levels {-}
+
+```{r Ex 11.13 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(TTR)
+library(forecast)
+
+# Load data
+
+# load hourly data for site 060379033
+site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
+
+```
+
+```{r Ex 11.13 data munge}
+# one night hour per day missing for instrument calibration - imputed for simplicity
+imputeNA <- mean(site_hourly$ozone, na.rm = TRUE)
+
+site_hourly$ozone[is.na(site_hourly$ozone)] <- imputeNA
+
+# Select the first seven days in july
+# days_pattern contains the dates for the first seven days
+days_pattern <- paste0("^2013070", 1:7, collapse="|") 
+
+# we can use grepl to select all the rows that follow that pattern
+july_seven_days <- site_hourly[grepl(days_pattern, site_hourly$datetime),] 
+
+july_seven_days$hours <- 1:nrow(july_seven_days)
+## Turn this into a time series object to use Holt-Winters forecast
+
+level_ts <- ts(july_seven_days$ozone,
+               frequency = 24,
+               start = c(1))
+
+ozone_forecast <- HoltWinters(level_ts) 
+ozone_forecast_fitted <- as.data.frame(ozone_forecast$fitted)
+
+ozone_forecast_fitted$hours <- 1:nrow(ozone_forecast_fitted) + 24
+
+# Plot Holt-Winters model fitting
+
+# REVIEW: I know you might not like it but the forecast plot seems more straightforward 
+# than using ggplot, I'll leave the two for now
+
+ggplot(july_seven_days[20:nrow(july_seven_days),]) +
+  geom_line(aes(x = hours, y = ozone)) +
+  geom_line(data = ozone_forecast_fitted, aes(x = hours, y = xhat), linetype = "dashed") +
+  ggtitle("Holt-Winters filtering") +
+  xlab("Hours - First Week -July 2013") +
+  theme_clear()
+
+plot(
+  ozone_forecast,
+  xlab = "Hours - First Week -July 2013",
+  ylab = "O3 (ppm)",
+  col.predicted = 1,
+  col = "black",
+  lty = 2
+)
+
+# Holt- Winters 24 ahead forast on Day 8 
+# the default forecast is Holt-Winters objects
+ozoneforecast_day8 <- forecast(ozone_forecast, h=24)
+
+ozoneforecast_day8_df <- data.frame(mean =  as.vector(ozoneforecast_day8$mean),
+                            lwr = as.vector(ozoneforecast_day8$lower[,"95%"]),
+                            uppr =  as.vector(ozoneforecast_day8$upper[,"95%"]),
+                            hours = (nrow(july_seven_days)+1):(nrow(july_seven_days) + 24))
+
+ggplot(july_seven_days) +
+    geom_line( aes(x = hours, y = ozone))  +
+  geom_line(data = ozoneforecast_day8_df, aes(x = hours, y = mean), color = "blue") + 
+geom_ribbon(data = ozoneforecast_day8_df, aes(ymin = lwr, ymax = uppr, x = hours),
+              alpha = 0.3) + 
+  ggtitle("Forecasts from Holt Winters") + theme_clear()
+
+plot(ozoneforecast_day8)
+
+  
+```
+
 
 
 
