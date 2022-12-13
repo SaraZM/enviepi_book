@@ -4,34 +4,34 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Strategies for modelling | Spatio-temporal methods in environmental epidemiology</title>
-  <meta name="description" content="Chapter 6 Strategies for modelling | Spatio-temporal methods in environmental epidemiology" />
+  <title>Chapter 7 Strategies-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology</title>
+  <meta name="description" content="Chapter 7 Strategies-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
   <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Strategies for modelling | Spatio-temporal methods in environmental epidemiology" />
+  <meta property="og:title" content="Chapter 7 Strategies-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/img/cover.jpg" />
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Strategies for modelling | Spatio-temporal methods in environmental epidemiology" />
+  <meta name="twitter:title" content="Chapter 7 Strategies-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
   
   
   <meta name="twitter:image" content="/img/cover.jpg" />
 
-<meta name="author" content="Gavin Shaddick and James V Zidek" />
+<meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2022-12-01" />
+<meta name="date" content="2022-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="Bayesian.html"/>
-<link rel="next" href="RealData.html"/>
+<link rel="prev" href="tactics.html"/>
+<link rel="next" href="trusted.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -139,45 +139,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="" data-path="preface-2nd-edition.html"><a href="preface-2nd-edition.html"><i class="fa fa-check"></i>Preface (2nd edition)</a></li>
 <li class="chapter" data-level="1" data-path="why.html"><a href="why.html"><i class="fa fa-check"></i><b>1</b> Why spatio-temporal epidemiology?</a></li>
-<li class="chapter" data-level="2" data-path="health-risks.html"><a href="health-risks.html"><i class="fa fa-check"></i><b>2</b> Modelling health risks</a></li>
-<li class="chapter" data-level="3" data-path="importance.html"><a href="importance.html"><i class="fa fa-check"></i><b>3</b> Importance of uncertainty</a></li>
-<li class="chapter" data-level="4" data-path="embracing.html"><a href="embracing.html"><i class="fa fa-check"></i><b>4</b> Embracing uncertainty: The Bayesian approach</a></li>
-<li class="chapter" data-level="5" data-path="Bayesian.html"><a href="Bayesian.html"><i class="fa fa-check"></i><b>5</b> The Bayesian approach in practice</a>
+<li class="chapter" data-level="2" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>2</b> Epidemiology-the basics</a></li>
+<li class="chapter" data-level="3" data-path="uncertainty.html"><a href="uncertainty.html"><i class="fa fa-check"></i><b>3</b> Uncertainty and its reduction</a></li>
+<li class="chapter" data-level="4" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>4</b> Data: increasing information and reducing uncertainty</a></li>
+<li class="chapter" data-level="5" data-path="embracing.html"><a href="embracing.html"><i class="fa fa-check"></i><b>5</b> Embracing uncertainty: the Bayesian approach</a></li>
+<li class="chapter" data-level="6" data-path="tactics.html"><a href="tactics.html"><i class="fa fa-check"></i><b>6</b> Tactics-implementing uncertainty models</a>
 <ul>
-<li class="chapter" data-level="" data-path="Bayesian.html"><a href="Bayesian.html#example-5.2-chronic-obstructive-pulmonary-disease-copd-in-england"><i class="fa fa-check"></i>Example 5.2: Chronic obstructive pulmonary disease (COPD) in England</a>
+<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.2-chronic-obstructive-pulmonary-disease-copd-in-england"><i class="fa fa-check"></i>Example 6.2: Chronic obstructive pulmonary disease (COPD) in England</a>
 <ul>
-<li class="chapter" data-level="" data-path="Bayesian.html"><a href="Bayesian.html#modelling-the-raw-standardized-mortality-rates-smrs"><i class="fa fa-check"></i>Modelling the raw standardized mortality rates (SMRs)</a></li>
-<li class="chapter" data-level="" data-path="Bayesian.html"><a href="Bayesian.html#modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r"><i class="fa fa-check"></i>Modelling a Poisson-Gamma with an MCMC implemented in <code>R</code></a></li>
+<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#modelling-the-raw-standardized-mortality-rates-smrs"><i class="fa fa-check"></i>Modelling the raw standardized mortality rates (SMRs)</a></li>
+<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r"><i class="fa fa-check"></i>Modelling a Poisson-Gamma with an MCMC implemented in <code>R</code></a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="Bayesian.html"><a href="Bayesian.html#example-5.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 5.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
+<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="Strategies.html"><a href="Strategies.html"><i class="fa fa-check"></i><b>6</b> Strategies for modelling</a></li>
-<li class="chapter" data-level="7" data-path="RealData.html"><a href="RealData.html"><i class="fa fa-check"></i><b>7</b> Is ‘real’ data always quite so real?</a></li>
-<li class="chapter" data-level="8" data-path="Spatial.html"><a href="Spatial.html"><i class="fa fa-check"></i><b>8</b> Spatial patterns in disease</a>
+<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies-implementing uncertainty models</a></li>
+<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But-can the data be trusted</a></li>
+<li class="chapter" data-level="9" data-path="Disease.html"><a href="Disease.html"><i class="fa fa-check"></i><b>9</b> Disease-spatial patterns</a>
 <ul>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#example-8.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 8.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 9.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
 <ul>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#nimble"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#stan"><i class="fa fa-check"></i>Stan</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#nimble"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#stan"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#example-8.3-fitting-a-conditional-spatial-model-in-nimble-and-stan"><i class="fa fa-check"></i>Example 8.3: Fitting a conditional spatial model in <code>nimble</code> and <code>stan</code></a>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.3-fitting-a-conditional-spatial-model-in-nimble-and-stan"><i class="fa fa-check"></i>Example 9.3: Fitting a conditional spatial model in <code>nimble</code> and <code>stan</code></a>
 <ul>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#nimble-1"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#stan-1"><i class="fa fa-check"></i>Stan</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#nimble-1"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#stan-1"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#example-8.4-fitting-a-conditional-spatial-model-using-carbayes"><i class="fa fa-check"></i>Example 8.4: Fitting a conditional spatial model using CARBayes</a></li>
-<li class="chapter" data-level="" data-path="Spatial.html"><a href="Spatial.html#example-8.5-fitting-a-conditional-model-using-inla"><i class="fa fa-check"></i>Example 8.5: Fitting a conditional model using INLA</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.4-fitting-a-conditional-spatial-model-using-carbayes"><i class="fa fa-check"></i>Example 9.4: Fitting a conditional spatial model using CARBayes</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.5-fitting-a-conditional-model-using-inla"><i class="fa fa-check"></i>Example 9.5: Fitting a conditional model using INLA</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="PointsFields.html"><a href="PointsFields.html"><i class="fa fa-check"></i><b>9</b> From points to fields: modelling environmental hazards over space</a></li>
-<li class="chapter" data-level="10" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>10</b> Why time also matters</a></li>
-<li class="chapter" data-level="11" data-path="Interplay.html"><a href="Interplay.html"><i class="fa fa-check"></i><b>11</b> The interplay between space and time in exposure assessment</a></li>
-<li class="chapter" data-level="12" data-path="Roadblocks.html"><a href="Roadblocks.html"><i class="fa fa-check"></i><b>12</b> Roadblocks on the way to causality: exposure pathways, aggregation and other sources of bias</a></li>
-<li class="chapter" data-level="13" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>13</b> Better exposure measurements through better design</a></li>
-<li class="chapter" data-level="14" data-path="frontiers.html"><a href="frontiers.html"><i class="fa fa-check"></i><b>14</b> New frontiers</a></li>
-<li class="chapter" data-level="15" data-path="other.html"><a href="other.html"><i class="fa fa-check"></i><b>15</b> Other resources</a>
+<li class="chapter" data-level="10" data-path="hazards.html"><a href="hazards.html"><i class="fa fa-check"></i><b>10</b> Environmental hazards-spatial models</a>
 <ul>
-<li class="chapter" data-level="15.1" data-path="other.html"><a href="other.html#course"><i class="fa fa-check"></i><b>15.1</b> Course</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1"><i class="fa fa-check"></i>Example 10.1</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9"><i class="fa fa-check"></i>Example 10.9</a>
+<ul>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
+<ul>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.1-ground-level-ozone-concentrations"><i class="fa fa-check"></i>Example 11.1 Ground level ozone concentrations</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.2-low-pass-filtering-of-carbon-monoxide-levels-using-the-moving-average"><i class="fa fa-check"></i>Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.13-forecasting-ozone-levels"><i class="fa fa-check"></i>Example 11.13 Forecasting ozone levels</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.14-forecasting-volcanic-ash"><i class="fa fa-check"></i>Example 11.14 Forecasting volcanic ash</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-random-walk"><i class="fa fa-check"></i>Example 11.16 implementation of a random walk</a>
+<ul>
+<li class="chapter" data-level="11.0.1" data-path="Time.html"><a href="Time.html#nimble-3"><i class="fa fa-check"></i><b>11.0.1</b> Nimble</a></li>
+<li class="chapter" data-level="11.0.2" data-path="Time.html"><a href="Time.html#stan-2"><i class="fa fa-check"></i><b>11.0.2</b> Stan</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
+<li class="chapter" data-level="13" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>13</b> Causality-roadblocks on the way to it</a></li>
+<li class="chapter" data-level="14" data-path="monitoring.html"><a href="monitoring.html"><i class="fa fa-check"></i><b>14</b> Better monitoring network design-getting better measurements</a></li>
+<li class="chapter" data-level="15" data-path="frontiers.html"><a href="frontiers.html"><i class="fa fa-check"></i><b>15</b> Current frontiers</a></li>
+<li class="chapter" data-level="" data-path="course.html"><a href="course.html"><i class="fa fa-check"></i>Course</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -199,17 +215,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="Strategies" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">Chapter 6</span> Strategies for modelling<a href="Strategies.html#Strategies" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This chapter considers both some of the wider issues related to modelling and the generalisability of results and more technical material on the effect of covariates and model selection. From this chapter, the reader will have gained an understanding of the following topics:</p>
+<div id="strategies" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Strategies-implementing uncertainty models<a href="strategies.html#strategies" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This chapter considers both some of the wider issues related to modelling and the generalisability of results and more
+technical material on the effect of covariates and model selection. From this chapter, the reader will have gained an
+understanding of the following topics:</p>
 <ul>
-<li>Why having contrasts in the variables of interest is important in assessing the effects they have on the response variable.</li>
-<li>The biases that may arise in the presence of covariates and how covariates can affect variable selection and model choice.</li>
+<li>Why having contrasts in the variables of interest is important in assessing the effects they have on the response
+variable.</li>
+<li>The biases that may arise in the presence of covariates and how covariates can affect variable selection and model
+choice.</li>
 <li>Hierarchical models and how that can be used to acknowledge dependence between observations.</li>
-<li>There are issues with using p–values as measures of evidence against a null hypothesis. Basing scientific conclusions on it can lead to non-reproducible results.</li>
-<li>The use of predictions from exposure models including acknowledging the additional uncertainty involved when using predictions as inputs to a health model.</li>
+<li>There are issues with using p–values as measures of evidence against a null hypothesis. Basing scientific conclusions
+on it can lead to non-reproducible results.</li>
+<li>The use of predictions from exposure models including acknowledging the additional uncertainty involved when
+using predictions as inputs to a health model.</li>
 <li>Methods for performing model selection, including the pros and cons of automatic selection procedures.</li>
-<li>Model selection within the Bayesian setting and how the models themselves can be incorporated into the estimation process using Bayesian Model Averaging.</li>
+<li>Model selection within the Bayesian setting and how the models themselves can be incorporated into the estimation
+process using Bayesian Model Averaging.</li>
 </ul>
 
 </div>
@@ -218,8 +241,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="Bayesian.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="RealData.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="tactics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="trusted.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -250,7 +273,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-Chpt6.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/07-Chpt7.Rmd",
 "text": "Edit"
 },
 "history": {
