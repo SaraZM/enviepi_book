@@ -372,7 +372,69 @@ ggplot(volcano_dust_df) +
 
 ```
 
+## Example 11.16 implementation of a random walk {-}
 
+### Nimble
+
+```{r Ex 11.16 clean, include = FALSE}
+rm(list = ls())
+```
+
+```{r  Ex 11.16 load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(nimble)
+
+```
+
+
+
+```{r Ex 11.16 nimble model, results='hide', warning=FALSE, message= FALSE}
+
+Example11_16Code <- nimbleCode({
+  for (t in 2:(NT - 1)) {
+  # Observation model
+    y[t] ~ dnorm(gamma[t], var = tau.v)
+  }
+  
+  y[1] ~ dnorm(gamma[1], prec = tau.v)
+  y[NT] ~ dnorm(gamma[n], prec = tau.v)
+  tau.v ~ dgamma(1, 0.01)
+  
+  # System model
+  for (t in 2:(NT - 1)) {
+    tmp.gamma[t] <- (gamma[t - 1] + gamma[t + 1]) / 2 
+    gamma[t] ~ dnorm(tmp.gamma[t], prec = tau.w2)
+  } 
+  
+  gamma[1] ~ dnorm(gamma[2], tau.w)
+  gamma[NT] ~ dnorm(gamma[NT - 1], prec = tau.w)
+  tau.w ~ dgamma(r.w, d.w) 
+  sigma.w <- 1 / sqrt(tau.w)
+})
+
+Example11_16Code_lik <- nimbleCode({
+  for (t in 2:(NT - 1)) {
+    tau.w.like[t] <- pow((gamma[t] - tmp.gamma[t]), 2)
+  }
+  tau.w.like[1] <- 0
+  tau.w.like[T] <- pow((gamma[T] - gamma[T - 1]), 2)
+  tau.w2 <- tau.w * 2
+  d <- 1
+  r <- 0.01
+  d.w <- d + sum(tau.w.like[]) / 2
+  r.w <- r + n / 2
+  tau.w ~ dgamma(r.w, d.w)
+})
+
+
+
+```
+
+Define the constants, data and initials lists for the `nimble` model.
+
+
+
+### Stan
 
 
 
