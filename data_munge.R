@@ -41,4 +41,4 @@ site_hour$time <- 1:nrow(site_hour)
 # site_hour <- tidyr::separate(site_hour, datetime, c("date", "time"), sep = "T")
 
 
-write.csv(site_hour, "data/LA_hourly_ozone.csv", row.names = FALSE)
+write.csv(site_hour, "data/LA_ozone_hourly.csv", row.names = FALSE)
