@@ -34,3 +34,4 @@ _main.Rmd
 *.tex
 # files in bookdown
 _bookdown_files/
+docs/libs/
