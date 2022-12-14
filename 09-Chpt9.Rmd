@@ -24,7 +24,6 @@ library(sf) # to read shapefile
 # Load data
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
-
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
@@ -37,7 +36,7 @@ The following is the code for the Poisson-Gamma model implemented in `nimble`.
 
 ```{r Ex 9.1 nimble model, results='hide', warning=FALSE, message= FALSE}
 
-Example8_1Code <- nimbleCode({
+Example9_1Code <- nimbleCode({
   for (i in 1:N) {
     Y[i] ~ dpois(mu[i])
     # REVIEW: There is an intercept in the book, 
@@ -90,7 +89,7 @@ params <- c("theta", "a", "b", "Y.fit")
 
 # Run model in nimble
 mcmc.out <- nimbleMCMC(
-  code = Example8_1Code,
+  code = Example9_1Code,
   constants = constants,
   data = ex.data,
   inits = inits,
@@ -114,7 +113,6 @@ Show the WAIC, effective sample size, and trace plots for some of the parameters
 
 mcmc.out$WAIC
 min(coda::effectiveSize(mcmc.out$samples))
-
 mvSamples <- mcmc.out$samples
 
 # trace plot of a
@@ -133,11 +131,9 @@ Now that we have checked the convergence of the chains we can plot the posterior
 ```{r Ex 9.1 nimble posterior summary}
 # Print posterior summary for parameters a and b
 summary(mvSamples[, c("a", "b")])
-
 # posterior summaries of theta_i
-post_summary <- mcmc.out$summary$all.chains  %>% as.data.frame() %>%
+post_summary <- mcmc.out$summary$all.chains |> as.data.frame() |>
   tibble::rownames_to_column("variable")
-
 # pot the mean and 95% CIs for the thetas
 post_theta <-  post_summary[grepl("theta\\[", post_summary$variable), ]
 
@@ -157,7 +153,6 @@ abline(h = 1, lwd = 2, lty = 2)
 
 # posterior summary of fitted values
 post_fitted <-  post_summary[grepl("Y.fit\\[", post_summary$variable), ]
-
 # plot mean and 95% CIs for the fitted values
 par(mfrow = c(1, 1))
 plot(
@@ -196,7 +191,6 @@ rstan_options(auto_write = TRUE)
 # Load data
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
-
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
@@ -228,7 +222,6 @@ ex.data <- list(
   lambda_a = 1,
   lambda_b = 1
 )
-
 # Run the model in Stan
 mod0 <- stan(
   file = "functions/Example8_1.stan",
@@ -265,7 +258,7 @@ traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
 ```{r Ex 8.1 stan posterior summary}
 
 summary_theta <-
-  summary(mod0, pars = c("theta"), probs = c(0.05, 0.95))$summary %>% as.data.frame()
+  summary(mod0, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame()
 
 par(mfrow = c(1, 1))
 plot(
@@ -283,8 +276,7 @@ abline(h = 1, lwd = 2, lty = 2)
 
 # Posterior summary of fitted values
 summary_fit <-
-  summary(mod0, pars = c("yfit"), probs = c(0.05, 0.95))$summary %>% as.data.frame()
-
+  summary(mod0, pars = c("yfit"), probs = c(0.05, 0.95))$summary |> as.data.frame()
 # Plot mean and 95% CIs for the fitted values
 par(mfrow = c(1, 1))
 plot(
@@ -321,7 +313,6 @@ library(nimble)
 # Load data
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
-
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
@@ -351,26 +342,23 @@ adjlist = function(W, N) {
 
 Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
 
-```{r Ex 8.3 nimble neighborhood}
+```{r Ex 9.3 nimble neighborhood}
 
 # Create the neighborhood
 W.nb <-
   poly2nb(england, row.names = rownames(england))
-
 # Creates a matrix for following function call
 W.mat <- nb2mat(W.nb, style = "B")
-
 # Define the spatial structure to use in stan
 N <- length(unique(england$ID))
-
-neigh = adjlist(W.mat, N)
-numneigh = apply(W.mat,2,sum)
+neigh  <- adjlist(W.mat, N)
+numneigh  <- apply(W.mat,2,sum)
 
 ```
 
-```{r Ex 8.3 nimble car model, warning=FALSE}
+```{r Ex 9.3 nimble car model, warning=FALSE}
 
-CAR_Code <- nimbleCode({
+Example9_3Code <- nimbleCode({
   # Likelihood
   for (i in 1:N) {
     y[i] ~ dpois(lambda[i])
@@ -379,12 +367,9 @@ CAR_Code <- nimbleCode({
   
   # Priors
   beta0 ~ dnorm(0, sd = 0.98)
-  
   b[1:N] ~ dcar_normal(adj[1:L], weights[1:L], num[1:N], tau, zero_mean = 1)
-  
   tau <- 1 / (sigma_b ^ 2)
   sigma_b ~ T(dnorm(0, sd = 1), 0,)
-  
   # Fitted values and likelihood for WAIC
   for (i in 1:N) {
     fitted[i] ~ dpois(lambda[i])
@@ -397,7 +382,7 @@ Define the constants, data and initial values lists and run the model.
 
 ```{r Ex 8.3 nimble car run, error = FALSE, message = FALSE, results='hide'}
 # constants list
-constants = list(
+constants <- list(
   N = N,
   E = expected$E2010,
   L = length(neigh),
@@ -407,25 +392,23 @@ constants = list(
   p = 3
 )
 # data list
-ex.data = list(y = observed$Y2010)
+ex.data <- list(y = observed$Y2010)
 inits = list(
   beta0 = rnorm(1),
   fitted = rpois(N, 2),
   sigma_b = 1,
   b = rnorm(N)
 )
-
 # Run model in nimble
-CAR_Model = nimbleModel(
-  code = CAR_Code,
+CAR_Model <- nimbleModel(
+  code = Example9_3Code,
   constants = constants,
   data = ex.data,
   inits = inits
 )
-
 # QUESTION: can I run this model without configuring it as I did in the previous examples? 
 CAR_conf <-
-  configureMCMC(CAR_Model, monitors = c("beta0", "fitted", "b", "sigma_b"))
+  configureMCMC(Example9_3Code, monitors = c("beta0", "fitted", "b", "sigma_b"))
 CAR_MCMC = buildMCMC(
   CAR_Model,
   enableWAIC = T,
@@ -444,7 +427,6 @@ CAR_runMCMC = runMCMC(
   summary = TRUE
 )
 
-
 ```
 
 Show the WAIC, effective sample size, and trace plots for some of the parameters.
@@ -454,7 +436,6 @@ Show the WAIC, effective sample size, and trace plots for some of the parameters
 
 CAR_runMCMC$WAIC
 min(coda::effectiveSize(CAR_runMCMC$samples))
-
 plot(CAR_runMCMC$samples[, c("beta0")])
 plot(CAR_runMCMC$samples[, c("b[2]")])
 plot(CAR_runMCMC$samples[, c("sigma_b")])
@@ -466,7 +447,6 @@ plot(CAR_runMCMC$samples[, c("sigma_b")])
 # Extract samples
 variables <- c("beta0", "sigma_b")
 summary_CAR_nimble <- CAR_runMCMC$summary$all.chains
-
 summary_CAR_nimble[variables,]
 
 ```
@@ -475,27 +455,23 @@ Map the mean of the posterior estimate for the latent effect.
 
 ```{r plot map nimble}
 
-samples_CAR_b <- summary_CAR_nimble[grepl("b\\[", rownames(summary_CAR_nimble)),] %>% as.data.frame()
-
+samples_CAR_b <-
+  summary_CAR_nimble[grepl("b\\[", rownames(summary_CAR_nimble)), ] |> as.data.frame()
 observed <- tibble::rownames_to_column(observed, "ID")
-
 samples_CAR_b$ID <- observed$ID
-
-CAR_nimble_merge <- merge(england, samples_CAR_b, by = "ID") 
-
+CAR_nimble_merge <- merge(england, samples_CAR_b, by = "ID")
 ggplot() +
   # Choose spatial object and column for plotting
-  geom_sf(data = CAR_nimble_merge, aes(fill = Mean)) + 
+  geom_sf(data = CAR_nimble_merge, aes(fill = Mean)) +
   # Change legend's label
-    labs(fill = 'Latent effects stan') +
+  labs(fill = 'Latent effects stan') +
   # Clear background and plot borders
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks = element_blank(),
     rect = element_blank()
-  ) 
-
+  )
 
 ```
 
@@ -521,7 +497,6 @@ rstan_options(auto_write = TRUE)
 # Load data
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
-
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
@@ -587,20 +562,17 @@ Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjli
 # Create the neighborhood
 W.nb <-
   poly2nb(england, row.names = rownames(england))
-
 # Creates a matrix for following function call
 W.mat <- nb2mat(W.nb, style = "B")
-
 # Define the spatial structure to use in stan
 N <- length(unique(england$ID))
-
-neigh = adjlist(W.mat, N)
-numneigh = apply(W.mat, 2, sum)
-nbs = mungeCARdata4stan(neigh, numneigh)
-N = nbs$N
-node1 = nbs$node1
-node2 = nbs$node2
-N_edges = nbs$N_edges
+neigh <- adjlist(W.mat, N)
+numneigh  <-  apply(W.mat, 2, sum)
+nbs <- mungeCARdata4stan(neigh, numneigh)
+N <- nbs$N
+node1 <- nbs$node1
+node2 <- nbs$node2
+N_edges <- nbs$N_edges
 
 ```
 
@@ -613,15 +585,14 @@ cat functions/Example8_3.stan
 ``` 
 
 
-
 ```{r Ex 8.3 stan car effects, warning=FALSE}
 
-N_edges = N_edges
-node1 = node1
-node2 = node2
-N = N
-y = observed$Y2010
-E = expected$E2010
+N_edges <- N_edges
+node1 <- node1
+node2 <- node2
+N <- N
+y <- observed$Y2010
+E <- expected$E2010
 
 ex.data <- list(
   N = N,
@@ -799,10 +770,8 @@ Check that there are no errors and summarize the results
 
 # Printing first six rows of smoothed SMRs
 head(SMR_smooth)
-
 # Summarizing smoothed SMRs
 summary(SMR_smooth)
-
 # Summary of the parameters under the CAR model.
 model$summary.results[]
 ```
@@ -814,19 +783,14 @@ Use `ggplot()` and `geom_sf()` to plot the map of smoothed SMRs.
 ```{r Ex 9.4 carbayes map smoothed SMRs, class.source = 'foldable'}
 
 SMR_smooth <- tibble::rownames_to_column(SMR_smooth, "ID")
-
 # Combining smoothed SMRs and the shapefile
-
 SMRspatial_smooth <- merge(england, SMR_smooth, by = "ID")
-
 # Creating breaks for legend in plot
 range <-
   seq(min(SMR_smooth$SMR2010) - 0.01,
       max(SMR_smooth$SMR2010) + 0.01,
       length.out = 11)
-
 # Creating map of smoothed SMRs in England in 2010
-
 ggplot() +
   # Choose spatial object and column for plotting
   geom_sf(data = SMRspatial_smooth, aes(fill = SMR2010)) +
@@ -856,11 +820,9 @@ library(spdep)
 
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
-
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
-
 expected <-
   read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
 

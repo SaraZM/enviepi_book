@@ -384,49 +384,277 @@ rm(list = ls())
 
 library(nimble)
 
-```
+# Load data for one site
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
 
+# change the format of the date column
+site_daily$date <- as.Date(site_daily$date, "%m/%d/%Y")
+
+# load hourly data from that same site
+site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
+
+# Select the first seven days in July as in Example 11.13
+days_pattern <- paste0("^2013070", 1:7, collapse="|") 
+
+# select all the rows that follow that pattern using grepl
+
+# I know I don't need to impute it but it was taking forever to compile
+imputeNA <- mean(site_hourly$ozone, na.rm = TRUE)
+site_hourly$ozone[is.na(site_hourly$ozone)] <- imputeNA
+
+july_seven_days <- site_hourly[grepl(days_pattern, site_hourly$datetime),] 
+july_seven_days$hours <- 1:nrow(july_seven_days)
+
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+```
 
 
 ```{r Ex 11.16 nimble model, results='hide', warning=FALSE, message= FALSE}
 
+# The following nimble code was originally written by Paritosh Kumar Roy
 Example11_16Code <- nimbleCode({
-  for (t in 2:(NT - 1)) {
-  # Observation model
-    y[t] ~ dnorm(gamma[t], var = tau.v)
+  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  for (t in 1:Tt) {
+    Vt[t] <- tau ^ 2
   }
   
-  y[1] ~ dnorm(gamma[1], prec = tau.v)
-  y[NT] ~ dnorm(gamma[n], prec = tau.v)
-  tau.v ~ dgamma(1, 0.01)
   
-  # System model
-  for (t in 2:(NT - 1)) {
-    tmp.gamma[t] <- (gamma[t - 1] + gamma[t + 1]) / 2 
-    gamma[t] ~ dnorm(tmp.gamma[t], prec = tau.w2)
-  } 
-  
-  gamma[1] ~ dnorm(gamma[2], tau.w)
-  gamma[NT] ~ dnorm(gamma[NT - 1], prec = tau.w)
-  tau.w ~ dgamma(r.w, d.w) 
-  sigma.w <- 1 / sqrt(tau.w)
-})
-
-Example11_16Code_lik <- nimbleCode({
-  for (t in 2:(NT - 1)) {
-    tau.w.like[t] <- pow((gamma[t] - tmp.gamma[t]), 2)
+  for (j in 1:p) {
+    sqrt_Wt_diag[j] ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
   }
-  tau.w.like[1] <- 0
-  tau.w.like[T] <- pow((gamma[T] - gamma[T - 1]), 2)
-  tau.w2 <- tau.w * 2
-  d <- 1
-  r <- 0.01
-  d.w <- d + sum(tau.w.like[]) / 2
-  r.w <- r + n / 2
-  tau.w ~ dgamma(r.w, d.w)
+  
+  Wt[1:p, 1:p] <- diag(sqrt_Wt_diag[1:p] ^ 2)
+  
+  mt[1:p, 1] <- m0[1:p]
+  Ct[1:p, 1:p, 1] <- C0[1:p, 1:p]
+  
+  for (t in 1:Tt) {
+    at[1:p, t] <- (Gt[1:p, 1:p] %*% mt[1:p, t])[1:p, 1]
+    Rt[1:p, 1:p, t] <-
+      Gt[1:p, 1:p] %*% Ct[1:p, 1:p, t] %*% t(Gt[1:p, 1:p]) + Wt[1:p, 1:p]
+    ft[t] <- (t(Ft[1:p, t]) %*% at[1:p, t])[1, 1]
+    Qt[t] <-
+      (t(Ft[1:p, t]) %*% Rt[1:p, 1:p, t] %*% Ft[1:p, t] + Vt[t])[1, 1]
+    yt[t] ~ dnorm(mean = ft[t], var = Qt[t])
+    At[1:p, t] <- (Rt[1:p, 1:p, t] %*% Ft[1:p, t])[1:p, 1] / Qt[t]
+    mt[1:p, t + 1] <- at[1:p, t] + (At[1:p, t] * (yt[t] - ft[t]))
+    Ct[1:p, 1:p, t + 1] <-
+      Rt[1:p, 1:p, t] - (At[1:p, t] %*% t(At[1:p, t])) * Qt[t]
+  }
+  
+  theta[1:p, 1:(Tt + 1)] <-
+    nim_bsample(
+      mt = mt[1:p, 1:(Tt + 1)],
+      Ct = Ct[1:p, 1:p, 1:(Tt + 1)],
+      at = at[1:p, 1:Tt],
+      Gt = Gt[1:p, 1:p],
+      Rt = Rt[1:p, 1:p, 1:Tt]
+    )
+  
+  
 })
 
+```
 
+```{r Ex 11.16 nimble sampler}
+
+nim_bsample <- nimbleFunction(
+  run = function(mt = double(2),
+                 Ct = double(3),
+                 at = double(2),
+                 Gt = double(2),
+                 Rt = double(3)) {
+    returnType(double(2))  # return type declaration
+    # identifying the dimension of the observation equation and evolution equation
+    p <- nimDim(at)[1] # dimension of the evolution equation
+    Tt <- nimDim(at)[2] # total time points
+    
+    theta <-
+      nimArray(0, dim = c(p, Tt + 1)) # including theta0 at the 1st column
+    # forward j = 1:(Tt+1) index transformed to t = (Tt+1):1 index as t = (Tt+2) - j
+    j <- 1
+    t <- (Tt + 2) - j
+    theta[1:p, t] <-
+      rmnorm_chol(
+        n = 1,
+        mean = mt[1:p, t],
+        cholesky = chol(Ct[1:p, 1:p, t]),
+        prec_param = FALSE
+      )
+    for (j in 2:(Tt + 1)) {
+      t <- (Tt + 2) - j
+      Bt <- Ct[1:p, 1:p, t] %*% t(Gt) %*% inverse(Rt[1:p, 1:p, t])
+      ht <- (mt[1:p, t] + Bt %*% (theta[1:p, t + 1] - at[1:p, t]))[, 1]
+      Ht <- Ct[1:p, 1:p, t] - Bt %*% Gt %*% Ct[1:p, 1:p, t]
+      theta[1:p, t] <-
+        rmnorm_chol(
+          n = 1,
+          mean = ht,
+          cholesky = chol(Ht),
+          prec_param = FALSE
+        )
+    }
+    
+    return(theta)
+  },
+  check = FALSE
+)
+```
+
+## Hourly data using seasonal component
+
+```{r Ex 11.16 nimble hourly data}
+
+#linearGrowth <- readRDS("data/linearGrowth.rds")
+# fit a linear growth model for the daily data
+yt <- july_seven_days$ozone
+Tt <- length(yt)
+p <- 3
+
+Ft <- array(0, dim = c(p, Tt))
+Ft[1, ] <- 1
+Ft[2, ] <- 1
+Ft[3, ] <- 0
+
+# Intercept and seasonal component with period of 24hrs
+Gt <- rbind(c(1, 0, 0),
+           c(0, cos(2 * pi / 24), sin(2 * pi / 24)),
+           c(0, -sin(2 * pi / 24), cos(2 * pi / 24)))
+
+#Gt <- rbind(c(1, 1), c(0, 1))
+
+# initials
+m0 <- c(mean(yt, na.rm = TRUE), 0, 0)
+C0 <- diag(x = 1, nrow = p, ncol = p)
+
+const_list <- list(Tt = Tt,
+                   p = p,
+                   m0 = m0,
+                   C0 = C0)
+dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
+init_list <- list(
+  tau = 0.01,
+  sqrt_Wt_diag = sqrt(rep(0.1, p)),
+  theta = array(0, dim = c(p, Tt + 1))
+)
+
+Rmodel <-
+  nimbleModel(Example11_16Code,
+              constants = const_list,
+              data = dat_list,
+              inits = init_list)
+Rmodel$initializeInfo()
+Rmodel$calculate()
+Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
+conf <-
+  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt_diag", "theta"))
+
+Rmcmc <- buildMCMC(conf)
+Cmcmc <-
+  compileNimble(
+    Rmcmc,
+    project = Cmodel,
+    resetFunctions = TRUE,
+    showCompilerOutput = FALSE
+  )
+
+niter <- 20000
+nburnin <- 0.5 * niter
+nthin <- 1
+start_time <- Sys.time()
+post_samples <-
+  runMCMC(
+    Cmcmc,
+    niter = niter,
+    nburnin = nburnin,
+    thin = nthin,
+    nchains = 2,
+    summary = TRUE,
+    samplesAsCodaMCMC = TRUE
+  )
+end_time <- Sys.time()
+run_time <- end_time - start_time
+run_time
+
+```
+
+```{r}
+library(coda)
+post_summary <- post_samples$summary$all.chains 
+post_summary[c('tau',
+               'sqrt_Wt_diag[1]',
+               'sqrt_Wt_diag[2]',
+               'sqrt_Wt_diag[3]'), ]
+
+
+
+library(tidybayes)
+tidy_post_samples <- post_samples$samples %>% tidy_draws()
+
+tidy_post_samples %>%
+  select(
+    .chain,
+    .iteration,
+    .draw,
+    'tau',
+    'sqrt_Wt_diag[1]',
+    'sqrt_Wt_diag[2]',
+    'sqrt_Wt_diag[3]'
+  ) %>%
+  gather(vars, value, -.chain, -.iteration, -.draw) %>%
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), size = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 3) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+post_sum_theta <-
+  as.data.frame(post_summary) %>%  rownames_to_column() %>%
+  filter(str_detect(rowname, "theta")) %>%
+  select(rowname, `95%CI_low`, Mean, `95%CI_upp`) %>%
+  separate(rowname, into = c("x1", "x2"), sep = ",") %>%
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) %>%
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) %>%
+  select(component, time, `95%CI_low`, Mean, `95%CI_upp`)
+str(post_sum_theta)
+
+theta_true_df <- data.frame(t(theta)) %>%
+  rownames_to_column() %>%
+  mutate(time = as.numeric(rowname)) %>%
+  select(-rowname) %>%
+  gather(key, theta,-time) %>%
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", key))) %>%
+  select(component, time, theta)
+str(theta_true_df)
+
+theta_df <-
+  inner_join(theta_true_df, post_sum_theta, by = c("component", "time"))
+
+ggplot(data = post_sum_theta, aes(x = time)) +
+  #geom_path(aes(y = theta), color = "red", size = 0.4) +
+  geom_ribbon(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`), fill = "lightgray", alpha = 0.7) +
+  geom_path(aes(y = Mean), col = "blue", size = 0.4) +
+  facet_wrap(
+    ~ component,
+    nrow = 2,
+    scales = "free",
+    labeller = label_bquote(theta[.(component)])
+  ) +
+  ylab("") +
+  xlab("Time") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
 
 ```
 
@@ -434,12 +662,251 @@ Define the constants, data and initials lists for the `nimble` model.
 
 
 
-### Stan
+```{r}
+n <- ncol(post_samples$samples$chain1)
+
+Rhat_all <-  sapply(1:n, function(x) {
+  rstan::Rhat(cbind(post_samples$samples$chain1[, x],
+                    post_samples$samples$chain2[, x]))
+})
+
+ess_all <- sapply(1:n, function(x) {
+  rstan::ess_bulk(cbind(post_samples$samples$chain1[, x],
+                        post_samples$samples$chain2[, x]))
+})
+
+ess_all_tail <- sapply(1:n, function(x) {
+  rstan::ess_tail(cbind(post_samples$samples$chain1[, x],
+                        post_samples$samples$chain2[, x]))
+})
+
+max(Rhat_all, na.rm = T)
+min(ess_all, na.rm = T)
+min(ess_all_tail, na.rm = T)
+```
 
 
 
 
 
+
+
+## Daily data linear growth model -----
+
+```{r}
+integratedcodeUni <- nimbleCode({
+  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  for (t in 1:Tt) {
+    Vt[t] <- tau ^ 2
+  }
+  
+  sqrt_Wt ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  
+  Wt <-  sqrt_Wt ^ 2
+  
+  mt[1] <- m0
+  Ct[1] <- C0
+  
+  for (t in 1:Tt) {
+    at[t] <- Gt * mt[t]
+    Rt[t] <- Gt * Ct[t] * Gt + Wt
+    ft[t] <- (Ft[t] * at[t])
+    Qt[t] <- (Ft[t] * Rt[t] * Ft[t] + Vt[t])
+    yt[t] ~ dnorm(mean = ft[t], var = Qt[t])
+    At[t] <- (Rt[t] * Ft[t]) / Qt[t]
+    mt[t + 1] <- at[t] + (At[t] * (yt[t] - ft[t]))
+    Ct[t + 1] <- Rt[t] - (At[t] * At[t]) * Qt[t]
+  }
+  
+  theta[1:(Tt + 1)] <- nim_bsample_uni(
+    mt = mt[1:(Tt + 1)],
+    Ct = Ct[1:(Tt + 1)],
+    at = at[1:Tt],
+    Gt = Gt,
+    Rt = Rt[1:Tt]
+  )
+  
+})
+```
+
+```{r}
+
+nim_bsample_uni <- nimbleFunction(
+  run = function(mt = double(1),
+                 Ct = double(1),
+                 at = double(1),
+                 Gt = double(1),
+                 Rt = double(1)) {
+    returnType(double(1))  # return type declaration
+    # identifying the dimension of the observation equation and evolution equation
+    Tt <- nimDim(at)[1] # total time points
+    
+    theta <-
+      nimArray(0, dim = c(1, Tt + 1)) # including theta0 at the 1st column
+    # forward j = 1:(Tt+1) index transformed to t = (Tt+1):1 index as t = (Tt+2) - j
+    j <- 1
+    t <- (Tt + 2) - j
+    theta[t] <-
+      rnorm(
+        n = 1,
+        mean = mt[t],
+        sd = sqrt(Ct[t])
+      )
+    for (j in 2:(Tt + 1)) {
+      t <- (Tt + 2) - j
+      Bt <- Ct[t] * t(Gt) * inverse(Rt[t])
+      ht <- (mt[ t] + Bt * (theta[t + 1] - at[ t]))
+      Ht <- Ct[t] - Bt * Gt * Ct[ t]
+      theta[t] <-
+        rnorm(
+          n = 1,
+          mean = ht,
+          sd = sqrt(Ht)
+        )
+    }
+    
+    return(theta)
+  },
+  check = FALSE
+)
+```
+
+```{r Ex 11.16 daily data linear growth model}
+
+#linearGrowth <- readRDS("data/linearGrowth.rds")
+# fit a linear growth model for the daily data
+yt <- site_daily$max.ozone
+Tt <- length(yt)
+
+Ft <- rep(1, Tt)
+
+# Intercept and seasonal component with period of 24hrs
+
+Gt <- 1
+
+# initials
+m0 <- mean(yt, na.rm = TRUE)
+C0 <- 1
+
+const_list <- list(Tt = Tt,
+                   m0 = as.matrix(m0),
+                   C0 = as.matrix(C0),
+                   p = 1)
+dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
+init_list <- list(
+  tau = 0.01,
+  sqrt_Wt = sqrt(0.1),
+  theta = rep(0, Tt+1)
+)
+
+Rmodel <-
+  nimbleModel(integratedcodeUni,
+              constants = const_list,
+              data = dat_list,
+              inits = init_list)
+Rmodel$initializeInfo()
+Rmodel$calculate()
+Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
+conf <-
+  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt", "theta"))
+
+Rmcmc <- buildMCMC(conf)
+Cmcmc <-
+  compileNimble(
+    Rmcmc,
+    project = Cmodel,
+    resetFunctions = TRUE,
+    showCompilerOutput = FALSE
+  )
+
+niter <- 20000
+nburnin <- 0.5 * niter
+nthin <- 1
+start_time <- Sys.time()
+post_samples <-
+  runMCMC(
+    Cmcmc,
+    niter = niter,
+    nburnin = nburnin,
+    thin = nthin,
+    nchains = 2,
+    summary = TRUE,
+    samplesAsCodaMCMC = TRUE
+  )
+end_time <- Sys.time()
+run_time <- end_time - start_time
+run_time
+```
+
+```{r}
+library(coda)
+post_summary <- post_samples$summary$all.chains 
+post_summary[c('tau',
+               'sqrt_Wt_diag[1]',
+               'sqrt_Wt_diag[2]'), ]
+
+
+
+library(tidybayes)
+tidy_post_samples <- post_samples$samples %>% tidy_draws()
+
+tidy_post_samples %>%
+  select(
+    .chain,
+    .iteration,
+    .draw,
+    'tau',
+    'sqrt_Wt_diag[1]',
+    'sqrt_Wt_diag[2]'
+  ) %>%
+  gather(vars, value, -.chain, -.iteration, -.draw) %>%
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), size = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 3) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+post_sum_theta <-
+  as.data.frame(post_summary) %>%  rownames_to_column() %>%
+  filter(str_detect(rowname, "theta")) %>%
+  select(rowname, `95%CI_low`, Mean, `95%CI_upp`) %>%
+  separate(rowname, into = c("x1", "x2"), sep = ",") %>%
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) %>%
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) %>%
+  select(component, time, `95%CI_low`, Mean, `95%CI_upp`)
+str(post_sum_theta)
+
+theta_true_df <- data.frame(t(theta)) %>%
+  rownames_to_column() %>%
+  mutate(time = as.numeric(rowname)) %>%
+  select(-rowname) %>%
+  gather(key, theta,-time) %>%
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", key))) %>%
+  select(component, time, theta)
+str(theta_true_df)
+
+theta_df <-
+  inner_join(theta_true_df, post_sum_theta, by = c("component", "time"))
+
+ggplot(data = post_sum_theta, aes(x = time)) +
+  #geom_path(aes(y = theta), color = "red", size = 0.4) +
+  geom_ribbon(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`), fill = "lightgray", alpha = 0.7) +
+  geom_path(aes(y = Mean), col = "blue", size = 0.4) +
+  facet_wrap(
+    ~ component,
+    nrow = 2,
+    scales = "free",
+    labeller = label_bquote(theta[.(component)])
+  ) +
+  ylab("") +
+  xlab("Time") +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+```
 
 
 
