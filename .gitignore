@@ -32,3 +32,5 @@ _main.Rmd
 *.pdf
 *.epub
 *.tex
+# files in bookdown
+_bookdown_files/
