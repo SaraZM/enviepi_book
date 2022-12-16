@@ -557,8 +557,7 @@ integratedcodeUni <- nimbleCode({
 
   sqrt_Wt ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
   Wt <-  sqrt_Wt ^ 2
-  alpha ~ dunif(-1,1)
-  
+
   yt[1:Tt] ~  ddlm_uous(Ft[1:Tt], Vt, Gt, Wt, m0, C0)
   theta[1:(Tt + 1)] <- nim_ffbs_uous(
     yt = yt[1:Tt],
@@ -604,7 +603,7 @@ Rmodel$initializeInfo()
 Rmodel$calculate()
 Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
-  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt", "theta", "alpha"))
+  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt", "theta"))
 
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
@@ -637,7 +636,7 @@ run_time
 ```{r Ex 11.16 daily rw posterior summary}
 post_summary <- post_samples$summary$all.chains 
 post_summary[c('tau',
-               'sqrt_Wt', 'alpha'), ]
+               'sqrt_Wt'), ]
 
 tidy_post_samples <- post_samples$samples |> tidy_draws()
 
@@ -647,8 +646,7 @@ tidy_post_samples |>
     .iteration,
     .draw,
     'tau',
-    'sqrt_Wt',
-    'alpha'
+    'sqrt_Wt'
   ) |>
   gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
