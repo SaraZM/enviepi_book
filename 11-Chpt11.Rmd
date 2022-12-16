@@ -165,23 +165,13 @@ library(forecast)
 
 # Load hourly data for site 060379033
 site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
-# add a theme to clear axes and background in ggplot
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black"), # keep axis line
-  )
-}
+# one night hour per day missing for instrument calibration - imputed for simplicity
+imputeNA <- mean(site_hourly$ozone, na.rm = TRUE)
+site_hourly$ozone[is.na(site_hourly$ozone)] <- imputeNA
 
 ```
 
 ```{r Ex 11.13 data munge}
-
-# one night hour per day missing for instrument calibration - imputed for simplicity
-imputeNA <- mean(site_hourly$ozone, na.rm = TRUE)
-site_hourly$ozone[is.na(site_hourly$ozone)] <- imputeNA
 
 # Select the first seven days in july
 # days_pattern contains the dates for the first seven days
@@ -191,26 +181,12 @@ days_pattern <- paste0("^2013070", 1:7, collapse="|")
 july_seven_days <- site_hourly[grepl(days_pattern, site_hourly$datetime),] 
 july_seven_days$hours <- 1:nrow(july_seven_days)
 
+# Holt-Winters model fitting
 # Turn this into a time series object to use Holt-Winters forecast
 level_ts <- ts(july_seven_days$ozone,
                frequency = 24,
                start = c(1))
-
 ozone_forecast <- HoltWinters(level_ts) 
-ozone_forecast_fitted <- as.data.frame(ozone_forecast$fitted)
-ozone_forecast_fitted$hours <- 1:nrow(ozone_forecast_fitted) + 24 
-
-# Plot Holt-Winters model fitting
-## REVIEW: I know you might not like it but the plot from the forecast package seems more straightforwardthan using ggplot, I'll leave the two for now
-
-# Plot using ggplot
-ggplot(july_seven_days) + # Plot the original data for the first seven days
-  geom_line(aes(x = hours, y = ozone)) +
-  # Plot the fitted values
-  geom_line(data = ozone_forecast_fitted, aes(x = hours, y = xhat), linetype = "dashed") +
-  ggtitle("Holt-Winters filtering") +
-  xlab("Hours - First Week -July 2013") +
-  theme_clear()
 
 # Plot using the default function
 plot(
@@ -219,28 +195,16 @@ plot(
   ylab = "O3 (ppm)",
   col.predicted = 1,
   col = "black",
+  bty = "n",
   lty = 2
 )
 
 # Holt- Winters 24 ahead forast on Day 8 
 # no need to specify Holt-Winters forecast as the object is already HoltWinters class
 ozoneforecast_day8 <- forecast(ozone_forecast, h=24)
-ozoneforecast_day8_df <- data.frame(mean =  as.vector(ozoneforecast_day8$mean),
-                            lwr = as.vector(ozoneforecast_day8$lower[,"95%"]),
-                            uppr =  as.vector(ozoneforecast_day8$upper[,"95%"]),
-                            hours = (nrow(july_seven_days)+1):(nrow(july_seven_days) + 24))
-
-# Plot using ggplot
-ggplot(july_seven_days) +
-  geom_line(aes(x = hours, y = ozone))  +
-  geom_line(data = ozoneforecast_day8_df, aes(x = hours, y = mean), color = "blue") +
-  geom_ribbon(data = ozoneforecast_day8_df,
-              aes(ymin = lwr, ymax = uppr, x = hours),
-              alpha = 0.3) +
-  ggtitle("Forecasts from Holt Winters") + theme_clear()
 
 # Plot using default function
-plot(ozoneforecast_day8)
+plot(ozoneforecast_day8, bty = "n")
 
 ```
 
@@ -300,44 +264,21 @@ We can also plot the autocorrelogram (ACF) and partial autocorrelogram (PACF) to
 
 # convert data into a time series object
 volcano_dust_series <- ts(volcano_dust, start = c(1500))
+# Compute autocorrelogram with max lag 20
+acf(
+  volcano_dust_series,
+  lag.max = 20,
+  bty = "n",
+  main = "Autocorrelogram volcano dust"
+)
 
-# Compute the autocorrelogram with max lag 20
-volcano_acf <- acf(volcano_dust_series, lag.max = 20, plot = FALSE) 
-# create a data frame with the output of acf
-volcano_acf_df <- with(volcano_acf, data.frame(lag, acf))
-# Compute 95% CI
-conf.level <- 0.95
-ciline <- qnorm((1 - conf.level)/2)/sqrt(length(volcano_dust_series))
-# plot using ggplot
-ggplot(data = volcano_acf_df, mapping = aes(x = lag, y = acf)) +
-  geom_hline(aes(yintercept = 0)) +
-  # plot acf as lines 
-  geom_segment(mapping = aes(xend = lag, yend = 0)) +
-  # show the 95%CI 
-  geom_hline(aes(yintercept = ciline), linetype = 2, color = 'blue') + 
-  geom_hline(aes(yintercept = -ciline), linetype = 2, color = 'blue') + 
-  ggtitle("Autocorrelogram volcano dust") +
-  theme_clear()
-
-# Or plot using the acf function directly
-acf(volcano_dust_series, lag.max = 20) 
-# Compute the partial autocorrelogram with max lag 20 
-volcano_pacf <- pacf(volcano_dust_series, lag.max = 20, plot = FALSE) 
-# create a data frame with the output of pacf
-volcano_pacf_df <- with(volcano_acf, data.frame(lag, acf))
-# plot using ggplot
-ggplot(data = volcano_pacf_df, mapping = aes(x = lag, y = acf)) +
-  geom_hline(aes(yintercept = 0)) +
-  # plot acf as lines
-  geom_segment(mapping = aes(xend = lag, yend = 0)) +
-  # plot 95%CI
-  geom_hline(aes(yintercept = ciline), linetype = 2, color = 'blue') + 
-  geom_hline(aes(yintercept = -ciline), linetype = 2, color = 'blue') + 
-  ggtitle("Partial autocorrelogram volcano dust") +
-  theme_clear()
-
-# Or plot using pacf function directly
-pacf(volcano_dust_series, lag.max = 20)
+# Compute the partial autocorrelogram with max lag 20
+pacf(
+  volcano_dust_series,
+  lag.max = 20,
+  bty = "n",
+  main = "Partial autocorrelogram volcano dust"
+)
 
 ```
 
@@ -351,30 +292,14 @@ volcano_dust_arima <- arima(volcano_dust_series, order = c(2, 0, 0))
 
 # forecast 31 years with the ARIMA(2,0,0) model
 volcano_dust_forecast <- forecast(volcano_dust_arima, h = 31)
-plot(volcano_dust_forecast)
+plot(volcano_dust_forecast, bty = "n")
 
-# Make a data frame with the forecast information for ggplot
-volcano_dust_forecast_df <- data.frame(
-  mean =  as.vector(volcano_dust_forecast$mean),
-  lwr = as.vector(volcano_dust_forecast$lower[, "95%"]),
-  uppr =  as.vector(volcano_dust_forecast$upper[, "95%"]),
-  year = 1970:2000
-)
-
-# Same plot using ggplot
-ggplot(volcano_dust_df) +
-  geom_line(aes(x = year, y = dust))  +
-  geom_line(data = volcano_dust_forecast_df, aes(x = year, y = mean), color = "blue") +
-  geom_ribbon(data = volcano_dust_forecast_df,
-              aes(ymin = lwr, ymax = uppr, x = year),
-              alpha = 0.3) +
-  ggtitle("Forecasts from ARIMA (2, 0, 0)") + theme_clear()
 
 ```
 
-## Example 11.16 implementation of a random walk {-}
+## Example 11.16 implementation of a dynamic linear model {-}
 
-### Nimble
+### Nimble 
 
 ```{r Ex 11.16 clean, include = FALSE}
 rm(list = ls())
@@ -382,7 +307,13 @@ rm(list = ls())
 
 ```{r  Ex 11.16 load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
+library(coda)
 library(nimble)
+library(tidybayes)
+library(tidyverse)
+
+# Load sampler functions
+source("functions/Ex11_16_FFBS_sampler.R")
 
 # Load data for one site
 site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
@@ -416,15 +347,18 @@ theme_clear <- function(){
 }
 ```
 
+#### Hourly data seasonal component
 
-```{r Ex 11.16 nimble model, results='hide', warning=FALSE, message= FALSE}
+We first analyze the hourly data for the first seven days in July.
+
+```{r Ex 11.16 nimble model multivariate}
 
 # The following nimble code was originally written by Paritosh Kumar Roy
+
 Example11_16Code <- nimbleCode({
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  for (t in 1:Tt) {
-    Vt[t] <- tau ^ 2
-  }
+  Vt <- tau ^ 2
+  
   
   
   for (j in 1:p) {
@@ -432,88 +366,34 @@ Example11_16Code <- nimbleCode({
   }
   
   Wt[1:p, 1:p] <- diag(sqrt_Wt_diag[1:p] ^ 2)
-  
-  mt[1:p, 1] <- m0[1:p]
-  Ct[1:p, 1:p, 1] <- C0[1:p, 1:p]
-  
-  for (t in 1:Tt) {
-    at[1:p, t] <- (Gt[1:p, 1:p] %*% mt[1:p, t])[1:p, 1]
-    Rt[1:p, 1:p, t] <-
-      Gt[1:p, 1:p] %*% Ct[1:p, 1:p, t] %*% t(Gt[1:p, 1:p]) + Wt[1:p, 1:p]
-    ft[t] <- (t(Ft[1:p, t]) %*% at[1:p, t])[1, 1]
-    Qt[t] <-
-      (t(Ft[1:p, t]) %*% Rt[1:p, 1:p, t] %*% Ft[1:p, t] + Vt[t])[1, 1]
-    yt[t] ~ dnorm(mean = ft[t], var = Qt[t])
-    At[1:p, t] <- (Rt[1:p, 1:p, t] %*% Ft[1:p, t])[1:p, 1] / Qt[t]
-    mt[1:p, t + 1] <- at[1:p, t] + (At[1:p, t] * (yt[t] - ft[t]))
-    Ct[1:p, 1:p, t + 1] <-
-      Rt[1:p, 1:p, t] - (At[1:p, t] %*% t(At[1:p, t])) * Qt[t]
-  }
+  yt[1:Tt] ~ ddlm_uoms(
+    Ft = Ft[1:p, 1:Tt],
+    Vt = Vt,
+    Gt = Gt[1:p, 1:p],
+    Wt = Wt[1:p, 1:p],
+    m0 = m0[1:p],
+    C0 = C0[1:p, 1:p]
+  )
   
   theta[1:p, 1:(Tt + 1)] <-
-    nim_bsample(
-      mt = mt[1:p, 1:(Tt + 1)],
-      Ct = Ct[1:p, 1:p, 1:(Tt + 1)],
-      at = at[1:p, 1:Tt],
+    nim_ffbs_uoms(
+      yt = yt[1:Tt],
+      Ft = Ft[1:p, 1:Tt],
+      Vt = Vt,
       Gt = Gt[1:p, 1:p],
-      Rt = Rt[1:p, 1:p, 1:Tt]
+      Wt = Wt[1:p, 1:p],
+      m0 = m0[1:p],
+      C0 = C0[1:p, 1:p]
     )
-  
   
 })
 
 ```
 
-```{r Ex 11.16 nimble sampler}
 
-nim_bsample <- nimbleFunction(
-  run = function(mt = double(2),
-                 Ct = double(3),
-                 at = double(2),
-                 Gt = double(2),
-                 Rt = double(3)) {
-    returnType(double(2))  # return type declaration
-    # identifying the dimension of the observation equation and evolution equation
-    p <- nimDim(at)[1] # dimension of the evolution equation
-    Tt <- nimDim(at)[2] # total time points
-    
-    theta <-
-      nimArray(0, dim = c(p, Tt + 1)) # including theta0 at the 1st column
-    # forward j = 1:(Tt+1) index transformed to t = (Tt+1):1 index as t = (Tt+2) - j
-    j <- 1
-    t <- (Tt + 2) - j
-    theta[1:p, t] <-
-      rmnorm_chol(
-        n = 1,
-        mean = mt[1:p, t],
-        cholesky = chol(Ct[1:p, 1:p, t]),
-        prec_param = FALSE
-      )
-    for (j in 2:(Tt + 1)) {
-      t <- (Tt + 2) - j
-      Bt <- Ct[1:p, 1:p, t] %*% t(Gt) %*% inverse(Rt[1:p, 1:p, t])
-      ht <- (mt[1:p, t] + Bt %*% (theta[1:p, t + 1] - at[1:p, t]))[, 1]
-      Ht <- Ct[1:p, 1:p, t] - Bt %*% Gt %*% Ct[1:p, 1:p, t]
-      theta[1:p, t] <-
-        rmnorm_chol(
-          n = 1,
-          mean = ht,
-          cholesky = chol(Ht),
-          prec_param = FALSE
-        )
-    }
-    
-    return(theta)
-  },
-  check = FALSE
-)
-```
 
-## Hourly data using seasonal component
+```{r Ex 11.16 nimble hourly data, results='hide', warning=FALSE, message= FALSE}
 
-```{r Ex 11.16 nimble hourly data}
-
-#linearGrowth <- readRDS("data/linearGrowth.rds")
 # fit a linear growth model for the daily data
 yt <- july_seven_days$ozone
 Tt <- length(yt)
@@ -526,10 +406,8 @@ Ft[3, ] <- 0
 
 # Intercept and seasonal component with period of 24hrs
 Gt <- rbind(c(1, 0, 0),
-           c(0, cos(2 * pi / 24), sin(2 * pi / 24)),
-           c(0, -sin(2 * pi / 24), cos(2 * pi / 24)))
-
-#Gt <- rbind(c(1, 1), c(0, 1))
+           c(0, cos(2 * pi / 12), sin(2 * pi / 12)),
+           c(0, -sin(2 * pi / 12), cos(2 * pi / 12)))
 
 # initials
 m0 <- c(mean(yt, na.rm = TRUE), 0, 0)
@@ -557,6 +435,7 @@ Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
   configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt_diag", "theta"))
 
+conf$printSamplers(byType = TRUE)
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
   compileNimble(
@@ -566,7 +445,7 @@ Cmcmc <-
     showCompilerOutput = FALSE
   )
 
-niter <- 20000
+niter <- 40000
 nburnin <- 0.5 * niter
 nthin <- 1
 start_time <- Sys.time()
@@ -586,20 +465,16 @@ run_time
 
 ```
 
-```{r}
-library(coda)
+```{r Ex 11.16 hourly posterior summary}
 post_summary <- post_samples$summary$all.chains 
 post_summary[c('tau',
                'sqrt_Wt_diag[1]',
                'sqrt_Wt_diag[2]',
                'sqrt_Wt_diag[3]'), ]
 
+tidy_post_samples <- post_samples$samples |> tidy_draws()
 
-
-library(tidybayes)
-tidy_post_samples <- post_samples$samples %>% tidy_draws()
-
-tidy_post_samples %>%
+tidy_post_samples |>
   select(
     .chain,
     .iteration,
@@ -608,8 +483,8 @@ tidy_post_samples %>%
     'sqrt_Wt_diag[1]',
     'sqrt_Wt_diag[2]',
     'sqrt_Wt_diag[3]'
-  ) %>%
-  gather(vars, value, -.chain, -.iteration, -.draw) %>%
+  ) |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
   geom_path(aes(color = factor(.chain)), size = 0.25,
             show.legend = FALSE) +
@@ -619,26 +494,13 @@ tidy_post_samples %>%
         strip.background = element_blank())
 
 post_sum_theta <-
-  as.data.frame(post_summary) %>%  rownames_to_column() %>%
-  filter(str_detect(rowname, "theta")) %>%
-  select(rowname, `95%CI_low`, Mean, `95%CI_upp`) %>%
-  separate(rowname, into = c("x1", "x2"), sep = ",") %>%
-  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) %>%
-  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) %>%
+  as.data.frame(post_summary) |>  rownames_to_column() |>
+  filter(str_detect(rowname, "theta")) |>
+  select(rowname, `95%CI_low`, Mean, `95%CI_upp`)|>
+  separate(rowname, into = c("x1", "x2"), sep = ",") |>
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) |>
   select(component, time, `95%CI_low`, Mean, `95%CI_upp`)
-str(post_sum_theta)
-
-theta_true_df <- data.frame(t(theta)) %>%
-  rownames_to_column() %>%
-  mutate(time = as.numeric(rowname)) %>%
-  select(-rowname) %>%
-  gather(key, theta,-time) %>%
-  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", key))) %>%
-  select(component, time, theta)
-str(theta_true_df)
-
-theta_df <-
-  inner_join(theta_true_df, post_sum_theta, by = c("component", "time"))
 
 ggplot(data = post_sum_theta, aes(x = time)) +
   #geom_path(aes(y = theta), color = "red", size = 0.4) +
@@ -660,9 +522,7 @@ ggplot(data = post_sum_theta, aes(x = time)) +
 
 Define the constants, data and initials lists for the `nimble` model.
 
-
-
-```{r}
+```{r Ex 11.16 rhat and ess hourly}
 n <- ncol(post_samples$samples$chain1)
 
 Rhat_all <-  sapply(1:n, function(x) {
@@ -686,112 +546,48 @@ min(ess_all_tail, na.rm = T)
 ```
 
 
+#### Daily data time varying mean
 
+```{r Ex 11.16 nimble RW code}
 
-
-
-
-## Daily data linear growth model -----
-
-```{r}
 integratedcodeUni <- nimbleCode({
+  
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  for (t in 1:Tt) {
-    Vt[t] <- tau ^ 2
-  }
-  
+  Vt <- tau ^ 2
+
   sqrt_Wt ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  
   Wt <-  sqrt_Wt ^ 2
+  alpha ~ dunif(-1,1)
   
-  mt[1] <- m0
-  Ct[1] <- C0
-  
-  for (t in 1:Tt) {
-    at[t] <- Gt * mt[t]
-    Rt[t] <- Gt * Ct[t] * Gt + Wt
-    ft[t] <- (Ft[t] * at[t])
-    Qt[t] <- (Ft[t] * Rt[t] * Ft[t] + Vt[t])
-    yt[t] ~ dnorm(mean = ft[t], var = Qt[t])
-    At[t] <- (Rt[t] * Ft[t]) / Qt[t]
-    mt[t + 1] <- at[t] + (At[t] * (yt[t] - ft[t]))
-    Ct[t + 1] <- Rt[t] - (At[t] * At[t]) * Qt[t]
-  }
-  
-  theta[1:(Tt + 1)] <- nim_bsample_uni(
-    mt = mt[1:(Tt + 1)],
-    Ct = Ct[1:(Tt + 1)],
-    at = at[1:Tt],
+  yt[1:Tt] ~  ddlm_uous(Ft[1:Tt], Vt, Gt, Wt, m0, C0)
+  theta[1:(Tt + 1)] <- nim_ffbs_uous(
+    yt = yt[1:Tt],
+    Ft = Ft[1:Tt],
+    Vt = Vt,
     Gt = Gt,
-    Rt = Rt[1:Tt]
+    Wt = Wt,
+    m0 = m0,
+    C0 = C0
   )
   
 })
 ```
 
-```{r}
 
-nim_bsample_uni <- nimbleFunction(
-  run = function(mt = double(1),
-                 Ct = double(1),
-                 at = double(1),
-                 Gt = double(1),
-                 Rt = double(1)) {
-    returnType(double(1))  # return type declaration
-    # identifying the dimension of the observation equation and evolution equation
-    Tt <- nimDim(at)[1] # total time points
-    
-    theta <-
-      nimArray(0, dim = c(1, Tt + 1)) # including theta0 at the 1st column
-    # forward j = 1:(Tt+1) index transformed to t = (Tt+1):1 index as t = (Tt+2) - j
-    j <- 1
-    t <- (Tt + 2) - j
-    theta[t] <-
-      rnorm(
-        n = 1,
-        mean = mt[t],
-        sd = sqrt(Ct[t])
-      )
-    for (j in 2:(Tt + 1)) {
-      t <- (Tt + 2) - j
-      Bt <- Ct[t] * t(Gt) * inverse(Rt[t])
-      ht <- (mt[ t] + Bt * (theta[t + 1] - at[ t]))
-      Ht <- Ct[t] - Bt * Gt * Ct[ t]
-      theta[t] <-
-        rnorm(
-          n = 1,
-          mean = ht,
-          sd = sqrt(Ht)
-        )
-    }
-    
-    return(theta)
-  },
-  check = FALSE
-)
-```
-
-```{r Ex 11.16 daily data linear growth model}
-
-#linearGrowth <- readRDS("data/linearGrowth.rds")
+```{r Ex 11.16 daily data rw model, results='hide', warning=FALSE, message= FALSE}
 # fit a linear growth model for the daily data
 yt <- site_daily$max.ozone
 Tt <- length(yt)
-
 Ft <- rep(1, Tt)
-
-# Intercept and seasonal component with period of 24hrs
-
 Gt <- 1
 
-# initials
+# initial values
 m0 <- mean(yt, na.rm = TRUE)
 C0 <- 1
 
 const_list <- list(Tt = Tt,
-                   m0 = as.matrix(m0),
-                   C0 = as.matrix(C0),
-                   p = 1)
+                   m0 = m0,
+                   C0 = C0)
 dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
 init_list <- list(
   tau = 0.01,
@@ -808,7 +604,7 @@ Rmodel$initializeInfo()
 Rmodel$calculate()
 Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
-  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt", "theta"))
+  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt", "theta", "alpha"))
 
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
@@ -838,28 +634,23 @@ run_time <- end_time - start_time
 run_time
 ```
 
-```{r}
-library(coda)
+```{r Ex 11.16 daily rw posterior summary}
 post_summary <- post_samples$summary$all.chains 
 post_summary[c('tau',
-               'sqrt_Wt_diag[1]',
-               'sqrt_Wt_diag[2]'), ]
+               'sqrt_Wt', 'alpha'), ]
 
+tidy_post_samples <- post_samples$samples |> tidy_draws()
 
-
-library(tidybayes)
-tidy_post_samples <- post_samples$samples %>% tidy_draws()
-
-tidy_post_samples %>%
+tidy_post_samples |>
   select(
     .chain,
     .iteration,
     .draw,
     'tau',
-    'sqrt_Wt_diag[1]',
-    'sqrt_Wt_diag[2]'
-  ) %>%
-  gather(vars, value, -.chain, -.iteration, -.draw) %>%
+    'sqrt_Wt',
+    'alpha'
+  ) |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
   geom_path(aes(color = factor(.chain)), size = 0.25,
             show.legend = FALSE) +
@@ -869,37 +660,16 @@ tidy_post_samples %>%
         strip.background = element_blank())
 
 post_sum_theta <-
-  as.data.frame(post_summary) %>%  rownames_to_column() %>%
-  filter(str_detect(rowname, "theta")) %>%
-  select(rowname, `95%CI_low`, Mean, `95%CI_upp`) %>%
-  separate(rowname, into = c("x1", "x2"), sep = ",") %>%
-  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) %>%
-  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) %>%
-  select(component, time, `95%CI_low`, Mean, `95%CI_upp`)
-str(post_sum_theta)
-
-theta_true_df <- data.frame(t(theta)) %>%
-  rownames_to_column() %>%
-  mutate(time = as.numeric(rowname)) %>%
-  select(-rowname) %>%
-  gather(key, theta,-time) %>%
-  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", key))) %>%
-  select(component, time, theta)
-str(theta_true_df)
-
-theta_df <-
-  inner_join(theta_true_df, post_sum_theta, by = c("component", "time"))
+  as.data.frame(post_summary) |>  rownames_to_column() |>
+  filter(str_detect(rowname, "theta")) |>
+  select(rowname, `95%CI_low`, Mean, `95%CI_upp`) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname))) |>
+  select(time, `95%CI_low`, Mean, `95%CI_upp`)
 
 ggplot(data = post_sum_theta, aes(x = time)) +
   #geom_path(aes(y = theta), color = "red", size = 0.4) +
   geom_ribbon(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`), fill = "lightgray", alpha = 0.7) +
   geom_path(aes(y = Mean), col = "blue", size = 0.4) +
-  facet_wrap(
-    ~ component,
-    nrow = 2,
-    scales = "free",
-    labeller = label_bquote(theta[.(component)])
-  ) +
   ylab("") +
   xlab("Time") +
   theme_bw() +
