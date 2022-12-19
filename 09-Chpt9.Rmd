@@ -202,7 +202,7 @@ expected <-
 Write the `stan` model. This model is in a separate file called `Example8_1.stan` that will be called later.
 
 ```{r engine='bash', comment='', echo = FALSE}
-cat functions/Example8_1.stan
+cat functions/Example9_1.stan
 ``` 
 
 
@@ -224,7 +224,7 @@ ex.data <- list(
 )
 # Run the model in Stan
 mod0 <- stan(
-  file = "functions/Example8_1.stan",
+  file = "functions/Example9_1.stan",
   data = ex.data,
   chains = 3,
   iter = 10000,
@@ -298,8 +298,9 @@ abline(a = 0, b = 1)
 
 ### Nimble {-}
 
+In this example we revisit the COPD data from example 6.3.
 
-```{r Ex 9.3 clean, include = FALSE}
+```{r Ex 9.3 nimble clean, include = FALSE}
 rm(list=ls())
 ```
 
@@ -309,7 +310,15 @@ rm(list=ls())
 library(ggplot2) # to plot map
 library(spdep) # read the shapefile (read_sf) and build neighbors list (poly2nb)
 library(nimble)
-
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
 # Load data
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
@@ -317,9 +326,30 @@ england <- read_sf("data/englandlocalauthority.shp")
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
 expected <-
-  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv")
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
 
 ```
+
+Analyze the relationship between COPD data and the average deprivation score which is a measure of the socioeconomic status of the patients. 
+
+```{r Ex 9.3 plot copd and avg score}
+
+copd_df$SMR2010 = copd_df$Y2010 / copd_df$E2010
+
+ggplot(copd_df) + geom_point(aes(x = Average.Score, y = SMR2010)) + theme_clear() + ylab("SMR 2010") + xlab("Average deprivation score")
+
+```
+
 
 Define a function to obtain the number of neighbors. 
 
@@ -362,11 +392,12 @@ Example9_3Code <- nimbleCode({
   # Likelihood
   for (i in 1:N) {
     y[i] ~ dpois(lambda[i])
-    log(lambda[i]) <- log(E[i]) + b[i] + beta0
+    log(lambda[i]) <- log(E[i]) + b[i] + beta0 + beta1*x[i]
   }
   
   # Priors
-  beta0 ~ dnorm(0, sd = 0.98)
+  beta0 ~ dnorm(0, sd = 1)
+  beta1 ~ dnorm(0, sd = 1)
   b[1:N] ~ dcar_normal(adj[1:L], weights[1:L], num[1:N], tau, zero_mean = 1)
   tau <- 1 / (sigma_b ^ 2)
   sigma_b ~ T(dnorm(0, sd = 1), 0,)
@@ -384,7 +415,7 @@ Define the constants, data and initial values lists and run the model.
 # constants list
 constants <- list(
   N = N,
-  E = expected$E2010,
+  E = copd_df$E2010,
   L = length(neigh),
   adj = neigh,
   weights = rep(1, length(neigh)),
@@ -392,9 +423,12 @@ constants <- list(
   p = 3
 )
 # data list
-ex.data <- list(y = observed$Y2010)
-inits = list(
+ex.data <-
+  list(y = copd_df$Y2010, 
+       x = as.vector(scale(copd_df$Average.Score))) # vector of covariates
+inits <-  list(
   beta0 = rnorm(1),
+  beta1 = rnorm(1),
   fitted = rpois(N, 2),
   sigma_b = 1,
   b = rnorm(N)
@@ -406,13 +440,14 @@ CAR_Model <- nimbleModel(
   data = ex.data,
   inits = inits
 )
+
 # QUESTION: can I run this model without configuring it as I did in the previous examples? 
 CAR_conf <-
-  configureMCMC(Example9_3Code, monitors = c("beta0", "fitted", "b", "sigma_b"))
+  configureMCMC(CAR_Model, monitors = c("beta0","beta1", "fitted", "b", "sigma_b"))
 CAR_MCMC = buildMCMC(
   CAR_Model,
   enableWAIC = T,
-  monitors = c("beta0", "fitted", "b", "sigma_b")
+  monitors = c("beta0", "beta1","fitted", "b", "sigma_b")
 )
 CAR_Cmodel = compileNimble(CAR_Model)
 CAR_Cmcmc = compileNimble(CAR_MCMC, project = CAR_Model)
@@ -436,16 +471,17 @@ Show the WAIC, effective sample size, and trace plots for some of the parameters
 
 CAR_runMCMC$WAIC
 min(coda::effectiveSize(CAR_runMCMC$samples))
-plot(CAR_runMCMC$samples[, c("beta0")])
-plot(CAR_runMCMC$samples[, c("b[2]")])
-plot(CAR_runMCMC$samples[, c("sigma_b")])
+plot(CAR_runMCMC$samples[, c("beta0")], bty = "n")
+plot(CAR_runMCMC$samples[, c("beta1")], bty = "n")
+plot(CAR_runMCMC$samples[, c("b[2]")], bty = "n")
+plot(CAR_runMCMC$samples[, c("sigma_b")], bty = "n")
 ```
 
 
 ```{r Ex 8.3 nimble CAR summary, echo = TRUE}
 
 # Extract samples
-variables <- c("beta0", "sigma_b")
+variables <- c("beta0", "beta1","sigma_b")
 summary_CAR_nimble <- CAR_runMCMC$summary$all.chains
 summary_CAR_nimble[variables,]
 
@@ -466,12 +502,7 @@ ggplot() +
   # Change legend's label
   labs(fill = 'Latent effects stan') +
   # Clear background and plot borders
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    rect = element_blank()
-  )
+ theme_clear()
 
 ```
 
@@ -480,17 +511,27 @@ ggplot() +
 
 Here, we implement the CAR model using `stan`.
 
-<!-- QUESTION: Is it ok to reload the data everytime? -->
-
-```{r Ex 8.3 stan load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
-
+```{r Ex 9.3 stan clean, include = FALSE}
 rm(list=ls())
+```
+
+
+```{r Ex 9.3 stan load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 
 library(ggplot2)
 library(loo) # To calculate WAIC and loo later
 library(rstan) 
 library(spdep) 
-
+# Function to clear the axes of the ggplot map 
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+# Additional settings for stan
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 
@@ -501,14 +542,24 @@ england <- read_sf("data/englandlocalauthority.shp")
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
 expected <-
-  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv")
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
 
 ```
 
 
 We will need two functions to structure the matrix of neighbors that will be needed in `stan`.
 
-```{r Ex 8.3 stan munge functions, echo = TRUE}
+```{r Ex 9.3 stan munge functions, echo = TRUE}
 
 adjlist = function(W, N) {
   adj = 0
@@ -557,7 +608,7 @@ mungeCARdata4stan = function(adjBUGS, numBUGS) {
 
 Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
 
-```{r Ex 8.3 stan neighborhood}
+```{r Ex 9.3 stan neighborhood}
 
 # Create the neighborhood
 W.nb <-
@@ -581,36 +632,39 @@ N_edges <- nbs$N_edges
 This model is in a separate file called `Example8_3.stan` that will be called later.
 
 ```{r engine='bash', comment='', echo = FALSE}
-cat functions/Example8_3.stan
+cat functions/Example9_3.stan
 ``` 
 
 
-```{r Ex 8.3 stan car effects, warning=FALSE}
+```{r Ex 9.3 stan car effects, warning=FALSE}
 
 N_edges <- N_edges
 node1 <- node1
 node2 <- node2
 N <- N
-y <- observed$Y2010
-E <- expected$E2010
+y <- copd_df$Y2010
+E <- copd_df$E2010
+X <- as.numeric(scale(copd_df$Average.Score))
 
 ex.data <- list(
   N = N,
   y = y,
   E = E,
+  p = 1,
+  X = as.matrix(X),
   N_edges = N_edges,
   node1 = node1,
   node2 = node2
 )
 
 COPD_fitCAR  <- stan(
-  file = "functions/Example8_3.stan",
+  file = "functions/Example9_3.stan",
   data = ex.data,
   warmup = 10000,
   iter = 20000,
   chains = 2,
   thin = 10,
-  pars = c("beta0","sigma_s", "b", "log_lik"),
+  pars = c("beta0", "beta","sigma_s", "b", "log_lik"),
   include = TRUE
 )
 
@@ -619,27 +673,27 @@ COPD_fitCAR  <- stan(
 
 Show traceplots.
 
-```{r Ex 8.3 stan CAR traceplots}
+```{r Ex 9.3 stan CAR traceplots}
 #computing WAIC using the package loo
 
 loglikcar <- extract_log_lik(COPD_fitCAR)
 waiccar <- waic(loglikcar)
 waiccar
 
-traceplot(COPD_fitCAR, pars = c("beta0","sigma_s"))
+traceplot(COPD_fitCAR, pars = c("beta0","beta","sigma_s"))
 
 ```
 
 Show the posterior summary for the parameters if interest. 
 Keep in mind that in the stan model the we are sampling the standard deviation of the random effect unlike `CARBayes` where the variance is obtained.
 
-```{r Ex 8.3 stan CAR results, echo = TRUE}
+```{r Ex 9.3 stan CAR results, echo = TRUE}
 
 # Extract samples
 summary_CAR_stan <-
   summary(
     COPD_fitCAR,
-    pars = c("beta0", "sigma_s"),
+    pars = c("beta0", "beta","sigma_s"),
     probs = c(0.025, 0.975)
   )
 
@@ -651,7 +705,7 @@ summary_CAR_stan$summary
 
 Map the mean of the posterior estimate for the latent effect.
 
-```{r plot map stan}
+```{r Ex 9.3 plot map stan}
 
 summary_CAR_stan_b <-
   summary(
@@ -672,12 +726,7 @@ ggplot() +
   # Change legend's label
   labs(fill = 'Latent effects stan') +
   # Clear background and plot borders
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    rect = element_blank()
-  ) 
+  theme_clear()
 
 
 ```
@@ -700,16 +749,33 @@ library(CARBayes)
 library(ggplot2)
 library(sf)
 library(spdep)
-
+# Function to clear the axes of the ggplot map 
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
-
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
-
 expected <-
-  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv") 
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
+copd_df$Average.Score <- as.numeric(scale(copd_df$Average.Score))
 
 ```
 
@@ -738,7 +804,9 @@ The function `S.CARleroux()` allows us to use the neighborhood structure and per
 model <-
   S.CARleroux(
     # Model Formula
-    formula = observed$Y2010 ~ offset(log(expected$E2010)),
+    formula = Y2010 ~ offset(log(E2010)) + Average.Score,
+    # data frame with data
+    data = copd_df,
     # Choosing Poisson Regression
     family = "poisson",
     # Neighborhood matrix
@@ -753,21 +821,14 @@ model <-
 
 ```
 
-We can extract the new smoother values from the model output and divide them by the expected values in order to compare both methods.
+We can extract the new smoother values from the model output and divide them by the expected values in order to compare both methods. 
 
 
 ```{r Ex 9.4 carbayes smoothed SMRs, class.source = 'foldable' }
 
 # Creating a dataset with smoothed SMRs in 2010
-SMR2010 <- model$fitted.values / expected$E2010
+SMR2010 <- model$fitted.values /  copd_df$E2010
 SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
-
-```
-
-Check that there are no errors and summarize the results
-
-```{r Ex 9.4 carbayes summary}
-
 # Printing first six rows of smoothed SMRs
 head(SMR_smooth)
 # Summarizing smoothed SMRs
@@ -776,34 +837,29 @@ summary(SMR_smooth)
 model$summary.results[]
 ```
 
+<!-- QUESTION: What do we want the latent effect or the fitted values? -->
 
-Use `ggplot()` and `geom_sf()` to plot the map of smoothed SMRs.
-
+Use `ggplot()` and `geom_sf()` to plot the map of the latent spatial effect.
 
 ```{r Ex 9.4 carbayes map smoothed SMRs, class.source = 'foldable'}
 
-SMR_smooth <- tibble::rownames_to_column(SMR_smooth, "ID")
-# Combining smoothed SMRs and the shapefile
-SMRspatial_smooth <- merge(england, SMR_smooth, by = "ID")
-# Creating breaks for legend in plot
-range <-
-  seq(min(SMR_smooth$SMR2010) - 0.01,
-      max(SMR_smooth$SMR2010) + 0.01,
-      length.out = 11)
+observed <- tibble::rownames_to_column(observed, "ID")
+phi_car <-  model$samples$phi
+
+latent_car_df  <-  data.frame(
+  phi_mean = apply(phi_car, 2, mean),
+  phi_sd = apply(phi_car, 2, sd)
+)
+# Combine latent spatial effect with england dataset
+latent_car_df$ID <- observed$ID
+latent_car_england <-  merge(england, latent_car_df, by = "ID")
 # Creating map of smoothed SMRs in England in 2010
 ggplot() +
   # Choose spatial object and column for plotting
-  geom_sf(data = SMRspatial_smooth, aes(fill = SMR2010)) +
-  # Break points for colours
-  scale_y_continuous(breaks = range) +
+  geom_sf(data = latent_car_england, aes(fill = phi_mean)) +
+  labs(fill = 'Latent effects CARbayes') +
   # Clear background and plot borders
-  theme(
-    axis.text.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    rect = element_blank()
-  )
-
+  theme_clear()
 ```
 
 ## Example 9.5: Fitting a conditional model using INLA {-}
@@ -817,14 +873,35 @@ rm(list = ls())
 
 library(INLA)
 library(spdep) 
-
+# Function to clear the axes of the ggplot map 
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
 observed <-
   read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
 expected <-
-  read.csv(file = "data/copdmortalityexpected.csv", row.names = 1)
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv") 
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
+copd_df$Average.Score <- as.numeric(scale(copd_df$Average.Score))
+# Create areas IDs to match the values in UK.adj
+copd_df$ID <- 1:324
 
 # Create the neighborhood matrix
 W.nb <- poly2nb (england , row.names = england$ID)
@@ -834,10 +911,6 @@ W.mat <- nb2mat (W.nb , style = "B")
 # Convert the adjacency matrix into a file in the INLA format
 nb2INLA("UK.adj", W.nb)
 
-# Create areas IDs to match the values in UK.adj
-data = as.data.frame(cbind(y = observed$Y2010, E = expected$E2010))
-data$ID <- 1:324
-
 ```
 
 <!-- TODO: Show output for this model  -->
@@ -846,14 +919,43 @@ data$ID <- 1:324
 ```{r Ex 9.5 inla run}
 # run the INLA model
 m1 <- inla(
-  y ~ f(ID , model = "besag", graph = "UK.adj"),
+  Y2010 ~ Average.Score + f(ID  , model = "besag", graph = "UK.adj"),
   family = "poisson",
-  E = E,
-  data = data,
+  E = E2010,
+  data = copd_df,
   control.predictor = list(compute = TRUE)
 )
 ```
 
 
+Summarize the results
 
+```{r Ex 9.5 inla summary}
+# Summarizing smoothed SMRs
+summary(m1)
+
+```
+
+
+```{r Ex 9.5 inla smoothed SMRs, class.source = 'foldable'}
+
+observed <- tibble::rownames_to_column(observed, "ID")
+phi_car <-  m1$summary.random$ID
+
+latent_car_df  <-  data.frame(
+  phi_mean = phi_car$mean,
+  phi_sd = phi_car$sd
+)
+# Combine latent spatial effect with england dataset
+latent_car_df$ID <- observed$ID
+latent_car_england <-  merge(england, latent_car_df, by = "ID")
+# Creating map of smoothed SMRs in England in 2010
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = latent_car_england, aes(fill = phi_mean)) +
+  labs(fill = 'Latent effects INLA') +
+  # Clear background and plot borders
+  theme_clear()
+
+```
 

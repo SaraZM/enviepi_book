@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2022-12-13" />
+<meta name="date" content="2022-12-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -183,10 +183,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.2-low-pass-filtering-of-carbon-monoxide-levels-using-the-moving-average"><i class="fa fa-check"></i>Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.13-forecasting-ozone-levels"><i class="fa fa-check"></i>Example 11.13 Forecasting ozone levels</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.14-forecasting-volcanic-ash"><i class="fa fa-check"></i>Example 11.14 Forecasting volcanic ash</a></li>
-<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-random-walk"><i class="fa fa-check"></i>Example 11.16 implementation of a random walk</a>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model"><i class="fa fa-check"></i>Example 11.16 implementation of a dynamic linear model</a>
 <ul>
 <li class="chapter" data-level="11.0.1" data-path="Time.html"><a href="Time.html#nimble-3"><i class="fa fa-check"></i><b>11.0.1</b> Nimble</a></li>
-<li class="chapter" data-level="11.0.2" data-path="Time.html"><a href="Time.html#stan-2"><i class="fa fa-check"></i><b>11.0.2</b> Stan</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
@@ -230,43 +229,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="example-10.1" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.1<a href="hazards.html#example-10.1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Map the locations of the monitoring stations in the UK.</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="hazards.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
-<span id="cb114-2"><a href="hazards.html#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
-<span id="cb114-3"><a href="hazards.html#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
-<span id="cb114-4"><a href="hazards.html#cb114-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-5"><a href="hazards.html#cb114-5" aria-hidden="true" tabindex="-1"></a>uk_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/uk_ozone_uni.csv&quot;</span>)</span>
-<span id="cb114-6"><a href="hazards.html#cb114-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-7"><a href="hazards.html#cb114-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format </span></span>
-<span id="cb114-8"><a href="hazards.html#cb114-8" aria-hidden="true" tabindex="-1"></a>uk_data_sp <span class="ot">&lt;-</span> uk_data</span>
-<span id="cb114-9"><a href="hazards.html#cb114-9" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(uk_data_sp) <span class="ot">&lt;-</span> <span class="er">~</span> longitude <span class="sc">+</span> latitude</span>
-<span id="cb114-10"><a href="hazards.html#cb114-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-11"><a href="hazards.html#cb114-11" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the projection code</span></span>
-<span id="cb114-12"><a href="hazards.html#cb114-12" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(uk_data_sp) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +ellps=WGS84&quot;</span>)</span>
-<span id="cb114-13"><a href="hazards.html#cb114-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-14"><a href="hazards.html#cb114-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the bounding box </span></span>
-<span id="cb114-15"><a href="hazards.html#cb114-15" aria-hidden="true" tabindex="-1"></a>latLongBox <span class="ot">=</span> <span class="fu">bbox</span>(uk_data_sp)</span>
-<span id="cb114-16"><a href="hazards.html#cb114-16" aria-hidden="true" tabindex="-1"></a>location <span class="ot">=</span> <span class="fu">c</span>(latLongBox[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.2</span>,</span>
-<span id="cb114-17"><a href="hazards.html#cb114-17" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="dv">0</span>,</span>
-<span id="cb114-18"><a href="hazards.html#cb114-18" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">1</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.2</span>,</span>
-<span id="cb114-19"><a href="hazards.html#cb114-19" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.2</span>)</span>
-<span id="cb114-20"><a href="hazards.html#cb114-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-21"><a href="hazards.html#cb114-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with location dots marked on it in</span></span>
-<span id="cb114-22"><a href="hazards.html#cb114-22" aria-hidden="true" tabindex="-1"></a>UKOzoneMap <span class="ot">&lt;-</span></span>
-<span id="cb114-23"><a href="hazards.html#cb114-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_stamenmap</span>(</span>
-<span id="cb114-24"><a href="hazards.html#cb114-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">bbox =</span> location,</span>
-<span id="cb114-25"><a href="hazards.html#cb114-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">zoom =</span> <span class="dv">6</span></span>
-<span id="cb114-26"><a href="hazards.html#cb114-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb114-27"><a href="hazards.html#cb114-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb114-28"><a href="hazards.html#cb114-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(UKOzoneMap) <span class="sc">+</span> <span class="fu">geom_point</span>(</span>
-<span id="cb114-29"><a href="hazards.html#cb114-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> uk_data,</span>
-<span id="cb114-30"><a href="hazards.html#cb114-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
-<span id="cb114-31"><a href="hazards.html#cb114-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> longitude,</span>
-<span id="cb114-32"><a href="hazards.html#cb114-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> latitude,</span>
-<span id="cb114-33"><a href="hazards.html#cb114-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> ozone,</span>
-<span id="cb114-34"><a href="hazards.html#cb114-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> ozone</span>
-<span id="cb114-35"><a href="hazards.html#cb114-35" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb114-36"><a href="hazards.html#cb114-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.45</span></span>
-<span id="cb114-37"><a href="hazards.html#cb114-37" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="hazards.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
+<span id="cb118-2"><a href="hazards.html#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
+<span id="cb118-3"><a href="hazards.html#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
+<span id="cb118-4"><a href="hazards.html#cb118-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-5"><a href="hazards.html#cb118-5" aria-hidden="true" tabindex="-1"></a>uk_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/uk_ozone_uni.csv&quot;</span>)</span>
+<span id="cb118-6"><a href="hazards.html#cb118-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-7"><a href="hazards.html#cb118-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format </span></span>
+<span id="cb118-8"><a href="hazards.html#cb118-8" aria-hidden="true" tabindex="-1"></a>uk_data_sp <span class="ot">&lt;-</span> uk_data</span>
+<span id="cb118-9"><a href="hazards.html#cb118-9" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(uk_data_sp) <span class="ot">&lt;-</span> <span class="er">~</span> longitude <span class="sc">+</span> latitude</span>
+<span id="cb118-10"><a href="hazards.html#cb118-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-11"><a href="hazards.html#cb118-11" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the projection code</span></span>
+<span id="cb118-12"><a href="hazards.html#cb118-12" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(uk_data_sp) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +ellps=WGS84&quot;</span>)</span>
+<span id="cb118-13"><a href="hazards.html#cb118-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-14"><a href="hazards.html#cb118-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the bounding box </span></span>
+<span id="cb118-15"><a href="hazards.html#cb118-15" aria-hidden="true" tabindex="-1"></a>latLongBox <span class="ot">=</span> <span class="fu">bbox</span>(uk_data_sp)</span>
+<span id="cb118-16"><a href="hazards.html#cb118-16" aria-hidden="true" tabindex="-1"></a>location <span class="ot">=</span> <span class="fu">c</span>(latLongBox[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.2</span>,</span>
+<span id="cb118-17"><a href="hazards.html#cb118-17" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="dv">0</span>,</span>
+<span id="cb118-18"><a href="hazards.html#cb118-18" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">1</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.2</span>,</span>
+<span id="cb118-19"><a href="hazards.html#cb118-19" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.2</span>)</span>
+<span id="cb118-20"><a href="hazards.html#cb118-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-21"><a href="hazards.html#cb118-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with location dots marked on it in</span></span>
+<span id="cb118-22"><a href="hazards.html#cb118-22" aria-hidden="true" tabindex="-1"></a>UKOzoneMap <span class="ot">&lt;-</span></span>
+<span id="cb118-23"><a href="hazards.html#cb118-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_stamenmap</span>(</span>
+<span id="cb118-24"><a href="hazards.html#cb118-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">bbox =</span> location,</span>
+<span id="cb118-25"><a href="hazards.html#cb118-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">zoom =</span> <span class="dv">6</span></span>
+<span id="cb118-26"><a href="hazards.html#cb118-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb118-27"><a href="hazards.html#cb118-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-28"><a href="hazards.html#cb118-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(UKOzoneMap) <span class="sc">+</span> <span class="fu">geom_point</span>(</span>
+<span id="cb118-29"><a href="hazards.html#cb118-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> uk_data,</span>
+<span id="cb118-30"><a href="hazards.html#cb118-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb118-31"><a href="hazards.html#cb118-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> longitude,</span>
+<span id="cb118-32"><a href="hazards.html#cb118-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> latitude,</span>
+<span id="cb118-33"><a href="hazards.html#cb118-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> ozone,</span>
+<span id="cb118-34"><a href="hazards.html#cb118-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> ozone</span>
+<span id="cb118-35"><a href="hazards.html#cb118-35" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb118-36"><a href="hazards.html#cb118-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.45</span></span>
+<span id="cb118-37"><a href="hazards.html#cb118-37" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.1%20load%20data-1.png" width="672" /></p>
 <p>Using the <code>geoR</code> package we can also plot the following:</p>
 <ul>
@@ -274,10 +273,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>the concentrations of ozone in relation to the x and y coordinates</li>
 <li>and a histogram of the concentrations indicating the distribution of concentrations together with an estimate of the density.</li>
 </ul>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="hazards.html#cb115-1" aria-hidden="true" tabindex="-1"></a>uk_data_geo <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>(uk_data,</span>
-<span id="cb115-2"><a href="hazards.html#cb115-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">data.col =</span> <span class="dv">4</span>)</span>
-<span id="cb115-3"><a href="hazards.html#cb115-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb115-4"><a href="hazards.html#cb115-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(uk_data_geo)</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="hazards.html#cb119-1" aria-hidden="true" tabindex="-1"></a>uk_data_geo <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>(uk_data,</span>
+<span id="cb119-2"><a href="hazards.html#cb119-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">data.col =</span> <span class="dv">4</span>)</span>
+<span id="cb119-3"><a href="hazards.html#cb119-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-4"><a href="hazards.html#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(uk_data_geo)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.1%20geoR%20plot-1.png" width="672" /></p>
 </div>
 <div id="example-10.9" class="section level2 unnumbered hasAnchor">
@@ -285,96 +284,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>NOTE: This won’t be the real example but I need to compare it to something that I know the answer to, so instead of doing a simulation I will keep going by analyzing the meuse river data</p>
 <div id="nimble-2" class="section level3 unnumbered hasAnchor">
 <h3>Nimble<a href="hazards.html#nimble-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="hazards.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
-<span id="cb116-2"><a href="hazards.html#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
-<span id="cb116-3"><a href="hazards.html#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble)</span></code></pre></div>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="hazards.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse)</span>
-<span id="cb117-2"><a href="hazards.html#cb117-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-3"><a href="hazards.html#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the zinc data in the log scale from the meuse dataset</span></span>
-<span id="cb117-4"><a href="hazards.html#cb117-4" aria-hidden="true" tabindex="-1"></a>meusesample <span class="ot">&lt;-</span></span>
-<span id="cb117-5"><a href="hazards.html#cb117-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb117-6"><a href="hazards.html#cb117-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">log</span>(meuse<span class="sc">$</span>zinc),</span>
-<span id="cb117-7"><a href="hazards.html#cb117-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x1 =</span> <span class="fu">sqrt</span>(meuse<span class="sc">$</span>dist),</span>
-<span id="cb117-8"><a href="hazards.html#cb117-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">easting =</span> meuse<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">1000</span>,</span>
-<span id="cb117-9"><a href="hazards.html#cb117-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">northing =</span> meuse<span class="sc">$</span>y <span class="sc">/</span> <span class="dv">1000</span></span>
-<span id="cb117-10"><a href="hazards.html#cb117-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb117-11"><a href="hazards.html#cb117-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-12"><a href="hazards.html#cb117-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the distance matrix</span></span>
-<span id="cb117-13"><a href="hazards.html#cb117-13" aria-hidden="true" tabindex="-1"></a>Dist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(meusesample[,<span class="fu">c</span>(<span class="st">&quot;easting&quot;</span>, <span class="st">&quot;northing&quot;</span>)]))</span></code></pre></div>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="hazards.html#cb118-1" aria-hidden="true" tabindex="-1"></a>Example10_9Code <span class="ot">&lt;-</span>  <span class="fu">nimbleCode</span> ({</span>
-<span id="cb118-2"><a href="hazards.html#cb118-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Covariance matrix spatial effect</span></span>
-<span id="cb118-3"><a href="hazards.html#cb118-3" aria-hidden="true" tabindex="-1"></a>  Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> (sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>distMatrix[<span class="dv">1</span><span class="sc">:</span>n,<span class="dv">1</span><span class="sc">:</span>n]<span class="sc">/</span>phi) <span class="sc">+</span> (tau<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">identityMatrix</span>(<span class="at">d =</span> n)</span>
-<span id="cb118-4"><a href="hazards.html#cb118-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb118-5"><a href="hazards.html#cb118-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (site <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb118-6"><a href="hazards.html#cb118-6" aria-hidden="true" tabindex="-1"></a>    mean.site[site] <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x[site]</span>
-<span id="cb118-7"><a href="hazards.html#cb118-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb118-8"><a href="hazards.html#cb118-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb118-9"><a href="hazards.html#cb118-9" aria-hidden="true" tabindex="-1"></a>  y[<span class="dv">1</span><span class="sc">:</span>n]  <span class="sc">~</span>  <span class="fu">dmnorm</span>(mean.site[<span class="dv">1</span><span class="sc">:</span>n], <span class="at">cov =</span> Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n])</span>
-<span id="cb118-10"><a href="hazards.html#cb118-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb118-11"><a href="hazards.html#cb118-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set up the priors for the spatial model</span></span>
-<span id="cb118-12"><a href="hazards.html#cb118-12" aria-hidden="true" tabindex="-1"></a>  sigma <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb118-13"><a href="hazards.html#cb118-13" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb118-14"><a href="hazards.html#cb118-14" aria-hidden="true" tabindex="-1"></a>  phi_inv <span class="sc">~</span> <span class="fu">dgamma</span>(<span class="at">shape =</span>  <span class="fl">8186.436</span>, <span class="at">rate =</span> <span class="fl">12026.879</span>)</span>
-<span id="cb118-15"><a href="hazards.html#cb118-15" aria-hidden="true" tabindex="-1"></a>  phi <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>phi_inv</span>
-<span id="cb118-16"><a href="hazards.html#cb118-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb118-17"><a href="hazards.html#cb118-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># prior for the intercept term</span></span>
-<span id="cb118-18"><a href="hazards.html#cb118-18" aria-hidden="true" tabindex="-1"></a>  beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb118-19"><a href="hazards.html#cb118-19" aria-hidden="true" tabindex="-1"></a>  beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb118-20"><a href="hazards.html#cb118-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb118-21"><a href="hazards.html#cb118-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb118-22"><a href="hazards.html#cb118-22" aria-hidden="true" tabindex="-1"></a>}) </span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="hazards.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
+<span id="cb120-2"><a href="hazards.html#cb120-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb120-3"><a href="hazards.html#cb120-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble)</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="hazards.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse)</span>
+<span id="cb121-2"><a href="hazards.html#cb121-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb121-3"><a href="hazards.html#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the zinc data in the log scale from the meuse dataset</span></span>
+<span id="cb121-4"><a href="hazards.html#cb121-4" aria-hidden="true" tabindex="-1"></a>meusesample <span class="ot">&lt;-</span></span>
+<span id="cb121-5"><a href="hazards.html#cb121-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb121-6"><a href="hazards.html#cb121-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">log</span>(meuse<span class="sc">$</span>zinc),</span>
+<span id="cb121-7"><a href="hazards.html#cb121-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x1 =</span> <span class="fu">sqrt</span>(meuse<span class="sc">$</span>dist),</span>
+<span id="cb121-8"><a href="hazards.html#cb121-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">easting =</span> meuse<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb121-9"><a href="hazards.html#cb121-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">northing =</span> meuse<span class="sc">$</span>y <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb121-10"><a href="hazards.html#cb121-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb121-11"><a href="hazards.html#cb121-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb121-12"><a href="hazards.html#cb121-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the distance matrix</span></span>
+<span id="cb121-13"><a href="hazards.html#cb121-13" aria-hidden="true" tabindex="-1"></a>Dist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(meusesample[,<span class="fu">c</span>(<span class="st">&quot;easting&quot;</span>, <span class="st">&quot;northing&quot;</span>)]))</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="hazards.html#cb122-1" aria-hidden="true" tabindex="-1"></a>Example10_9Code <span class="ot">&lt;-</span>  <span class="fu">nimbleCode</span> ({</span>
+<span id="cb122-2"><a href="hazards.html#cb122-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Covariance matrix spatial effect</span></span>
+<span id="cb122-3"><a href="hazards.html#cb122-3" aria-hidden="true" tabindex="-1"></a>  Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> (sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>distMatrix[<span class="dv">1</span><span class="sc">:</span>n,<span class="dv">1</span><span class="sc">:</span>n]<span class="sc">/</span>phi) <span class="sc">+</span> (tau<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">identityMatrix</span>(<span class="at">d =</span> n)</span>
+<span id="cb122-4"><a href="hazards.html#cb122-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb122-5"><a href="hazards.html#cb122-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (site <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb122-6"><a href="hazards.html#cb122-6" aria-hidden="true" tabindex="-1"></a>    mean.site[site] <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x[site]</span>
+<span id="cb122-7"><a href="hazards.html#cb122-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb122-8"><a href="hazards.html#cb122-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb122-9"><a href="hazards.html#cb122-9" aria-hidden="true" tabindex="-1"></a>  y[<span class="dv">1</span><span class="sc">:</span>n]  <span class="sc">~</span>  <span class="fu">dmnorm</span>(mean.site[<span class="dv">1</span><span class="sc">:</span>n], <span class="at">cov =</span> Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n])</span>
+<span id="cb122-10"><a href="hazards.html#cb122-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb122-11"><a href="hazards.html#cb122-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set up the priors for the spatial model</span></span>
+<span id="cb122-12"><a href="hazards.html#cb122-12" aria-hidden="true" tabindex="-1"></a>  sigma <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb122-13"><a href="hazards.html#cb122-13" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb122-14"><a href="hazards.html#cb122-14" aria-hidden="true" tabindex="-1"></a>  phi_inv <span class="sc">~</span> <span class="fu">dgamma</span>(<span class="at">shape =</span>  <span class="fl">8186.436</span>, <span class="at">rate =</span> <span class="fl">12026.879</span>)</span>
+<span id="cb122-15"><a href="hazards.html#cb122-15" aria-hidden="true" tabindex="-1"></a>  phi <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>phi_inv</span>
+<span id="cb122-16"><a href="hazards.html#cb122-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb122-17"><a href="hazards.html#cb122-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># prior for the intercept term</span></span>
+<span id="cb122-18"><a href="hazards.html#cb122-18" aria-hidden="true" tabindex="-1"></a>  beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb122-19"><a href="hazards.html#cb122-19" aria-hidden="true" tabindex="-1"></a>  beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb122-20"><a href="hazards.html#cb122-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb122-21"><a href="hazards.html#cb122-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb122-22"><a href="hazards.html#cb122-22" aria-hidden="true" tabindex="-1"></a>}) </span></code></pre></div>
 <p>Define the constants, data and initials lists for the <code>nimble</code> model.</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="hazards.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the distance matrix using by turning it into an sf object</span></span>
-<span id="cb119-2"><a href="hazards.html#cb119-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb119-3"><a href="hazards.html#cb119-3" aria-hidden="true" tabindex="-1"></a>constants <span class="ot">&lt;-</span></span>
-<span id="cb119-4"><a href="hazards.html#cb119-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">nrow</span>(meusesample))</span>
-<span id="cb119-5"><a href="hazards.html#cb119-5" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y =</span> meusesample<span class="sc">$</span>y, <span class="at">x =</span> meusesample<span class="sc">$</span>x1, <span class="at">distMatrix =</span> Dist)</span>
-<span id="cb119-6"><a href="hazards.html#cb119-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb119-7"><a href="hazards.html#cb119-7" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">&quot;tau&quot;</span>,  <span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
-<span id="cb119-8"><a href="hazards.html#cb119-8" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">tau =</span> <span class="fl">0.1</span>, <span class="at">beta0 =</span> <span class="dv">1</span>, <span class="at">beta1 =</span> <span class="dv">1</span>, <span class="at">sigma =</span> <span class="fl">0.1</span>, <span class="at">phi_inv =</span> <span class="dv">6</span><span class="sc">/</span><span class="fu">max</span>(Dist))</span>
-<span id="cb119-9"><a href="hazards.html#cb119-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: I have to check this code with a simulation first </span></span>
-<span id="cb119-10"><a href="hazards.html#cb119-10" aria-hidden="true" tabindex="-1"></a>mcmc.out <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
-<span id="cb119-11"><a href="hazards.html#cb119-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example10_9Code,</span>
-<span id="cb119-12"><a href="hazards.html#cb119-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> constants,</span>
-<span id="cb119-13"><a href="hazards.html#cb119-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
-<span id="cb119-14"><a href="hazards.html#cb119-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
-<span id="cb119-15"><a href="hazards.html#cb119-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
-<span id="cb119-16"><a href="hazards.html#cb119-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">10000</span>,</span>
-<span id="cb119-17"><a href="hazards.html#cb119-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">5000</span>,</span>
-<span id="cb119-18"><a href="hazards.html#cb119-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">14</span>,</span>
-<span id="cb119-19"><a href="hazards.html#cb119-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb119-20"><a href="hazards.html#cb119-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
-<span id="cb119-21"><a href="hazards.html#cb119-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb119-22"><a href="hazards.html#cb119-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
-<span id="cb119-23"><a href="hazards.html#cb119-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="hazards.html#cb120-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="hazards.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the distance matrix using by turning it into an sf object</span></span>
+<span id="cb123-2"><a href="hazards.html#cb123-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-3"><a href="hazards.html#cb123-3" aria-hidden="true" tabindex="-1"></a>constants <span class="ot">&lt;-</span></span>
+<span id="cb123-4"><a href="hazards.html#cb123-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">nrow</span>(meusesample))</span>
+<span id="cb123-5"><a href="hazards.html#cb123-5" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y =</span> meusesample<span class="sc">$</span>y, <span class="at">x =</span> meusesample<span class="sc">$</span>x1, <span class="at">distMatrix =</span> Dist)</span>
+<span id="cb123-6"><a href="hazards.html#cb123-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-7"><a href="hazards.html#cb123-7" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">&quot;tau&quot;</span>,  <span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
+<span id="cb123-8"><a href="hazards.html#cb123-8" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">tau =</span> <span class="fl">0.1</span>, <span class="at">beta0 =</span> <span class="dv">1</span>, <span class="at">beta1 =</span> <span class="dv">1</span>, <span class="at">sigma =</span> <span class="fl">0.1</span>, <span class="at">phi_inv =</span> <span class="dv">6</span><span class="sc">/</span><span class="fu">max</span>(Dist))</span>
+<span id="cb123-9"><a href="hazards.html#cb123-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: I have to check this code with a simulation first </span></span>
+<span id="cb123-10"><a href="hazards.html#cb123-10" aria-hidden="true" tabindex="-1"></a>mcmc.out <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
+<span id="cb123-11"><a href="hazards.html#cb123-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example10_9Code,</span>
+<span id="cb123-12"><a href="hazards.html#cb123-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> constants,</span>
+<span id="cb123-13"><a href="hazards.html#cb123-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
+<span id="cb123-14"><a href="hazards.html#cb123-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
+<span id="cb123-15"><a href="hazards.html#cb123-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
+<span id="cb123-16"><a href="hazards.html#cb123-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">10000</span>,</span>
+<span id="cb123-17"><a href="hazards.html#cb123-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">5000</span>,</span>
+<span id="cb123-18"><a href="hazards.html#cb123-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">14</span>,</span>
+<span id="cb123-19"><a href="hazards.html#cb123-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb123-20"><a href="hazards.html#cb123-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
+<span id="cb123-21"><a href="hazards.html#cb123-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb123-22"><a href="hazards.html#cb123-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
+<span id="cb123-23"><a href="hazards.html#cb123-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="hazards.html#cb124-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 256.4037
+## [1] 255.4531
 ## Field &quot;lppd&quot;:
-## [1] -120.0474
+## [1] -120.2377
 ## Field &quot;pWAIC&quot;:
-## [1] 8.154504</code></pre>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="hazards.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
-<pre><code>## [1] 664.9118</code></pre>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="hazards.html#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># REVIEW: the effective size for sigma is really low, look at the traceplot</span></span>
-<span id="cb124-2"><a href="hazards.html#cb124-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: there might not be a spatial structure...</span></span>
-<span id="cb124-3"><a href="hazards.html#cb124-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)])</span></code></pre></div>
+## [1] 7.48887</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="hazards.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
+<pre><code>## [1] 714</code></pre>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="hazards.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="co"># REVIEW: the effective size for sigma is really low, look at the traceplot</span></span>
+<span id="cb128-2"><a href="hazards.html#cb128-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: there might not be a spatial structure...</span></span>
+<span id="cb128-3"><a href="hazards.html#cb128-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)])</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-1.png" width="672" /></p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="hazards.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="hazards.html#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-2.png" width="672" /></p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="hazards.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(mcmc.out$samples[, c(&quot;sigma&quot;)])</span></span>
-<span id="cb126-2"><a href="hazards.html#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="hazards.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(mcmc.out$samples[, c(&quot;sigma&quot;)])</span></span>
+<span id="cb130-2"><a href="hazards.html#cb130-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>)])</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-3.png" width="672" /></p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="hazards.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(mcmc.out$samples[, c(&quot;phi&quot;)])</span></span>
-<span id="cb127-2"><a href="hazards.html#cb127-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb127-3"><a href="hazards.html#cb127-3" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="hazards.html#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(mcmc.out$samples[, c(&quot;phi&quot;)])</span></span>
+<span id="cb131-2"><a href="hazards.html#cb131-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-3"><a href="hazards.html#cb131-3" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span></code></pre></div>
 <pre><code>##              Mean      Median    St.Dev.    95%CI_low 95%CI_upp
-## beta0  0.76064465  0.77245923 0.30963022  0.125826088 1.3456582
-## beta1 -0.42275914 -0.42939466 0.28774900 -0.978665822 0.1570727
-## phi    1.47533769  1.47588649 0.01681748  1.441944628 1.5073720
-## sigma  1.51881941  1.51117308 0.09823623  1.333914329 1.7115349
-## tau    0.06551542  0.05939259 0.04434318  0.002983605 0.1639261</code></pre>
+## beta0  0.74629350  0.75295515 0.30096555  0.121056644 1.3481696
+## beta1 -0.41426285 -0.42416695 0.27868686 -0.921199587 0.1497284
+## phi    1.47501662  1.47504728 0.01630318  1.442837617 1.5063160
+## sigma  1.51963892  1.51656003 0.09661708  1.342351222 1.7118578
+## tau    0.06543891  0.05776484 0.04623935  0.002630855 0.1690170</code></pre>
 
 </div>
 </div>

@@ -10,7 +10,8 @@ Disease
 hazards
 Time
 nimble-3
-stan-2
+hourly-data-seasonal-component
+daily-data-time-varying-mean
 exposure
 causality
 monitoring
