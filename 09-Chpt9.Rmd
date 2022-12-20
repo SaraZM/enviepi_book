@@ -36,7 +36,7 @@ The following is the code for the Poisson-Gamma model implemented in `nimble`.
 
 ```{r Ex 9.1 nimble model, results='hide', warning=FALSE, message= FALSE}
 
-Example9_1Code <- nimbleCode({
+Example9_1Nimble <- nimbleCode({
   for (i in 1:N) {
     Y[i] ~ dpois(mu[i])
     # REVIEW: There is an intercept in the book, 
@@ -89,7 +89,7 @@ params <- c("theta", "a", "b", "Y.fit")
 
 # Run model in nimble
 mcmc.out <- nimbleMCMC(
-  code = Example9_1Code,
+  code = Example9_1Nimble,
   constants = constants,
   data = ex.data,
   inits = inits,
@@ -116,12 +116,12 @@ min(coda::effectiveSize(mcmc.out$samples))
 mvSamples <- mcmc.out$samples
 
 # trace plot of a
-plot(mvSamples[, c("a")])
+plot(mvSamples[, c("a")], bty = "n")
 # trace plot of b
-plot(mvSamples[, c("b")])
+plot(mvSamples[, c("b")], bty = "n")
 # trace plots of theta
 for (i in 1:3)
-  plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))])
+  plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))], bty = "n")
 
 ```
 
@@ -176,7 +176,7 @@ abline(a = 0, b = 1)
 Load necessary libraries and data.  
 
 
-```{r Ex 9.1 clean}
+```{r Ex 9.1 clean, include = FALSE}
 rm(list=ls())
 ```
 
@@ -223,7 +223,7 @@ ex.data <- list(
   lambda_b = 1
 )
 # Run the model in Stan
-mod0 <- stan(
+Ex9_1Stan <- stan(
   file = "functions/Example9_1.stan",
   data = ex.data,
   chains = 3,
@@ -243,14 +243,14 @@ Compute the WAIC, show the trace plots and posterior summaries of the parameters
 
 ```{r Ex 8.1 stan waic and traceplots, message= FALSE, warning=FALSE}
 
-loglik0 <- extract_log_lik(mod0)
+loglik0 <- extract_log_lik(Ex9_1Stan)
 waic0 <- waic(loglik0)
 waic0
 
 # traceplots of parameters a and b
-traceplot(mod0, pars = c("a", "b"))
+traceplot(Ex9_1Stan, pars = c("a", "b"))
 # traceplots of parameter theta
-traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
+traceplot(Ex9_1Stan, pars = c("theta[1]", "theta[2]", "theta[3]"))
 
 ```
 
@@ -258,7 +258,7 @@ traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
 ```{r Ex 8.1 stan posterior summary}
 
 summary_theta <-
-  summary(mod0, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+  summary(Ex9_1Stan, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame()
 
 par(mfrow = c(1, 1))
 plot(
@@ -276,7 +276,7 @@ abline(h = 1, lwd = 2, lty = 2)
 
 # Posterior summary of fitted values
 summary_fit <-
-  summary(mod0, pars = c("yfit"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+  summary(Ex9_1Stan, pars = c("yfit"), probs = c(0.05, 0.95))$summary |> as.data.frame()
 # Plot mean and 95% CIs for the fitted values
 par(mfrow = c(1, 1))
 plot(
@@ -316,9 +316,10 @@ theme_clear <- function(){
     panel.grid.major = element_blank(), # remove background grid
     panel.grid.minor = element_blank(),
     panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
+    axis.line = element_line(colour = "black") # remove axis line
   )
 }
+
 # Load data
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
@@ -388,7 +389,7 @@ numneigh  <- apply(W.mat,2,sum)
 
 ```{r Ex 9.3 nimble car model, warning=FALSE}
 
-Example9_3Code <- nimbleCode({
+Example9_3Nimble <- nimbleCode({
   # Likelihood
   for (i in 1:N) {
     y[i] ~ dpois(lambda[i])
@@ -411,7 +412,7 @@ Example9_3Code <- nimbleCode({
 
 Define the constants, data and initial values lists and run the model. 
 
-```{r Ex 8.3 nimble car run, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 9.3 nimble car run, error = FALSE, message = FALSE, results='hide'}
 # constants list
 constants <- list(
   N = N,
@@ -433,48 +434,38 @@ inits <-  list(
   sigma_b = 1,
   b = rnorm(N)
 )
+params <- c("beta0","beta1", "fitted", "b", "sigma_b")
 # Run model in nimble
-CAR_Model <- nimbleModel(
-  code = Example9_3Code,
+mcmc.out <- nimbleMCMC(
+  code = Example9_3Nimble,
   constants = constants,
   data = ex.data,
-  inits = inits
+  inits = inits,
+  monitors = params,
+  niter = 40000,
+  nburnin = 20000,
+  thin = 80,
+  WAIC = TRUE,
+  nchains = 2,
+  summary = TRUE,
+  samplesAsCodaMCMC = TRUE
 )
 
-# QUESTION: can I run this model without configuring it as I did in the previous examples? 
-CAR_conf <-
-  configureMCMC(CAR_Model, monitors = c("beta0","beta1", "fitted", "b", "sigma_b"))
-CAR_MCMC = buildMCMC(
-  CAR_Model,
-  enableWAIC = T,
-  monitors = c("beta0", "beta1","fitted", "b", "sigma_b")
-)
-CAR_Cmodel = compileNimble(CAR_Model)
-CAR_Cmcmc = compileNimble(CAR_MCMC, project = CAR_Model)
-CAR_runMCMC = runMCMC(
-  CAR_Cmcmc,
-  nburnin = 20000,
-  niter = 40000,
-  thin = 80,
-  nchains = 2,
-  samplesAsCodaMCMC = TRUE,
-  WAIC = T,
-  summary = TRUE
-)
+
 
 ```
 
 Show the WAIC, effective sample size, and trace plots for some of the parameters.
 
 
-```{r Ex 8.3 WAIC, ESS and traceplots }
+```{r Ex 9.3 WAIC, ESS and traceplots }
 
-CAR_runMCMC$WAIC
-min(coda::effectiveSize(CAR_runMCMC$samples))
-plot(CAR_runMCMC$samples[, c("beta0")], bty = "n")
-plot(CAR_runMCMC$samples[, c("beta1")], bty = "n")
-plot(CAR_runMCMC$samples[, c("b[2]")], bty = "n")
-plot(CAR_runMCMC$samples[, c("sigma_b")], bty = "n")
+mcmc.out$WAIC
+min(coda::effectiveSize(mcmc.out$samples))
+plot(mcmc.out$samples[, c("beta0")], bty = "n")
+plot(mcmc.out$samples[, c("beta1")], bty = "n")
+plot(mcmc.out$samples[, c("b[2]")], bty = "n")
+plot(mcmc.out$samples[, c("sigma_b")], bty = "n")
 ```
 
 
@@ -482,7 +473,7 @@ plot(CAR_runMCMC$samples[, c("sigma_b")], bty = "n")
 
 # Extract samples
 variables <- c("beta0", "beta1","sigma_b")
-summary_CAR_nimble <- CAR_runMCMC$summary$all.chains
+summary_CAR_nimble <- mcmc.out$summary$all.chains
 summary_CAR_nimble[variables,]
 
 ```
@@ -500,10 +491,9 @@ ggplot() +
   # Choose spatial object and column for plotting
   geom_sf(data = CAR_nimble_merge, aes(fill = Mean)) +
   # Change legend's label
-  labs(fill = 'Latent effects stan') +
+  labs(fill = 'Latent effects nimble') +
   # Clear background and plot borders
- theme_clear()
-
+ theme_void()
 ```
 
 
@@ -522,13 +512,13 @@ library(ggplot2)
 library(loo) # To calculate WAIC and loo later
 library(rstan) 
 library(spdep) 
-# Function to clear the axes of the ggplot map 
+# Add a theme to clear axes and background in ggplot (optional)
 theme_clear <- function(){
   theme(
     panel.grid.major = element_blank(), # remove background grid
     panel.grid.minor = element_blank(),
     panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
+    axis.line = element_blank() # remove axis line
   )
 }
 # Additional settings for stan
@@ -657,7 +647,7 @@ ex.data <- list(
   node2 = node2
 )
 
-COPD_fitCAR  <- stan(
+Example9_3Stan  <- stan(
   file = "functions/Example9_3.stan",
   data = ex.data,
   warmup = 10000,
@@ -676,11 +666,11 @@ Show traceplots.
 ```{r Ex 9.3 stan CAR traceplots}
 #computing WAIC using the package loo
 
-loglikcar <- extract_log_lik(COPD_fitCAR)
+loglikcar <- extract_log_lik(Example9_3Stan)
 waiccar <- waic(loglikcar)
 waiccar
 
-traceplot(COPD_fitCAR, pars = c("beta0","beta","sigma_s"))
+traceplot(Example9_3Stan, pars = c("beta0","beta","sigma_s"))
 
 ```
 
@@ -692,7 +682,7 @@ Keep in mind that in the stan model the we are sampling the standard deviation o
 # Extract samples
 summary_CAR_stan <-
   summary(
-    COPD_fitCAR,
+    Example9_3Stan,
     pars = c("beta0", "beta","sigma_s"),
     probs = c(0.025, 0.975)
   )
@@ -709,7 +699,7 @@ Map the mean of the posterior estimate for the latent effect.
 
 summary_CAR_stan_b <-
   summary(
-    COPD_fitCAR,
+    Example9_3Stan,
     pars = c("b"),
     probs = c(0.025, 0.975)
   )
@@ -726,7 +716,7 @@ ggplot() +
   # Change legend's label
   labs(fill = 'Latent effects stan') +
   # Clear background and plot borders
-  theme_clear()
+  theme_void()
 
 
 ```
@@ -749,13 +739,13 @@ library(CARBayes)
 library(ggplot2)
 library(sf)
 library(spdep)
-# Function to clear the axes of the ggplot map 
+# Add a theme to clear axes and background in ggplot (optional)
 theme_clear <- function(){
   theme(
     panel.grid.major = element_blank(), # remove background grid
     panel.grid.minor = element_blank(),
     panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
+    axis.line = element_blank()# remove axis line
   )
 }
 # Reading in borders
@@ -801,7 +791,7 @@ The function `S.CARleroux()` allows us to use the neighborhood structure and per
 ```{r Ex 9.4 carbayes run, results='hide', message = FALSE}
 
 # Running smoothing model
-model <-
+Ex9_4 <-
   S.CARleroux(
     # Model Formula
     formula = Y2010 ~ offset(log(E2010)) + Average.Score,
@@ -827,14 +817,14 @@ We can extract the new smoother values from the model output and divide them by 
 ```{r Ex 9.4 carbayes smoothed SMRs, class.source = 'foldable' }
 
 # Creating a dataset with smoothed SMRs in 2010
-SMR2010 <- model$fitted.values /  copd_df$E2010
+SMR2010 <- Ex9_4$fitted.values /  copd_df$E2010
 SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
 # Printing first six rows of smoothed SMRs
 head(SMR_smooth)
 # Summarizing smoothed SMRs
 summary(SMR_smooth)
 # Summary of the parameters under the CAR model.
-model$summary.results[]
+Ex9_4$summary.results[]
 ```
 
 <!-- QUESTION: What do we want the latent effect or the fitted values? -->
@@ -844,7 +834,7 @@ Use `ggplot()` and `geom_sf()` to plot the map of the latent spatial effect.
 ```{r Ex 9.4 carbayes map smoothed SMRs, class.source = 'foldable'}
 
 observed <- tibble::rownames_to_column(observed, "ID")
-phi_car <-  model$samples$phi
+phi_car <-  Ex9_4$samples$phi
 
 latent_car_df  <-  data.frame(
   phi_mean = apply(phi_car, 2, mean),
@@ -859,7 +849,7 @@ ggplot() +
   geom_sf(data = latent_car_england, aes(fill = phi_mean)) +
   labs(fill = 'Latent effects CARbayes') +
   # Clear background and plot borders
-  theme_clear()
+  theme_void()
 ```
 
 ## Example 9.5: Fitting a conditional model using INLA {-}
@@ -873,15 +863,6 @@ rm(list = ls())
 
 library(INLA)
 library(spdep) 
-# Function to clear the axes of the ggplot map 
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
-  )
-}
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
@@ -918,7 +899,7 @@ nb2INLA("UK.adj", W.nb)
 
 ```{r Ex 9.5 inla run}
 # run the INLA model
-m1 <- inla(
+Ex9_5 <- inla(
   Y2010 ~ Average.Score + f(ID  , model = "besag", graph = "UK.adj"),
   family = "poisson",
   E = E2010,
@@ -932,7 +913,7 @@ Summarize the results
 
 ```{r Ex 9.5 inla summary}
 # Summarizing smoothed SMRs
-summary(m1)
+summary(Ex9_5)
 
 ```
 
@@ -940,7 +921,7 @@ summary(m1)
 ```{r Ex 9.5 inla smoothed SMRs, class.source = 'foldable'}
 
 observed <- tibble::rownames_to_column(observed, "ID")
-phi_car <-  m1$summary.random$ID
+phi_car <-  Ex9_5$summary.random$ID
 
 latent_car_df  <-  data.frame(
   phi_mean = phi_car$mean,
@@ -955,7 +936,7 @@ ggplot() +
   geom_sf(data = latent_car_england, aes(fill = phi_mean)) +
   labs(fill = 'Latent effects INLA') +
   # Clear background and plot borders
-  theme_clear()
+  theme_void()
 
 ```
 

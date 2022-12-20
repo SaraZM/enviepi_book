@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2022-12-19" />
+<meta name="date" content="2022-12-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -523,12 +523,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <pre><code>## [1] &quot;ESS a:&quot;</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="tactics.html#cb23-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]) </span></code></pre></div>
 <pre><code>##     var1 
-## 47.12422</code></pre>
+## 39.00681</code></pre>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="tactics.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ESS b:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ESS b:&quot;</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="tactics.html#cb27-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux])</span></code></pre></div>
 <pre><code>##     var1 
-## 40.88192</code></pre>
+## 42.29559</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="tactics.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ESS theta[1]:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]:&quot;</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="tactics.html#cb31-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>])</span></code></pre></div>
@@ -537,8 +537,8 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="tactics.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ESS theta[10]:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[10]:&quot;</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="tactics.html#cb35-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>])</span></code></pre></div>
-<pre><code>##     var1 
-## 1947.628</code></pre>
+<pre><code>## var1 
+## 2001</code></pre>
 <p>The variances for the parameters <code>a</code> and <code>b</code> is lower than the recommended minimum of 100. We will go back to this in Chapter 8.</p>
 <p>Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tactics.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summaries of theta_i</span></span>
@@ -652,11 +652,11 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="tactics.html#cb42-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.302
+## [1] 3049.364
 ## Field &quot;lppd&quot;:
-## [1] -1514.463
+## [1] -1514.458
 ## Field &quot;pWAIC&quot;:
-## [1] 10.18779</code></pre>
+## [1] 10.22433</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="tactics.html#cb44-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
 <span id="cb44-2"><a href="tactics.html#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -681,12 +681,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.1288316      0.0123398      0.0001951      0.0002017 
+##      1.1288584      0.0122649      0.0001939      0.0001969 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.105 1.120 1.129 1.137 1.153</code></pre>
+## 1.105 1.121 1.129 1.137 1.153</code></pre>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="tactics.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
 <span id="cb49-2"><a href="tactics.html#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -699,12 +699,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0151066      0.0174534      0.0002760      0.0004579 
+##      1.0148438      0.0174738      0.0002763      0.0004220 
 ## 
 ## 2. Quantiles for each variable:
 ## 
-##   2.5%    25%    50%    75%  97.5% 
-## 0.9811 1.0036 1.0149 1.0267 1.0497</code></pre>
+##  2.5%   25%   50%   75% 97.5% 
+## 0.981 1.003 1.015 1.026 1.050</code></pre>
 
 </div>
 </div>

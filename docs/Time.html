@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2022-12-19" />
+<meta name="date" content="2022-12-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -228,213 +228,213 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="example-11.1-ground-level-ozone-concentrations" class="section level2 unnumbered hasAnchor">
 <h2>Example 11.1 Ground level ozone concentrations<a href="Time.html#example-11.1-ground-level-ozone-concentrations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Load the daily and hourly data for one site.</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="Time.html#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb133-2"><a href="Time.html#cb133-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb133-3"><a href="Time.html#cb133-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data for one site</span></span>
-<span id="cb133-4"><a href="Time.html#cb133-4" aria-hidden="true" tabindex="-1"></a>site_daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_daily.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb133-5"><a href="Time.html#cb133-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb133-6"><a href="Time.html#cb133-6" aria-hidden="true" tabindex="-1"></a><span class="co"># change the format of the date column</span></span>
-<span id="cb133-7"><a href="Time.html#cb133-7" aria-hidden="true" tabindex="-1"></a>site_daily<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(site_daily<span class="sc">$</span>date, <span class="st">&quot;%m/%d/%Y&quot;</span>)</span>
-<span id="cb133-8"><a href="Time.html#cb133-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb133-9"><a href="Time.html#cb133-9" aria-hidden="true" tabindex="-1"></a><span class="co"># load hourly data from that same site</span></span>
-<span id="cb133-10"><a href="Time.html#cb133-10" aria-hidden="true" tabindex="-1"></a>site_hourly <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_hourly.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb133-11"><a href="Time.html#cb133-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb133-12"><a href="Time.html#cb133-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a theme to clear axes and background in ggplot (optional)</span></span>
-<span id="cb133-13"><a href="Time.html#cb133-13" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb133-14"><a href="Time.html#cb133-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb133-15"><a href="Time.html#cb133-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
-<span id="cb133-16"><a href="Time.html#cb133-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb133-17"><a href="Time.html#cb133-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
-<span id="cb133-18"><a href="Time.html#cb133-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="co"># keep axis line</span></span>
-<span id="cb133-19"><a href="Time.html#cb133-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb133-20"><a href="Time.html#cb133-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="Time.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb132-2"><a href="Time.html#cb132-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-3"><a href="Time.html#cb132-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data for one site</span></span>
+<span id="cb132-4"><a href="Time.html#cb132-4" aria-hidden="true" tabindex="-1"></a>site_daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_daily.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb132-5"><a href="Time.html#cb132-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-6"><a href="Time.html#cb132-6" aria-hidden="true" tabindex="-1"></a><span class="co"># change the format of the date column</span></span>
+<span id="cb132-7"><a href="Time.html#cb132-7" aria-hidden="true" tabindex="-1"></a>site_daily<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(site_daily<span class="sc">$</span>date, <span class="st">&quot;%m/%d/%Y&quot;</span>)</span>
+<span id="cb132-8"><a href="Time.html#cb132-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-9"><a href="Time.html#cb132-9" aria-hidden="true" tabindex="-1"></a><span class="co"># load hourly data from that same site</span></span>
+<span id="cb132-10"><a href="Time.html#cb132-10" aria-hidden="true" tabindex="-1"></a>site_hourly <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_hourly.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb132-11"><a href="Time.html#cb132-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-12"><a href="Time.html#cb132-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a theme to clear axes and background in ggplot (optional)</span></span>
+<span id="cb132-13"><a href="Time.html#cb132-13" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb132-14"><a href="Time.html#cb132-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb132-15"><a href="Time.html#cb132-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
+<span id="cb132-16"><a href="Time.html#cb132-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb132-17"><a href="Time.html#cb132-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
+<span id="cb132-18"><a href="Time.html#cb132-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="co"># keep axis line</span></span>
+<span id="cb132-19"><a href="Time.html#cb132-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb132-20"><a href="Time.html#cb132-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Plot the daily and hourly time series.</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="Time.html#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot daily data</span></span>
-<span id="cb134-2"><a href="Time.html#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> site_daily) <span class="sc">+</span></span>
-<span id="cb134-3"><a href="Time.html#cb134-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> max.ozone, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb134-4"><a href="Time.html#cb134-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw a line at the first data</span></span>
-<span id="cb134-5"><a href="Time.html#cb134-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2013-01-01&quot;</span>), <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb134-6"><a href="Time.html#cb134-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 8 hour regulatory standard of 0.075 (ppm)</span></span>
-<span id="cb134-7"><a href="Time.html#cb134-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.075</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb134-8"><a href="Time.html#cb134-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb134-9"><a href="Time.html#cb134-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span> <span class="fu">theme_clear</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="Time.html#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot daily data</span></span>
+<span id="cb133-2"><a href="Time.html#cb133-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> site_daily) <span class="sc">+</span></span>
+<span id="cb133-3"><a href="Time.html#cb133-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> max.ozone, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb133-4"><a href="Time.html#cb133-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw a line at the first data</span></span>
+<span id="cb133-5"><a href="Time.html#cb133-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2013-01-01&quot;</span>), <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb133-6"><a href="Time.html#cb133-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 8 hour regulatory standard of 0.075 (ppm)</span></span>
+<span id="cb133-7"><a href="Time.html#cb133-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.075</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb133-8"><a href="Time.html#cb133-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb133-9"><a href="Time.html#cb133-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span> <span class="fu">theme_clear</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.1%20plot%20time%20series-1.png" width="672" /></p>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="Time.html#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot hourly data</span></span>
-<span id="cb135-2"><a href="Time.html#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> site_hourly,) <span class="sc">+</span></span>
-<span id="cb135-3"><a href="Time.html#cb135-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> ozone, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb135-4"><a href="Time.html#cb135-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb135-5"><a href="Time.html#cb135-5" aria-hidden="true" tabindex="-1"></a>   <span class="co"># 8 hour regulatory standard of 0.075 (ppm).</span></span>
-<span id="cb135-6"><a href="Time.html#cb135-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.075</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb135-7"><a href="Time.html#cb135-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Hour in 2013&#39;s ozone season&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb135-8"><a href="Time.html#cb135-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Hourly Ozone Concentration (ppm)&quot;</span>) <span class="sc">+</span>  <span class="fu">theme_clear</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="Time.html#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot hourly data</span></span>
+<span id="cb134-2"><a href="Time.html#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> site_hourly,) <span class="sc">+</span></span>
+<span id="cb134-3"><a href="Time.html#cb134-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> ozone, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb134-4"><a href="Time.html#cb134-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb134-5"><a href="Time.html#cb134-5" aria-hidden="true" tabindex="-1"></a>   <span class="co"># 8 hour regulatory standard of 0.075 (ppm).</span></span>
+<span id="cb134-6"><a href="Time.html#cb134-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.075</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb134-7"><a href="Time.html#cb134-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Hour in 2013&#39;s ozone season&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb134-8"><a href="Time.html#cb134-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Hourly Ozone Concentration (ppm)&quot;</span>) <span class="sc">+</span>  <span class="fu">theme_clear</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.1%20plot%20time%20series-2.png" width="672" /></p>
 </div>
 <div id="example-11.2-low-pass-filtering-of-carbon-monoxide-levels-using-the-moving-average" class="section level2 unnumbered hasAnchor">
 <h2>Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average<a href="Time.html#example-11.2-low-pass-filtering-of-carbon-monoxide-levels-using-the-moving-average" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For this example we will use the TTR package (Technical Trading Rules). This allow us to manipulate objects like time series for forecasting.</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="Time.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR)</span>
-<span id="cb136-2"><a href="Time.html#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load daily data</span></span>
-<span id="cb136-3"><a href="Time.html#cb136-3" aria-hidden="true" tabindex="-1"></a>site_daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_daily.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb136-4"><a href="Time.html#cb136-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add an identifier column for each day in the sample</span></span>
-<span id="cb136-5"><a href="Time.html#cb136-5" aria-hidden="true" tabindex="-1"></a>site_daily<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily)</span>
-<span id="cb136-6"><a href="Time.html#cb136-6" aria-hidden="true" tabindex="-1"></a><span class="co"># add a theme to clear axes and background in ggplot</span></span>
-<span id="cb136-7"><a href="Time.html#cb136-7" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb136-8"><a href="Time.html#cb136-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb136-9"><a href="Time.html#cb136-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
-<span id="cb136-10"><a href="Time.html#cb136-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb136-11"><a href="Time.html#cb136-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
-<span id="cb136-12"><a href="Time.html#cb136-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>), <span class="co"># keep axis line</span></span>
-<span id="cb136-13"><a href="Time.html#cb136-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb136-14"><a href="Time.html#cb136-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="Time.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add loess smooth</span></span>
-<span id="cb137-2"><a href="Time.html#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Single day</span></span>
-<span id="cb137-3"><a href="Time.html#cb137-3" aria-hidden="true" tabindex="-1"></a>ozone.loess <span class="ot">&lt;-</span> <span class="fu">loess</span>(max.ozone <span class="sc">~</span> day, <span class="at">span =</span> <span class="fl">0.75</span>, <span class="at">data =</span> site_daily[,<span class="fu">c</span>(<span class="st">&quot;max.ozone&quot;</span>, <span class="st">&quot;day&quot;</span>)])</span>
-<span id="cb137-4"><a href="Time.html#cb137-4" aria-hidden="true" tabindex="-1"></a>ozone.predict <span class="ot">&lt;-</span> <span class="fu">predict</span>(ozone.loess, <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily)))</span>
-<span id="cb137-5"><a href="Time.html#cb137-5" aria-hidden="true" tabindex="-1"></a>ozone.predict_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily), </span>
-<span id="cb137-6"><a href="Time.html#cb137-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">ozone.prediction =</span> ozone.predict)</span>
-<span id="cb137-7"><a href="Time.html#cb137-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-8"><a href="Time.html#cb137-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> site_daily) <span class="sc">+</span></span>
-<span id="cb137-9"><a href="Time.html#cb137-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> max.ozone, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb137-10"><a href="Time.html#cb137-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ozone.predict_df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> ozone.predict)) <span class="sc">+</span></span>
-<span id="cb137-11"><a href="Time.html#cb137-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb137-12"><a href="Time.html#cb137-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb137-13"><a href="Time.html#cb137-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Single day&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb137-14"><a href="Time.html#cb137-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="Time.html#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR)</span>
+<span id="cb135-2"><a href="Time.html#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load daily data</span></span>
+<span id="cb135-3"><a href="Time.html#cb135-3" aria-hidden="true" tabindex="-1"></a>site_daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_daily.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb135-4"><a href="Time.html#cb135-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add an identifier column for each day in the sample</span></span>
+<span id="cb135-5"><a href="Time.html#cb135-5" aria-hidden="true" tabindex="-1"></a>site_daily<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily)</span>
+<span id="cb135-6"><a href="Time.html#cb135-6" aria-hidden="true" tabindex="-1"></a><span class="co"># add a theme to clear axes and background in ggplot</span></span>
+<span id="cb135-7"><a href="Time.html#cb135-7" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb135-8"><a href="Time.html#cb135-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb135-9"><a href="Time.html#cb135-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
+<span id="cb135-10"><a href="Time.html#cb135-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb135-11"><a href="Time.html#cb135-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
+<span id="cb135-12"><a href="Time.html#cb135-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>), <span class="co"># keep axis line</span></span>
+<span id="cb135-13"><a href="Time.html#cb135-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb135-14"><a href="Time.html#cb135-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="Time.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add loess smooth</span></span>
+<span id="cb136-2"><a href="Time.html#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Single day</span></span>
+<span id="cb136-3"><a href="Time.html#cb136-3" aria-hidden="true" tabindex="-1"></a>ozone.loess <span class="ot">&lt;-</span> <span class="fu">loess</span>(max.ozone <span class="sc">~</span> day, <span class="at">span =</span> <span class="fl">0.75</span>, <span class="at">data =</span> site_daily[,<span class="fu">c</span>(<span class="st">&quot;max.ozone&quot;</span>, <span class="st">&quot;day&quot;</span>)])</span>
+<span id="cb136-4"><a href="Time.html#cb136-4" aria-hidden="true" tabindex="-1"></a>ozone.predict <span class="ot">&lt;-</span> <span class="fu">predict</span>(ozone.loess, <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily)))</span>
+<span id="cb136-5"><a href="Time.html#cb136-5" aria-hidden="true" tabindex="-1"></a>ozone.predict_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily), </span>
+<span id="cb136-6"><a href="Time.html#cb136-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">ozone.prediction =</span> ozone.predict)</span>
+<span id="cb136-7"><a href="Time.html#cb136-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb136-8"><a href="Time.html#cb136-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> site_daily) <span class="sc">+</span></span>
+<span id="cb136-9"><a href="Time.html#cb136-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> max.ozone, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb136-10"><a href="Time.html#cb136-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ozone.predict_df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> ozone.predict)) <span class="sc">+</span></span>
+<span id="cb136-11"><a href="Time.html#cb136-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb136-12"><a href="Time.html#cb136-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb136-13"><a href="Time.html#cb136-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Single day&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb136-14"><a href="Time.html#cb136-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.2%20moving%20averages%20plot-1.png" width="672" /></p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="Time.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Three days</span></span>
-<span id="cb138-2"><a href="Time.html#cb138-2" aria-hidden="true" tabindex="-1"></a>ozone_SMA3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sma =</span> <span class="fu">SMA</span>(site_daily<span class="sc">$</span>max.ozone, <span class="at">n =</span> <span class="dv">3</span>),</span>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="Time.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Three days</span></span>
+<span id="cb137-2"><a href="Time.html#cb137-2" aria-hidden="true" tabindex="-1"></a>ozone_SMA3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sma =</span> <span class="fu">SMA</span>(site_daily<span class="sc">$</span>max.ozone, <span class="at">n =</span> <span class="dv">3</span>),</span>
+<span id="cb137-3"><a href="Time.html#cb137-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily))</span>
+<span id="cb137-4"><a href="Time.html#cb137-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-5"><a href="Time.html#cb137-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ozone_SMA3) <span class="sc">+</span></span>
+<span id="cb137-6"><a href="Time.html#cb137-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> sma, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb137-7"><a href="Time.html#cb137-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ozone.predict_df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> ozone.predict)) <span class="sc">+</span></span>
+<span id="cb137-8"><a href="Time.html#cb137-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb137-9"><a href="Time.html#cb137-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span>  </span>
+<span id="cb137-10"><a href="Time.html#cb137-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Three days&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb137-11"><a href="Time.html#cb137-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2011.2%20moving%20averages%20plot-2.png" width="672" /></p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="Time.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Six days</span></span>
+<span id="cb138-2"><a href="Time.html#cb138-2" aria-hidden="true" tabindex="-1"></a>ozone_SMA6 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sma =</span> <span class="fu">SMA</span>(site_daily<span class="sc">$</span>max.ozone, <span class="at">n =</span> <span class="dv">6</span>),</span>
 <span id="cb138-3"><a href="Time.html#cb138-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily))</span>
 <span id="cb138-4"><a href="Time.html#cb138-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-5"><a href="Time.html#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ozone_SMA3) <span class="sc">+</span></span>
+<span id="cb138-5"><a href="Time.html#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ozone_SMA6) <span class="sc">+</span></span>
 <span id="cb138-6"><a href="Time.html#cb138-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> sma, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
 <span id="cb138-7"><a href="Time.html#cb138-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ozone.predict_df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> ozone.predict)) <span class="sc">+</span></span>
 <span id="cb138-8"><a href="Time.html#cb138-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb138-9"><a href="Time.html#cb138-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span>  </span>
-<span id="cb138-10"><a href="Time.html#cb138-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Three days&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb138-10"><a href="Time.html#cb138-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Six days&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb138-11"><a href="Time.html#cb138-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>()</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%2011.2%20moving%20averages%20plot-2.png" width="672" /></p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="Time.html#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Six days</span></span>
-<span id="cb139-2"><a href="Time.html#cb139-2" aria-hidden="true" tabindex="-1"></a>ozone_SMA6 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sma =</span> <span class="fu">SMA</span>(site_daily<span class="sc">$</span>max.ozone, <span class="at">n =</span> <span class="dv">6</span>),</span>
+<p><img src="_main_files/figure-html/Ex%2011.2%20moving%20averages%20plot-3.png" width="672" /></p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="Time.html#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Twelve days</span></span>
+<span id="cb139-2"><a href="Time.html#cb139-2" aria-hidden="true" tabindex="-1"></a>ozone_SMA12 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sma =</span> <span class="fu">SMA</span>(site_daily<span class="sc">$</span>max.ozone, <span class="at">n =</span> <span class="dv">12</span>),</span>
 <span id="cb139-3"><a href="Time.html#cb139-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily))</span>
 <span id="cb139-4"><a href="Time.html#cb139-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb139-5"><a href="Time.html#cb139-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ozone_SMA6) <span class="sc">+</span></span>
+<span id="cb139-5"><a href="Time.html#cb139-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ozone_SMA12) <span class="sc">+</span></span>
 <span id="cb139-6"><a href="Time.html#cb139-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> sma, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
 <span id="cb139-7"><a href="Time.html#cb139-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ozone.predict_df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> ozone.predict)) <span class="sc">+</span></span>
 <span id="cb139-8"><a href="Time.html#cb139-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb139-9"><a href="Time.html#cb139-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span>  </span>
-<span id="cb139-10"><a href="Time.html#cb139-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Six days&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb139-9"><a href="Time.html#cb139-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb139-10"><a href="Time.html#cb139-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Twelve days&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb139-11"><a href="Time.html#cb139-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>()</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%2011.2%20moving%20averages%20plot-3.png" width="672" /></p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="Time.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Twelve days</span></span>
-<span id="cb140-2"><a href="Time.html#cb140-2" aria-hidden="true" tabindex="-1"></a>ozone_SMA12 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sma =</span> <span class="fu">SMA</span>(site_daily<span class="sc">$</span>max.ozone, <span class="at">n =</span> <span class="dv">12</span>),</span>
-<span id="cb140-3"><a href="Time.html#cb140-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(site_daily))</span>
-<span id="cb140-4"><a href="Time.html#cb140-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb140-5"><a href="Time.html#cb140-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ozone_SMA12) <span class="sc">+</span></span>
-<span id="cb140-6"><a href="Time.html#cb140-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> sma, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb140-7"><a href="Time.html#cb140-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ozone.predict_df, <span class="fu">aes</span>(<span class="at">x =</span> day, <span class="at">y =</span> ozone.predict)) <span class="sc">+</span></span>
-<span id="cb140-8"><a href="Time.html#cb140-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day in 2013 at Los Angeles Site 060379033&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb140-9"><a href="Time.html#cb140-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Max Daily 8hr Ozone Level (ppm)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb140-10"><a href="Time.html#cb140-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Twelve days&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb140-11"><a href="Time.html#cb140-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.2%20moving%20averages%20plot-4.png" width="672" /></p>
 </div>
 <div id="example-11.13-forecasting-ozone-levels" class="section level2 unnumbered hasAnchor">
 <h2>Example 11.13 Forecasting ozone levels<a href="Time.html#example-11.13-forecasting-ozone-levels" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="Time.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR)</span>
-<span id="cb141-2"><a href="Time.html#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb141-3"><a href="Time.html#cb141-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb141-4"><a href="Time.html#cb141-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load hourly data for site 060379033</span></span>
-<span id="cb141-5"><a href="Time.html#cb141-5" aria-hidden="true" tabindex="-1"></a>site_hourly <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_hourly.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb141-6"><a href="Time.html#cb141-6" aria-hidden="true" tabindex="-1"></a><span class="co"># one night hour per day missing for instrument calibration - imputed for simplicity</span></span>
-<span id="cb141-7"><a href="Time.html#cb141-7" aria-hidden="true" tabindex="-1"></a>imputeNA <span class="ot">&lt;-</span> <span class="fu">mean</span>(site_hourly<span class="sc">$</span>ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb141-8"><a href="Time.html#cb141-8" aria-hidden="true" tabindex="-1"></a>site_hourly<span class="sc">$</span>ozone[<span class="fu">is.na</span>(site_hourly<span class="sc">$</span>ozone)] <span class="ot">&lt;-</span> imputeNA</span></code></pre></div>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="Time.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first seven days in july</span></span>
-<span id="cb142-2"><a href="Time.html#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="co"># days_pattern contains the dates for the first seven days</span></span>
-<span id="cb142-3"><a href="Time.html#cb142-3" aria-hidden="true" tabindex="-1"></a>days_pattern <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;^2013070&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">collapse=</span><span class="st">&quot;|&quot;</span>) </span>
-<span id="cb142-4"><a href="Time.html#cb142-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb142-5"><a href="Time.html#cb142-5" aria-hidden="true" tabindex="-1"></a><span class="co"># select all the rows that follow that pattern using grepl</span></span>
-<span id="cb142-6"><a href="Time.html#cb142-6" aria-hidden="true" tabindex="-1"></a>july_seven_days <span class="ot">&lt;-</span> site_hourly[<span class="fu">grepl</span>(days_pattern, site_hourly<span class="sc">$</span>datetime),] </span>
-<span id="cb142-7"><a href="Time.html#cb142-7" aria-hidden="true" tabindex="-1"></a>july_seven_days<span class="sc">$</span>hours <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(july_seven_days)</span>
-<span id="cb142-8"><a href="Time.html#cb142-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb142-9"><a href="Time.html#cb142-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt-Winters model fitting</span></span>
-<span id="cb142-10"><a href="Time.html#cb142-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn this into a time series object to use Holt-Winters forecast</span></span>
-<span id="cb142-11"><a href="Time.html#cb142-11" aria-hidden="true" tabindex="-1"></a>level_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(july_seven_days<span class="sc">$</span>ozone,</span>
-<span id="cb142-12"><a href="Time.html#cb142-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">frequency =</span> <span class="dv">24</span>,</span>
-<span id="cb142-13"><a href="Time.html#cb142-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1</span>))</span>
-<span id="cb142-14"><a href="Time.html#cb142-14" aria-hidden="true" tabindex="-1"></a>ozone_forecast <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(level_ts) </span>
-<span id="cb142-15"><a href="Time.html#cb142-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb142-16"><a href="Time.html#cb142-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using the default function</span></span>
-<span id="cb142-17"><a href="Time.html#cb142-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb142-18"><a href="Time.html#cb142-18" aria-hidden="true" tabindex="-1"></a>  ozone_forecast,</span>
-<span id="cb142-19"><a href="Time.html#cb142-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Hours - First Week -July 2013&quot;</span>,</span>
-<span id="cb142-20"><a href="Time.html#cb142-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;O3 (ppm)&quot;</span>,</span>
-<span id="cb142-21"><a href="Time.html#cb142-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.predicted =</span> <span class="dv">1</span>,</span>
-<span id="cb142-22"><a href="Time.html#cb142-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;black&quot;</span>,</span>
-<span id="cb142-23"><a href="Time.html#cb142-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb142-24"><a href="Time.html#cb142-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
-<span id="cb142-25"><a href="Time.html#cb142-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="Time.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR)</span>
+<span id="cb140-2"><a href="Time.html#cb140-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb140-3"><a href="Time.html#cb140-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="Time.html#cb140-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load hourly data for site 060379033</span></span>
+<span id="cb140-5"><a href="Time.html#cb140-5" aria-hidden="true" tabindex="-1"></a>site_hourly <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_hourly.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb140-6"><a href="Time.html#cb140-6" aria-hidden="true" tabindex="-1"></a><span class="co"># one night hour per day missing for instrument calibration - imputed for simplicity</span></span>
+<span id="cb140-7"><a href="Time.html#cb140-7" aria-hidden="true" tabindex="-1"></a>imputeNA <span class="ot">&lt;-</span> <span class="fu">mean</span>(site_hourly<span class="sc">$</span>ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb140-8"><a href="Time.html#cb140-8" aria-hidden="true" tabindex="-1"></a>site_hourly<span class="sc">$</span>ozone[<span class="fu">is.na</span>(site_hourly<span class="sc">$</span>ozone)] <span class="ot">&lt;-</span> imputeNA</span></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="Time.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first seven days in july</span></span>
+<span id="cb141-2"><a href="Time.html#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="co"># days_pattern contains the dates for the first seven days</span></span>
+<span id="cb141-3"><a href="Time.html#cb141-3" aria-hidden="true" tabindex="-1"></a>days_pattern <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;^2013070&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">collapse=</span><span class="st">&quot;|&quot;</span>) </span>
+<span id="cb141-4"><a href="Time.html#cb141-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb141-5"><a href="Time.html#cb141-5" aria-hidden="true" tabindex="-1"></a><span class="co"># select all the rows that follow that pattern using grepl</span></span>
+<span id="cb141-6"><a href="Time.html#cb141-6" aria-hidden="true" tabindex="-1"></a>july_seven_days <span class="ot">&lt;-</span> site_hourly[<span class="fu">grepl</span>(days_pattern, site_hourly<span class="sc">$</span>datetime),] </span>
+<span id="cb141-7"><a href="Time.html#cb141-7" aria-hidden="true" tabindex="-1"></a>july_seven_days<span class="sc">$</span>hours <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(july_seven_days)</span>
+<span id="cb141-8"><a href="Time.html#cb141-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb141-9"><a href="Time.html#cb141-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt-Winters model fitting</span></span>
+<span id="cb141-10"><a href="Time.html#cb141-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn this into a time series object to use Holt-Winters forecast</span></span>
+<span id="cb141-11"><a href="Time.html#cb141-11" aria-hidden="true" tabindex="-1"></a>level_ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(july_seven_days<span class="sc">$</span>ozone,</span>
+<span id="cb141-12"><a href="Time.html#cb141-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">frequency =</span> <span class="dv">24</span>,</span>
+<span id="cb141-13"><a href="Time.html#cb141-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1</span>))</span>
+<span id="cb141-14"><a href="Time.html#cb141-14" aria-hidden="true" tabindex="-1"></a>ozone_forecast <span class="ot">&lt;-</span> <span class="fu">HoltWinters</span>(level_ts) </span>
+<span id="cb141-15"><a href="Time.html#cb141-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb141-16"><a href="Time.html#cb141-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using the default function</span></span>
+<span id="cb141-17"><a href="Time.html#cb141-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb141-18"><a href="Time.html#cb141-18" aria-hidden="true" tabindex="-1"></a>  ozone_forecast,</span>
+<span id="cb141-19"><a href="Time.html#cb141-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Hours - First Week -July 2013&quot;</span>,</span>
+<span id="cb141-20"><a href="Time.html#cb141-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;O3 (ppm)&quot;</span>,</span>
+<span id="cb141-21"><a href="Time.html#cb141-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.predicted =</span> <span class="dv">1</span>,</span>
+<span id="cb141-22"><a href="Time.html#cb141-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb141-23"><a href="Time.html#cb141-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb141-24"><a href="Time.html#cb141-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">2</span></span>
+<span id="cb141-25"><a href="Time.html#cb141-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.13%20data%20munge-1.png" width="672" /></p>
-<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="Time.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt- Winters 24 ahead forast on Day 8 </span></span>
-<span id="cb143-2"><a href="Time.html#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="co"># no need to specify Holt-Winters forecast as the object is already HoltWinters class</span></span>
-<span id="cb143-3"><a href="Time.html#cb143-3" aria-hidden="true" tabindex="-1"></a>ozoneforecast_day8 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ozone_forecast, <span class="at">h=</span><span class="dv">24</span>)</span>
-<span id="cb143-4"><a href="Time.html#cb143-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb143-5"><a href="Time.html#cb143-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using default function</span></span>
-<span id="cb143-6"><a href="Time.html#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ozoneforecast_day8, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="Time.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt- Winters 24 ahead forast on Day 8 </span></span>
+<span id="cb142-2"><a href="Time.html#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="co"># no need to specify Holt-Winters forecast as the object is already HoltWinters class</span></span>
+<span id="cb142-3"><a href="Time.html#cb142-3" aria-hidden="true" tabindex="-1"></a>ozoneforecast_day8 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(ozone_forecast, <span class="at">h=</span><span class="dv">24</span>)</span>
+<span id="cb142-4"><a href="Time.html#cb142-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb142-5"><a href="Time.html#cb142-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using default function</span></span>
+<span id="cb142-6"><a href="Time.html#cb142-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ozoneforecast_day8, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.13%20data%20munge-2.png" width="672" /></p>
 </div>
 <div id="example-11.14-forecasting-volcanic-ash" class="section level2 unnumbered hasAnchor">
 <h2>Example 11.14 Forecasting volcanic ash<a href="Time.html#example-11.14-forecasting-volcanic-ash" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The data in this example consists of atmospheric levels of volcanic ash from 1500AD to 2000AD.</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="Time.html#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb144-2"><a href="Time.html#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb144-3"><a href="Time.html#cb144-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR)</span>
-<span id="cb144-4"><a href="Time.html#cb144-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb144-5"><a href="Time.html#cb144-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load volcano dust data </span></span>
-<span id="cb144-6"><a href="Time.html#cb144-6" aria-hidden="true" tabindex="-1"></a><span class="do">## REVIEW: Data source: Hyn�d�man, R.J.  Time Series Data Library, http://data.is/TSDLdemo</span></span>
-<span id="cb144-7"><a href="Time.html#cb144-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Data cover the period from 1500AD to 2000AD</span></span>
-<span id="cb144-8"><a href="Time.html#cb144-8" aria-hidden="true" tabindex="-1"></a>volcano_dust <span class="ot">&lt;-</span></span>
-<span id="cb144-9"><a href="Time.html#cb144-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scan</span>(<span class="st">&quot;http://robjhyndman.com/tsdldata/annual/dvi.dat&quot;</span>, <span class="at">skip =</span> <span class="dv">1</span>)</span>
-<span id="cb144-10"><a href="Time.html#cb144-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb144-11"><a href="Time.html#cb144-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a theme to clear axes and background in ggplot</span></span>
-<span id="cb144-12"><a href="Time.html#cb144-12" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb144-13"><a href="Time.html#cb144-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb144-14"><a href="Time.html#cb144-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
-<span id="cb144-15"><a href="Time.html#cb144-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb144-16"><a href="Time.html#cb144-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
-<span id="cb144-17"><a href="Time.html#cb144-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>), <span class="co"># keep axis line</span></span>
-<span id="cb144-18"><a href="Time.html#cb144-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb144-19"><a href="Time.html#cb144-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="Time.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb143-2"><a href="Time.html#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb143-3"><a href="Time.html#cb143-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TTR)</span>
+<span id="cb143-4"><a href="Time.html#cb143-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-5"><a href="Time.html#cb143-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load volcano dust data </span></span>
+<span id="cb143-6"><a href="Time.html#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="do">## REVIEW: Data source: Hyn�d�man, R.J.  Time Series Data Library, http://data.is/TSDLdemo</span></span>
+<span id="cb143-7"><a href="Time.html#cb143-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Data cover the period from 1500AD to 2000AD</span></span>
+<span id="cb143-8"><a href="Time.html#cb143-8" aria-hidden="true" tabindex="-1"></a>volcano_dust <span class="ot">&lt;-</span></span>
+<span id="cb143-9"><a href="Time.html#cb143-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scan</span>(<span class="st">&quot;http://robjhyndman.com/tsdldata/annual/dvi.dat&quot;</span>, <span class="at">skip =</span> <span class="dv">1</span>)</span>
+<span id="cb143-10"><a href="Time.html#cb143-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-11"><a href="Time.html#cb143-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a theme to clear axes and background in ggplot</span></span>
+<span id="cb143-12"><a href="Time.html#cb143-12" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb143-13"><a href="Time.html#cb143-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb143-14"><a href="Time.html#cb143-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
+<span id="cb143-15"><a href="Time.html#cb143-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb143-16"><a href="Time.html#cb143-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
+<span id="cb143-17"><a href="Time.html#cb143-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>), <span class="co"># keep axis line</span></span>
+<span id="cb143-18"><a href="Time.html#cb143-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb143-19"><a href="Time.html#cb143-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>The following figure shows the plot of the original time series.</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="Time.html#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn data into data frame to plot it in ggplot</span></span>
-<span id="cb145-2"><a href="Time.html#cb145-2" aria-hidden="true" tabindex="-1"></a>volcano_dust_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">year =</span> <span class="dv">1500</span><span class="sc">:</span>(<span class="dv">1500</span><span class="sc">+</span><span class="fu">length</span>(volcano_dust)<span class="sc">-</span><span class="dv">1</span>),</span>
-<span id="cb145-3"><a href="Time.html#cb145-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dust =</span> volcano_dust)</span>
-<span id="cb145-4"><a href="Time.html#cb145-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb145-5"><a href="Time.html#cb145-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> volcano_dust_df) <span class="sc">+</span></span>
-<span id="cb145-6"><a href="Time.html#cb145-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> dust, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb145-7"><a href="Time.html#cb145-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Year&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb145-8"><a href="Time.html#cb145-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Atmospheric levels of volcanic ash&quot;</span>) <span class="sc">+</span> <span class="fu">theme_clear</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="Time.html#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn data into data frame to plot it in ggplot</span></span>
+<span id="cb144-2"><a href="Time.html#cb144-2" aria-hidden="true" tabindex="-1"></a>volcano_dust_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">year =</span> <span class="dv">1500</span><span class="sc">:</span>(<span class="dv">1500</span><span class="sc">+</span><span class="fu">length</span>(volcano_dust)<span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb144-3"><a href="Time.html#cb144-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">dust =</span> volcano_dust)</span>
+<span id="cb144-4"><a href="Time.html#cb144-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb144-5"><a href="Time.html#cb144-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> volcano_dust_df) <span class="sc">+</span></span>
+<span id="cb144-6"><a href="Time.html#cb144-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> dust, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb144-7"><a href="Time.html#cb144-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Year&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb144-8"><a href="Time.html#cb144-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Atmospheric levels of volcanic ash&quot;</span>) <span class="sc">+</span> <span class="fu">theme_clear</span>()</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.14%20plot%20time%20series%20ACF%20and%20PACF-1.png" width="672" /></p>
 <p>We can also plot the autocorrelogram (ACF) and partial autocorrelogram (PACF) to identify any autocorrelation in the time series.</p>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="Time.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert data into a time series object</span></span>
-<span id="cb146-2"><a href="Time.html#cb146-2" aria-hidden="true" tabindex="-1"></a>volcano_dust_series <span class="ot">&lt;-</span> <span class="fu">ts</span>(volcano_dust, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1500</span>))</span>
-<span id="cb146-3"><a href="Time.html#cb146-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute autocorrelogram with max lag 20</span></span>
-<span id="cb146-4"><a href="Time.html#cb146-4" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(</span>
-<span id="cb146-5"><a href="Time.html#cb146-5" aria-hidden="true" tabindex="-1"></a>  volcano_dust_series,</span>
-<span id="cb146-6"><a href="Time.html#cb146-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">lag.max =</span> <span class="dv">20</span>,</span>
-<span id="cb146-7"><a href="Time.html#cb146-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb146-8"><a href="Time.html#cb146-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Autocorrelogram volcano dust&quot;</span></span>
-<span id="cb146-9"><a href="Time.html#cb146-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="Time.html#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert data into a time series object</span></span>
+<span id="cb145-2"><a href="Time.html#cb145-2" aria-hidden="true" tabindex="-1"></a>volcano_dust_series <span class="ot">&lt;-</span> <span class="fu">ts</span>(volcano_dust, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1500</span>))</span>
+<span id="cb145-3"><a href="Time.html#cb145-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute autocorrelogram with max lag 20</span></span>
+<span id="cb145-4"><a href="Time.html#cb145-4" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(</span>
+<span id="cb145-5"><a href="Time.html#cb145-5" aria-hidden="true" tabindex="-1"></a>  volcano_dust_series,</span>
+<span id="cb145-6"><a href="Time.html#cb145-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">lag.max =</span> <span class="dv">20</span>,</span>
+<span id="cb145-7"><a href="Time.html#cb145-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb145-8"><a href="Time.html#cb145-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Autocorrelogram volcano dust&quot;</span></span>
+<span id="cb145-9"><a href="Time.html#cb145-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.14%20acf%20and%20pacf-1.png" width="672" /></p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="Time.html#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the partial autocorrelogram with max lag 20</span></span>
-<span id="cb147-2"><a href="Time.html#cb147-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(</span>
-<span id="cb147-3"><a href="Time.html#cb147-3" aria-hidden="true" tabindex="-1"></a>  volcano_dust_series,</span>
-<span id="cb147-4"><a href="Time.html#cb147-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lag.max =</span> <span class="dv">20</span>,</span>
-<span id="cb147-5"><a href="Time.html#cb147-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb147-6"><a href="Time.html#cb147-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Partial autocorrelogram volcano dust&quot;</span></span>
-<span id="cb147-7"><a href="Time.html#cb147-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="Time.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the partial autocorrelogram with max lag 20</span></span>
+<span id="cb146-2"><a href="Time.html#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pacf</span>(</span>
+<span id="cb146-3"><a href="Time.html#cb146-3" aria-hidden="true" tabindex="-1"></a>  volcano_dust_series,</span>
+<span id="cb146-4"><a href="Time.html#cb146-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lag.max =</span> <span class="dv">20</span>,</span>
+<span id="cb146-5"><a href="Time.html#cb146-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb146-6"><a href="Time.html#cb146-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Partial autocorrelogram volcano dust&quot;</span></span>
+<span id="cb146-7"><a href="Time.html#cb146-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.14%20acf%20and%20pacf-2.png" width="672" /></p>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="Time.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding an ARIMA model</span></span>
-<span id="cb148-2"><a href="Time.html#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="fu">auto.arima</span>(volcano_dust_series, <span class="at">ic =</span> <span class="st">&quot;aic&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="Time.html#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding an ARIMA model</span></span>
+<span id="cb147-2"><a href="Time.html#cb147-2" aria-hidden="true" tabindex="-1"></a><span class="fu">auto.arima</span>(volcano_dust_series, <span class="at">ic =</span> <span class="st">&quot;aic&quot;</span>)</span></code></pre></div>
 <pre><code>## Series: volcano_dust_series 
 ## ARIMA(1,0,2) with non-zero mean 
 ## 
@@ -445,362 +445,362 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## sigma^2 = 4897:  log likelihood = -2661.84
 ## AIC=5333.68   AICc=5333.81   BIC=5354.45</code></pre>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="Time.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fitting the ARIMA(2,0,0) model</span></span>
-<span id="cb150-2"><a href="Time.html#cb150-2" aria-hidden="true" tabindex="-1"></a>volcano_dust_arima <span class="ot">&lt;-</span> <span class="fu">arima</span>(volcano_dust_series, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb150-3"><a href="Time.html#cb150-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb150-4"><a href="Time.html#cb150-4" aria-hidden="true" tabindex="-1"></a><span class="co"># forecast 31 years with the ARIMA(2,0,0) model</span></span>
-<span id="cb150-5"><a href="Time.html#cb150-5" aria-hidden="true" tabindex="-1"></a>volcano_dust_forecast <span class="ot">&lt;-</span> <span class="fu">forecast</span>(volcano_dust_arima, <span class="at">h =</span> <span class="dv">31</span>)</span>
-<span id="cb150-6"><a href="Time.html#cb150-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(volcano_dust_forecast, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="Time.html#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fitting the ARIMA(2,0,0) model</span></span>
+<span id="cb149-2"><a href="Time.html#cb149-2" aria-hidden="true" tabindex="-1"></a>volcano_dust_arima <span class="ot">&lt;-</span> <span class="fu">arima</span>(volcano_dust_series, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb149-3"><a href="Time.html#cb149-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-4"><a href="Time.html#cb149-4" aria-hidden="true" tabindex="-1"></a><span class="co"># forecast 31 years with the ARIMA(2,0,0) model</span></span>
+<span id="cb149-5"><a href="Time.html#cb149-5" aria-hidden="true" tabindex="-1"></a>volcano_dust_forecast <span class="ot">&lt;-</span> <span class="fu">forecast</span>(volcano_dust_arima, <span class="at">h =</span> <span class="dv">31</span>)</span>
+<span id="cb149-6"><a href="Time.html#cb149-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(volcano_dust_forecast, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.14%20arima%20model-1.png" width="672" /></p>
 </div>
 <div id="example-11.16-implementation-of-a-dynamic-linear-model" class="section level2 unnumbered hasAnchor">
 <h2>Example 11.16 implementation of a dynamic linear model<a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="nimble-3" class="section level3 hasAnchor" number="11.0.1">
 <h3><span class="header-section-number">11.0.1</span> Nimble<a href="Time.html#nimble-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="Time.html#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
-<span id="cb151-2"><a href="Time.html#cb151-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble)</span>
-<span id="cb151-3"><a href="Time.html#cb151-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
-<span id="cb151-4"><a href="Time.html#cb151-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb151-5"><a href="Time.html#cb151-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-6"><a href="Time.html#cb151-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load sampler functions</span></span>
-<span id="cb151-7"><a href="Time.html#cb151-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;functions/Ex11_16_FFBS_sampler.R&quot;</span>)</span>
-<span id="cb151-8"><a href="Time.html#cb151-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-9"><a href="Time.html#cb151-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data for one site</span></span>
-<span id="cb151-10"><a href="Time.html#cb151-10" aria-hidden="true" tabindex="-1"></a>site_daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_daily.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb151-11"><a href="Time.html#cb151-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-12"><a href="Time.html#cb151-12" aria-hidden="true" tabindex="-1"></a><span class="co"># change the format of the date column</span></span>
-<span id="cb151-13"><a href="Time.html#cb151-13" aria-hidden="true" tabindex="-1"></a>site_daily<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(site_daily<span class="sc">$</span>date, <span class="st">&quot;%m/%d/%Y&quot;</span>)</span>
-<span id="cb151-14"><a href="Time.html#cb151-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-15"><a href="Time.html#cb151-15" aria-hidden="true" tabindex="-1"></a><span class="co"># load hourly data from that same site</span></span>
-<span id="cb151-16"><a href="Time.html#cb151-16" aria-hidden="true" tabindex="-1"></a>site_hourly <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_hourly.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb151-17"><a href="Time.html#cb151-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-18"><a href="Time.html#cb151-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first seven days in July as in Example 11.13</span></span>
-<span id="cb151-19"><a href="Time.html#cb151-19" aria-hidden="true" tabindex="-1"></a>days_pattern <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;^2013070&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">collapse=</span><span class="st">&quot;|&quot;</span>) </span>
-<span id="cb151-20"><a href="Time.html#cb151-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-21"><a href="Time.html#cb151-21" aria-hidden="true" tabindex="-1"></a><span class="co"># select all the rows that follow that pattern using grepl</span></span>
-<span id="cb151-22"><a href="Time.html#cb151-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-23"><a href="Time.html#cb151-23" aria-hidden="true" tabindex="-1"></a><span class="co"># I know I don&#39;t need to impute it but it was taking forever to compile</span></span>
-<span id="cb151-24"><a href="Time.html#cb151-24" aria-hidden="true" tabindex="-1"></a>imputeNA <span class="ot">&lt;-</span> <span class="fu">mean</span>(site_hourly<span class="sc">$</span>ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb151-25"><a href="Time.html#cb151-25" aria-hidden="true" tabindex="-1"></a>site_hourly<span class="sc">$</span>ozone[<span class="fu">is.na</span>(site_hourly<span class="sc">$</span>ozone)] <span class="ot">&lt;-</span> imputeNA</span>
-<span id="cb151-26"><a href="Time.html#cb151-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-27"><a href="Time.html#cb151-27" aria-hidden="true" tabindex="-1"></a>july_seven_days <span class="ot">&lt;-</span> site_hourly[<span class="fu">grepl</span>(days_pattern, site_hourly<span class="sc">$</span>datetime),] </span>
-<span id="cb151-28"><a href="Time.html#cb151-28" aria-hidden="true" tabindex="-1"></a>july_seven_days<span class="sc">$</span>hours <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(july_seven_days)</span>
-<span id="cb151-29"><a href="Time.html#cb151-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-30"><a href="Time.html#cb151-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a theme to clear axes and background in ggplot (optional)</span></span>
-<span id="cb151-31"><a href="Time.html#cb151-31" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb151-32"><a href="Time.html#cb151-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb151-33"><a href="Time.html#cb151-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
-<span id="cb151-34"><a href="Time.html#cb151-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb151-35"><a href="Time.html#cb151-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
-<span id="cb151-36"><a href="Time.html#cb151-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="co"># keep axis line</span></span>
-<span id="cb151-37"><a href="Time.html#cb151-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb151-38"><a href="Time.html#cb151-38" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="Time.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
+<span id="cb150-2"><a href="Time.html#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble)</span>
+<span id="cb150-3"><a href="Time.html#cb150-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb150-4"><a href="Time.html#cb150-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb150-5"><a href="Time.html#cb150-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-6"><a href="Time.html#cb150-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load sampler functions</span></span>
+<span id="cb150-7"><a href="Time.html#cb150-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;functions/Ex11_16_FFBS_sampler.R&quot;</span>)</span>
+<span id="cb150-8"><a href="Time.html#cb150-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-9"><a href="Time.html#cb150-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data for one site</span></span>
+<span id="cb150-10"><a href="Time.html#cb150-10" aria-hidden="true" tabindex="-1"></a>site_daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_daily.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb150-11"><a href="Time.html#cb150-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-12"><a href="Time.html#cb150-12" aria-hidden="true" tabindex="-1"></a><span class="co"># change the format of the date column</span></span>
+<span id="cb150-13"><a href="Time.html#cb150-13" aria-hidden="true" tabindex="-1"></a>site_daily<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(site_daily<span class="sc">$</span>date, <span class="st">&quot;%m/%d/%Y&quot;</span>)</span>
+<span id="cb150-14"><a href="Time.html#cb150-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-15"><a href="Time.html#cb150-15" aria-hidden="true" tabindex="-1"></a><span class="co"># load hourly data from that same site</span></span>
+<span id="cb150-16"><a href="Time.html#cb150-16" aria-hidden="true" tabindex="-1"></a>site_hourly <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/LA_ozone_hourly.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb150-17"><a href="Time.html#cb150-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-18"><a href="Time.html#cb150-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first seven days in July as in Example 11.13</span></span>
+<span id="cb150-19"><a href="Time.html#cb150-19" aria-hidden="true" tabindex="-1"></a>days_pattern <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;^2013070&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">collapse=</span><span class="st">&quot;|&quot;</span>) </span>
+<span id="cb150-20"><a href="Time.html#cb150-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-21"><a href="Time.html#cb150-21" aria-hidden="true" tabindex="-1"></a><span class="co"># select all the rows that follow that pattern using grepl</span></span>
+<span id="cb150-22"><a href="Time.html#cb150-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-23"><a href="Time.html#cb150-23" aria-hidden="true" tabindex="-1"></a><span class="co"># I know I don&#39;t need to impute it but it was taking forever to compile</span></span>
+<span id="cb150-24"><a href="Time.html#cb150-24" aria-hidden="true" tabindex="-1"></a>imputeNA <span class="ot">&lt;-</span> <span class="fu">mean</span>(site_hourly<span class="sc">$</span>ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb150-25"><a href="Time.html#cb150-25" aria-hidden="true" tabindex="-1"></a>site_hourly<span class="sc">$</span>ozone[<span class="fu">is.na</span>(site_hourly<span class="sc">$</span>ozone)] <span class="ot">&lt;-</span> imputeNA</span>
+<span id="cb150-26"><a href="Time.html#cb150-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-27"><a href="Time.html#cb150-27" aria-hidden="true" tabindex="-1"></a>july_seven_days <span class="ot">&lt;-</span> site_hourly[<span class="fu">grepl</span>(days_pattern, site_hourly<span class="sc">$</span>datetime),] </span>
+<span id="cb150-28"><a href="Time.html#cb150-28" aria-hidden="true" tabindex="-1"></a>july_seven_days<span class="sc">$</span>hours <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(july_seven_days)</span>
+<span id="cb150-29"><a href="Time.html#cb150-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-30"><a href="Time.html#cb150-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a theme to clear axes and background in ggplot (optional)</span></span>
+<span id="cb150-31"><a href="Time.html#cb150-31" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb150-32"><a href="Time.html#cb150-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb150-33"><a href="Time.html#cb150-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
+<span id="cb150-34"><a href="Time.html#cb150-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb150-35"><a href="Time.html#cb150-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
+<span id="cb150-36"><a href="Time.html#cb150-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>) <span class="co"># keep axis line</span></span>
+<span id="cb150-37"><a href="Time.html#cb150-37" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb150-38"><a href="Time.html#cb150-38" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div id="hourly-data-seasonal-component" class="section level4 hasAnchor" number="11.0.1.1">
 <h4><span class="header-section-number">11.0.1.1</span> Hourly data seasonal component<a href="Time.html#hourly-data-seasonal-component" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We first analyze the hourly data for the first seven days in July.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="Time.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The following nimble code was originally written by Paritosh Kumar Roy</span></span>
-<span id="cb152-2"><a href="Time.html#cb152-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-3"><a href="Time.html#cb152-3" aria-hidden="true" tabindex="-1"></a>Example11_16Code <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
-<span id="cb152-4"><a href="Time.html#cb152-4" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb152-5"><a href="Time.html#cb152-5" aria-hidden="true" tabindex="-1"></a>  Vt <span class="ot">&lt;-</span> tau <span class="sc">^</span> <span class="dv">2</span></span>
-<span id="cb152-6"><a href="Time.html#cb152-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb152-7"><a href="Time.html#cb152-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb152-8"><a href="Time.html#cb152-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb152-9"><a href="Time.html#cb152-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p) {</span>
-<span id="cb152-10"><a href="Time.html#cb152-10" aria-hidden="true" tabindex="-1"></a>    sqrt_Wt_diag[j] <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb152-11"><a href="Time.html#cb152-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb152-12"><a href="Time.html#cb152-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb152-13"><a href="Time.html#cb152-13" aria-hidden="true" tabindex="-1"></a>  Wt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p] <span class="ot">&lt;-</span> <span class="fu">diag</span>(sqrt_Wt_diag[<span class="dv">1</span><span class="sc">:</span>p] <span class="sc">^</span> <span class="dv">2</span>)</span>
-<span id="cb152-14"><a href="Time.html#cb152-14" aria-hidden="true" tabindex="-1"></a>  yt[<span class="dv">1</span><span class="sc">:</span>Tt] <span class="sc">~</span> <span class="fu">ddlm_uoms</span>(</span>
-<span id="cb152-15"><a href="Time.html#cb152-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ft =</span> Ft[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>Tt],</span>
-<span id="cb152-16"><a href="Time.html#cb152-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Vt =</span> Vt,</span>
-<span id="cb152-17"><a href="Time.html#cb152-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gt =</span> Gt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
-<span id="cb152-18"><a href="Time.html#cb152-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Wt =</span> Wt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
-<span id="cb152-19"><a href="Time.html#cb152-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">m0 =</span> m0[<span class="dv">1</span><span class="sc">:</span>p],</span>
-<span id="cb152-20"><a href="Time.html#cb152-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">C0 =</span> C0[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p]</span>
-<span id="cb152-21"><a href="Time.html#cb152-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb152-22"><a href="Time.html#cb152-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb152-23"><a href="Time.html#cb152-23" aria-hidden="true" tabindex="-1"></a>  theta[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>(Tt <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span></span>
-<span id="cb152-24"><a href="Time.html#cb152-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nim_ffbs_uoms</span>(</span>
-<span id="cb152-25"><a href="Time.html#cb152-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">yt =</span> yt[<span class="dv">1</span><span class="sc">:</span>Tt],</span>
-<span id="cb152-26"><a href="Time.html#cb152-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">Ft =</span> Ft[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>Tt],</span>
-<span id="cb152-27"><a href="Time.html#cb152-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">Vt =</span> Vt,</span>
-<span id="cb152-28"><a href="Time.html#cb152-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">Gt =</span> Gt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
-<span id="cb152-29"><a href="Time.html#cb152-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">Wt =</span> Wt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
-<span id="cb152-30"><a href="Time.html#cb152-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">m0 =</span> m0[<span class="dv">1</span><span class="sc">:</span>p],</span>
-<span id="cb152-31"><a href="Time.html#cb152-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">C0 =</span> C0[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p]</span>
-<span id="cb152-32"><a href="Time.html#cb152-32" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb152-33"><a href="Time.html#cb152-33" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb152-34"><a href="Time.html#cb152-34" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="Time.html#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear growth model for the daily data</span></span>
-<span id="cb153-2"><a href="Time.html#cb153-2" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> july_seven_days<span class="sc">$</span>ozone</span>
-<span id="cb153-3"><a href="Time.html#cb153-3" aria-hidden="true" tabindex="-1"></a>Tt <span class="ot">&lt;-</span> <span class="fu">length</span>(yt)</span>
-<span id="cb153-4"><a href="Time.html#cb153-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb153-5"><a href="Time.html#cb153-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-6"><a href="Time.html#cb153-6" aria-hidden="true" tabindex="-1"></a>Ft <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(p, Tt))</span>
-<span id="cb153-7"><a href="Time.html#cb153-7" aria-hidden="true" tabindex="-1"></a>Ft[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb153-8"><a href="Time.html#cb153-8" aria-hidden="true" tabindex="-1"></a>Ft[<span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb153-9"><a href="Time.html#cb153-9" aria-hidden="true" tabindex="-1"></a>Ft[<span class="dv">3</span>, ] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb153-10"><a href="Time.html#cb153-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-11"><a href="Time.html#cb153-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Intercept and seasonal component with period of 24hrs</span></span>
-<span id="cb153-12"><a href="Time.html#cb153-12" aria-hidden="true" tabindex="-1"></a>Gt <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb153-13"><a href="Time.html#cb153-13" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>), <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>)),</span>
-<span id="cb153-14"><a href="Time.html#cb153-14" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>), <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>)))</span>
-<span id="cb153-15"><a href="Time.html#cb153-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-16"><a href="Time.html#cb153-16" aria-hidden="true" tabindex="-1"></a><span class="co"># initials</span></span>
-<span id="cb153-17"><a href="Time.html#cb153-17" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(yt, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb153-18"><a href="Time.html#cb153-18" aria-hidden="true" tabindex="-1"></a>C0 <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">nrow =</span> p, <span class="at">ncol =</span> p)</span>
-<span id="cb153-19"><a href="Time.html#cb153-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-20"><a href="Time.html#cb153-20" aria-hidden="true" tabindex="-1"></a>const_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Tt =</span> Tt,</span>
-<span id="cb153-21"><a href="Time.html#cb153-21" aria-hidden="true" tabindex="-1"></a>                   <span class="at">p =</span> p,</span>
-<span id="cb153-22"><a href="Time.html#cb153-22" aria-hidden="true" tabindex="-1"></a>                   <span class="at">m0 =</span> m0,</span>
-<span id="cb153-23"><a href="Time.html#cb153-23" aria-hidden="true" tabindex="-1"></a>                   <span class="at">C0 =</span> C0)</span>
-<span id="cb153-24"><a href="Time.html#cb153-24" aria-hidden="true" tabindex="-1"></a>dat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">yt =</span> yt, <span class="at">Ft =</span> Ft, <span class="at">Gt =</span> Gt)</span>
-<span id="cb153-25"><a href="Time.html#cb153-25" aria-hidden="true" tabindex="-1"></a>init_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb153-26"><a href="Time.html#cb153-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau =</span> <span class="fl">0.01</span>,</span>
-<span id="cb153-27"><a href="Time.html#cb153-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">sqrt_Wt_diag =</span> <span class="fu">sqrt</span>(<span class="fu">rep</span>(<span class="fl">0.1</span>, p)),</span>
-<span id="cb153-28"><a href="Time.html#cb153-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(p, Tt <span class="sc">+</span> <span class="dv">1</span>))</span>
-<span id="cb153-29"><a href="Time.html#cb153-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb153-30"><a href="Time.html#cb153-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-31"><a href="Time.html#cb153-31" aria-hidden="true" tabindex="-1"></a>Rmodel <span class="ot">&lt;-</span></span>
-<span id="cb153-32"><a href="Time.html#cb153-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nimbleModel</span>(Example11_16Code,</span>
-<span id="cb153-33"><a href="Time.html#cb153-33" aria-hidden="true" tabindex="-1"></a>              <span class="at">constants =</span> const_list,</span>
-<span id="cb153-34"><a href="Time.html#cb153-34" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat_list,</span>
-<span id="cb153-35"><a href="Time.html#cb153-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">inits =</span> init_list)</span>
-<span id="cb153-36"><a href="Time.html#cb153-36" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">initializeInfo</span>()</span>
-<span id="cb153-37"><a href="Time.html#cb153-37" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">calculate</span>()</span>
-<span id="cb153-38"><a href="Time.html#cb153-38" aria-hidden="true" tabindex="-1"></a>Cmodel <span class="ot">&lt;-</span> <span class="fu">compileNimble</span>(Rmodel, <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb153-39"><a href="Time.html#cb153-39" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span></span>
-<span id="cb153-40"><a href="Time.html#cb153-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">configureMCMC</span>(Rmodel, <span class="at">monitors =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sqrt_Wt_diag&quot;</span>, <span class="st">&quot;theta&quot;</span>))</span>
-<span id="cb153-41"><a href="Time.html#cb153-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-42"><a href="Time.html#cb153-42" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span><span class="fu">printSamplers</span>(<span class="at">byType =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb153-43"><a href="Time.html#cb153-43" aria-hidden="true" tabindex="-1"></a>Rmcmc <span class="ot">&lt;-</span> <span class="fu">buildMCMC</span>(conf)</span>
-<span id="cb153-44"><a href="Time.html#cb153-44" aria-hidden="true" tabindex="-1"></a>Cmcmc <span class="ot">&lt;-</span></span>
-<span id="cb153-45"><a href="Time.html#cb153-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compileNimble</span>(</span>
-<span id="cb153-46"><a href="Time.html#cb153-46" aria-hidden="true" tabindex="-1"></a>    Rmcmc,</span>
-<span id="cb153-47"><a href="Time.html#cb153-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">project =</span> Cmodel,</span>
-<span id="cb153-48"><a href="Time.html#cb153-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">resetFunctions =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb153-49"><a href="Time.html#cb153-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span></span>
-<span id="cb153-50"><a href="Time.html#cb153-50" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb153-51"><a href="Time.html#cb153-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-52"><a href="Time.html#cb153-52" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">40000</span></span>
-<span id="cb153-53"><a href="Time.html#cb153-53" aria-hidden="true" tabindex="-1"></a>nburnin <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> niter</span>
-<span id="cb153-54"><a href="Time.html#cb153-54" aria-hidden="true" tabindex="-1"></a>nthin <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb153-55"><a href="Time.html#cb153-55" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb153-56"><a href="Time.html#cb153-56" aria-hidden="true" tabindex="-1"></a>post_samples <span class="ot">&lt;-</span></span>
-<span id="cb153-57"><a href="Time.html#cb153-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">runMCMC</span>(</span>
-<span id="cb153-58"><a href="Time.html#cb153-58" aria-hidden="true" tabindex="-1"></a>    Cmcmc,</span>
-<span id="cb153-59"><a href="Time.html#cb153-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">niter =</span> niter,</span>
-<span id="cb153-60"><a href="Time.html#cb153-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">nburnin =</span> nburnin,</span>
-<span id="cb153-61"><a href="Time.html#cb153-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">thin =</span> nthin,</span>
-<span id="cb153-62"><a href="Time.html#cb153-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">nchains =</span> <span class="dv">2</span>,</span>
-<span id="cb153-63"><a href="Time.html#cb153-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb153-64"><a href="Time.html#cb153-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
-<span id="cb153-65"><a href="Time.html#cb153-65" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb153-66"><a href="Time.html#cb153-66" aria-hidden="true" tabindex="-1"></a>end_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb153-67"><a href="Time.html#cb153-67" aria-hidden="true" tabindex="-1"></a>run_time <span class="ot">&lt;-</span> end_time <span class="sc">-</span> start_time</span>
-<span id="cb153-68"><a href="Time.html#cb153-68" aria-hidden="true" tabindex="-1"></a>run_time</span></code></pre></div>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="Time.html#cb154-1" aria-hidden="true" tabindex="-1"></a>post_summary <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>summary<span class="sc">$</span>all.chains </span>
-<span id="cb154-2"><a href="Time.html#cb154-2" aria-hidden="true" tabindex="-1"></a>post_summary[<span class="fu">c</span>(<span class="st">&#39;tau&#39;</span>,</span>
-<span id="cb154-3"><a href="Time.html#cb154-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt_diag[1]&#39;</span>,</span>
-<span id="cb154-4"><a href="Time.html#cb154-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt_diag[2]&#39;</span>,</span>
-<span id="cb154-5"><a href="Time.html#cb154-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt_diag[3]&#39;</span>), ]</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="Time.html#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The following nimble code was originally written by Paritosh Kumar Roy</span></span>
+<span id="cb151-2"><a href="Time.html#cb151-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb151-3"><a href="Time.html#cb151-3" aria-hidden="true" tabindex="-1"></a>Example11_16Code <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
+<span id="cb151-4"><a href="Time.html#cb151-4" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb151-5"><a href="Time.html#cb151-5" aria-hidden="true" tabindex="-1"></a>  Vt <span class="ot">&lt;-</span> tau <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb151-6"><a href="Time.html#cb151-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb151-7"><a href="Time.html#cb151-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb151-8"><a href="Time.html#cb151-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb151-9"><a href="Time.html#cb151-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p) {</span>
+<span id="cb151-10"><a href="Time.html#cb151-10" aria-hidden="true" tabindex="-1"></a>    sqrt_Wt_diag[j] <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb151-11"><a href="Time.html#cb151-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb151-12"><a href="Time.html#cb151-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb151-13"><a href="Time.html#cb151-13" aria-hidden="true" tabindex="-1"></a>  Wt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p] <span class="ot">&lt;-</span> <span class="fu">diag</span>(sqrt_Wt_diag[<span class="dv">1</span><span class="sc">:</span>p] <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb151-14"><a href="Time.html#cb151-14" aria-hidden="true" tabindex="-1"></a>  yt[<span class="dv">1</span><span class="sc">:</span>Tt] <span class="sc">~</span> <span class="fu">ddlm_uoms</span>(</span>
+<span id="cb151-15"><a href="Time.html#cb151-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ft =</span> Ft[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>Tt],</span>
+<span id="cb151-16"><a href="Time.html#cb151-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Vt =</span> Vt,</span>
+<span id="cb151-17"><a href="Time.html#cb151-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gt =</span> Gt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
+<span id="cb151-18"><a href="Time.html#cb151-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Wt =</span> Wt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
+<span id="cb151-19"><a href="Time.html#cb151-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">m0 =</span> m0[<span class="dv">1</span><span class="sc">:</span>p],</span>
+<span id="cb151-20"><a href="Time.html#cb151-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">C0 =</span> C0[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p]</span>
+<span id="cb151-21"><a href="Time.html#cb151-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb151-22"><a href="Time.html#cb151-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb151-23"><a href="Time.html#cb151-23" aria-hidden="true" tabindex="-1"></a>  theta[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>(Tt <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span></span>
+<span id="cb151-24"><a href="Time.html#cb151-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nim_ffbs_uoms</span>(</span>
+<span id="cb151-25"><a href="Time.html#cb151-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">yt =</span> yt[<span class="dv">1</span><span class="sc">:</span>Tt],</span>
+<span id="cb151-26"><a href="Time.html#cb151-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">Ft =</span> Ft[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>Tt],</span>
+<span id="cb151-27"><a href="Time.html#cb151-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">Vt =</span> Vt,</span>
+<span id="cb151-28"><a href="Time.html#cb151-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">Gt =</span> Gt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
+<span id="cb151-29"><a href="Time.html#cb151-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">Wt =</span> Wt[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p],</span>
+<span id="cb151-30"><a href="Time.html#cb151-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">m0 =</span> m0[<span class="dv">1</span><span class="sc">:</span>p],</span>
+<span id="cb151-31"><a href="Time.html#cb151-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">C0 =</span> C0[<span class="dv">1</span><span class="sc">:</span>p, <span class="dv">1</span><span class="sc">:</span>p]</span>
+<span id="cb151-32"><a href="Time.html#cb151-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb151-33"><a href="Time.html#cb151-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb151-34"><a href="Time.html#cb151-34" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="Time.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear growth model for the daily data</span></span>
+<span id="cb152-2"><a href="Time.html#cb152-2" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> july_seven_days<span class="sc">$</span>ozone</span>
+<span id="cb152-3"><a href="Time.html#cb152-3" aria-hidden="true" tabindex="-1"></a>Tt <span class="ot">&lt;-</span> <span class="fu">length</span>(yt)</span>
+<span id="cb152-4"><a href="Time.html#cb152-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb152-5"><a href="Time.html#cb152-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-6"><a href="Time.html#cb152-6" aria-hidden="true" tabindex="-1"></a>Ft <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(p, Tt))</span>
+<span id="cb152-7"><a href="Time.html#cb152-7" aria-hidden="true" tabindex="-1"></a>Ft[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb152-8"><a href="Time.html#cb152-8" aria-hidden="true" tabindex="-1"></a>Ft[<span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb152-9"><a href="Time.html#cb152-9" aria-hidden="true" tabindex="-1"></a>Ft[<span class="dv">3</span>, ] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb152-10"><a href="Time.html#cb152-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-11"><a href="Time.html#cb152-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Intercept and seasonal component with period of 24hrs</span></span>
+<span id="cb152-12"><a href="Time.html#cb152-12" aria-hidden="true" tabindex="-1"></a>Gt <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb152-13"><a href="Time.html#cb152-13" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>), <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>)),</span>
+<span id="cb152-14"><a href="Time.html#cb152-14" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>), <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">12</span>)))</span>
+<span id="cb152-15"><a href="Time.html#cb152-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-16"><a href="Time.html#cb152-16" aria-hidden="true" tabindex="-1"></a><span class="co"># initials</span></span>
+<span id="cb152-17"><a href="Time.html#cb152-17" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(yt, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb152-18"><a href="Time.html#cb152-18" aria-hidden="true" tabindex="-1"></a>C0 <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">nrow =</span> p, <span class="at">ncol =</span> p)</span>
+<span id="cb152-19"><a href="Time.html#cb152-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-20"><a href="Time.html#cb152-20" aria-hidden="true" tabindex="-1"></a>const_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Tt =</span> Tt,</span>
+<span id="cb152-21"><a href="Time.html#cb152-21" aria-hidden="true" tabindex="-1"></a>                   <span class="at">p =</span> p,</span>
+<span id="cb152-22"><a href="Time.html#cb152-22" aria-hidden="true" tabindex="-1"></a>                   <span class="at">m0 =</span> m0,</span>
+<span id="cb152-23"><a href="Time.html#cb152-23" aria-hidden="true" tabindex="-1"></a>                   <span class="at">C0 =</span> C0)</span>
+<span id="cb152-24"><a href="Time.html#cb152-24" aria-hidden="true" tabindex="-1"></a>dat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">yt =</span> yt, <span class="at">Ft =</span> Ft, <span class="at">Gt =</span> Gt)</span>
+<span id="cb152-25"><a href="Time.html#cb152-25" aria-hidden="true" tabindex="-1"></a>init_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb152-26"><a href="Time.html#cb152-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau =</span> <span class="fl">0.01</span>,</span>
+<span id="cb152-27"><a href="Time.html#cb152-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">sqrt_Wt_diag =</span> <span class="fu">sqrt</span>(<span class="fu">rep</span>(<span class="fl">0.1</span>, p)),</span>
+<span id="cb152-28"><a href="Time.html#cb152-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(p, Tt <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb152-29"><a href="Time.html#cb152-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb152-30"><a href="Time.html#cb152-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-31"><a href="Time.html#cb152-31" aria-hidden="true" tabindex="-1"></a>Rmodel <span class="ot">&lt;-</span></span>
+<span id="cb152-32"><a href="Time.html#cb152-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nimbleModel</span>(Example11_16Code,</span>
+<span id="cb152-33"><a href="Time.html#cb152-33" aria-hidden="true" tabindex="-1"></a>              <span class="at">constants =</span> const_list,</span>
+<span id="cb152-34"><a href="Time.html#cb152-34" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat_list,</span>
+<span id="cb152-35"><a href="Time.html#cb152-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">inits =</span> init_list)</span>
+<span id="cb152-36"><a href="Time.html#cb152-36" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">initializeInfo</span>()</span>
+<span id="cb152-37"><a href="Time.html#cb152-37" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">calculate</span>()</span>
+<span id="cb152-38"><a href="Time.html#cb152-38" aria-hidden="true" tabindex="-1"></a>Cmodel <span class="ot">&lt;-</span> <span class="fu">compileNimble</span>(Rmodel, <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb152-39"><a href="Time.html#cb152-39" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span></span>
+<span id="cb152-40"><a href="Time.html#cb152-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">configureMCMC</span>(Rmodel, <span class="at">monitors =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sqrt_Wt_diag&quot;</span>, <span class="st">&quot;theta&quot;</span>))</span>
+<span id="cb152-41"><a href="Time.html#cb152-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-42"><a href="Time.html#cb152-42" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span><span class="fu">printSamplers</span>(<span class="at">byType =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb152-43"><a href="Time.html#cb152-43" aria-hidden="true" tabindex="-1"></a>Rmcmc <span class="ot">&lt;-</span> <span class="fu">buildMCMC</span>(conf)</span>
+<span id="cb152-44"><a href="Time.html#cb152-44" aria-hidden="true" tabindex="-1"></a>Cmcmc <span class="ot">&lt;-</span></span>
+<span id="cb152-45"><a href="Time.html#cb152-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compileNimble</span>(</span>
+<span id="cb152-46"><a href="Time.html#cb152-46" aria-hidden="true" tabindex="-1"></a>    Rmcmc,</span>
+<span id="cb152-47"><a href="Time.html#cb152-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">project =</span> Cmodel,</span>
+<span id="cb152-48"><a href="Time.html#cb152-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">resetFunctions =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb152-49"><a href="Time.html#cb152-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span></span>
+<span id="cb152-50"><a href="Time.html#cb152-50" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb152-51"><a href="Time.html#cb152-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-52"><a href="Time.html#cb152-52" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">40000</span></span>
+<span id="cb152-53"><a href="Time.html#cb152-53" aria-hidden="true" tabindex="-1"></a>nburnin <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> niter</span>
+<span id="cb152-54"><a href="Time.html#cb152-54" aria-hidden="true" tabindex="-1"></a>nthin <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb152-55"><a href="Time.html#cb152-55" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb152-56"><a href="Time.html#cb152-56" aria-hidden="true" tabindex="-1"></a>post_samples <span class="ot">&lt;-</span></span>
+<span id="cb152-57"><a href="Time.html#cb152-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">runMCMC</span>(</span>
+<span id="cb152-58"><a href="Time.html#cb152-58" aria-hidden="true" tabindex="-1"></a>    Cmcmc,</span>
+<span id="cb152-59"><a href="Time.html#cb152-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">niter =</span> niter,</span>
+<span id="cb152-60"><a href="Time.html#cb152-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">nburnin =</span> nburnin,</span>
+<span id="cb152-61"><a href="Time.html#cb152-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">thin =</span> nthin,</span>
+<span id="cb152-62"><a href="Time.html#cb152-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">nchains =</span> <span class="dv">2</span>,</span>
+<span id="cb152-63"><a href="Time.html#cb152-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb152-64"><a href="Time.html#cb152-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
+<span id="cb152-65"><a href="Time.html#cb152-65" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb152-66"><a href="Time.html#cb152-66" aria-hidden="true" tabindex="-1"></a>end_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb152-67"><a href="Time.html#cb152-67" aria-hidden="true" tabindex="-1"></a>run_time <span class="ot">&lt;-</span> end_time <span class="sc">-</span> start_time</span>
+<span id="cb152-68"><a href="Time.html#cb152-68" aria-hidden="true" tabindex="-1"></a>run_time</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="Time.html#cb153-1" aria-hidden="true" tabindex="-1"></a>post_summary <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>summary<span class="sc">$</span>all.chains </span>
+<span id="cb153-2"><a href="Time.html#cb153-2" aria-hidden="true" tabindex="-1"></a>post_summary[<span class="fu">c</span>(<span class="st">&#39;tau&#39;</span>,</span>
+<span id="cb153-3"><a href="Time.html#cb153-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt_diag[1]&#39;</span>,</span>
+<span id="cb153-4"><a href="Time.html#cb153-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt_diag[2]&#39;</span>,</span>
+<span id="cb153-5"><a href="Time.html#cb153-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt_diag[3]&#39;</span>), ]</span></code></pre></div>
 <pre><code>##                         Mean       Median      St.Dev.    95%CI_low   95%CI_upp
-## tau             0.0010143639 0.0009310974 0.0006707278 4.431602e-05 0.002448719
-## sqrt_Wt_diag[1] 0.0056552797 0.0056749970 0.0004282220 4.746418e-03 0.006461882
-## sqrt_Wt_diag[2] 0.0004440648 0.0003524679 0.0003693312 1.642260e-05 0.001386035
-## sqrt_Wt_diag[3] 0.0004376502 0.0003491513 0.0003721347 1.489135e-05 0.001398039</code></pre>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="Time.html#cb156-1" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>samples <span class="sc">|&gt;</span> <span class="fu">tidy_draws</span>()</span>
-<span id="cb156-2"><a href="Time.html#cb156-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb156-3"><a href="Time.html#cb156-3" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="sc">|&gt;</span></span>
-<span id="cb156-4"><a href="Time.html#cb156-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb156-5"><a href="Time.html#cb156-5" aria-hidden="true" tabindex="-1"></a>    .chain,</span>
-<span id="cb156-6"><a href="Time.html#cb156-6" aria-hidden="true" tabindex="-1"></a>    .iteration,</span>
-<span id="cb156-7"><a href="Time.html#cb156-7" aria-hidden="true" tabindex="-1"></a>    .draw,</span>
-<span id="cb156-8"><a href="Time.html#cb156-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;tau&#39;</span>,</span>
-<span id="cb156-9"><a href="Time.html#cb156-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt_diag[1]&#39;</span>,</span>
-<span id="cb156-10"><a href="Time.html#cb156-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt_diag[2]&#39;</span>,</span>
-<span id="cb156-11"><a href="Time.html#cb156-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt_diag[3]&#39;</span></span>
-<span id="cb156-12"><a href="Time.html#cb156-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb156-13"><a href="Time.html#cb156-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(vars, value, <span class="sc">-</span>.chain, <span class="sc">-</span>.iteration, <span class="sc">-</span>.draw) <span class="sc">|&gt;</span></span>
-<span id="cb156-14"><a href="Time.html#cb156-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .iteration, <span class="at">y =</span> value)) <span class="sc">+</span></span>
-<span id="cb156-15"><a href="Time.html#cb156-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(.chain)), <span class="at">size =</span> <span class="fl">0.25</span>,</span>
-<span id="cb156-16"><a href="Time.html#cb156-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb156-17"><a href="Time.html#cb156-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> vars, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb156-18"><a href="Time.html#cb156-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb156-19"><a href="Time.html#cb156-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb156-20"><a href="Time.html#cb156-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+## tau             0.0010312822 0.0009432750 0.0006832039 4.758700e-05 0.002489829
+## sqrt_Wt_diag[1] 0.0056433888 0.0056596468 0.0004241013 4.751362e-03 0.006451002
+## sqrt_Wt_diag[2] 0.0004525163 0.0003623653 0.0003815168 1.807832e-05 0.001430085
+## sqrt_Wt_diag[3] 0.0004382554 0.0003482520 0.0003674390 1.579212e-05 0.001355956</code></pre>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="Time.html#cb155-1" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>samples <span class="sc">|&gt;</span> <span class="fu">tidy_draws</span>()</span>
+<span id="cb155-2"><a href="Time.html#cb155-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb155-3"><a href="Time.html#cb155-3" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="sc">|&gt;</span></span>
+<span id="cb155-4"><a href="Time.html#cb155-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb155-5"><a href="Time.html#cb155-5" aria-hidden="true" tabindex="-1"></a>    .chain,</span>
+<span id="cb155-6"><a href="Time.html#cb155-6" aria-hidden="true" tabindex="-1"></a>    .iteration,</span>
+<span id="cb155-7"><a href="Time.html#cb155-7" aria-hidden="true" tabindex="-1"></a>    .draw,</span>
+<span id="cb155-8"><a href="Time.html#cb155-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;tau&#39;</span>,</span>
+<span id="cb155-9"><a href="Time.html#cb155-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt_diag[1]&#39;</span>,</span>
+<span id="cb155-10"><a href="Time.html#cb155-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt_diag[2]&#39;</span>,</span>
+<span id="cb155-11"><a href="Time.html#cb155-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt_diag[3]&#39;</span></span>
+<span id="cb155-12"><a href="Time.html#cb155-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb155-13"><a href="Time.html#cb155-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(vars, value, <span class="sc">-</span>.chain, <span class="sc">-</span>.iteration, <span class="sc">-</span>.draw) <span class="sc">|&gt;</span></span>
+<span id="cb155-14"><a href="Time.html#cb155-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .iteration, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb155-15"><a href="Time.html#cb155-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(.chain)), <span class="at">size =</span> <span class="fl">0.25</span>,</span>
+<span id="cb155-16"><a href="Time.html#cb155-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb155-17"><a href="Time.html#cb155-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> vars, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb155-18"><a href="Time.html#cb155-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb155-19"><a href="Time.html#cb155-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb155-20"><a href="Time.html#cb155-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.16%20hourly%20posterior%20summary-1.png" width="672" /></p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="Time.html#cb157-1" aria-hidden="true" tabindex="-1"></a>post_sum_theta <span class="ot">&lt;-</span></span>
-<span id="cb157-2"><a href="Time.html#cb157-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb157-3"><a href="Time.html#cb157-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb157-4"><a href="Time.html#cb157-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowname, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)<span class="sc">|&gt;</span></span>
-<span id="cb157-5"><a href="Time.html#cb157-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(rowname, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb157-6"><a href="Time.html#cb157-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">component =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, x1))) <span class="sc">|&gt;</span></span>
-<span id="cb157-7"><a href="Time.html#cb157-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, x2))) <span class="sc">|&gt;</span></span>
-<span id="cb157-8"><a href="Time.html#cb157-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(component, time, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)</span>
-<span id="cb157-9"><a href="Time.html#cb157-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb157-10"><a href="Time.html#cb157-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> post_sum_theta, <span class="fu">aes</span>(<span class="at">x =</span> time)) <span class="sc">+</span></span>
-<span id="cb157-11"><a href="Time.html#cb157-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_path(aes(y = theta), color = &quot;red&quot;, size = 0.4) +</span></span>
-<span id="cb157-12"><a href="Time.html#cb157-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>), <span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb157-13"><a href="Time.html#cb157-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">y =</span> Mean), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb157-14"><a href="Time.html#cb157-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(</span>
-<span id="cb157-15"><a href="Time.html#cb157-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> component,</span>
-<span id="cb157-16"><a href="Time.html#cb157-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow =</span> <span class="dv">2</span>,</span>
-<span id="cb157-17"><a href="Time.html#cb157-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>,</span>
-<span id="cb157-18"><a href="Time.html#cb157-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">labeller =</span> <span class="fu">label_bquote</span>(theta[.(component)])</span>
-<span id="cb157-19"><a href="Time.html#cb157-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb157-20"><a href="Time.html#cb157-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb157-21"><a href="Time.html#cb157-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Time&quot;</span>) <span class="sc">+</span></span>
-<span id="cb157-22"><a href="Time.html#cb157-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb157-23"><a href="Time.html#cb157-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb157-24"><a href="Time.html#cb157-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="Time.html#cb156-1" aria-hidden="true" tabindex="-1"></a>post_sum_theta <span class="ot">&lt;-</span></span>
+<span id="cb156-2"><a href="Time.html#cb156-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb156-3"><a href="Time.html#cb156-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb156-4"><a href="Time.html#cb156-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowname, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)<span class="sc">|&gt;</span></span>
+<span id="cb156-5"><a href="Time.html#cb156-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(rowname, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb156-6"><a href="Time.html#cb156-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">component =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, x1))) <span class="sc">|&gt;</span></span>
+<span id="cb156-7"><a href="Time.html#cb156-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, x2))) <span class="sc">|&gt;</span></span>
+<span id="cb156-8"><a href="Time.html#cb156-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(component, time, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)</span>
+<span id="cb156-9"><a href="Time.html#cb156-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-10"><a href="Time.html#cb156-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> post_sum_theta, <span class="fu">aes</span>(<span class="at">x =</span> time)) <span class="sc">+</span></span>
+<span id="cb156-11"><a href="Time.html#cb156-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_path(aes(y = theta), color = &quot;red&quot;, size = 0.4) +</span></span>
+<span id="cb156-12"><a href="Time.html#cb156-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>), <span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb156-13"><a href="Time.html#cb156-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">y =</span> Mean), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb156-14"><a href="Time.html#cb156-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(</span>
+<span id="cb156-15"><a href="Time.html#cb156-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> component,</span>
+<span id="cb156-16"><a href="Time.html#cb156-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow =</span> <span class="dv">2</span>,</span>
+<span id="cb156-17"><a href="Time.html#cb156-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>,</span>
+<span id="cb156-18"><a href="Time.html#cb156-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">labeller =</span> <span class="fu">label_bquote</span>(theta[.(component)])</span>
+<span id="cb156-19"><a href="Time.html#cb156-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb156-20"><a href="Time.html#cb156-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb156-21"><a href="Time.html#cb156-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Time&quot;</span>) <span class="sc">+</span></span>
+<span id="cb156-22"><a href="Time.html#cb156-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb156-23"><a href="Time.html#cb156-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb156-24"><a href="Time.html#cb156-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.16%20hourly%20posterior%20summary-2.png" width="672" /></p>
 <p>Define the constants, data and initials lists for the <code>nimble</code> model.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="Time.html#cb158-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1)</span>
-<span id="cb158-2"><a href="Time.html#cb158-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-3"><a href="Time.html#cb158-3" aria-hidden="true" tabindex="-1"></a>Rhat_all <span class="ot">&lt;-</span>  <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(x) {</span>
-<span id="cb158-4"><a href="Time.html#cb158-4" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">Rhat</span>(<span class="fu">cbind</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1[, x],</span>
-<span id="cb158-5"><a href="Time.html#cb158-5" aria-hidden="true" tabindex="-1"></a>                    post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain2[, x]))</span>
-<span id="cb158-6"><a href="Time.html#cb158-6" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb158-7"><a href="Time.html#cb158-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-8"><a href="Time.html#cb158-8" aria-hidden="true" tabindex="-1"></a>ess_all <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(x) {</span>
-<span id="cb158-9"><a href="Time.html#cb158-9" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">ess_bulk</span>(<span class="fu">cbind</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1[, x],</span>
-<span id="cb158-10"><a href="Time.html#cb158-10" aria-hidden="true" tabindex="-1"></a>                        post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain2[, x]))</span>
-<span id="cb158-11"><a href="Time.html#cb158-11" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb158-12"><a href="Time.html#cb158-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-13"><a href="Time.html#cb158-13" aria-hidden="true" tabindex="-1"></a>ess_all_tail <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(x) {</span>
-<span id="cb158-14"><a href="Time.html#cb158-14" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">ess_tail</span>(<span class="fu">cbind</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1[, x],</span>
-<span id="cb158-15"><a href="Time.html#cb158-15" aria-hidden="true" tabindex="-1"></a>                        post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain2[, x]))</span>
-<span id="cb158-16"><a href="Time.html#cb158-16" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb158-17"><a href="Time.html#cb158-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-18"><a href="Time.html#cb158-18" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(Rhat_all, <span class="at">na.rm =</span> T)</span></code></pre></div>
-<pre><code>## [1] 1.00099</code></pre>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="Time.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(ess_all, <span class="at">na.rm =</span> T)</span></code></pre></div>
-<pre><code>## [1] 4233.633</code></pre>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="Time.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(ess_all_tail, <span class="at">na.rm =</span> T)</span></code></pre></div>
-<pre><code>## [1] 4884.06</code></pre>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="Time.html#cb157-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1)</span>
+<span id="cb157-2"><a href="Time.html#cb157-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb157-3"><a href="Time.html#cb157-3" aria-hidden="true" tabindex="-1"></a>Rhat_all <span class="ot">&lt;-</span>  <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(x) {</span>
+<span id="cb157-4"><a href="Time.html#cb157-4" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">Rhat</span>(<span class="fu">cbind</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1[, x],</span>
+<span id="cb157-5"><a href="Time.html#cb157-5" aria-hidden="true" tabindex="-1"></a>                    post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain2[, x]))</span>
+<span id="cb157-6"><a href="Time.html#cb157-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb157-7"><a href="Time.html#cb157-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb157-8"><a href="Time.html#cb157-8" aria-hidden="true" tabindex="-1"></a>ess_all <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(x) {</span>
+<span id="cb157-9"><a href="Time.html#cb157-9" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">ess_bulk</span>(<span class="fu">cbind</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1[, x],</span>
+<span id="cb157-10"><a href="Time.html#cb157-10" aria-hidden="true" tabindex="-1"></a>                        post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain2[, x]))</span>
+<span id="cb157-11"><a href="Time.html#cb157-11" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb157-12"><a href="Time.html#cb157-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb157-13"><a href="Time.html#cb157-13" aria-hidden="true" tabindex="-1"></a>ess_all_tail <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(x) {</span>
+<span id="cb157-14"><a href="Time.html#cb157-14" aria-hidden="true" tabindex="-1"></a>  rstan<span class="sc">::</span><span class="fu">ess_tail</span>(<span class="fu">cbind</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1[, x],</span>
+<span id="cb157-15"><a href="Time.html#cb157-15" aria-hidden="true" tabindex="-1"></a>                        post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain2[, x]))</span>
+<span id="cb157-16"><a href="Time.html#cb157-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb157-17"><a href="Time.html#cb157-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb157-18"><a href="Time.html#cb157-18" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(Rhat_all, <span class="at">na.rm =</span> T)</span></code></pre></div>
+<pre><code>## [1] 1.000808</code></pre>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="Time.html#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(ess_all, <span class="at">na.rm =</span> T)</span></code></pre></div>
+<pre><code>## [1] 4144.015</code></pre>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="Time.html#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(ess_all_tail, <span class="at">na.rm =</span> T)</span></code></pre></div>
+<pre><code>## [1] 5293.313</code></pre>
 </div>
 <div id="daily-data-time-varying-mean" class="section level4 hasAnchor" number="11.0.1.2">
 <h4><span class="header-section-number">11.0.1.2</span> Daily data time varying mean<a href="Time.html#daily-data-time-varying-mean" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="Time.html#cb164-1" aria-hidden="true" tabindex="-1"></a>integratedcodeUni <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
-<span id="cb164-2"><a href="Time.html#cb164-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb164-3"><a href="Time.html#cb164-3" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb164-4"><a href="Time.html#cb164-4" aria-hidden="true" tabindex="-1"></a>  Vt <span class="ot">&lt;-</span> tau <span class="sc">^</span> <span class="dv">2</span></span>
-<span id="cb164-5"><a href="Time.html#cb164-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb164-6"><a href="Time.html#cb164-6" aria-hidden="true" tabindex="-1"></a>  sqrt_Wt <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb164-7"><a href="Time.html#cb164-7" aria-hidden="true" tabindex="-1"></a>  Wt <span class="ot">&lt;-</span>  sqrt_Wt <span class="sc">^</span> <span class="dv">2</span></span>
-<span id="cb164-8"><a href="Time.html#cb164-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb164-9"><a href="Time.html#cb164-9" aria-hidden="true" tabindex="-1"></a>  yt[<span class="dv">1</span><span class="sc">:</span>Tt] <span class="sc">~</span>  <span class="fu">ddlm_uous</span>(Ft[<span class="dv">1</span><span class="sc">:</span>Tt], Vt, Gt, Wt, m0, C0)</span>
-<span id="cb164-10"><a href="Time.html#cb164-10" aria-hidden="true" tabindex="-1"></a>  theta[<span class="dv">1</span><span class="sc">:</span>(Tt <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">nim_ffbs_uous</span>(</span>
-<span id="cb164-11"><a href="Time.html#cb164-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">yt =</span> yt[<span class="dv">1</span><span class="sc">:</span>Tt],</span>
-<span id="cb164-12"><a href="Time.html#cb164-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ft =</span> Ft[<span class="dv">1</span><span class="sc">:</span>Tt],</span>
-<span id="cb164-13"><a href="Time.html#cb164-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Vt =</span> Vt,</span>
-<span id="cb164-14"><a href="Time.html#cb164-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gt =</span> Gt,</span>
-<span id="cb164-15"><a href="Time.html#cb164-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Wt =</span> Wt,</span>
-<span id="cb164-16"><a href="Time.html#cb164-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">m0 =</span> m0,</span>
-<span id="cb164-17"><a href="Time.html#cb164-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">C0 =</span> C0</span>
-<span id="cb164-18"><a href="Time.html#cb164-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb164-19"><a href="Time.html#cb164-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb164-20"><a href="Time.html#cb164-20" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="Time.html#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear growth model for the daily data</span></span>
-<span id="cb165-2"><a href="Time.html#cb165-2" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> site_daily<span class="sc">$</span>max.ozone</span>
-<span id="cb165-3"><a href="Time.html#cb165-3" aria-hidden="true" tabindex="-1"></a>Tt <span class="ot">&lt;-</span> <span class="fu">length</span>(yt)</span>
-<span id="cb165-4"><a href="Time.html#cb165-4" aria-hidden="true" tabindex="-1"></a>Ft <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, Tt)</span>
-<span id="cb165-5"><a href="Time.html#cb165-5" aria-hidden="true" tabindex="-1"></a>Gt <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb165-6"><a href="Time.html#cb165-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-7"><a href="Time.html#cb165-7" aria-hidden="true" tabindex="-1"></a><span class="co"># initial values</span></span>
-<span id="cb165-8"><a href="Time.html#cb165-8" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">mean</span>(yt, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb165-9"><a href="Time.html#cb165-9" aria-hidden="true" tabindex="-1"></a>C0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb165-10"><a href="Time.html#cb165-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-11"><a href="Time.html#cb165-11" aria-hidden="true" tabindex="-1"></a>const_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Tt =</span> Tt,</span>
-<span id="cb165-12"><a href="Time.html#cb165-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">m0 =</span> m0,</span>
-<span id="cb165-13"><a href="Time.html#cb165-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">C0 =</span> C0)</span>
-<span id="cb165-14"><a href="Time.html#cb165-14" aria-hidden="true" tabindex="-1"></a>dat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">yt =</span> yt, <span class="at">Ft =</span> Ft, <span class="at">Gt =</span> Gt)</span>
-<span id="cb165-15"><a href="Time.html#cb165-15" aria-hidden="true" tabindex="-1"></a>init_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb165-16"><a href="Time.html#cb165-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau =</span> <span class="fl">0.01</span>,</span>
-<span id="cb165-17"><a href="Time.html#cb165-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">sqrt_Wt =</span> <span class="fu">sqrt</span>(<span class="fl">0.1</span>),</span>
-<span id="cb165-18"><a href="Time.html#cb165-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> <span class="fu">rep</span>(<span class="dv">0</span>, Tt<span class="sc">+</span><span class="dv">1</span>)</span>
-<span id="cb165-19"><a href="Time.html#cb165-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb165-20"><a href="Time.html#cb165-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-21"><a href="Time.html#cb165-21" aria-hidden="true" tabindex="-1"></a>Rmodel <span class="ot">&lt;-</span></span>
-<span id="cb165-22"><a href="Time.html#cb165-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nimbleModel</span>(integratedcodeUni,</span>
-<span id="cb165-23"><a href="Time.html#cb165-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">constants =</span> const_list,</span>
-<span id="cb165-24"><a href="Time.html#cb165-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat_list,</span>
-<span id="cb165-25"><a href="Time.html#cb165-25" aria-hidden="true" tabindex="-1"></a>              <span class="at">inits =</span> init_list)</span>
-<span id="cb165-26"><a href="Time.html#cb165-26" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">initializeInfo</span>()</span>
-<span id="cb165-27"><a href="Time.html#cb165-27" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">calculate</span>()</span>
-<span id="cb165-28"><a href="Time.html#cb165-28" aria-hidden="true" tabindex="-1"></a>Cmodel <span class="ot">&lt;-</span> <span class="fu">compileNimble</span>(Rmodel, <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb165-29"><a href="Time.html#cb165-29" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span></span>
-<span id="cb165-30"><a href="Time.html#cb165-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">configureMCMC</span>(Rmodel, <span class="at">monitors =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sqrt_Wt&quot;</span>, <span class="st">&quot;theta&quot;</span>))</span>
-<span id="cb165-31"><a href="Time.html#cb165-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-32"><a href="Time.html#cb165-32" aria-hidden="true" tabindex="-1"></a>Rmcmc <span class="ot">&lt;-</span> <span class="fu">buildMCMC</span>(conf)</span>
-<span id="cb165-33"><a href="Time.html#cb165-33" aria-hidden="true" tabindex="-1"></a>Cmcmc <span class="ot">&lt;-</span></span>
-<span id="cb165-34"><a href="Time.html#cb165-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compileNimble</span>(</span>
-<span id="cb165-35"><a href="Time.html#cb165-35" aria-hidden="true" tabindex="-1"></a>    Rmcmc,</span>
-<span id="cb165-36"><a href="Time.html#cb165-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">project =</span> Cmodel,</span>
-<span id="cb165-37"><a href="Time.html#cb165-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">resetFunctions =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb165-38"><a href="Time.html#cb165-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span></span>
-<span id="cb165-39"><a href="Time.html#cb165-39" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb165-40"><a href="Time.html#cb165-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-41"><a href="Time.html#cb165-41" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
-<span id="cb165-42"><a href="Time.html#cb165-42" aria-hidden="true" tabindex="-1"></a>nburnin <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> niter</span>
-<span id="cb165-43"><a href="Time.html#cb165-43" aria-hidden="true" tabindex="-1"></a>nthin <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb165-44"><a href="Time.html#cb165-44" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb165-45"><a href="Time.html#cb165-45" aria-hidden="true" tabindex="-1"></a>post_samples <span class="ot">&lt;-</span></span>
-<span id="cb165-46"><a href="Time.html#cb165-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">runMCMC</span>(</span>
-<span id="cb165-47"><a href="Time.html#cb165-47" aria-hidden="true" tabindex="-1"></a>    Cmcmc,</span>
-<span id="cb165-48"><a href="Time.html#cb165-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">niter =</span> niter,</span>
-<span id="cb165-49"><a href="Time.html#cb165-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">nburnin =</span> nburnin,</span>
-<span id="cb165-50"><a href="Time.html#cb165-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">thin =</span> nthin,</span>
-<span id="cb165-51"><a href="Time.html#cb165-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">nchains =</span> <span class="dv">2</span>,</span>
-<span id="cb165-52"><a href="Time.html#cb165-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb165-53"><a href="Time.html#cb165-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
-<span id="cb165-54"><a href="Time.html#cb165-54" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb165-55"><a href="Time.html#cb165-55" aria-hidden="true" tabindex="-1"></a>end_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb165-56"><a href="Time.html#cb165-56" aria-hidden="true" tabindex="-1"></a>run_time <span class="ot">&lt;-</span> end_time <span class="sc">-</span> start_time</span>
-<span id="cb165-57"><a href="Time.html#cb165-57" aria-hidden="true" tabindex="-1"></a>run_time</span></code></pre></div>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="Time.html#cb166-1" aria-hidden="true" tabindex="-1"></a>post_summary <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>summary<span class="sc">$</span>all.chains </span>
-<span id="cb166-2"><a href="Time.html#cb166-2" aria-hidden="true" tabindex="-1"></a>post_summary[<span class="fu">c</span>(<span class="st">&#39;tau&#39;</span>,</span>
-<span id="cb166-3"><a href="Time.html#cb166-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt&#39;</span>), ]</span></code></pre></div>
-<pre><code>##                Mean      Median      St.Dev.   95%CI_low   95%CI_upp
-## tau     0.008447861 0.008460210 0.0005315363 0.007372871 0.009482332
-## sqrt_Wt 0.003063444 0.003014422 0.0007308644 0.001836635 0.004653789</code></pre>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="Time.html#cb168-1" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>samples <span class="sc">|&gt;</span> <span class="fu">tidy_draws</span>()</span>
-<span id="cb168-2"><a href="Time.html#cb168-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-3"><a href="Time.html#cb168-3" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="sc">|&gt;</span></span>
-<span id="cb168-4"><a href="Time.html#cb168-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb168-5"><a href="Time.html#cb168-5" aria-hidden="true" tabindex="-1"></a>    .chain,</span>
-<span id="cb168-6"><a href="Time.html#cb168-6" aria-hidden="true" tabindex="-1"></a>    .iteration,</span>
-<span id="cb168-7"><a href="Time.html#cb168-7" aria-hidden="true" tabindex="-1"></a>    .draw,</span>
-<span id="cb168-8"><a href="Time.html#cb168-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;tau&#39;</span>,</span>
-<span id="cb168-9"><a href="Time.html#cb168-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt&#39;</span></span>
-<span id="cb168-10"><a href="Time.html#cb168-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb168-11"><a href="Time.html#cb168-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(vars, value, <span class="sc">-</span>.chain, <span class="sc">-</span>.iteration, <span class="sc">-</span>.draw) <span class="sc">|&gt;</span></span>
-<span id="cb168-12"><a href="Time.html#cb168-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .iteration, <span class="at">y =</span> value)) <span class="sc">+</span></span>
-<span id="cb168-13"><a href="Time.html#cb168-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(.chain)), <span class="at">size =</span> <span class="fl">0.25</span>,</span>
-<span id="cb168-14"><a href="Time.html#cb168-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb168-15"><a href="Time.html#cb168-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> vars, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb168-16"><a href="Time.html#cb168-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb168-17"><a href="Time.html#cb168-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb168-18"><a href="Time.html#cb168-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="Time.html#cb163-1" aria-hidden="true" tabindex="-1"></a>integratedcodeUni <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
+<span id="cb163-2"><a href="Time.html#cb163-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb163-3"><a href="Time.html#cb163-3" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb163-4"><a href="Time.html#cb163-4" aria-hidden="true" tabindex="-1"></a>  Vt <span class="ot">&lt;-</span> tau <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb163-5"><a href="Time.html#cb163-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-6"><a href="Time.html#cb163-6" aria-hidden="true" tabindex="-1"></a>  sqrt_Wt <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb163-7"><a href="Time.html#cb163-7" aria-hidden="true" tabindex="-1"></a>  Wt <span class="ot">&lt;-</span>  sqrt_Wt <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb163-8"><a href="Time.html#cb163-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-9"><a href="Time.html#cb163-9" aria-hidden="true" tabindex="-1"></a>  yt[<span class="dv">1</span><span class="sc">:</span>Tt] <span class="sc">~</span>  <span class="fu">ddlm_uous</span>(Ft[<span class="dv">1</span><span class="sc">:</span>Tt], Vt, Gt, Wt, m0, C0)</span>
+<span id="cb163-10"><a href="Time.html#cb163-10" aria-hidden="true" tabindex="-1"></a>  theta[<span class="dv">1</span><span class="sc">:</span>(Tt <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">nim_ffbs_uous</span>(</span>
+<span id="cb163-11"><a href="Time.html#cb163-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">yt =</span> yt[<span class="dv">1</span><span class="sc">:</span>Tt],</span>
+<span id="cb163-12"><a href="Time.html#cb163-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ft =</span> Ft[<span class="dv">1</span><span class="sc">:</span>Tt],</span>
+<span id="cb163-13"><a href="Time.html#cb163-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Vt =</span> Vt,</span>
+<span id="cb163-14"><a href="Time.html#cb163-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gt =</span> Gt,</span>
+<span id="cb163-15"><a href="Time.html#cb163-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Wt =</span> Wt,</span>
+<span id="cb163-16"><a href="Time.html#cb163-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">m0 =</span> m0,</span>
+<span id="cb163-17"><a href="Time.html#cb163-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">C0 =</span> C0</span>
+<span id="cb163-18"><a href="Time.html#cb163-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb163-19"><a href="Time.html#cb163-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb163-20"><a href="Time.html#cb163-20" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="Time.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear growth model for the daily data</span></span>
+<span id="cb164-2"><a href="Time.html#cb164-2" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> site_daily<span class="sc">$</span>max.ozone</span>
+<span id="cb164-3"><a href="Time.html#cb164-3" aria-hidden="true" tabindex="-1"></a>Tt <span class="ot">&lt;-</span> <span class="fu">length</span>(yt)</span>
+<span id="cb164-4"><a href="Time.html#cb164-4" aria-hidden="true" tabindex="-1"></a>Ft <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, Tt)</span>
+<span id="cb164-5"><a href="Time.html#cb164-5" aria-hidden="true" tabindex="-1"></a>Gt <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb164-6"><a href="Time.html#cb164-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-7"><a href="Time.html#cb164-7" aria-hidden="true" tabindex="-1"></a><span class="co"># initial values</span></span>
+<span id="cb164-8"><a href="Time.html#cb164-8" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">mean</span>(yt, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb164-9"><a href="Time.html#cb164-9" aria-hidden="true" tabindex="-1"></a>C0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb164-10"><a href="Time.html#cb164-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-11"><a href="Time.html#cb164-11" aria-hidden="true" tabindex="-1"></a>const_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Tt =</span> Tt,</span>
+<span id="cb164-12"><a href="Time.html#cb164-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">m0 =</span> m0,</span>
+<span id="cb164-13"><a href="Time.html#cb164-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">C0 =</span> C0)</span>
+<span id="cb164-14"><a href="Time.html#cb164-14" aria-hidden="true" tabindex="-1"></a>dat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">yt =</span> yt, <span class="at">Ft =</span> Ft, <span class="at">Gt =</span> Gt)</span>
+<span id="cb164-15"><a href="Time.html#cb164-15" aria-hidden="true" tabindex="-1"></a>init_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb164-16"><a href="Time.html#cb164-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau =</span> <span class="fl">0.01</span>,</span>
+<span id="cb164-17"><a href="Time.html#cb164-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">sqrt_Wt =</span> <span class="fu">sqrt</span>(<span class="fl">0.1</span>),</span>
+<span id="cb164-18"><a href="Time.html#cb164-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> <span class="fu">rep</span>(<span class="dv">0</span>, Tt<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb164-19"><a href="Time.html#cb164-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb164-20"><a href="Time.html#cb164-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-21"><a href="Time.html#cb164-21" aria-hidden="true" tabindex="-1"></a>Rmodel <span class="ot">&lt;-</span></span>
+<span id="cb164-22"><a href="Time.html#cb164-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nimbleModel</span>(integratedcodeUni,</span>
+<span id="cb164-23"><a href="Time.html#cb164-23" aria-hidden="true" tabindex="-1"></a>              <span class="at">constants =</span> const_list,</span>
+<span id="cb164-24"><a href="Time.html#cb164-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat_list,</span>
+<span id="cb164-25"><a href="Time.html#cb164-25" aria-hidden="true" tabindex="-1"></a>              <span class="at">inits =</span> init_list)</span>
+<span id="cb164-26"><a href="Time.html#cb164-26" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">initializeInfo</span>()</span>
+<span id="cb164-27"><a href="Time.html#cb164-27" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">calculate</span>()</span>
+<span id="cb164-28"><a href="Time.html#cb164-28" aria-hidden="true" tabindex="-1"></a>Cmodel <span class="ot">&lt;-</span> <span class="fu">compileNimble</span>(Rmodel, <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb164-29"><a href="Time.html#cb164-29" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span></span>
+<span id="cb164-30"><a href="Time.html#cb164-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">configureMCMC</span>(Rmodel, <span class="at">monitors =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sqrt_Wt&quot;</span>, <span class="st">&quot;theta&quot;</span>))</span>
+<span id="cb164-31"><a href="Time.html#cb164-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-32"><a href="Time.html#cb164-32" aria-hidden="true" tabindex="-1"></a>Rmcmc <span class="ot">&lt;-</span> <span class="fu">buildMCMC</span>(conf)</span>
+<span id="cb164-33"><a href="Time.html#cb164-33" aria-hidden="true" tabindex="-1"></a>Cmcmc <span class="ot">&lt;-</span></span>
+<span id="cb164-34"><a href="Time.html#cb164-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compileNimble</span>(</span>
+<span id="cb164-35"><a href="Time.html#cb164-35" aria-hidden="true" tabindex="-1"></a>    Rmcmc,</span>
+<span id="cb164-36"><a href="Time.html#cb164-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">project =</span> Cmodel,</span>
+<span id="cb164-37"><a href="Time.html#cb164-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">resetFunctions =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb164-38"><a href="Time.html#cb164-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span></span>
+<span id="cb164-39"><a href="Time.html#cb164-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb164-40"><a href="Time.html#cb164-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-41"><a href="Time.html#cb164-41" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb164-42"><a href="Time.html#cb164-42" aria-hidden="true" tabindex="-1"></a>nburnin <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> niter</span>
+<span id="cb164-43"><a href="Time.html#cb164-43" aria-hidden="true" tabindex="-1"></a>nthin <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb164-44"><a href="Time.html#cb164-44" aria-hidden="true" tabindex="-1"></a>start_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb164-45"><a href="Time.html#cb164-45" aria-hidden="true" tabindex="-1"></a>post_samples <span class="ot">&lt;-</span></span>
+<span id="cb164-46"><a href="Time.html#cb164-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">runMCMC</span>(</span>
+<span id="cb164-47"><a href="Time.html#cb164-47" aria-hidden="true" tabindex="-1"></a>    Cmcmc,</span>
+<span id="cb164-48"><a href="Time.html#cb164-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">niter =</span> niter,</span>
+<span id="cb164-49"><a href="Time.html#cb164-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">nburnin =</span> nburnin,</span>
+<span id="cb164-50"><a href="Time.html#cb164-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">thin =</span> nthin,</span>
+<span id="cb164-51"><a href="Time.html#cb164-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">nchains =</span> <span class="dv">2</span>,</span>
+<span id="cb164-52"><a href="Time.html#cb164-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb164-53"><a href="Time.html#cb164-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
+<span id="cb164-54"><a href="Time.html#cb164-54" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb164-55"><a href="Time.html#cb164-55" aria-hidden="true" tabindex="-1"></a>end_time <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb164-56"><a href="Time.html#cb164-56" aria-hidden="true" tabindex="-1"></a>run_time <span class="ot">&lt;-</span> end_time <span class="sc">-</span> start_time</span>
+<span id="cb164-57"><a href="Time.html#cb164-57" aria-hidden="true" tabindex="-1"></a>run_time</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="Time.html#cb165-1" aria-hidden="true" tabindex="-1"></a>post_summary <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>summary<span class="sc">$</span>all.chains </span>
+<span id="cb165-2"><a href="Time.html#cb165-2" aria-hidden="true" tabindex="-1"></a>post_summary[<span class="fu">c</span>(<span class="st">&#39;tau&#39;</span>,</span>
+<span id="cb165-3"><a href="Time.html#cb165-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">&#39;sqrt_Wt&#39;</span>), ]</span></code></pre></div>
+<pre><code>##                Mean      Median      St.Dev.  95%CI_low   95%CI_upp
+## tau     0.008399282 0.008421366 0.0005684528 0.00723195 0.009453244
+## sqrt_Wt 0.003118875 0.003023848 0.0007965156 0.00181725 0.004930784</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="Time.html#cb167-1" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>samples <span class="sc">|&gt;</span> <span class="fu">tidy_draws</span>()</span>
+<span id="cb167-2"><a href="Time.html#cb167-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb167-3"><a href="Time.html#cb167-3" aria-hidden="true" tabindex="-1"></a>tidy_post_samples <span class="sc">|&gt;</span></span>
+<span id="cb167-4"><a href="Time.html#cb167-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb167-5"><a href="Time.html#cb167-5" aria-hidden="true" tabindex="-1"></a>    .chain,</span>
+<span id="cb167-6"><a href="Time.html#cb167-6" aria-hidden="true" tabindex="-1"></a>    .iteration,</span>
+<span id="cb167-7"><a href="Time.html#cb167-7" aria-hidden="true" tabindex="-1"></a>    .draw,</span>
+<span id="cb167-8"><a href="Time.html#cb167-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;tau&#39;</span>,</span>
+<span id="cb167-9"><a href="Time.html#cb167-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;sqrt_Wt&#39;</span></span>
+<span id="cb167-10"><a href="Time.html#cb167-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb167-11"><a href="Time.html#cb167-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(vars, value, <span class="sc">-</span>.chain, <span class="sc">-</span>.iteration, <span class="sc">-</span>.draw) <span class="sc">|&gt;</span></span>
+<span id="cb167-12"><a href="Time.html#cb167-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .iteration, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb167-13"><a href="Time.html#cb167-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(.chain)), <span class="at">size =</span> <span class="fl">0.25</span>,</span>
+<span id="cb167-14"><a href="Time.html#cb167-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb167-15"><a href="Time.html#cb167-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> vars, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb167-16"><a href="Time.html#cb167-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb167-17"><a href="Time.html#cb167-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb167-18"><a href="Time.html#cb167-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.16%20daily%20rw%20posterior%20summary-1.png" width="672" /></p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="Time.html#cb169-1" aria-hidden="true" tabindex="-1"></a>post_sum_theta <span class="ot">&lt;-</span></span>
-<span id="cb169-2"><a href="Time.html#cb169-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb169-3"><a href="Time.html#cb169-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb169-4"><a href="Time.html#cb169-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowname, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb169-5"><a href="Time.html#cb169-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, rowname))) <span class="sc">|&gt;</span></span>
-<span id="cb169-6"><a href="Time.html#cb169-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(time, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)</span>
-<span id="cb169-7"><a href="Time.html#cb169-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb169-8"><a href="Time.html#cb169-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> post_sum_theta, <span class="fu">aes</span>(<span class="at">x =</span> time)) <span class="sc">+</span></span>
-<span id="cb169-9"><a href="Time.html#cb169-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_path(aes(y = theta), color = &quot;red&quot;, size = 0.4) +</span></span>
-<span id="cb169-10"><a href="Time.html#cb169-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>), <span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb169-11"><a href="Time.html#cb169-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">y =</span> Mean), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb169-12"><a href="Time.html#cb169-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb169-13"><a href="Time.html#cb169-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Time&quot;</span>) <span class="sc">+</span></span>
-<span id="cb169-14"><a href="Time.html#cb169-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb169-15"><a href="Time.html#cb169-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb169-16"><a href="Time.html#cb169-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="Time.html#cb168-1" aria-hidden="true" tabindex="-1"></a>post_sum_theta <span class="ot">&lt;-</span></span>
+<span id="cb168-2"><a href="Time.html#cb168-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb168-3"><a href="Time.html#cb168-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb168-4"><a href="Time.html#cb168-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowname, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb168-5"><a href="Time.html#cb168-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, rowname))) <span class="sc">|&gt;</span></span>
+<span id="cb168-6"><a href="Time.html#cb168-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(time, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)</span>
+<span id="cb168-7"><a href="Time.html#cb168-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-8"><a href="Time.html#cb168-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> post_sum_theta, <span class="fu">aes</span>(<span class="at">x =</span> time)) <span class="sc">+</span></span>
+<span id="cb168-9"><a href="Time.html#cb168-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_path(aes(y = theta), color = &quot;red&quot;, size = 0.4) +</span></span>
+<span id="cb168-10"><a href="Time.html#cb168-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>), <span class="at">fill =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb168-11"><a href="Time.html#cb168-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">y =</span> Mean), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb168-12"><a href="Time.html#cb168-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb168-13"><a href="Time.html#cb168-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Time&quot;</span>) <span class="sc">+</span></span>
+<span id="cb168-14"><a href="Time.html#cb168-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb168-15"><a href="Time.html#cb168-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb168-16"><a href="Time.html#cb168-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2011.16%20daily%20rw%20posterior%20summary-2.png" width="672" /></p>
 
 </div>
