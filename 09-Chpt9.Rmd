@@ -451,8 +451,6 @@ mcmc.out <- nimbleMCMC(
   samplesAsCodaMCMC = TRUE
 )
 
-
-
 ```
 
 Show the WAIC, effective sample size, and trace plots for some of the parameters.

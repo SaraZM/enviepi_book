@@ -162,7 +162,6 @@ rm(list = ls())
 
 library(TTR)
 library(forecast)
-
 # Load hourly data for site 060379033
 site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
 # one night hour per day missing for instrument calibration - imputed for simplicity
@@ -355,7 +354,7 @@ We first analyze the hourly data for the first seven days in July.
 
 # The following nimble code was originally written by Paritosh Kumar Roy
 
-Example11_16Code <- nimbleCode({
+Example11_16Hourly <- nimbleCode({
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
   Vt <- tau ^ 2
   
@@ -374,7 +373,8 @@ Example11_16Code <- nimbleCode({
     m0 = m0[1:p],
     C0 = C0[1:p, 1:p]
   )
-  
+ 
+
   theta[1:p, 1:(Tt + 1)] <-
     nim_ffbs_uoms(
       yt = yt[1:Tt],
@@ -385,6 +385,8 @@ Example11_16Code <- nimbleCode({
       m0 = m0[1:p],
       C0 = C0[1:p, 1:p]
     )
+   yt.fitted[1:Tt] <- nim_postfit_uoms(yt[1:Tt], Ft[1:p, 1:Tt], Vt,
+                 Gt[1:p,1:p], Wt[1:p,1:p], m0[1:p], C0[1:p,1:p])
   
 })
 
@@ -424,55 +426,33 @@ init_list <- list(
   theta = array(0, dim = c(p, Tt + 1))
 )
 
-Rmodel <-
-  nimbleModel(Example11_16Code,
-              constants = const_list,
-              data = dat_list,
-              inits = init_list)
-Rmodel$initializeInfo()
-Rmodel$calculate()
-Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
-conf <-
-  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt_diag", "theta"))
-
-conf$printSamplers(byType = TRUE)
-Rmcmc <- buildMCMC(conf)
-Cmcmc <-
-  compileNimble(
-    Rmcmc,
-    project = Cmodel,
-    resetFunctions = TRUE,
-    showCompilerOutput = FALSE
-  )
-
-niter <- 40000
-nburnin <- 0.5 * niter
-nthin <- 1
-start_time <- Sys.time()
-post_samples <-
-  runMCMC(
-    Cmcmc,
-    niter = niter,
-    nburnin = nburnin,
-    thin = nthin,
-    nchains = 2,
-    summary = TRUE,
-    samplesAsCodaMCMC = TRUE
-  )
-end_time <- Sys.time()
-run_time <- end_time - start_time
-run_time
+params <- c("tau", "sqrt_Wt_diag", "theta", "yt.fitted")
+# Run model in nimble
+mcmc.out <- nimbleMCMC(
+  code = Example11_16Hourly,
+  constants = const_list,
+  data = dat_list,
+  inits = init_list,
+  monitors = params,
+  niter = 40000,
+  nburnin = 20000,
+  thin = 80,
+  WAIC = TRUE,
+  nchains = 2,
+  summary = TRUE,
+  samplesAsCodaMCMC = TRUE
+)
 
 ```
 
 ```{r Ex 11.16 hourly posterior summary}
-post_summary <- post_samples$summary$all.chains 
+post_summary <- mcmc.out$summary$all.chains 
 post_summary[c('tau',
                'sqrt_Wt_diag[1]',
                'sqrt_Wt_diag[2]',
                'sqrt_Wt_diag[3]'), ]
 
-tidy_post_samples <- post_samples$samples |> tidy_draws()
+tidy_post_samples <- mcmc.out$samples |> tidy_draws()
 
 tidy_post_samples |>
   select(
@@ -514,30 +494,29 @@ ggplot(data = post_sum_theta, aes(x = time)) +
   ) +
   ylab("") +
   xlab("Time") +
-  theme_bw() +
   theme(panel.grid = element_blank(),
-        strip.background = element_blank())
+        strip.background = element_blank()) + theme_clear()
 
 ```
 
 Define the constants, data and initials lists for the `nimble` model.
 
 ```{r Ex 11.16 rhat and ess hourly}
-n <- ncol(post_samples$samples$chain1)
+n <- ncol(mcmc.out$samples$chain1)
 
 Rhat_all <-  sapply(1:n, function(x) {
-  rstan::Rhat(cbind(post_samples$samples$chain1[, x],
-                    post_samples$samples$chain2[, x]))
+  rstan::Rhat(cbind(mcmc.out$samples$chain1[, x],
+                    mcmc.out$samples$chain2[, x]))
 })
 
 ess_all <- sapply(1:n, function(x) {
-  rstan::ess_bulk(cbind(post_samples$samples$chain1[, x],
-                        post_samples$samples$chain2[, x]))
+  rstan::ess_bulk(cbind(mcmc.out$samples$chain1[, x],
+                        mcmc.out$samples$chain2[, x]))
 })
 
 ess_all_tail <- sapply(1:n, function(x) {
-  rstan::ess_tail(cbind(post_samples$samples$chain1[, x],
-                        post_samples$samples$chain2[, x]))
+  rstan::ess_tail(cbind(mcmc.out$samples$chain1[, x],
+                        mcmc.out$samples$chain2[, x]))
 })
 
 max(Rhat_all, na.rm = T)
@@ -548,118 +527,179 @@ min(ess_all_tail, na.rm = T)
 
 #### Daily data time varying mean
 
+```{r}
+
+
+# nim_bsample <- nimbleFunction(
+#   run = function(mt = double(1), Ct = double(1), at = double(1),
+#                  Gt = double(0), Rt = double(1)) {
+#     
+#     returnType(double(1))  # return type declaration
+#     
+#     # identifying the dimension of the observation equation and evolution equation
+#     Tt <- nimDim(at)[1] # total time points
+#     theta <-  nimNumeric(length = Tt + 1) # including theta0 at the 1st column
+#     # forward j = 1:(Tt+1) index transformed to t = (Tt+1):1 index as t = (Tt+2) - j
+#     theta[Tt+1]  <-  rnorm(n = 1, mean = mt[Tt+1], sd = sqrt(Ct[Tt+1]))
+#     # for t = J:1 (backward) use j = 1:J and transformed to t = J:1 as t = (J+1)-j
+#     for(j in 1:Tt){
+#       t <- (Tt+1)-j
+#       Bt <- Ct[t] * Gt / Rt[t]
+#       ht <- mt[t] + Bt * (theta[t+1] - at[t])
+#       Ht <- Ct[t] - Bt * Gt * Ct[t]
+#       theta[t] <- rnorm(n = 1, mean = ht, sd = sqrt(Ht))
+#     }
+#      
+#      return(theta)
+#   }, check = FALSE
+# )
+
+nim_bsample <- nimbleFunction(
+  run = function(mt = double(2), Ct = double(3), at = double(2),
+                 Gt = double(2), Rt = double(3)) {
+    
+    returnType(double(2))  # return type declaration
+    
+    # identifying the dimension of the observation equation and evolution equation
+    p <- nimDim(at)[1] # dimension of the evolution equation
+    Tt <- nimDim(at)[2] # total time points
+    
+    theta <- nimArray(0, dim = c(p,Tt+1)) # including theta0 at the 1st column
+    
+    
+    # forward j = 1:(Tt+1) index transformed to t = (Tt+1):1 index as t = (Tt+2) - j
+    j <- 1
+    t <- (Tt+2)-j
+    theta[1:p,t] <- rmnorm_chol(n = 1, mean = mt[1:p,t], cholesky = chol(Ct[1:p,1:p,t]), prec_param = FALSE)
+    for(j in 2:(Tt+1)){
+      t <- (Tt+2)-j
+      Bt <- Ct[1:p,1:p,t] %*% t(Gt) %*% inverse(Rt[1:p,1:p,t])
+      ht <- (mt[1:p,t] + Bt %*% (theta[1:p,t+1] - at[1:p,t]))[,1]
+      Ht <- Ct[1:p,1:p,t] - Bt %*% Gt %*% Ct[1:p,1:p,t]
+      theta[1:p,t] <- rmnorm_chol(n = 1, mean = ht, cholesky = chol(Ht), prec_param = FALSE)
+    }
+    
+    return(theta)
+  }, check = FALSE
+)
+
+
+```
+
 ```{r Ex 11.16 nimble RW code}
 
-integratedcodeUni <- nimbleCode({
+Example11_16Daily <- nimbleCode({
   
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  Vt <- tau ^ 2
+  
+    Vt <- tau^2
 
-  sqrt_Wt ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  Wt <-  sqrt_Wt ^ 2
+  
+  sqrt_Wt_diag[1] ~ T(dt(mu = 0, sigma = 0.01, df = 1), 0, Inf)
+  sqrt_Wt_diag[2] ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
 
-  yt[1:Tt] ~  ddlm_uous(Ft[1:Tt], Vt, Gt, Wt, m0, C0)
-  theta[1:(Tt + 1)] <- nim_ffbs_uous(
-    yt = yt[1:Tt],
-    Ft = Ft[1:Tt],
-    Vt = Vt,
-    Gt = Gt,
-    Wt = Wt,
-    m0 = m0,
-    C0 = C0
-  )
+  
+  Wt[1:p,1:p] <- nim_diag(x = sqrt_Wt_diag[1:p]^2)
+  
+  mt[1:p,1] <- m0[1:p]
+  Ct[1:p,1:p,1] <- C0[1:p,1:p]
+  
+  for (t in 1:Tt) {
+    at[1:p,t] <- (Gt[1:p,1:p] %*% mt[1:p,t])[1:p, 1]
+    Rt[1:p,1:p,t] <- Gt[1:p,1:p] %*% Ct[1:p,1:p,t] %*% t(Gt[1:p,1:p]) + Wt[1:p,1:p]
+    ft[t] <- (t(Ft[1:p, t]) %*% at[1:p,t])[1, 1]
+    Qt[t] <- (t(Ft[1:p, t]) %*% Rt[1:p,1:p,t] %*% Ft[1:p, t] + Vt)[1,1]
+    yt[t] ~ dnorm(mean = ft[t], var = Qt[t])
+    At[1:p,t] <- (Rt[1:p,1:p,t] %*% Ft[1:p, t])[1:p, 1]/Qt[t]
+    mt[1:p,t+1] <- at[1:p,t] + (At[1:p,t] * (yt[t] - ft[t]))
+    Ct[1:p,1:p,t+1] <- Rt[1:p,1:p,t] - (At[1:p,t] %*% t(At[1:p,t])) * Qt[t]
+  }
+  
+  yt.fitted[1:Tt] <- nim_postfit_uoms(yt[1:Tt], Ft[1:p, 1:Tt], Vt,
+                 Gt[1:p,1:p], Wt[1:p,1:p], m0[1:p], C0[1:p,1:p])
+  theta[1:p,1:(Tt+1)] <- nim_bsample(mt = mt[1:p,1:(Tt+1)], Ct = Ct[1:p,1:p,1:(Tt+1)], at = at[1:p,1:Tt], Gt = Gt[1:p,1:p], Rt = Rt[1:p,1:p,1:Tt])
+  
   
 })
 ```
+
 
 
 ```{r Ex 11.16 daily data rw model, results='hide', warning=FALSE, message= FALSE}
 # fit a linear growth model for the daily data
 yt <- site_daily$max.ozone
 Tt <- length(yt)
-Ft <- rep(1, Tt)
-Gt <- 1
-
+p <- 2
+Ft <- matrix(c(1, 0), nrow = p, ncol = Tt)
+Gt <- matrix(c(1,0,1,1),ncol = 2, nrow = 2)
 # initial values
-m0 <- mean(yt, na.rm = TRUE)
-C0 <- 1
+m0 <- rep(mean(yt, na.rm = TRUE),2)
+C0 <- diag(x = 1, nrow = p, ncol = p)
 
 const_list <- list(Tt = Tt,
                    m0 = m0,
-                   C0 = C0)
+                   C0 = C0,
+                   p = p)
 dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
 init_list <- list(
   tau = 0.01,
-  sqrt_Wt = sqrt(0.1),
-  theta = rep(0, Tt+1)
+  sqrt_Wt = sqrt(0.1))
+params <- c("tau",  "theta", "Vt", "Wt", "yt.fitted")
+# Run model in nimble
+mcmc.out <- nimbleMCMC(
+  code = Example11_16Daily,
+  constants = const_list,
+  data = dat_list,
+  inits = init_list,
+  monitors = params,
+  niter = 40000,
+  nburnin = 20000,
+  thin = 20,
+  WAIC = TRUE,
+  nchains = 2,
+  summary = TRUE,
+  samplesAsCodaMCMC = TRUE
 )
 
-Rmodel <-
-  nimbleModel(integratedcodeUni,
-              constants = const_list,
-              data = dat_list,
-              inits = init_list)
-Rmodel$initializeInfo()
-Rmodel$calculate()
-Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
-conf <-
-  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt", "theta"))
 
-Rmcmc <- buildMCMC(conf)
-Cmcmc <-
-  compileNimble(
-    Rmcmc,
-    project = Cmodel,
-    resetFunctions = TRUE,
-    showCompilerOutput = FALSE
-  )
-
-niter <- 20000
-nburnin <- 0.5 * niter
-nthin <- 1
-start_time <- Sys.time()
-post_samples <-
-  runMCMC(
-    Cmcmc,
-    niter = niter,
-    nburnin = nburnin,
-    thin = nthin,
-    nchains = 2,
-    summary = TRUE,
-    samplesAsCodaMCMC = TRUE
-  )
-end_time <- Sys.time()
-run_time <- end_time - start_time
-run_time
 ```
 
 ```{r Ex 11.16 daily rw posterior summary}
-post_summary <- post_samples$summary$all.chains 
-post_summary[c('tau',
-               'sqrt_Wt'), ]
 
-tidy_post_samples <- post_samples$samples |> tidy_draws()
+post_summary <- mcmc.out$summary$all.chains 
 
-tidy_post_samples |>
-  select(
-    .chain,
-    .iteration,
-    .draw,
-    'tau',
-    'sqrt_Wt'
-  ) |>
-  gather(vars, value, -.chain, -.iteration, -.draw) |>
-  ggplot(aes(x = .iteration, y = value)) +
-  geom_path(aes(color = factor(.chain)), size = 0.25,
-            show.legend = FALSE) +
-  facet_wrap( ~ vars, scales = "free_y", nrow = 3) +
-  theme_bw() +
-  theme(panel.grid = element_blank(),
-        strip.background = element_blank())
 
 post_sum_theta <-
   as.data.frame(post_summary) |>  rownames_to_column() |>
   filter(str_detect(rowname, "theta")) |>
+  select(rowname, `95%CI_low`, Mean, `95%CI_upp`)|>
+  separate(rowname, into = c("x1", "x2"), sep = ",") |>
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) |>
+  select(component, time, `95%CI_low`, Mean, `95%CI_upp`)
+
+ggplot(data = post_sum_theta, aes(x = time)) +
+  #geom_path(aes(y = theta), color = "red", size = 0.4) +
+  geom_ribbon(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`), fill = "lightgray", alpha = 0.7) +
+  geom_path(aes(y = Mean), col = "blue", size = 0.4) +
+  facet_wrap(
+    ~ component,
+    nrow = 2,
+    scales = "free",
+    labeller = label_bquote(theta[.(component)])
+  ) +
+  ylab("") +
+  xlab("Time") +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank()) + theme_clear()
+
+```
+
+```{r  Ex 11.16 daily residuals}
+
+post_sum_theta <-
+  as.data.frame(post_summary) |>  rownames_to_column() |>
+  filter(str_detect(rowname, "yt.fitted")) |>
   select(rowname, `95%CI_low`, Mean, `95%CI_upp`) |>
   mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname))) |>
   select(time, `95%CI_low`, Mean, `95%CI_upp`)
@@ -670,11 +710,23 @@ ggplot(data = post_sum_theta, aes(x = time)) +
   geom_path(aes(y = Mean), col = "blue", size = 0.4) +
   ylab("") +
   xlab("Time") +
-  theme_bw() +
+  theme_clear() +
   theme(panel.grid = element_blank(),
         strip.background = element_blank())
-
 ```
 
+```{r}
+ for (t in 1:Tt) {
+    at[t] <- (Gt * mt[t])
+    Rt[t] <- Gt * Ct[t] * Gt + Wt
+    ft[t] <- Ft[t] * at[t]
+    Qt[t] <- Ft[t] * Rt[t] * Ft[t] + Vt
+    yt[t] <-  rnorm(1, mean = ft[t], sd = sqrt(Qt[t]))
+    At[t] <- (Rt[t] * Ft[t])/Qt[t]
+    mt[t+1] <- at[t] + (At[t] * (yt[t] - ft[t]))
+    Ct[t+1] <- Rt[t] - (At[t] * At[t]) * Qt[t]
+  }
+  
+```
 
 
