@@ -9,9 +9,9 @@ trusted
 Disease
 hazards
 Time
-nimble-3
-hourly-data-seasonal-component
-daily-data-time-varying-mean
+autoregressive-model-daily-data
+stan-2
+uk-ozone-data-rw
 exposure
 causality
 monitoring

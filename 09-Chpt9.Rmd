@@ -616,7 +616,6 @@ N_edges <- nbs$N_edges
 ```
 
 
-`Stan` model for CAR effects. 
 This model is in a separate file called `Example8_3.stan` that will be called later.
 
 ```{r engine='bash', comment='', echo = FALSE}
