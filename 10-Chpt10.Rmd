@@ -22,14 +22,14 @@ library(geoR)
 library(ggmap)
 library(spdep)
 
-uk_data <- read.csv("data/uk_ozone_uni.csv")
+benzene_data <- read.csv("data/montreal_benzene.csv")
 
 # create a new variable in "sp" format 
-uk_data_sp <- uk_data
-coordinates(uk_data_sp) <- ~ longitude + latitude
+benzene_data_sp <- benzene_data
 
+coordinates(benzene_data_sp) <- ~ X + Y
 # specify the projection code
-proj4string(uk_data_sp) <- CRS("+proj=longlat +ellps=WGS84")
+proj4string(benzene_data_sp) <- CRS("+proj=utm +zone=18 +ellps=WGS72")
 
 # Specify the bounding box 
 latLongBox = bbox(uk_data_sp)

@@ -21,6 +21,20 @@ uk_o3_one_site <- data.frame(ozone = o3[1,],
 
 write.csv(uk_o3_one_site, "data/uk_ozone_one_site.csv", row.names = FALSE)
 
+# Chapter 10 ----
+
+library(readxl)
+VOCs <- read_excel("data/VOCDec2005.xlsx") 
+VOCS_IDs <- read_excel("data/VOClogsheetDec2005.xlsx") 
+
+VOCs_coords <- VOCS_IDs[,c("ID", "X", "Y")]
+benzene <- VOCs[,c("ID", "Benzene")]
+# avoid dealing with replicates
+benzene <- benzene[unique(benzene$ID),]
+
+benzene_coords <- merge(benzene, VOCs_coords, by = "ID")
+
+write.csv(benzene_coords, "data/montreal_benzene.csv", row.names = FALSE)
 
 # Chapter 11 -----
 
