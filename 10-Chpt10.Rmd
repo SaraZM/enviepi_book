@@ -25,33 +25,31 @@ library(spdep)
 benzene_data <- read.csv("data/montreal_benzene.csv")
 
 # create a new variable in "sp" format 
-benzene_data_sp <- benzene_data
-
-coordinates(benzene_data_sp) <- ~ X + Y
-# specify the projection code
-proj4string(benzene_data_sp) <- CRS("+proj=utm +zone=18 +ellps=WGS72")
+benzene_data_geo <- benzene_data
+coordinates(benzene_data_geo) <- ~ lon+lat
+proj4string(benzene_data_geo) <- CRS("+proj=longlat +datum=WGS84")
 
 # Specify the bounding box 
-latLongBox = bbox(uk_data_sp)
+latLongBox = bbox(benzene_data_geo)
 location = c(latLongBox[1, 1] - 0.2,
-             latLongBox[2, 1] - 0,
-             latLongBox[1, 2] + 0.2,
-             latLongBox[2, 2] + 0.2)
+             latLongBox[2, 1] - 0.05,
+             latLongBox[1, 2] + 0.1,
+             latLongBox[2, 2] + 0.05)
 
 # Create map with location dots marked on it in
-UKOzoneMap <-
+MontrelBenzeneMap <-
   get_stamenmap(
-    bbox = location,
-    zoom = 6
+    bbox =  location,
+    zoom = 11
   )
 
-ggmap(UKOzoneMap) + geom_point(
-  data = uk_data,
+ggmap(MontrelBenzeneMap) + geom_point(
+  data = benzene_data,
   aes(
-    x = longitude,
-    y = latitude,
-    size = ozone,
-    color = ozone
+    x = lon,
+    y = lat,
+    size = Benzene,
+    color = Benzene
   ),
   alpha = 0.45
 ) + theme_void()
@@ -65,13 +63,20 @@ Using the `geoR` package we can also plot the following:
 - and a histogram of the concentrations indicating the distribution of concentrations together with an estimate of the density.
 
 ```{r Ex 10.1 geoR plot}
+# Convert data to utm 
+benzene_data_utm <- spTransform(benzene_data_geo,
+                        CRS("+proj=utm +zone=18 +ellps=WGS72"))
 
-uk_data_geo <- as.geodata(uk_data,
-                          coords.col = 2:3, data.col = 4)
+benzene_utm_df <- as.data.frame(benzene_data_utm)
+colnames(benzene_utm_df) <- c("ID", "Benzene", "X", "Y")
 
-plot(uk_data_geo)
+benzene_geodata <- as.geodata(benzene_utm_df,
+                          coords.col = 3:4, data.col = 2)
+
+plot(benzene_geodata)
 
 ```
+
 
 
 ## Example 10.9 {-}
@@ -93,18 +98,20 @@ library(nimble)
 data(meuse)
 
 # Extract the zinc data in the log scale from the meuse dataset
-meusesample <-
+benzenesample <-
   data.frame(
-    y = log(meuse$zinc),
-    x1 = sqrt(meuse$dist),
-    easting = meuse$x / 1000,
-    northing = meuse$y / 1000
+    y = log(benzene_utm_df$Benzene),
+    x1 = benzene_utm_df$X/1000,
+    x2 = benzene_utm_df$Y/1000,
+    easting = benzene_utm_df$X / 1000,
+    northing = benzene_utm_df$Y / 1000
   )
 
 # Compute the distance matrix
-Dist <- as.matrix(dist(meusesample[,c("easting", "northing")]))
+Dist <- as.matrix(dist(benzenesample[,c("easting", "northing")]))
 
 ```
+
 
 
 ```{r Ex 10.9 nimble model}
