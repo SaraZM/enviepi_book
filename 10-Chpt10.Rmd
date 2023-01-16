@@ -75,8 +75,18 @@ benzene_geodata <- as.geodata(benzene_utm_df,
 
 plot(benzene_geodata)
 
-```
+hist(log(benzene_utm_df$Benzene), main = "log(benzene)")
+qqnorm(log(benzene_utm_df$Benzene), bty = "n")
+qqline(log(benzene_utm_df$Benzene))
 
+```
+## Example 10.5 {-}
+
+
+```{r Ex 10.5 plot variogram}
+CA.vario4 <- variog(benzen, uvec = seq(0,8,l=8))
+plot(CA.vario4)
+```
 
 
 ## Example 10.9 {-}
@@ -88,7 +98,6 @@ NOTE: This won't be the real example but I need to compare it to something that 
 
 ```{r Ex 10.9 load data, message = FALSE, warning=FALSE, error=FALSE}
 
-rm(list=ls())
 library(sp)
 library(nimble)
 ```
@@ -101,8 +110,6 @@ data(meuse)
 benzenesample <-
   data.frame(
     y = log(benzene_utm_df$Benzene),
-    x1 = benzene_utm_df$X/1000,
-    x2 = benzene_utm_df$Y/1000,
     easting = benzene_utm_df$X / 1000,
     northing = benzene_utm_df$Y / 1000
   )
@@ -121,7 +128,7 @@ Example10_9Code <-  nimbleCode ({
   Sigma[1:n, 1:n] <- (sigma^2)*exp(-distMatrix[1:n,1:n]/phi) + (tau^2)*identityMatrix(d = n)
   
   for (site in 1:n) {
-    mean.site[site] <- beta0 + beta1 * x[site]
+    mean.site[site] <- beta0 + beta1*easting[site] + beta2*northing[site]
   }
   
   y[1:n]  ~  dmnorm(mean.site[1:n], cov = Sigma[1:n, 1:n])
@@ -132,11 +139,11 @@ Example10_9Code <-  nimbleCode ({
   phi_inv ~ dgamma(shape =  8186.436, rate = 12026.879)
   phi <- 1/phi_inv
   
-  # prior for the intercept term
-  beta0 ~ dnorm (0, 10)
-  beta1 ~ dnorm (0, 10)
-  
-  
+  # prior for the coefficients term
+    beta0 ~ dnorm (0, 10)
+    beta1 ~ dnorm (0, 10)
+    beta2 ~ dnorm (0, 10)
+
 }) 
 
 ```
@@ -151,11 +158,15 @@ Define the constants, data and initials lists for the `nimble` model.
 # Get the distance matrix using by turning it into an sf object
 
 constants <-
-  list(n = nrow(meusesample))
-ex.data <- list(y = meusesample$y, x = meusesample$x1, distMatrix = Dist)
+  list(n = nrow(benzenesample))
+ex.data <-
+  list(y = benzenesample$y,
+       easting = as.vector(scale(benzenesample$easting)),
+       northing = as.vector(scale(benzenesample$northing)),
+       distMatrix = Dist)
 
-params <- c( "tau",  "beta0", "beta1", "sigma", "phi")
-inits <- list(tau = 0.1, beta0 = 1, beta1 = 1, sigma = 0.1, phi_inv = 6/max(Dist))
+params <- c( "tau",  "beta0", "beta1","beta2", "sigma", "phi")
+inits <- list(tau = 0.1, sigma = 0.1, phi_inv = 6/max(Dist))
 # TODO: I have to check this code with a simulation first 
 mcmc.out <- nimbleMCMC(
   code = Example10_9Code,
@@ -182,6 +193,8 @@ min(coda::effectiveSize(mcmc.out$samples))
 # NOTE: there might not be a spatial structure...
 plot(mcmc.out$samples[, c("beta0")])
 plot(mcmc.out$samples[, c("beta1")])
+plot(mcmc.out$samples[, c("beta2")])
+
 
 #plot(mcmc.out$samples[, c("sigma")])
 plot(mcmc.out$samples[, c("tau")])
