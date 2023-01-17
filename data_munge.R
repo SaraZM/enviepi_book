@@ -57,6 +57,22 @@ colnames(benzene_geo_df) <- c("ID", "Benzene", "lon", "lat")
 
 write.csv(benzene_geo_df, "data/montreal_benzene.csv", row.names = FALSE)
 
+
+# Chapter 10 ----
+# California temperature
+cal_sites <- read.csv("data/metadataCA.txt", sep = "\t")
+cal_temp <- read.csv("data/MaxCaliforniaTemp.csv")
+
+cal_temp_oneday <- cal_temp[cal_temp$X == "20120401",]
+cal_temp_oneday <- as.data.frame(t(cal_temp_oneday[c(2:14,16:19)]))
+cal_temp_oneday <- tibble::rownames_to_column(cal_temp_oneday, "Location")
+
+colnames(cal_temp_oneday) <- c("Location", 'MaxTemp')
+
+cal_sites$MaxTemp <- cal_temp_oneday[,2]
+
+write.csv(cal_sites, "data/CalTempData.csv", row.names = FALSE)
+
 # Chapter 11 -----
 
 ## Daily data ----

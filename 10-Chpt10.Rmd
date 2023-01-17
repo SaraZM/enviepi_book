@@ -22,15 +22,20 @@ library(geoR)
 library(ggmap)
 library(spdep)
 
-benzene_data <- read.csv("data/montreal_benzene.csv")
-
+#benzene_data <- read.csv("data/montreal_benzene.csv")
+cal_temp_data <- read.csv("data/CalTempData.csv")
+ 
 # create a new variable in "sp" format 
-benzene_data_geo <- benzene_data
-coordinates(benzene_data_geo) <- ~ lon+lat
-proj4string(benzene_data_geo) <- CRS("+proj=longlat +datum=WGS84")
+# benzene_data_geo <- benzene_data
+# coordinates(benzene_data_geo) <- ~ lon+lat
+# proj4string(benzene_data_geo) <- CRS("+proj=longlat +datum=WGS84")
+
+cal_data_geo <- cal_temp_data
+coordinates(cal_data_geo) <- ~ Long + Lat
+proj4string(cal_data_geo) <- CRS("+proj=longlat +datum=WGS84")
 
 # Specify the bounding box 
-latLongBox = bbox(benzene_data_geo)
+latLongBox = bbox(cal_data_geo)
 location = c(latLongBox[1, 1] - 0.2,
              latLongBox[2, 1] - 0.05,
              latLongBox[1, 2] + 0.1,
@@ -40,16 +45,15 @@ location = c(latLongBox[1, 1] - 0.2,
 MontrelBenzeneMap <-
   get_stamenmap(
     bbox =  location,
-    zoom = 11
+    zoom = 5
   )
 
 ggmap(MontrelBenzeneMap) + geom_point(
-  data = benzene_data,
+  data = cal_temp_data,
   aes(
-    x = lon,
-    y = lat,
-    size = Benzene,
-    color = Benzene
+    x = Long,
+    y = Lat,
+    size = MaxTemp
   ),
   alpha = 0.45
 ) + theme_void()
@@ -64,29 +68,121 @@ Using the `geoR` package we can also plot the following:
 
 ```{r Ex 10.1 geoR plot}
 # Convert data to utm 
-benzene_data_utm <- spTransform(benzene_data_geo,
-                        CRS("+proj=utm +zone=18 +ellps=WGS72"))
+# benzene_data_utm <- spTransform(benzene_data_geo,
+#                         CRS("+proj=utm +zone=18 +ellps=WGS72"))
+# 
+# benzene_utm_df <- as.data.frame(benzene_data_utm)
+# colnames(benzene_utm_df) <- c("ID", "Benzene", "X", "Y")
+# 
+# benzene_geodata <- as.geodata(benzene_utm_df,
+#                           coords.col = 3:4, data.col = 2)
+# 
+# plot(benzene_geodata)
 
-benzene_utm_df <- as.data.frame(benzene_data_utm)
-colnames(benzene_utm_df) <- c("ID", "Benzene", "X", "Y")
+cal_data_utm <- spTransform(cal_data_geo,
+                         CRS("+proj=utm +zone=10 +ellps=WGS72"))
+cal_utm_df <- as.data.frame(cal_data_utm)
 
-benzene_geodata <- as.geodata(benzene_utm_df,
-                          coords.col = 3:4, data.col = 2)
+cal_geodata <- as.geodata(cal_utm_df,
+                          coords.col = 6:7, data.col = 5)
 
-plot(benzene_geodata)
-
-hist(log(benzene_utm_df$Benzene), main = "log(benzene)")
-qqnorm(log(benzene_utm_df$Benzene), bty = "n")
-qqline(log(benzene_utm_df$Benzene))
+plot(cal_geodata)
 
 ```
+
+
+## Example 10.2 {-}
+
+```{r Ex 10.2 plot hist and qqplot log}
+# Histogram for the log of the benzene concentration
+# hist(log(cal_utm_df$MaxTemp), main = "", xlab = "log(MaxTemp)")
+# # qqplot for the log of the benzene concentration
+# qqnorm(log(cal_utm_df$MaxTemp), bty = "n")
+# qqline(log(cal_utm_df$MaxTemp))
+# Coplot?
+
+```
+
+
 ## Example 10.5 {-}
 
 
 ```{r Ex 10.5 plot variogram}
-CA.vario4 <- variog(benzen, uvec = seq(0,8,l=8))
-plot(CA.vario4)
+
+# benzene_utm_df[,c("X", "Y")] <- benzene_utm_df[,c("X", "Y")]/1000
+# coordinates(benzene_utm_df) <- ~ X + Y
+# 
+# benzene_vgm <- variogram(log(Benzene)~X+Y, data = benzene_utm_df)
+# plot(benzene_vgm)
+# 
+# benzene_vgm_fit = fit.variogram(benzene_vgm, 
+#                                 model = vgm(0.01, "Sph",6, 0.08))
+# plot(benzene_vgm, benzene_vgm_fit)
+#cal_temp_data[,c("Long", "Lat")] <- cal_utm_df[,c("Long", "Lat")]/1000
+cal_utm_km <- cal_utm_df
+cal_utm_km[,c("Long", "Lat")] <- cal_utm_km[,c("Long", "Lat")]/1000
+coordinates(cal_utm_km) <- ~ Long + Lat
+
+cal_vgm <- variogram(MaxTemp~  1, data = cal_utm_km, width = 1000/50)
+cal_vgm_fit = fit.variogram(cal_vgm, 
+                                model = vgm(1000, "Exp", 400, 0))
+
+plot(cal_vgm, cal_vgm_fit, bty = "n")
+# COMBAK: there is a warning that we have to check
+
+
+
 ```
+
+## Example 10.6 {-}
+
+
+```{r}
+# Plot grid
+CAPred.loci <- expand.grid ( seq (241, 1500 , 1), seq (3542, 4655 , 1) )
+names (CAPred.loci)[ names ( CAPred.loci )=="Var1"] <-"Long"
+names (CAPred.loci)[ names ( CAPred.loci )=="Var2"] <-"Lat"
+coordinates (CAPred.loci) = ~ Long + Lat
+gridded(CAPred.loci) = TRUE
+
+mod <- vgm (6652 , "Exp", 399 )
+# ordinary kriging :
+x <- krige(MaxTemp ~1, cal_utm_km , CAPred.loci , model = mod )
+spplot (x["var1.pred"], main = "ordinary kriging predictions ")
+spplot (x["var1.var"], main = "ordinary kriging variance ")
+
+```
+
+
+```{r}
+### Augment data file with coordinates
+coordinates ( cal_temp_data) <- ~Long + Lat
+
+CAgstat.vario <- variogram ( MaxTemp ~1, cal_temp_data , print.SSE = TRUE )
+plot ( CAgstat.vario )
+### Get the fit
+CATemp.variofit <- fit.variogram ( CAgstat.vario, 
+                                   model = vgm (5000 , "Exp" ,2.9 ,0))
+plot(CAgstat.vario, CATemp.variofit)
+
+### Create the grid on which to make the spatial predictions
+CAPred.loci <- expand.grid ( seq ( -125 , -115 ,.1), seq (32 ,42 ,.1) )
+names ( CAPred.loci )[ names ( CAPred.loci )=="Var1"] <-"Long"
+names ( CAPred.loci )[ names ( CAPred.loci )=="Var2"] <-"Lat"
+coordinates ( CAPred.loci ) = ~ Long + Lat
+gridded ( CAPred.loci ) = TRUE
+
+mod <- vgm (5000 , "Exp", 2.9 , 0.04)
+# ordinary kriging :
+x <- krige(MaxTemp ~1, cal_temp_data , CAPred.loci , model = mod )
+spplot (x["var1.pred"], main = "ordinary kriging predictions ", col = "transparent")
+spplot (x["var1.var"], main = "ordinary kriging variance ", col = "transparent")
+
+
+```
+
+
+
 
 
 ## Example 10.9 {-}
@@ -104,18 +200,17 @@ library(nimble)
 
 ```{r Ex 10.9 load data sim}
 
-data(meuse)
 
 # Extract the zinc data in the log scale from the meuse dataset
-benzenesample <-
+CA_Temp_sample <-
   data.frame(
-    y = log(benzene_utm_df$Benzene),
-    easting = benzene_utm_df$X / 1000,
-    northing = benzene_utm_df$Y / 1000
+    y = cal_utm_df$MaxTemp,
+    easting = cal_utm_df$Long / 1000,
+    northing = cal_utm_df$Lat / 1000
   )
 
 # Compute the distance matrix
-Dist <- as.matrix(dist(benzenesample[,c("easting", "northing")]))
+Dist <- as.matrix(dist(CA_Temp_sample[,c("easting", "northing")]))
 
 ```
 
@@ -125,7 +220,7 @@ Dist <- as.matrix(dist(benzenesample[,c("easting", "northing")]))
 
 Example10_9Code <-  nimbleCode ({
   # Covariance matrix spatial effect
-  Sigma[1:n, 1:n] <- (sigma^2)*exp(-distMatrix[1:n,1:n]/phi) + (tau^2)*identityMatrix(d = n)
+  Sigma[1:n, 1:n] <- (sigma^2)*exp(-distMatrix[1:n,1:n]/phi) 
   
   for (site in 1:n) {
     mean.site[site] <- beta0 + beta1*easting[site] + beta2*northing[site]
@@ -135,9 +230,9 @@ Example10_9Code <-  nimbleCode ({
   
   # Set up the priors for the spatial model
   sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  phi_inv ~ dgamma(shape =  8186.436, rate = 12026.879)
-  phi <- 1/phi_inv
+  #tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  #phi_inv ~ dgamma(shape =  8186.436, rate = 12026.879)
+  phi ~ dexp(1/182)
   
   # prior for the coefficients term
     beta0 ~ dnorm (0, 10)
@@ -158,15 +253,15 @@ Define the constants, data and initials lists for the `nimble` model.
 # Get the distance matrix using by turning it into an sf object
 
 constants <-
-  list(n = nrow(benzenesample))
+  list(n = nrow(CA_Temp_sample))
 ex.data <-
-  list(y = benzenesample$y,
-       easting = as.vector(scale(benzenesample$easting)),
-       northing = as.vector(scale(benzenesample$northing)),
+  list(y = CA_Temp_sample$y,
+       easting = as.vector(scale(CA_Temp_sample$easting)),
+       northing = as.vector(scale(CA_Temp_sample$northing)),
        distMatrix = Dist)
 
-params <- c( "tau",  "beta0", "beta1","beta2", "sigma", "phi")
-inits <- list(tau = 0.1, sigma = 0.1, phi_inv = 6/max(Dist))
+params <- c(  "beta0", "beta1","beta2", "sigma", "phi")
+inits <- list( sigma = 0.1, phi_inv = 6/max(Dist))
 # TODO: I have to check this code with a simulation first 
 mcmc.out <- nimbleMCMC(
   code = Example10_9Code,
@@ -196,14 +291,25 @@ plot(mcmc.out$samples[, c("beta1")])
 plot(mcmc.out$samples[, c("beta2")])
 
 
-#plot(mcmc.out$samples[, c("sigma")])
-plot(mcmc.out$samples[, c("tau")])
-#plot(mcmc.out$samples[, c("phi")])
+plot(mcmc.out$samples[, c("sigma")])
+#plot(mcmc.out$samples[, c("tau")])
+plot(mcmc.out$samples[, c("phi")])
 
 mcmc.out$summary$all.chains
 
 ```
 
+## Example 10.13
+
+```{r}
+### Compute and plot the directional variogram
+
+cal_temp_data
+CA.geo <-as.geodata( cal_temp_data , coords.col = 3:4 , data.col=7)
+
+CA.vario4 <- variog4(CA.geo, uvec = seq (0 ,8 ,l=8) )
+plot(CA.vario4 )
+```
 
 
 
