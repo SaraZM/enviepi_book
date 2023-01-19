@@ -388,11 +388,6 @@ model = inla(
 )
 
 model$summary.fixed
-
-```
-
-```{r}
-
 ```
 
 ## Example 10.13: Directional variograms
