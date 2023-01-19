@@ -391,6 +391,10 @@ model$summary.fixed
 
 ```
 
+```{r}
+
+```
+
 ## Example 10.13: Directional variograms
 
 ```{r Ex 10.13 directional variogram, error = FALSE, message = FALSE, results='hide'}
