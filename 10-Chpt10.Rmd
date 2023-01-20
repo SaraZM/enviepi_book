@@ -43,7 +43,8 @@ MontrelBenzeneMap <-
 ggmap(MontrelBenzeneMap) + geom_point(data = benzene_data,
                                       aes(x = lon,
                                           y = lat,
-                                          size = Benzene),
+                                          size = Benzene), 
+                                      col = "#011f4b",
                                       alpha = 0.45) + theme_void()
 
 ```
@@ -322,9 +323,9 @@ summary_exp_stan$summary
 
 <!-- TODO: Predictions -->
 
-## Example 10.11: INLA, creating a mesh
+## Example 10.11: INLA, creating a mesh {-}
 
-```{r Ex 10.11 load data for INLA}
+```{r Ex 10.11 load data for INLA, message = FALSE, warning=FALSE, error=FALSE}
 library(geoR)
 library(INLA)
 library(spdep)
@@ -358,9 +359,9 @@ plot(mesh , col="gray", main="")
 
 ```
 
-## Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal
+## Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal {-}
 
-```{r Ex 10.12 spde inla}
+```{r Ex 10.12 spde inla, warning=FALSE}
 # Field std . dev . for theta =0
 sigma0 = 1
 # find the range of the location data
@@ -390,7 +391,7 @@ model = inla(
 model$summary.fixed
 ```
 
-## Example 10.13: Directional variograms
+## Example 10.13: Directional variograms {-}
 
 ```{r Ex 10.13 directional variogram, error = FALSE, message = FALSE, results='hide'}
 ### Compute and plot the directional variogram
