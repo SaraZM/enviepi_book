@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2022-12-20" />
+<meta name="date" content="2023-01-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -171,11 +171,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="hazards.html"><a href="hazards.html"><i class="fa fa-check"></i><b>10</b> Environmental hazards-spatial models</a>
 <ul>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1"><i class="fa fa-check"></i>Example 10.1</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9"><i class="fa fa-check"></i>Example 10.9</a>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1-spatial-patterns-of-benzene-concentrations-in-montreal-qc-canada"><i class="fa fa-check"></i>Example 10.1 Spatial patterns of benzene concentrations in Montreal, QC, Canada</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.2-examining-the-log-concentrations-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.2: Examining the log concentrations of benzene in Montreal</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.5-variogram"><i class="fa fa-check"></i>Example 10.5: Variogram</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.9 Spatial modelling of Benzene in Montreal</a>
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="10.0.1" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i><b>10.0.1</b> Stan</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -185,7 +192,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.14-forecasting-volcanic-ash"><i class="fa fa-check"></i>Example 11.14 Forecasting volcanic ash</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model"><i class="fa fa-check"></i>Example 11.16 implementation of a dynamic linear model</a>
 <ul>
-<li class="chapter" data-level="11.0.1" data-path="Time.html"><a href="Time.html#nimble-3"><i class="fa fa-check"></i><b>11.0.1</b> Nimble</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#autoregressive-model-daily-data"><i class="fa fa-check"></i>Autoregressive model daily data</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#uk-ozone-data-rw"><i class="fa fa-check"></i>UK ozone data RW</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#uk-ozone-data-linear-growth"><i class="fa fa-check"></i>UK ozone data linear growth</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
@@ -225,157 +234,406 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Methods for spatial prediction, using both classical methods (kriging) as well as modern methods (Bayesian kriging).</li>
 <li>Non-stationarity fields.</li>
 </ul>
-<!-- NOTE: I know this might not be what we agreed on but I don't like the codes that are available for this chapter, some of them are incomplete and some of them are repeated so I am doing some of them all over again with the UK ozone data, but you can decide to change it later if you wish. -->
-<div id="example-10.1" class="section level2 unnumbered hasAnchor">
-<h2>Example 10.1<a href="hazards.html#example-10.1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Map the locations of the monitoring stations in the UK.</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="hazards.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
-<span id="cb117-2"><a href="hazards.html#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
-<span id="cb117-3"><a href="hazards.html#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
-<span id="cb117-4"><a href="hazards.html#cb117-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-5"><a href="hazards.html#cb117-5" aria-hidden="true" tabindex="-1"></a>uk_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/uk_ozone_uni.csv&quot;</span>)</span>
-<span id="cb117-6"><a href="hazards.html#cb117-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-7"><a href="hazards.html#cb117-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format </span></span>
-<span id="cb117-8"><a href="hazards.html#cb117-8" aria-hidden="true" tabindex="-1"></a>uk_data_sp <span class="ot">&lt;-</span> uk_data</span>
-<span id="cb117-9"><a href="hazards.html#cb117-9" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(uk_data_sp) <span class="ot">&lt;-</span> <span class="er">~</span> longitude <span class="sc">+</span> latitude</span>
-<span id="cb117-10"><a href="hazards.html#cb117-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-11"><a href="hazards.html#cb117-11" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the projection code</span></span>
-<span id="cb117-12"><a href="hazards.html#cb117-12" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(uk_data_sp) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +ellps=WGS84&quot;</span>)</span>
-<span id="cb117-13"><a href="hazards.html#cb117-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-14"><a href="hazards.html#cb117-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the bounding box </span></span>
-<span id="cb117-15"><a href="hazards.html#cb117-15" aria-hidden="true" tabindex="-1"></a>latLongBox <span class="ot">=</span> <span class="fu">bbox</span>(uk_data_sp)</span>
-<span id="cb117-16"><a href="hazards.html#cb117-16" aria-hidden="true" tabindex="-1"></a>location <span class="ot">=</span> <span class="fu">c</span>(latLongBox[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.2</span>,</span>
-<span id="cb117-17"><a href="hazards.html#cb117-17" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="dv">0</span>,</span>
-<span id="cb117-18"><a href="hazards.html#cb117-18" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">1</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.2</span>,</span>
-<span id="cb117-19"><a href="hazards.html#cb117-19" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.2</span>)</span>
-<span id="cb117-20"><a href="hazards.html#cb117-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-21"><a href="hazards.html#cb117-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with location dots marked on it in</span></span>
-<span id="cb117-22"><a href="hazards.html#cb117-22" aria-hidden="true" tabindex="-1"></a>UKOzoneMap <span class="ot">&lt;-</span></span>
-<span id="cb117-23"><a href="hazards.html#cb117-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_stamenmap</span>(</span>
-<span id="cb117-24"><a href="hazards.html#cb117-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">bbox =</span> location,</span>
-<span id="cb117-25"><a href="hazards.html#cb117-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">zoom =</span> <span class="dv">6</span></span>
-<span id="cb117-26"><a href="hazards.html#cb117-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb117-27"><a href="hazards.html#cb117-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb117-28"><a href="hazards.html#cb117-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(UKOzoneMap) <span class="sc">+</span> <span class="fu">geom_point</span>(</span>
-<span id="cb117-29"><a href="hazards.html#cb117-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> uk_data,</span>
-<span id="cb117-30"><a href="hazards.html#cb117-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
-<span id="cb117-31"><a href="hazards.html#cb117-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> longitude,</span>
-<span id="cb117-32"><a href="hazards.html#cb117-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> latitude,</span>
-<span id="cb117-33"><a href="hazards.html#cb117-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> ozone,</span>
-<span id="cb117-34"><a href="hazards.html#cb117-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> ozone</span>
-<span id="cb117-35"><a href="hazards.html#cb117-35" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb117-36"><a href="hazards.html#cb117-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.45</span></span>
-<span id="cb117-37"><a href="hazards.html#cb117-37" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%2010.1%20load%20data-1.png" width="672" /></p>
+<!-- NOTE: Unlike some of the other chapters you have to run this code sequentially -->
+<div id="example-10.1-spatial-patterns-of-benzene-concentrations-in-montreal-qc-canada" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.1 Spatial patterns of benzene concentrations in Montreal, QC, Canada<a href="hazards.html#example-10.1-spatial-patterns-of-benzene-concentrations-in-montreal-qc-canada" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Map the locations of the monitoring stations in Montreal.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="hazards.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1-2"><a href="hazards.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
+<span id="cb1-3"><a href="hazards.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
+<span id="cb1-4"><a href="hazards.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
+<span id="cb1-5"><a href="hazards.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data on benzene concentration in Montreal</span></span>
+<span id="cb1-6"><a href="hazards.html#cb1-6" aria-hidden="true" tabindex="-1"></a>benzene_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/montreal_benzene_apr.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="hazards.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format and define coordinates</span></span>
+<span id="cb2-2"><a href="hazards.html#cb2-2" aria-hidden="true" tabindex="-1"></a>benzene_data_geo <span class="ot">&lt;-</span> benzene_data</span>
+<span id="cb2-3"><a href="hazards.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(benzene_data_geo) <span class="ot">&lt;-</span> <span class="er">~</span> lon <span class="sc">+</span> lat</span>
+<span id="cb2-4"><a href="hazards.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(benzene_data_geo) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</span>
+<span id="cb2-5"><a href="hazards.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the bounding box</span></span>
+<span id="cb2-6"><a href="hazards.html#cb2-6" aria-hidden="true" tabindex="-1"></a>latLongBox <span class="ot">=</span> <span class="fu">bbox</span>(benzene_data_geo)</span>
+<span id="cb2-7"><a href="hazards.html#cb2-7" aria-hidden="true" tabindex="-1"></a>location <span class="ot">=</span> <span class="fu">c</span>(latLongBox[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.05</span>,</span>
+<span id="cb2-8"><a href="hazards.html#cb2-8" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.05</span>,</span>
+<span id="cb2-9"><a href="hazards.html#cb2-9" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">1</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.1</span>,</span>
+<span id="cb2-10"><a href="hazards.html#cb2-10" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.05</span>)</span>
+<span id="cb2-11"><a href="hazards.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># create map with location dots marked on it in</span></span>
+<span id="cb2-12"><a href="hazards.html#cb2-12" aria-hidden="true" tabindex="-1"></a>MontrelBenzeneMap <span class="ot">&lt;-</span></span>
+<span id="cb2-13"><a href="hazards.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_stamenmap</span>(<span class="at">bbox =</span>  location,</span>
+<span id="cb2-14"><a href="hazards.html#cb2-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">zoom =</span> <span class="dv">10</span>)</span>
+<span id="cb2-15"><a href="hazards.html#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(MontrelBenzeneMap) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> benzene_data,</span>
+<span id="cb2-16"><a href="hazards.html#cb2-16" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">aes</span>(<span class="at">x =</span> lon,</span>
+<span id="cb2-17"><a href="hazards.html#cb2-17" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">y =</span> lat,</span>
+<span id="cb2-18"><a href="hazards.html#cb2-18" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">size =</span> Benzene), </span>
+<span id="cb2-19"><a href="hazards.html#cb2-19" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">col =</span> <span class="st">&quot;#011f4b&quot;</span>,</span>
+<span id="cb2-20"><a href="hazards.html#cb2-20" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">alpha =</span> <span class="fl">0.45</span>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.1%20map%20data-1.png" width="672" /></p>
 <p>Using the <code>geoR</code> package we can also plot the following:</p>
 <ul>
 <li>the locations of the sampling sites</li>
 <li>the concentrations of ozone in relation to the x and y coordinates</li>
 <li>and a histogram of the concentrations indicating the distribution of concentrations together with an estimate of the density.</li>
 </ul>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="hazards.html#cb118-1" aria-hidden="true" tabindex="-1"></a>uk_data_geo <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>(uk_data,</span>
-<span id="cb118-2"><a href="hazards.html#cb118-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">data.col =</span> <span class="dv">4</span>)</span>
-<span id="cb118-3"><a href="hazards.html#cb118-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb118-4"><a href="hazards.html#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(uk_data_geo)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="hazards.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert data to utm coordinates</span></span>
+<span id="cb3-2"><a href="hazards.html#cb3-2" aria-hidden="true" tabindex="-1"></a>benzene_data_utm <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(benzene_data_geo,</span>
+<span id="cb3-3"><a href="hazards.html#cb3-3" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">CRS</span>(<span class="st">&quot;+proj=utm +zone=18 +ellps=WGS72&quot;</span>))</span>
+<span id="cb3-4"><a href="hazards.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the utm as a data frame</span></span>
+<span id="cb3-5"><a href="hazards.html#cb3-5" aria-hidden="true" tabindex="-1"></a>benzene_utm_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(benzene_data_utm)</span>
+<span id="cb3-6"><a href="hazards.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(benzene_utm_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Benzene&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb3-7"><a href="hazards.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Save as geodata to generate the geodata plot</span></span>
+<span id="cb3-8"><a href="hazards.html#cb3-8" aria-hidden="true" tabindex="-1"></a>benzene_geodata <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>(benzene_utm_df,</span>
+<span id="cb3-9"><a href="hazards.html#cb3-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">data.col =</span> <span class="dv">1</span>)</span>
+<span id="cb3-10"><a href="hazards.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(benzene_geodata)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.1%20geoR%20plot-1.png" width="672" /></p>
 </div>
-<div id="example-10.9" class="section level2 unnumbered hasAnchor">
-<h2>Example 10.9<a href="hazards.html#example-10.9" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>NOTE: This won’t be the real example but I need to compare it to something that I know the answer to, so instead of doing a simulation I will keep going by analyzing the meuse river data</p>
+<div id="example-10.2-examining-the-log-concentrations-of-benzene-in-montreal" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.2: Examining the log concentrations of benzene in Montreal<a href="hazards.html#example-10.2-examining-the-log-concentrations-of-benzene-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="hazards.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram for the log of the benzene concentration</span></span>
+<span id="cb4-2"><a href="hazards.html#cb4-2" aria-hidden="true" tabindex="-1"></a>log_histogram <span class="ot">&lt;-</span> <span class="fu">hist</span>(<span class="fu">log</span>(benzene_data<span class="sc">$</span>Benzene), <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;log(Benzene)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.2%20plot%20hist%20and%20qqplot%20log-1.png" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="hazards.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># qqplot for the log of the benzene concentration</span></span>
+<span id="cb5-2"><a href="hazards.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(<span class="fu">log</span>(benzene_data<span class="sc">$</span>Benzene), <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>);</span>
+<span id="cb5-3"><a href="hazards.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(<span class="fu">log</span>(benzene_data<span class="sc">$</span>Benzene))</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.2%20plot%20hist%20and%20qqplot%20log-2.png" width="672" />
+<!-- NOTE: I don't know how to generate the plot in Figure 9.4 --></p>
+</div>
+<div id="example-10.5-variogram" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.5: Variogram<a href="hazards.html#example-10.5-variogram" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="hazards.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb6-2"><a href="hazards.html#cb6-2" aria-hidden="true" tabindex="-1"></a>benzene_utm_geo <span class="ot">&lt;-</span> benzene_utm_df</span>
+<span id="cb6-3"><a href="hazards.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the coordinates in kms and turn into a Spatial object</span></span>
+<span id="cb6-4"><a href="hazards.html#cb6-4" aria-hidden="true" tabindex="-1"></a>benzene_utm_geo[,<span class="fu">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)] <span class="ot">&lt;-</span> benzene_utm_geo[,<span class="fu">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)]<span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb6-5"><a href="hazards.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(benzene_utm_geo) <span class="ot">&lt;-</span> <span class="er">~</span> X <span class="sc">+</span> Y</span>
+<span id="cb6-6"><a href="hazards.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the variogram and fit one</span></span>
+<span id="cb6-7"><a href="hazards.html#cb6-7" aria-hidden="true" tabindex="-1"></a>benzene_vgm <span class="ot">&lt;-</span> <span class="fu">variogram</span>(<span class="fu">log</span>(Benzene)<span class="sc">~</span> X <span class="sc">+</span> Y, <span class="at">data =</span> benzene_utm_geo)</span>
+<span id="cb6-8"><a href="hazards.html#cb6-8" aria-hidden="true" tabindex="-1"></a>benzene_vgm_fit <span class="ot">=</span> <span class="fu">fit.variogram</span>(benzene_vgm,</span>
+<span id="cb6-9"><a href="hazards.html#cb6-9" aria-hidden="true" tabindex="-1"></a>                                <span class="at">model =</span> <span class="fu">vgm</span>(<span class="fl">0.1</span>, <span class="st">&quot;Exp&quot;</span>,<span class="dv">6</span>))</span>
+<span id="cb6-10"><a href="hazards.html#cb6-10" aria-hidden="true" tabindex="-1"></a>benzene_vgm_fit</span></code></pre></div>
+<pre><code>##   model      psill    range
+## 1   Exp 0.05295422 2.159286</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="hazards.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(benzene_vgm, benzene_vgm_fit)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.5%20plot%20variogram-1.png" width="672" /></p>
+</div>
+<div id="example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal<a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="hazards.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate grid</span></span>
+<span id="cb9-2"><a href="hazards.html#cb9-2" aria-hidden="true" tabindex="-1"></a>MtlPred <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="fu">seq</span> (<span class="dv">580</span>, <span class="dv">615</span> , <span class="fl">0.5</span>),</span>
+<span id="cb9-3"><a href="hazards.html#cb9-3" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">seq</span> (<span class="dv">5020</span>, <span class="dv">5060</span> , <span class="fl">0.5</span>) )</span>
+<span id="cb9-4"><a href="hazards.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># change names grid</span></span>
+<span id="cb9-5"><a href="hazards.html#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(MtlPred)[ <span class="fu">names</span>(MtlPred)<span class="sc">==</span><span class="st">&quot;Var1&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;X&quot;</span></span>
+<span id="cb9-6"><a href="hazards.html#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(MtlPred)[ <span class="fu">names</span>(MtlPred)<span class="sc">==</span><span class="st">&quot;Var2&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Y&quot;</span></span>
+<span id="cb9-7"><a href="hazards.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># make the grid a Spatial object</span></span>
+<span id="cb9-8"><a href="hazards.html#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span> (MtlPred) <span class="ot">=</span> <span class="er">~</span> X <span class="sc">+</span> Y</span>
+<span id="cb9-9"><a href="hazards.html#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">gridded</span>(MtlPred) <span class="ot">=</span> <span class="cn">TRUE</span></span>
+<span id="cb9-10"><a href="hazards.html#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># define the model based on the variogram fit from the previous example</span></span>
+<span id="cb9-11"><a href="hazards.html#cb9-11" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">vgm</span> (<span class="fl">0.053</span> , <span class="st">&quot;Exp&quot;</span>, <span class="fl">2.159</span> )</span>
+<span id="cb9-12"><a href="hazards.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># use ordinary kriging to predict values in the grid</span></span>
+<span id="cb9-13"><a href="hazards.html#cb9-13" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">krige</span>(<span class="fu">log</span>(Benzene) <span class="sc">~</span> X <span class="sc">+</span> Y, benzene_utm_geo , MtlPred , <span class="at">model =</span> mod )</span></code></pre></div>
+<pre><code>## [using universal kriging]</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="hazards.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the ordinary kriging predictions and their variance</span></span>
+<span id="cb11-2"><a href="hazards.html#cb11-2" aria-hidden="true" tabindex="-1"></a>krig_pred <span class="ot">&lt;-</span> <span class="fu">spplot</span> (x[<span class="st">&quot;var1.pred&quot;</span>], <span class="at">main =</span> <span class="st">&quot;Ordinary kriging predictions &quot;</span>)</span>
+<span id="cb11-3"><a href="hazards.html#cb11-3" aria-hidden="true" tabindex="-1"></a>krig_var <span class="ot">&lt;-</span> <span class="fu">spplot</span> (x[<span class="st">&quot;var1.var&quot;</span>], <span class="at">main =</span> <span class="st">&quot;Ordinary kriging variance &quot;</span>)</span>
+<span id="cb11-4"><a href="hazards.html#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(krig_pred, krig_var, <span class="at">labels =</span> <span class="st">&quot;auto&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.6%20kriging%20predictions-1.png" width="672" /></p>
+</div>
+<div id="example-10.9-spatial-modelling-of-benzene-in-montreal" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.9 Spatial modelling of Benzene in Montreal<a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="nimble-2" class="section level3 unnumbered hasAnchor">
 <h3>Nimble<a href="hazards.html#nimble-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="hazards.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
-<span id="cb119-2"><a href="hazards.html#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
-<span id="cb119-3"><a href="hazards.html#cb119-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble)</span></code></pre></div>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="hazards.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse)</span>
-<span id="cb120-2"><a href="hazards.html#cb120-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-3"><a href="hazards.html#cb120-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the zinc data in the log scale from the meuse dataset</span></span>
-<span id="cb120-4"><a href="hazards.html#cb120-4" aria-hidden="true" tabindex="-1"></a>meusesample <span class="ot">&lt;-</span></span>
-<span id="cb120-5"><a href="hazards.html#cb120-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb120-6"><a href="hazards.html#cb120-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">log</span>(meuse<span class="sc">$</span>zinc),</span>
-<span id="cb120-7"><a href="hazards.html#cb120-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x1 =</span> <span class="fu">sqrt</span>(meuse<span class="sc">$</span>dist),</span>
-<span id="cb120-8"><a href="hazards.html#cb120-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">easting =</span> meuse<span class="sc">$</span>x <span class="sc">/</span> <span class="dv">1000</span>,</span>
-<span id="cb120-9"><a href="hazards.html#cb120-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">northing =</span> meuse<span class="sc">$</span>y <span class="sc">/</span> <span class="dv">1000</span></span>
-<span id="cb120-10"><a href="hazards.html#cb120-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb120-11"><a href="hazards.html#cb120-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-12"><a href="hazards.html#cb120-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the distance matrix</span></span>
-<span id="cb120-13"><a href="hazards.html#cb120-13" aria-hidden="true" tabindex="-1"></a>Dist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(meusesample[,<span class="fu">c</span>(<span class="st">&quot;easting&quot;</span>, <span class="st">&quot;northing&quot;</span>)]))</span></code></pre></div>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="hazards.html#cb121-1" aria-hidden="true" tabindex="-1"></a>Example10_9Code <span class="ot">&lt;-</span>  <span class="fu">nimbleCode</span> ({</span>
-<span id="cb121-2"><a href="hazards.html#cb121-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Covariance matrix spatial effect</span></span>
-<span id="cb121-3"><a href="hazards.html#cb121-3" aria-hidden="true" tabindex="-1"></a>  Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> (sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>distMatrix[<span class="dv">1</span><span class="sc">:</span>n,<span class="dv">1</span><span class="sc">:</span>n]<span class="sc">/</span>phi) <span class="sc">+</span> (tau<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">identityMatrix</span>(<span class="at">d =</span> n)</span>
-<span id="cb121-4"><a href="hazards.html#cb121-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb121-5"><a href="hazards.html#cb121-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (site <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb121-6"><a href="hazards.html#cb121-6" aria-hidden="true" tabindex="-1"></a>    mean.site[site] <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x[site]</span>
-<span id="cb121-7"><a href="hazards.html#cb121-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb121-8"><a href="hazards.html#cb121-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb121-9"><a href="hazards.html#cb121-9" aria-hidden="true" tabindex="-1"></a>  y[<span class="dv">1</span><span class="sc">:</span>n]  <span class="sc">~</span>  <span class="fu">dmnorm</span>(mean.site[<span class="dv">1</span><span class="sc">:</span>n], <span class="at">cov =</span> Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n])</span>
-<span id="cb121-10"><a href="hazards.html#cb121-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb121-11"><a href="hazards.html#cb121-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set up the priors for the spatial model</span></span>
-<span id="cb121-12"><a href="hazards.html#cb121-12" aria-hidden="true" tabindex="-1"></a>  sigma <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb121-13"><a href="hazards.html#cb121-13" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
-<span id="cb121-14"><a href="hazards.html#cb121-14" aria-hidden="true" tabindex="-1"></a>  phi_inv <span class="sc">~</span> <span class="fu">dgamma</span>(<span class="at">shape =</span>  <span class="fl">8186.436</span>, <span class="at">rate =</span> <span class="fl">12026.879</span>)</span>
-<span id="cb121-15"><a href="hazards.html#cb121-15" aria-hidden="true" tabindex="-1"></a>  phi <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>phi_inv</span>
-<span id="cb121-16"><a href="hazards.html#cb121-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb121-17"><a href="hazards.html#cb121-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># prior for the intercept term</span></span>
-<span id="cb121-18"><a href="hazards.html#cb121-18" aria-hidden="true" tabindex="-1"></a>  beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb121-19"><a href="hazards.html#cb121-19" aria-hidden="true" tabindex="-1"></a>  beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb121-20"><a href="hazards.html#cb121-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb121-21"><a href="hazards.html#cb121-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb121-22"><a href="hazards.html#cb121-22" aria-hidden="true" tabindex="-1"></a>}) </span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="hazards.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble)</span>
+<span id="cb12-2"><a href="hazards.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
+<span id="cb12-3"><a href="hazards.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="hazards.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data on benzene concentration in Montreal</span></span>
+<span id="cb13-2"><a href="hazards.html#cb13-2" aria-hidden="true" tabindex="-1"></a>benzene_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/montreal_benzene_apr.csv&quot;</span>)</span>
+<span id="cb13-3"><a href="hazards.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format and define coordinates</span></span>
+<span id="cb13-4"><a href="hazards.html#cb13-4" aria-hidden="true" tabindex="-1"></a>benzene_data_geo <span class="ot">&lt;-</span> benzene_data</span>
+<span id="cb13-5"><a href="hazards.html#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(benzene_data_geo) <span class="ot">&lt;-</span> <span class="er">~</span> lon <span class="sc">+</span> lat</span>
+<span id="cb13-6"><a href="hazards.html#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(benzene_data_geo) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</span>
+<span id="cb13-7"><a href="hazards.html#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="hazards.html#cb13-8" aria-hidden="true" tabindex="-1"></a>benzene_data_utm <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(benzene_data_geo,</span>
+<span id="cb13-9"><a href="hazards.html#cb13-9" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">CRS</span>(<span class="st">&quot;+proj=utm +zone=18 +ellps=WGS72&quot;</span>))</span>
+<span id="cb13-10"><a href="hazards.html#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the utm as a data frame</span></span>
+<span id="cb13-11"><a href="hazards.html#cb13-11" aria-hidden="true" tabindex="-1"></a>benzene_utm_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(benzene_data_utm)</span>
+<span id="cb13-12"><a href="hazards.html#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Change coordinates to kilometers and observations to the log scale</span></span>
+<span id="cb13-13"><a href="hazards.html#cb13-13" aria-hidden="true" tabindex="-1"></a>Mtl_benzene_sample <span class="ot">&lt;-</span></span>
+<span id="cb13-14"><a href="hazards.html#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb13-15"><a href="hazards.html#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">log</span>(benzene_utm_df<span class="sc">$</span>Benzene),</span>
+<span id="cb13-16"><a href="hazards.html#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">easting =</span>  benzene_utm_df<span class="sc">$</span>lon <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb13-17"><a href="hazards.html#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">northing =</span> benzene_utm_df<span class="sc">$</span>lat <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb13-18"><a href="hazards.html#cb13-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-19"><a href="hazards.html#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the distance matrix</span></span>
+<span id="cb13-20"><a href="hazards.html#cb13-20" aria-hidden="true" tabindex="-1"></a>Dist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(Mtl_benzene_sample[,<span class="fu">c</span>(<span class="st">&quot;easting&quot;</span>, <span class="st">&quot;northing&quot;</span>)]))</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="hazards.html#cb14-1" aria-hidden="true" tabindex="-1"></a>Example10_9Code <span class="ot">&lt;-</span>  <span class="fu">nimbleCode</span> ({</span>
+<span id="cb14-2"><a href="hazards.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Covariance matrix spatial effect</span></span>
+<span id="cb14-3"><a href="hazards.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> (sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>distMatrix[<span class="dv">1</span><span class="sc">:</span>n,<span class="dv">1</span><span class="sc">:</span>n]<span class="sc">/</span>phi) <span class="sc">+</span> (tau<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">identityMatrix</span>(<span class="at">d =</span> n)</span>
+<span id="cb14-4"><a href="hazards.html#cb14-4" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb14-5"><a href="hazards.html#cb14-5" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> (site <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb14-6"><a href="hazards.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    mean.site[site] <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> beta1<span class="sc">*</span>easting[site] <span class="sc">+</span> beta2<span class="sc">*</span>northing[site]</span>
+<span id="cb14-7"><a href="hazards.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-8"><a href="hazards.html#cb14-8" aria-hidden="true" tabindex="-1"></a>  y[<span class="dv">1</span><span class="sc">:</span>n]  <span class="sc">~</span>  <span class="fu">dmnorm</span>(mean.site[<span class="dv">1</span><span class="sc">:</span>n], <span class="at">cov =</span> Sigma[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n])</span>
+<span id="cb14-9"><a href="hazards.html#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set up the priors for the spatial model</span></span>
+<span id="cb14-10"><a href="hazards.html#cb14-10" aria-hidden="true" tabindex="-1"></a>  sigma <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb14-11"><a href="hazards.html#cb14-11" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb14-12"><a href="hazards.html#cb14-12" aria-hidden="true" tabindex="-1"></a>   phi_inv <span class="sc">~</span> <span class="fu">dgamma</span>(<span class="at">shape =</span>  <span class="dv">5</span>, <span class="at">rate =</span> <span class="dv">5</span>)</span>
+<span id="cb14-13"><a href="hazards.html#cb14-13" aria-hidden="true" tabindex="-1"></a>   phi <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>phi_inv</span>
+<span id="cb14-14"><a href="hazards.html#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># prior for the coefficients </span></span>
+<span id="cb14-15"><a href="hazards.html#cb14-15" aria-hidden="true" tabindex="-1"></a>    beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb14-16"><a href="hazards.html#cb14-16" aria-hidden="true" tabindex="-1"></a>    beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb14-17"><a href="hazards.html#cb14-17" aria-hidden="true" tabindex="-1"></a>    beta2 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb14-18"><a href="hazards.html#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="hazards.html#cb14-19" aria-hidden="true" tabindex="-1"></a>}) </span></code></pre></div>
 <p>Define the constants, data and initials lists for the <code>nimble</code> model.</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="hazards.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the distance matrix using by turning it into an sf object</span></span>
-<span id="cb122-2"><a href="hazards.html#cb122-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-3"><a href="hazards.html#cb122-3" aria-hidden="true" tabindex="-1"></a>constants <span class="ot">&lt;-</span></span>
-<span id="cb122-4"><a href="hazards.html#cb122-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">nrow</span>(meusesample))</span>
-<span id="cb122-5"><a href="hazards.html#cb122-5" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y =</span> meusesample<span class="sc">$</span>y, <span class="at">x =</span> meusesample<span class="sc">$</span>x1, <span class="at">distMatrix =</span> Dist)</span>
-<span id="cb122-6"><a href="hazards.html#cb122-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-7"><a href="hazards.html#cb122-7" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">&quot;tau&quot;</span>,  <span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
-<span id="cb122-8"><a href="hazards.html#cb122-8" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">tau =</span> <span class="fl">0.1</span>, <span class="at">beta0 =</span> <span class="dv">1</span>, <span class="at">beta1 =</span> <span class="dv">1</span>, <span class="at">sigma =</span> <span class="fl">0.1</span>, <span class="at">phi_inv =</span> <span class="dv">6</span><span class="sc">/</span><span class="fu">max</span>(Dist))</span>
-<span id="cb122-9"><a href="hazards.html#cb122-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: I have to check this code with a simulation first </span></span>
-<span id="cb122-10"><a href="hazards.html#cb122-10" aria-hidden="true" tabindex="-1"></a>mcmc.out <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
-<span id="cb122-11"><a href="hazards.html#cb122-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example10_9Code,</span>
-<span id="cb122-12"><a href="hazards.html#cb122-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> constants,</span>
-<span id="cb122-13"><a href="hazards.html#cb122-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
-<span id="cb122-14"><a href="hazards.html#cb122-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
-<span id="cb122-15"><a href="hazards.html#cb122-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
-<span id="cb122-16"><a href="hazards.html#cb122-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">10000</span>,</span>
-<span id="cb122-17"><a href="hazards.html#cb122-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">5000</span>,</span>
-<span id="cb122-18"><a href="hazards.html#cb122-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">14</span>,</span>
-<span id="cb122-19"><a href="hazards.html#cb122-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb122-20"><a href="hazards.html#cb122-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
-<span id="cb122-21"><a href="hazards.html#cb122-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb122-22"><a href="hazards.html#cb122-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
-<span id="cb122-23"><a href="hazards.html#cb122-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="hazards.html#cb123-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="hazards.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the constants, data, parameters and initial values</span></span>
+<span id="cb15-2"><a href="hazards.html#cb15-2" aria-hidden="true" tabindex="-1"></a>constants <span class="ot">&lt;-</span></span>
+<span id="cb15-3"><a href="hazards.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">nrow</span>(Mtl_benzene_sample))</span>
+<span id="cb15-4"><a href="hazards.html#cb15-4" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span></span>
+<span id="cb15-5"><a href="hazards.html#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">y =</span> Mtl_benzene_sample<span class="sc">$</span>y,</span>
+<span id="cb15-6"><a href="hazards.html#cb15-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">easting =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(Mtl_benzene_sample<span class="sc">$</span>easting)),</span>
+<span id="cb15-7"><a href="hazards.html#cb15-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">northing =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(Mtl_benzene_sample<span class="sc">$</span>northing)),</span>
+<span id="cb15-8"><a href="hazards.html#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">distMatrix =</span> Dist)</span>
+<span id="cb15-9"><a href="hazards.html#cb15-9" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>(  <span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>,<span class="st">&quot;beta2&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;tau&quot;</span>)</span>
+<span id="cb15-10"><a href="hazards.html#cb15-10" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="fu">list</span>( <span class="at">sigma =</span> <span class="fl">0.1</span>, <span class="at">phi_inv =</span> <span class="dv">6</span><span class="sc">/</span><span class="fu">max</span>(Dist), <span class="at">tau =</span> <span class="fl">0.1</span>)</span>
+<span id="cb15-11"><a href="hazards.html#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Run model in nimble</span></span>
+<span id="cb15-12"><a href="hazards.html#cb15-12" aria-hidden="true" tabindex="-1"></a>mcmc.out <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
+<span id="cb15-13"><a href="hazards.html#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example10_9Code,</span>
+<span id="cb15-14"><a href="hazards.html#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> constants,</span>
+<span id="cb15-15"><a href="hazards.html#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
+<span id="cb15-16"><a href="hazards.html#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
+<span id="cb15-17"><a href="hazards.html#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
+<span id="cb15-18"><a href="hazards.html#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">15000</span>,</span>
+<span id="cb15-19"><a href="hazards.html#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">7000</span>,</span>
+<span id="cb15-20"><a href="hazards.html#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">14</span>,</span>
+<span id="cb15-21"><a href="hazards.html#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-22"><a href="hazards.html#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
+<span id="cb15-23"><a href="hazards.html#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-24"><a href="hazards.html#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
+<span id="cb15-25"><a href="hazards.html#cb15-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="hazards.html#cb16-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 255.9792
+## [1] -32.16285
 ## Field &quot;lppd&quot;:
-## [1] -120.0071
+## [1] 19.02601
 ## Field &quot;pWAIC&quot;:
-## [1] 7.982528</code></pre>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="hazards.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
-<pre><code>## [1] 652.6286</code></pre>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="hazards.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co"># REVIEW: the effective size for sigma is really low, look at the traceplot</span></span>
-<span id="cb127-2"><a href="hazards.html#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: there might not be a spatial structure...</span></span>
-<span id="cb127-3"><a href="hazards.html#cb127-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)])</span></code></pre></div>
+## [1] 2.944589</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="hazards.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
+<pre><code>## [1] 448.3656</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="hazards.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-1.png" width="672" /></p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="hazards.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="hazards.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-2.png" width="672" /></p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="hazards.html#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(mcmc.out$samples[, c(&quot;sigma&quot;)])</span></span>
-<span id="cb129-2"><a href="hazards.html#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="hazards.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta2&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-3.png" width="672" /></p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="hazards.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(mcmc.out$samples[, c(&quot;phi&quot;)])</span></span>
-<span id="cb130-2"><a href="hazards.html#cb130-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb130-3"><a href="hazards.html#cb130-3" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span></code></pre></div>
-<pre><code>##              Mean      Median    St.Dev.    95%CI_low 95%CI_upp
-## beta0  0.76564724  0.76316426 0.31283607  0.177428888 1.4004890
-## beta1 -0.43406517 -0.44752763 0.26964606 -0.946362908 0.1451615
-## phi    1.47491322  1.47452409 0.01600389  1.443913339 1.5078308
-## sigma  1.51986045  1.51779493 0.09759022  1.340413889 1.7200419
-## tau    0.06554179  0.05685945 0.04518016  0.002752747 0.1656068</code></pre>
-
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="hazards.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;sigma&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-4.png" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="hazards.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-5.png" width="672" /></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="hazards.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;phi&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-6.png" width="672" /></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="hazards.html#cb26-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span></code></pre></div>
+<pre><code>##             Mean     Median    St.Dev.   95%CI_low 95%CI_upp
+## beta0 0.14576444 0.15245185 0.07965851 -0.03470476 0.2844419
+## beta1 0.05050797 0.04758278 0.06151203 -0.06582232 0.1786680
+## beta2 0.07503045 0.07876951 0.06770073 -0.07367572 0.1978829
+## phi   3.76859343 3.16166514 2.21617195  1.48750707 9.8211529
+## sigma 0.23523442 0.22941975 0.04123602  0.16717329 0.3369308
+## tau   0.08733017 0.09112029 0.03968638  0.00605435 0.1567003</code></pre>
+<!-- TODO: Predictions -->
 </div>
+<div id="stan-2" class="section level3 hasAnchor" number="10.0.1">
+<h3><span class="header-section-number">10.0.1</span> Stan<a href="hazards.html#stan-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="hazards.html#cb28-1" aria-hidden="true" tabindex="-1"></a>benzene_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/montreal_benzene_apr.csv&quot;</span>)</span>
+<span id="cb28-2"><a href="hazards.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format and define coordinates</span></span>
+<span id="cb28-3"><a href="hazards.html#cb28-3" aria-hidden="true" tabindex="-1"></a>benzene_data_geo <span class="ot">&lt;-</span> benzene_data</span>
+<span id="cb28-4"><a href="hazards.html#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(benzene_data_geo) <span class="ot">&lt;-</span> <span class="er">~</span> lon <span class="sc">+</span> lat</span>
+<span id="cb28-5"><a href="hazards.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(benzene_data_geo) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</span>
+<span id="cb28-6"><a href="hazards.html#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="hazards.html#cb28-7" aria-hidden="true" tabindex="-1"></a>benzene_data_utm <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(benzene_data_geo,</span>
+<span id="cb28-8"><a href="hazards.html#cb28-8" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">CRS</span>(<span class="st">&quot;+proj=utm +zone=18 +ellps=WGS72&quot;</span>))</span>
+<span id="cb28-9"><a href="hazards.html#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the utm as a data frame</span></span>
+<span id="cb28-10"><a href="hazards.html#cb28-10" aria-hidden="true" tabindex="-1"></a>benzene_utm_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(benzene_data_utm)</span>
+<span id="cb28-11"><a href="hazards.html#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co"># change the observed values to the log scale and the coordinates to km&#39;s</span></span>
+<span id="cb28-12"><a href="hazards.html#cb28-12" aria-hidden="true" tabindex="-1"></a>Mtl_benzene_sample <span class="ot">&lt;-</span></span>
+<span id="cb28-13"><a href="hazards.html#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb28-14"><a href="hazards.html#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">log</span>(benzene_utm_df<span class="sc">$</span>Benzene),</span>
+<span id="cb28-15"><a href="hazards.html#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">easting =</span>  benzene_utm_df<span class="sc">$</span>lon <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb28-16"><a href="hazards.html#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">northing =</span> benzene_utm_df<span class="sc">$</span>lat <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb28-17"><a href="hazards.html#cb28-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb28-18"><a href="hazards.html#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the distance matrix</span></span>
+<span id="cb28-19"><a href="hazards.html#cb28-19" aria-hidden="true" tabindex="-1"></a>Dist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(Mtl_benzene_sample[,<span class="fu">c</span>(<span class="st">&quot;easting&quot;</span>, <span class="st">&quot;northing&quot;</span>)]))</span></code></pre></div>
+<pre><code>
+data {
+  int&lt;lower=1&gt; N;
+  int&lt;lower=0&gt; p;
+  vector[N] y;
+  matrix[N,N] dist_matrix;
+  matrix[N,p] X; 
+}
+
+parameters {
+  real&lt;lower=0&gt; phi;
+  real&lt;lower=0&gt; tau;
+  real&lt;lower=0&gt; sigma;
+  vector[p] beta;
+  real beta0;
+
+}
+model {
+  vector[N] mu;
+  matrix[N, N] L;
+  matrix[N, N] Sigma;
+
+  real sigma_sq = square(sigma);
+  real tau_sq = square(tau);
+
+ for(i in 1:(N-1)){
+   for(j in (i+1):N){
+     Sigma[i,j] = sigma_sq*exp(-dist_matrix[i,j]/phi);
+     Sigma[j,i] = Sigma[i,j];
+   }
+ }
+   // diagonal elements
+
+  for(i in 1:N) {
+    Sigma[i,i] = sigma_sq + tau_sq;
+    mu[i] = beta0 + X[i,]*beta;
+  }
+  
+  L = cholesky_decompose(Sigma);
+  
+  beta0 ~ normal(0,10);
+  beta ~ normal(0,10);
+  phi ~ inv_gamma(5, 5);
+  tau ~ cauchy(0,1);
+  sigma ~ cauchy(0,1);
+
+  y ~ multi_normal_cholesky(mu, L);
+}</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="hazards.html#cb30-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(benzene_utm_df)</span>
+<span id="cb30-2"><a href="hazards.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Change coordinates to kilometers</span></span>
+<span id="cb30-3"><a href="hazards.html#cb30-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">easting =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(Mtl_benzene_sample<span class="sc">$</span>easting<span class="sc">/</span><span class="dv">1000</span>)),</span>
+<span id="cb30-4"><a href="hazards.html#cb30-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">northing =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(Mtl_benzene_sample<span class="sc">$</span>northing<span class="sc">/</span><span class="dv">1000</span>))) </span>
+<span id="cb30-5"><a href="hazards.html#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="hazards.html#cb30-6" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb30-7"><a href="hazards.html#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> N,</span>
+<span id="cb30-8"><a href="hazards.html#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> <span class="dv">2</span>,</span>
+<span id="cb30-9"><a href="hazards.html#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span>   <span class="fu">log</span>(benzene_utm_df<span class="sc">$</span>Benzene),</span>
+<span id="cb30-10"><a href="hazards.html#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">dist_matrix =</span> Dist,</span>
+<span id="cb30-11"><a href="hazards.html#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">X =</span> <span class="fu">as.matrix</span>(X)</span>
+<span id="cb30-12"><a href="hazards.html#cb30-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-13"><a href="hazards.html#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="hazards.html#cb30-14" aria-hidden="true" tabindex="-1"></a>Example10_9Stan  <span class="ot">&lt;-</span> <span class="fu">stan</span>(</span>
+<span id="cb30-15"><a href="hazards.html#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;functions/Example10_9.stan&quot;</span>,</span>
+<span id="cb30-16"><a href="hazards.html#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
+<span id="cb30-17"><a href="hazards.html#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">warmup =</span> <span class="dv">10000</span>,</span>
+<span id="cb30-18"><a href="hazards.html#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">20000</span>,</span>
+<span id="cb30-19"><a href="hazards.html#cb30-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">2</span>,</span>
+<span id="cb30-20"><a href="hazards.html#cb30-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">10</span>,</span>
+<span id="cb30-21"><a href="hazards.html#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta&quot;</span>,<span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;tau&quot;</span>, <span class="st">&quot;phi&quot;</span>),</span>
+<span id="cb30-22"><a href="hazards.html#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="cn">TRUE</span></span>
+<span id="cb30-23"><a href="hazards.html#cb30-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="hazards.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">traceplot</span>(Example10_9Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;tau&quot;</span>, <span class="st">&quot;phi&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.9%20stan%20exp%20traceplots-1.png" width="672" /></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="hazards.html#cb32-1" aria-hidden="true" tabindex="-1"></a>summary_exp_stan <span class="ot">&lt;-</span></span>
+<span id="cb32-2"><a href="hazards.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(</span>
+<span id="cb32-3"><a href="hazards.html#cb32-3" aria-hidden="true" tabindex="-1"></a>    Example10_9Stan,</span>
+<span id="cb32-4"><a href="hazards.html#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;tau&quot;</span>),</span>
+<span id="cb32-5"><a href="hazards.html#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)</span>
+<span id="cb32-6"><a href="hazards.html#cb32-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-7"><a href="hazards.html#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="hazards.html#cb32-8" aria-hidden="true" tabindex="-1"></a>summary_exp_stan<span class="sc">$</span>summary</span></code></pre></div>
+<pre><code>##               mean      se_mean         sd         2.5%     97.5%    n_eff
+## beta0   0.15381777 0.0017361857 0.07993500 -0.025880142 0.2988911 2119.735
+## beta[1] 0.05152464 0.0013062054 0.05892381 -0.054253468 0.1783731 2034.973
+## beta[2] 0.07916878 0.0016912817 0.06688711 -0.066852363 0.1955267 1564.059
+## phi     3.64342615 0.0501895357 2.10110303  1.478266734 9.1028812 1752.542
+## sigma   0.23322468 0.0009443012 0.04079159  0.164405436 0.3243540 1866.037
+## tau     0.08662863 0.0009313626 0.03957471  0.008386844 0.1538596 1805.501
+##              Rhat
+## beta0   0.9993724
+## beta[1] 0.9994953
+## beta[2] 1.0003820
+## phi     1.0000525
+## sigma   1.0002576
+## tau     1.0025965</code></pre>
+<!-- TODO: Predictions -->
+</div>
+</div>
+<div id="example-10.11-inla-creating-a-mesh" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.11: INLA, creating a mesh<a href="hazards.html#example-10.11-inla-creating-a-mesh" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="hazards.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
+<span id="cb34-2"><a href="hazards.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb34-3"><a href="hazards.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
+<span id="cb34-4"><a href="hazards.html#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="hazards.html#cb34-5" aria-hidden="true" tabindex="-1"></a>benzene_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/montreal_benzene_apr.csv&quot;</span>)</span>
+<span id="cb34-6"><a href="hazards.html#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format and define coordinates</span></span>
+<span id="cb34-7"><a href="hazards.html#cb34-7" aria-hidden="true" tabindex="-1"></a>benzene_data_loc <span class="ot">&lt;-</span> benzene_data</span>
+<span id="cb34-8"><a href="hazards.html#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(benzene_data_loc) <span class="ot">&lt;-</span> <span class="er">~</span> lon <span class="sc">+</span> lat</span>
+<span id="cb34-9"><a href="hazards.html#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(benzene_data_loc) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</span>
+<span id="cb34-10"><a href="hazards.html#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="hazards.html#cb34-11" aria-hidden="true" tabindex="-1"></a>benzene_data_utm <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(benzene_data_loc,</span>
+<span id="cb34-12"><a href="hazards.html#cb34-12" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">CRS</span>(<span class="st">&quot;+proj=utm +zone=18 +ellps=WGS72&quot;</span>))</span>
+<span id="cb34-13"><a href="hazards.html#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the utm as a data frame</span></span>
+<span id="cb34-14"><a href="hazards.html#cb34-14" aria-hidden="true" tabindex="-1"></a>locations_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(benzene_data_utm<span class="sc">@</span>coords)</span>
+<span id="cb34-15"><a href="hazards.html#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="hazards.html#cb34-16" aria-hidden="true" tabindex="-1"></a>benzene_utm_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(benzene_data),</span>
+<span id="cb34-17"><a href="hazards.html#cb34-17" aria-hidden="true" tabindex="-1"></a>                              <span class="at">X =</span> benzene_data_utm<span class="sc">@</span>coords[,<span class="dv">1</span>]<span class="sc">/</span><span class="dv">1000</span>,</span>
+<span id="cb34-18"><a href="hazards.html#cb34-18" aria-hidden="true" tabindex="-1"></a>                              <span class="at">Y =</span> benzene_data_utm<span class="sc">@</span>coords[,<span class="dv">2</span>]<span class="sc">/</span><span class="dv">1000</span>,</span>
+<span id="cb34-19"><a href="hazards.html#cb34-19" aria-hidden="true" tabindex="-1"></a>                              <span class="at">logbenzene =</span> <span class="fu">log</span>(benzene_data_utm<span class="sc">$</span>Benzene))</span>
+<span id="cb34-20"><a href="hazards.html#cb34-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-21"><a href="hazards.html#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="co"># change the observed values to the log scale and the coordinates to km&#39;s</span></span>
+<span id="cb34-22"><a href="hazards.html#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="hazards.html#cb34-23" aria-hidden="true" tabindex="-1"></a>mesh <span class="ot">=</span> <span class="fu">inla.mesh.create</span>(locations_df, <span class="at">cutoff =</span> <span class="fl">0.01</span>, </span>
+<span id="cb34-24"><a href="hazards.html#cb34-24" aria-hidden="true" tabindex="-1"></a>                       <span class="at">refine =</span>(<span class="fu">list</span>(<span class="at">min.angle =</span><span class="dv">20</span>)))</span>
+<span id="cb34-25"><a href="hazards.html#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mesh , <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>) </span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.11%20load%20data%20for%20INLA-1.png" width="672" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="hazards.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ukmap &lt;- readShapeLines(&quot;uk_BNG.shp&quot;) plot(mesh , col=&quot;gray&quot;, main=&quot;&quot;) </span></span>
+<span id="cb35-2"><a href="hazards.html#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lines(ukmap)</span></span>
+<span id="cb35-3"><a href="hazards.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># points(locations , col=&quot;red&quot;, pch=20,bg=&quot;red&quot;) </span></span></code></pre></div>
+</div>
+<div id="example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal<a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="hazards.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Field std . dev . for theta =0</span></span>
+<span id="cb36-2"><a href="hazards.html#cb36-2" aria-hidden="true" tabindex="-1"></a>sigma0 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb36-3"><a href="hazards.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># find the range of the location data</span></span>
+<span id="cb36-4"><a href="hazards.html#cb36-4" aria-hidden="true" tabindex="-1"></a>size <span class="ot">=</span> <span class="fu">min</span>(<span class="fu">c</span>(<span class="fu">diff</span>(<span class="fu">range</span>(mesh<span class="sc">$</span>loc[, <span class="dv">1</span>])),</span>
+<span id="cb36-5"><a href="hazards.html#cb36-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">diff</span> (<span class="fu">range</span>(mesh<span class="sc">$</span>loc[, <span class="dv">2</span>]))))</span>
+<span id="cb36-6"><a href="hazards.html#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># A fifth of the approximate domain width .</span></span>
+<span id="cb36-7"><a href="hazards.html#cb36-7" aria-hidden="true" tabindex="-1"></a>range0 <span class="ot">=</span> size<span class="sc">/</span><span class="dv">5</span></span>
+<span id="cb36-8"><a href="hazards.html#cb36-8" aria-hidden="true" tabindex="-1"></a>kappa0 <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">8</span>)<span class="sc">/</span>range0</span>
+<span id="cb36-9"><a href="hazards.html#cb36-9" aria-hidden="true" tabindex="-1"></a>tau0 <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">sqrt</span> (<span class="dv">4</span><span class="sc">*</span>pi)<span class="sc">*</span>kappa0<span class="sc">*</span>sigma0)</span>
+<span id="cb36-10"><a href="hazards.html#cb36-10" aria-hidden="true" tabindex="-1"></a>spde <span class="ot">=</span> <span class="fu">inla.spde2.matern</span> (</span>
+<span id="cb36-11"><a href="hazards.html#cb36-11" aria-hidden="true" tabindex="-1"></a>  mesh,</span>
+<span id="cb36-12"><a href="hazards.html#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">B.tau =</span> <span class="fu">cbind</span>(<span class="fu">log</span> (tau0), <span class="sc">-</span><span class="dv">1</span>, <span class="sc">+</span><span class="dv">1</span>),</span>
+<span id="cb36-13"><a href="hazards.html#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">B.kappa =</span> <span class="fu">cbind</span>(<span class="fu">log</span> (kappa0), <span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb36-14"><a href="hazards.html#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta.prior.mean =</span> <span class="fu">c</span>(<span class="dv">0</span> , <span class="dv">0</span>),</span>
+<span id="cb36-15"><a href="hazards.html#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">constr =</span> <span class="cn">TRUE</span></span>
+<span id="cb36-16"><a href="hazards.html#cb36-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-17"><a href="hazards.html#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="hazards.html#cb36-18" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">=</span> logbenzene  <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> X <span class="sc">+</span> Y <span class="sc">+</span> <span class="fu">f</span>(ID , <span class="at">model =</span> spde)</span>
+<span id="cb36-19"><a href="hazards.html#cb36-19" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">inla</span>(</span>
+<span id="cb36-20"><a href="hazards.html#cb36-20" aria-hidden="true" tabindex="-1"></a>  formula,</span>
+<span id="cb36-21"><a href="hazards.html#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb36-22"><a href="hazards.html#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> benzene_utm_df ,</span>
+<span id="cb36-23"><a href="hazards.html#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">control.predictor =</span> <span class="fu">list</span>(<span class="at">compute =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb36-24"><a href="hazards.html#cb36-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">control.compute =</span> <span class="fu">list</span>(<span class="at">dic =</span> <span class="cn">TRUE</span> , <span class="at">config =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-25"><a href="hazards.html#cb36-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-26"><a href="hazards.html#cb36-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-27"><a href="hazards.html#cb36-27" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>summary.fixed</span></code></pre></div>
+<pre><code>##                     mean           sd    0.025quant      0.5quant   0.975quant
+## (Intercept) -1.686470286 111.66894219 -182.24776337 -17.506396963 281.76530712
+## X            0.013436242   0.01994953   -0.02334170   0.011813181   0.06151800
+## Y           -0.001256258   0.02255075   -0.05792507   0.001917255   0.03521233
+##             mode          kld
+## (Intercept)   NA 3.794265e-05
+## X             NA 6.757268e-05
+## Y             NA 2.544491e-05</code></pre>
+</div>
+<div id="example-10.13-directional-variograms" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.13: Directional variograms<a href="hazards.html#example-10.13-directional-variograms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="hazards.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Compute and plot the directional variogram</span></span>
+<span id="cb38-2"><a href="hazards.html#cb38-2" aria-hidden="true" tabindex="-1"></a>CA.geo <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>( benzene_utm_df , <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span> , <span class="at">data.col=</span><span class="dv">1</span>)</span>
+<span id="cb38-3"><a href="hazards.html#cb38-3" aria-hidden="true" tabindex="-1"></a>CA.vario4 <span class="ot">&lt;-</span> <span class="fu">variog4</span>(CA.geo )</span>
+<span id="cb38-4"><a href="hazards.html#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(CA.vario4)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.13%20directional%20variogram-1.png" width="672" /></p>
+
 </div>
 </div>
             </section>
@@ -438,20 +696,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

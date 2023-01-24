@@ -16,3 +16,7 @@ exposure
 causality
 monitoring
 frontiers
+example-10.13
+example-10.11-inla-creating-a-mesh
+example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal
+example-10.13-directional-variograms

@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-01-10" />
+<meta name="date" content="2023-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,10 +172,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10" data-path="hazards.html"><a href="hazards.html"><i class="fa fa-check"></i><b>10</b> Environmental hazards-spatial models</a>
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1"><i class="fa fa-check"></i>Example 10.1</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.2"><i class="fa fa-check"></i>Example 10.2</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.5"><i class="fa fa-check"></i>Example 10.5</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.6"><i class="fa fa-check"></i>Example 10.6</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9"><i class="fa fa-check"></i>Example 10.9</a>
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
 </ul></li>
+<li class="chapter" data-level="10.1" data-path="hazards.html"><a href="hazards.html#example-10.13"><i class="fa fa-check"></i><b>10.1</b> Example 10.13</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -552,13 +556,13 @@ generated quantities{
 <span id="cb24-2"><a href="Time.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Ex11_16StanAR, <span class="at">pars =</span> <span class="fu">c</span>( <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;W&quot;</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))<span class="sc">$</span>summary <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb24-3"><a href="Time.html#cb24-3" aria-hidden="true" tabindex="-1"></a>summary_fit</span></code></pre></div>
 <pre><code>##               mean      se_mean           sd           5%         95%     n_eff
-## beta  0.4017129423 2.113331e-03 0.0572023591 0.3098660782 0.491077041  732.6438
-## sigma 0.0090242537 9.776237e-06 0.0003551437 0.0084567025 0.009608952 1319.6684
-## W     0.0009587905 1.298206e-05 0.0002285123 0.0006246792 0.001382478  309.8359
-##            Rhat
-## beta  0.9991595
-## sigma 1.0038715
-## W     1.0013533</code></pre>
+## beta  0.4018852533 2.477597e-03 0.0572147465 0.3092139584 0.492683976  533.2791
+## sigma 0.0090048694 1.011824e-05 0.0003738325 0.0084072990 0.009643267 1365.0355
+## W     0.0009579185 1.716305e-05 0.0002552966 0.0006319935 0.001411269  221.2591
+##           Rhat
+## beta  1.004249
+## sigma 1.001962
+## W     1.014515</code></pre>
 <p>Plot fitted values</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Time.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary of state vector</span></span>
 <span id="cb26-2"><a href="Time.html#cb26-2" aria-hidden="true" tabindex="-1"></a>summary_theta <span class="ot">&lt;-</span></span>
@@ -794,10 +798,10 @@ generated quantities{
 <span id="cb43-2"><a href="Time.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Ex11_16StanRW, <span class="at">pars =</span> <span class="fu">c</span>( <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;W&quot;</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))<span class="sc">$</span>summary <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb43-3"><a href="Time.html#cb43-3" aria-hidden="true" tabindex="-1"></a>summary_fit</span></code></pre></div>
 <pre><code>##              mean    se_mean        sd        5%        95%     n_eff      Rhat
-## beta[1] -2.973573 0.02138897 1.2961483 -5.155536 -0.8370396 3672.2282 1.0009607
-## beta[2]  2.534846 0.01016869 0.6463828  1.470742  3.5957600 4040.6339 1.0001834
-## sigma    8.556388 0.01343272 0.5614383  7.632489  9.4762255 1746.9331 0.9995143
-## W        2.547188 0.02428486 0.7494389  1.389917  3.8454391  952.3606 0.9997619</code></pre>
+## beta[1] -2.962300 0.02202475 1.2772120 -5.040400 -0.8839865 3362.8245 1.0003757
+## beta[2]  2.547453 0.01026070 0.6546240  1.465244  3.6236008 4070.3302 0.9997331
+## sigma    8.562761 0.01485384 0.5610602  7.647440  9.4834493 1426.7279 1.0001668
+## W        2.519147 0.02520017 0.7319989  1.359672  3.7891084  843.7505 1.0000615</code></pre>
 <p>Plot the state vector and the fitted values.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Time.html#cb45-1" aria-hidden="true" tabindex="-1"></a>summary_theta <span class="ot">&lt;-</span></span>
 <span id="cb45-2"><a href="Time.html#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Ex11_16StanRW,</span>
