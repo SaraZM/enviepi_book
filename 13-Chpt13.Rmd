@@ -43,7 +43,7 @@ vonK_Data_70 <- vonK_Data_70 |> group_by(Age_Range, Country) |>
 
 ##### i): Display a 2 by 2 contingency table of deaths/survivors vs. China/Italy aggregated over all age groups.
 
-```{r Exercise 13.16 1a), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+```{r Exercise 13.16 i), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 ## Sum up all deaths by country
 
@@ -56,7 +56,7 @@ knitr::kable(vonK_Aggregated_Table, caption = "Aggregated Contingency Table")
 
 ##### ii): Display 2 by 2 contingency tables stratified by the age groups $<70$ and $\geq 70$. 
 
-```{r, Exercise 13.16 1b), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+```{r, Exercise 13.16 ii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 ## Filter by age range and then sum up deaths
 
@@ -77,7 +77,7 @@ A Simpson's disaggregation occurs when $P_1 > P_2$, while $R_1 < R_2$ and $Q_1 <
 
 We compute the empirical values denoted $\hat{P}_1, \hat{P}_2, \hat{Q}_1, \hat{Q}_2, \hat{R}_1, \hat{R}_2$: 
 
-```{r}
+```{r  Exercise 13.16 iii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 P_hats = head(vonK_Aggregated_Table$Survived/vonK_Aggregated_Table$Total_Cases, -1)
 Q_hats = head(vonK_Under70_Table$Survived/vonK_Under70_Table$Total_Cases, -1)
 R_hats = head(vonK_Over70_Table$Survived/vonK_Over70_Table$Total_Cases, -1)
@@ -123,7 +123,7 @@ implying that $\gamma_1 > 0.583$. Being conservative up to three decimal points,
 
 Recall that $\beta_1 = Pr(T|\bar{C}), \beta_2 = Pr(T|C)$. In our context, an empirical estimate of $\beta_1$ is hence the proportion of Chinese patients over 70, and $\beta_2$ the proportion of Chinese patients under 70.
 
-```{r}
+```{r Exercise 13.16 iii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 beta_hat_1 <- vonK_Over70_Table$Total_Cases[1]/vonK_Over70_Table$Total_Cases[3]
 beta_hat_2 <- vonK_Under70_Table$Total_Cases[2]/vonK_Over70_Table$Total_Cases[3]
 beta_hats <- c(beta_hat_1, beta_hat_2)
@@ -137,7 +137,7 @@ We obtain $\hat{\beta}_1 = 0.616$ and $\hat{\beta}_2 = 0.545$.
 
 We compute the average:
 
-```{r}
+```{r Exercise 13.16 iii) part 2, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 mean(c(beta_hat_1, beta_hat_2))
 ```
 We wish to have the tightest interval centered at $0.581$ such that $\gamma_1, \gamma_2$ satisfy 
@@ -154,7 +154,7 @@ This indicates that $\gamma = 0.080$ is a boundary value (at 3 decimal points), 
 
 Re-loading the data and re-stratifying:
 
-```{r}
+```{r  Exercise 13.18 Data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 vonK_Data_50 <- mutate(vonK_Data, .keep = "unused", Age_Range = fct_collapse(`Age group`, 
                                                          Over_50 = c("50-59", "60-69", "70-79", "80+"),
@@ -167,7 +167,7 @@ vonK_Data_50 <- mutate(vonK_Data, .keep = "unused", Age_Range = fct_collapse(`Ag
 
 We reproduce the contingency tables of Exercise 13.16.
 
-```{r}
+```{r Exercise 13.18 i), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 vonK_Data_50 <- vonK_Data_50 |> group_by(Age_Range, Country) |>
   summarise(Fatalities = sum(`Confirmed fatalities`),
             Total_Cases = sum(`Confirmed cases`), 
@@ -185,7 +185,7 @@ knitr::kable(vonK_Over50_Table, caption = "Over 50 Contingency Table")
 
 Now, checking if an SDis still occurs.
 
-```{r}
+```{r Exercise 13.18 i) SDis, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 P_hats <- head(vonK_Aggregated_Table$Survived/vonK_Aggregated_Table$Total_Cases, -1)
 Q_hats <- head(vonK_Under50_Table$Survived/vonK_Under50_Table$Total_Cases, -1)
 R_hats <- head(vonK_Over50_Table$Survived/vonK_Over50_Table$Total_Cases, -1)
@@ -206,7 +206,7 @@ $$
 
 We first compute $\hat{\beta_i}$ again.
 
-```{r}
+```{r Exercise 13.18 ii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 beta_hat_1 <- vonK_Over50_Table$Total_Cases[1]/vonK_Over50_Table$Total_Cases[3]
 beta_hat_2 <- vonK_Under50_Table$Total_Cases[1]/vonK_Over50_Table$Total_Cases[3]
 beta_hats <- c(beta_hat_1, beta_hat_2)
