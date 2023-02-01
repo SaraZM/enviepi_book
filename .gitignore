@@ -35,3 +35,5 @@ _main.Rmd
 # files in bookdown
 _bookdown_files/
 docs/libs/
+# mac
+.DS_Store
