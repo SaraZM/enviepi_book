@@ -20,7 +20,7 @@ The data for this exercise follows that of Exercise 13.3, we can load it as foll
 library(tidyverse) 
 library(janitor)
 
-vonK_Data_China <- read_csv("data/vonK_China_Italy.csv") 
+vonK_Data <- read_csv("data/vonK_China_Italy.csv") 
 
 # Aggregate these datasets to have just two age ranges---$<70$ and $\geq 70$.
 
