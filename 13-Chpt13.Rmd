@@ -17,24 +17,29 @@ This chapter contains a discussion of the differences between causality and asso
 The data for this exercise follows that of Exercise 13.3, we can load it as follows.
 
 ```{r Exercise 13.16 Data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
-library(tidyverse) 
+library(tidyverse)
 library(janitor)
 
-vonK_Data <- read_csv("data/vonK_China_Italy.csv") 
-
+vonK_Data <- read_csv("data/vonK_China_Italy.csv")
 # Aggregate these datasets to have just two age ranges---$<70$ and $\geq 70$.
-
-vonK_Data_70 <- mutate(vonK_Data, .keep = "unused", Age_Range = fct_collapse(`Age group`, 
-                                                         Over_70 = c("70-79", "80+"),
-                                                         other_level = "Under_70" 
-                                                         )) 
+vonK_Data_70 <-
+  mutate(
+    vonK_Data,
+    .keep = "unused",
+    Age_Range = fct_collapse(
+      `Age group`,
+      Over_70 = c("70-79", "80+"),
+      other_level = "Under_70"
+    )
+  )
 
 # Sum up all death data grouped by age range and country
-
 vonK_Data_70 <- vonK_Data_70 |> group_by(Age_Range, Country) |>
-  summarise(Fatalities = sum(`Confirmed fatalities`),
-            Total_Cases = sum(`Confirmed cases`), 
- .groups = "drop_last") |>
+  summarise(
+    Fatalities = sum(`Confirmed fatalities`),
+    Total_Cases = sum(`Confirmed cases`),
+    .groups = "drop_last"
+  ) |>
   mutate(Survived = Total_Cases - Fatalities, .before = Total_Cases) |>  ## Convert from fatalities to survivals
   arrange(Country) |> ungroup()
 ```
@@ -44,11 +49,10 @@ vonK_Data_70 <- vonK_Data_70 |> group_by(Age_Range, Country) |>
 ```{r Exercise 13.16 i), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 ## Sum up all deaths by country
-
-vonK_Aggregated_Table <- vonK_Data_70 |> 
-  select(-Age_Range) |> 
-  group_by(Country) |> 
-  summarise_all(.funs = c(sum)) |> 
+vonK_Aggregated_Table <- vonK_Data_70 |>
+  select(-Age_Range) |>
+  group_by(Country) |>
+  summarise_all(.funs = c(sum)) |>
   adorn_totals("row")
 
 ```
@@ -63,14 +67,13 @@ knitr::kable(vonK_Aggregated_Table, caption = "Aggregated Contingency Table", la
 ```{r Exercise 13.16 ii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
 ## Filter by age range and then sum up deaths
-
-vonK_Under70_Table <- vonK_Data_70 |> 
-  filter(Age_Range == "Under_70") |> 
-  select(-Age_Range) |> 
-  adorn_totals("row") 
-vonK_Over70_Table <- vonK_Data_70 |> 
-  filter(Age_Range == "Over_70") |> 
-  select(-Age_Range) |> 
+vonK_Under70_Table <- vonK_Data_70 |>
+  filter(Age_Range == "Under_70") |>
+  select(-Age_Range) |>
+  adorn_totals("row")
+vonK_Over70_Table <- vonK_Data_70 |>
+  filter(Age_Range == "Over_70") |>
+  select(-Age_Range) |>
   adorn_totals("row")
 ```
 
@@ -93,11 +96,20 @@ A Simpson's disaggregation occurs when $P_1 > P_2$, while $R_1 < R_2$ and $Q_1 <
 We compute the empirical values denoted $\hat{P}_1, \hat{P}_2, \hat{Q}_1, \hat{Q}_2, \hat{R}_1, \hat{R}_2$: 
 
 ```{r  Exercise 13.16 iii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
-P_hats = head(vonK_Aggregated_Table$Survived/vonK_Aggregated_Table$Total_Cases, -1)
-Q_hats = head(vonK_Under70_Table$Survived/vonK_Under70_Table$Total_Cases, -1)
-R_hats = head(vonK_Over70_Table$Survived/vonK_Over70_Table$Total_Cases, -1)
+P_hats = head(vonK_Aggregated_Table$Survived / vonK_Aggregated_Table$Total_Cases,
+              -1)
+Q_hats = head(vonK_Under70_Table$Survived / vonK_Under70_Table$Total_Cases,
+              -1)
+R_hats = head(vonK_Over70_Table$Survived / vonK_Over70_Table$Total_Cases,
+              -1)
 
-Solution <- tibble(index = c(1, 2), P_hat = P_hats, Q_hat = Q_hats, R_hat = R_hats)
+Solution <-
+  tibble(
+    index = c(1, 2),
+    P_hat = P_hats,
+    Q_hat = Q_hats,
+    R_hat = R_hats
+  )
 
 knitr::kable(Solution)
 ```
@@ -139,8 +151,10 @@ implying that $\gamma_1 > 0.583$. Being conservative up to three decimal points,
 Recall that $\beta_1 = Pr(T|\bar{C}), \beta_2 = Pr(T|C)$. In our context, an empirical estimate of $\beta_1$ is hence the proportion of Chinese patients over 70, and $\beta_2$ the proportion of Chinese patients under 70.
 
 ```{r Exercise 13.17 iii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
-beta_hat_1 <- vonK_Over70_Table$Total_Cases[1]/vonK_Over70_Table$Total_Cases[3]
-beta_hat_2 <- vonK_Under70_Table$Total_Cases[2]/vonK_Over70_Table$Total_Cases[3]
+beta_hat_1 <-
+  vonK_Over70_Table$Total_Cases[1] / vonK_Over70_Table$Total_Cases[3]
+beta_hat_2 <-
+  vonK_Under70_Table$Total_Cases[2] / vonK_Over70_Table$Total_Cases[3]
 beta_hats <- c(beta_hat_1, beta_hat_2)
 Solution <- Solution |> add_column(beta_hat = beta_hats)
 knitr::kable(Solution)
@@ -171,10 +185,16 @@ Re-loading the data and re-stratifying:
 
 ```{r  Exercise 13.18 Data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
-vonK_Data_50 <- mutate(vonK_Data, .keep = "unused", Age_Range = fct_collapse(`Age group`, 
-                                                         Over_50 = c("50-59", "60-69", "70-79", "80+"),
-                                                         other_level = "Under_50" 
-                                                         )) 
+vonK_Data_50 <-
+  mutate(
+    vonK_Data,
+    .keep = "unused",
+    Age_Range = fct_collapse(
+      `Age group`,
+      Over_50 = c("50-59", "60-69", "70-79", "80+"),
+      other_level = "Under_50"
+    )
+  ) 
 ``` 
 
 
@@ -184,23 +204,25 @@ We reproduce the contingency tables of Exercise 13.16.
 
 ```{r Exercise 13.18 i), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 vonK_Data_50 <- vonK_Data_50 |> group_by(Age_Range, Country) |>
-  summarise(Fatalities = sum(`Confirmed fatalities`),
-            Total_Cases = sum(`Confirmed cases`), 
- .groups = "drop_last") |>
+  summarise(
+    Fatalities = sum(`Confirmed fatalities`),
+    Total_Cases = sum(`Confirmed cases`),
+    .groups = "drop_last"
+  ) |>
   mutate(Survived = Total_Cases - Fatalities, .before = Total_Cases) |>
   arrange(Country) |> ungroup()
 
-vonK_Aggregated_Table <- vonK_Data_50 |> 
-  select(-Age_Range) |> 
-  group_by(Country) |> 
-  summarise_all(.funs = c(sum)) |> 
+vonK_Aggregated_Table <- vonK_Data_50 |>
+  select(-Age_Range) |>
+  group_by(Country) |>
+  summarise_all(.funs = c(sum)) |>
   adorn_totals("row")
-vonK_Under50_Table <- vonK_Data_50 |> 
-  filter(Age_Range == "Under_50") |> 
-  select(-Age_Range) |> adorn_totals("row") 
-vonK_Over50_Table <- vonK_Data_50 |> 
-  filter(Age_Range == "Over_50") |> 
-  select(-Age_Range) |> 
+vonK_Under50_Table <- vonK_Data_50 |>
+  filter(Age_Range == "Under_50") |>
+  select(-Age_Range) |> adorn_totals("row")
+vonK_Over50_Table <- vonK_Data_50 |>
+  filter(Age_Range == "Over_50") |>
+  select(-Age_Range) |>
   adorn_totals("row")
 ```
 
@@ -209,9 +231,11 @@ Displaying the tables:
 ```{r, echo=FALSE}
 knitr::kable(vonK_Aggregated_Table, caption = "Aggregated Contingency Table", label = NULL)
 ```
+
 ```{r, echo = FALSE}
 knitr::kable(vonK_Under50_Table, caption = "Under 50 Contingency Table", label = NULL)
 ```
+
 ```{r, echo = FALSE}
 knitr::kable(vonK_Over50_Table, caption = "Over 50 Contingency Table", label = NULL)
 ```
@@ -219,11 +243,23 @@ knitr::kable(vonK_Over50_Table, caption = "Over 50 Contingency Table", label = N
 Now, checking if an SDis still occurs.
 
 ```{r Exercise 13.18 i) SDis, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
-P_hats <- head(vonK_Aggregated_Table$Survived/vonK_Aggregated_Table$Total_Cases, -1)
-Q_hats <- head(vonK_Under50_Table$Survived/vonK_Under50_Table$Total_Cases, -1)
-R_hats <- head(vonK_Over50_Table$Survived/vonK_Over50_Table$Total_Cases, -1)
+P_hats <-
+  head(vonK_Aggregated_Table$Survived / vonK_Aggregated_Table$Total_Cases,
+       -1)
+Q_hats <-
+  head(vonK_Under50_Table$Survived / vonK_Under50_Table$Total_Cases,
+       -1)
+R_hats <-
+  head(vonK_Over50_Table$Survived / vonK_Over50_Table$Total_Cases,
+       -1)
 
-Solution <- tibble(index = c(1, 2), P_hat = P_hats, Q_hat = Q_hats, R_hat = R_hats)
+Solution <-
+  tibble(
+    index = c(1, 2),
+    P_hat = P_hats,
+    Q_hat = Q_hats,
+    R_hat = R_hats
+  )
 
 knitr::kable(Solution)
 ```
@@ -240,8 +276,10 @@ $$
 We first compute $\hat{\beta_i}$ again.
 
 ```{r Exercise 13.18 ii), message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
-beta_hat_1 <- vonK_Over50_Table$Total_Cases[1]/vonK_Over50_Table$Total_Cases[3]
-beta_hat_2 <- vonK_Under50_Table$Total_Cases[1]/vonK_Over50_Table$Total_Cases[3]
+beta_hat_1 <-
+  vonK_Over50_Table$Total_Cases[1] / vonK_Over50_Table$Total_Cases[3]
+beta_hat_2 <-
+  vonK_Under50_Table$Total_Cases[1] / vonK_Over50_Table$Total_Cases[3]
 beta_hats <- c(beta_hat_1, beta_hat_2)
 
 print(beta_hats)
