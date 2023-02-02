@@ -22,16 +22,16 @@ library(geoR)
 library(ggmap)
 library(spdep)
 # Load data on benzene concentration in Montreal
-benzene_data <- read.csv("data/montreal_benzene_apr.csv")
+benzene <- read.csv("data/montreal_benzene_apr.csv")
 ```
 
 ```{r Ex 10.1 map data, message = FALSE, warning=FALSE, error=FALSE}
 # create a new variable in "sp" format and define coordinates
-benzene_data_geo <- benzene_data
-coordinates(benzene_data_geo) <- ~ lon + lat
-proj4string(benzene_data_geo) <- CRS("+proj=longlat +datum=WGS84")
+benzene_geo <- benzene
+coordinates(benzene_geo) <- ~ lon + lat
+proj4string(benzene_geo) <- CRS("+proj=longlat +datum=WGS84")
 # specify the bounding box
-latLongBox = bbox(benzene_data_geo)
+latLongBox = bbox(benzene_geo)
 location = c(latLongBox[1, 1] - 0.05,
              latLongBox[2, 1] - 0.05,
              latLongBox[1, 2] + 0.1,
@@ -40,7 +40,7 @@ location = c(latLongBox[1, 1] - 0.05,
 MontrelBenzeneMap <-
   get_stamenmap(bbox =  location,
                 zoom = 10)
-ggmap(MontrelBenzeneMap) + geom_point(data = benzene_data,
+ggmap(MontrelBenzeneMap) + geom_point(data = benzene,
                                       aes(x = lon,
                                           y = lat,
                                           size = Benzene), 
@@ -57,10 +57,10 @@ Using the `geoR` package we can also plot the following:
 
 ```{r Ex 10.1 geoR plot}
 # convert data to utm coordinates
-benzene_data_utm <- spTransform(benzene_data_geo,
+benzene_utm <- spTransform(benzene_geo,
                         CRS("+proj=utm +zone=18 +ellps=WGS72"))
 # Save the utm as a data frame
-benzene_utm_df <- as.data.frame(benzene_data_utm)
+benzene_utm_df <- as.data.frame(benzene_utm)
 colnames(benzene_utm_df) <- c("Benzene", "X", "Y")
 # Save as geodata to generate the geodata plot
 benzene_geodata <- as.geodata(benzene_utm_df,
@@ -73,10 +73,10 @@ plot(benzene_geodata)
 
 ```{r Ex 10.2 plot hist and qqplot log}
 # Histogram for the log of the benzene concentration
-log_histogram <- hist(log(benzene_data$Benzene), main = "", xlab = "log(Benzene)")
+log_histogram <- hist(log(benzene$Benzene), main = "", xlab = "log(Benzene)")
 # qqplot for the log of the benzene concentration
-qqnorm(log(benzene_data$Benzene), bty = "n");
-qqline(log(benzene_data$Benzene))
+qqnorm(log(benzene$Benzene), bty = "n");
+qqline(log(benzene$Benzene))
 
 ```
 <!-- NOTE: I don't know how to generate the plot in Figure 9.4 -->
@@ -117,8 +117,24 @@ mod <- vgm (0.053 , "Exp", 2.159 )
 # use ordinary kriging to predict values in the grid
 x <- krige(log(Benzene) ~ X + Y, benzene_utm_geo , MtlPred , model = mod )
 # Plot the ordinary kriging predictions and their variance
-krig_pred <- spplot (x["var1.pred"], main = "Ordinary kriging predictions ")
-krig_var <- spplot (x["var1.var"], main = "Ordinary kriging variance ")
+
+monitor_loc <- list('sp.points', benzene_utm_geo, pch=19, cex=.8, col='midnightblue')
+
+krig_pred <-
+  spplot (
+    x["var1.pred"],
+    main = "Ordinary kriging predictions ",
+    col.regions = viridis::plasma(20),
+    sp.layout = list(monitor_loc)
+  )
+krig_var <-
+  spplot (
+    x["var1.var"],
+    main = "Ordinary kriging variance ",
+    col.regions = viridis::plasma(20),
+    sp.layout = list(monitor_loc)
+  )
+
 plot_grid(krig_pred, krig_var, labels = "auto")
 
 ```
@@ -137,16 +153,16 @@ library(spdep)
 
 ```{r Ex 10.9 benzene to spatial data, message = FALSE, warning=FALSE, error=FALSE}
 # Load data on benzene concentration in Montreal
-benzene_data <- read.csv("data/montreal_benzene_apr.csv")
+benzene <- read.csv("data/montreal_benzene_apr.csv")
 # create a new variable in "sp" format and define coordinates
-benzene_data_geo <- benzene_data
-coordinates(benzene_data_geo) <- ~ lon + lat
-proj4string(benzene_data_geo) <- CRS("+proj=longlat +datum=WGS84")
+benzene_geo <- benzene
+coordinates(benzene_geo) <- ~ lon + lat
+proj4string(benzene_geo) <- CRS("+proj=longlat +datum=WGS84")
 
-benzene_data_utm <- spTransform(benzene_data_geo,
+benzene_utm <- spTransform(benzene_geo,
                         CRS("+proj=utm +zone=18 +ellps=WGS72"))
 # Save the utm as a data frame
-benzene_utm_df <- as.data.frame(benzene_data_utm)
+benzene_utm_df <- as.data.frame(benzene_utm)
 # Change coordinates to kilometers and observations to the log scale
 Mtl_benzene_sample <-
   data.frame(
@@ -206,8 +222,8 @@ mcmc.out <- nimbleMCMC(
   data = ex.data,
   inits = inits,
   monitors = params,
-  niter = 15000,
-  nburnin = 7000,
+  niter = 30000,
+  nburnin = 15000,
   thin = 14,
   WAIC = TRUE,
   nchains = 2,
@@ -221,16 +237,87 @@ mcmc.out <- nimbleMCMC(
 
 mcmc.out$WAIC
 min(coda::effectiveSize(mcmc.out$samples))
-plot(mcmc.out$samples[, c("beta0")], bty = "n")
-plot(mcmc.out$samples[, c("beta1")], bty = "n")
-plot(mcmc.out$samples[, c("beta2")], bty = "n")
-plot(mcmc.out$samples[, c("sigma")], bty = "n")
-plot(mcmc.out$samples[, c("tau")], bty = "n")
-plot(mcmc.out$samples[, c("phi")], bty = "n")
+plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
+plot(mcmc.out$samples[, c("beta1")], bty = "n", main = "beta1")
+plot(mcmc.out$samples[, c("beta2")], bty = "n", main = "beta2")
+plot(mcmc.out$samples[, c("sigma")], bty = "n", main = "sigma")
+plot(mcmc.out$samples[, c("tau")], bty = "n", main = "tau")
+plot(mcmc.out$samples[, c("phi")], bty = "n", main = "phi")
 mcmc.out$summary$all.chains
 ```
 
 <!-- TODO: Predictions -->
+
+
+```{r Ex 10.9 load montreal shapefile}
+# Load centroids for spatial prediction
+Mtl_centroids <- read.csv("data/montreal_shp/centroids_mtl.csv")
+coordinates(Mtl_centroids) <- ~ X + Y
+proj4string(Mtl_centroids) <- CRS("+proj=longlat +datum=WGS84")
+
+Mtl_centroids_utm <- spTransform(Mtl_centroids,
+                        CRS("+proj=utm +zone=18 +ellps=WGS72"))
+plot(Mtl_centroids_utm, pch = 16, cex = 0.5)
+# Save the utm as a data frame
+Mtl_centroids_df <- as.data.frame(Mtl_centroids_utm)
+
+```
+
+
+```{r Ex 10.9 predictions function}
+
+mcmc_samples <- do.call(rbind, mcmc.out$samples) |> as.data.frame()
+# Extract chains for each parameter
+niter <- nrow(mcmc_samples)
+
+spat.pred.nimble <-
+  function(coords,
+           pred_coords,
+           y_obs,
+           mu,
+           beta0_post,
+           beta1_post,
+           beta2_post,
+           phi_post,
+           sigma_post,
+           tau_post) {
+    
+    norg <- nrow(coords)
+    npred <- nrow(pred_coords)
+    
+    mu <-
+      beta0_post + beta1_post * coords[,"easting"] + beta2_post *
+      coords[,"northing"]
+    
+    mu_u <-
+      beta0_post + beta1_post * pred_coords[, "easting"] + beta2_post *
+      pred_coords[, "northing"]
+    
+    all_dist <- rdist::rdist(pred_coords, coords)
+    
+    Sigma <- tau_post ^ 2 * diag(pred_coords + coords) +
+      sigma_post ^ 2 * exp(-all_dist / phi_post)
+    
+    Sigma_unobs <- Sigma[1:npred, 1:npred]
+   
+    Sigma_obs <-
+      Sigma[(npred + 1:npred + norg), (npred + 1:npred + norg)]
+    
+    Sigma_unobs_obs <- Sigma[1:npred, (npred + 1):(norg + npred)]
+    
+    mu_pred <-
+      mu_u + Sigma_unobs_obs %*% solve(Sigma_obs) %*% (y_obs - mu)
+    
+    Sigma_pred <- Sigma_unobs-Sigma_unobs_obs %*% solve(Sigma_obs) %*% t(Sigma_unobs_obs)
+    
+    Y_u <- mvtnorm::rmvnorm(1, mu_pred, Sigma_pred)
+    
+  }
+
+
+do.call("mapply", c(list(funcion_prueba), mcmc_samples))
+
+```
 
 ### Stan
 
