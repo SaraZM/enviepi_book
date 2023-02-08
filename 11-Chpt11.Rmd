@@ -15,784 +15,787 @@ The chapter contains the theory required for handling time series data. From thi
 
 Load the daily and hourly data for one site.
 
-<!-- ```{r Ex 11.1 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
-
-<!-- library(ggplot2) -->
-
-<!-- # Load data for one site -->
-<!-- site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE) -->
-
-<!-- # change the format of the date column -->
-<!-- site_daily$date <- as.Date(site_daily$date, "%m/%d/%Y") -->
-
-<!-- # load hourly data from that same site -->
-<!-- site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE) -->
-
-<!-- # Add a theme to clear axes and background in ggplot (optional) -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black") # keep axis line -->
-<!--   ) -->
-<!-- } -->
-
-<!-- ``` -->
-
-
-<!-- Plot the daily and hourly time series.  -->
-
-<!-- ```{r Ex 11.1 plot time series} -->
-<!-- # Plot daily data -->
-<!-- ggplot(data = site_daily) + -->
-<!--   geom_line(aes(x = date, y = max.ozone, group = 1)) + -->
-<!--   # draw a line at the first data -->
-<!--   geom_vline(xintercept = as.Date("2013-01-01"), color = "grey") + -->
-<!--   # 8 hour regulatory standard of 0.075 (ppm) -->
-<!--   geom_hline(yintercept = 0.075, color = "grey") + -->
-<!--   xlab("Day in 2013 at Los Angeles Site 060379033") +  -->
-<!--   ylab("Max Daily 8hr Ozone Level (ppm)") + theme_clear() -->
-
-
-<!-- # Plot hourly data -->
-<!-- ggplot(data = site_hourly,) + -->
-<!--   geom_line(aes(x = time, y = ozone, group = 1)) + -->
-<!--   geom_vline(xintercept = 1, color = "grey") + -->
-<!--    # 8 hour regulatory standard of 0.075 (ppm). -->
-<!--   geom_hline(yintercept = 0.075, color = "grey") + -->
-<!--   xlab("Hour in 2013's ozone season") +  -->
-<!--   ylab("Hourly Ozone Concentration (ppm)") +  theme_clear() -->
-
-<!-- ``` -->
-
-<!-- ## Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average {-} -->
-
-<!-- ```{r Ex 11.2 clean, include = FALSE} -->
-<!-- rm(list=ls()) -->
-<!-- ``` -->
-
-<!-- For this example we will use the TTR package (Technical Trading Rules). This allow us to manipulate objects like time series for forecasting. -->
-
-
-<!-- ```{r Ex 11.2 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
-
-<!-- library(TTR) -->
-<!-- # Load daily data -->
-<!-- site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE) -->
-<!-- # add an identifier column for each day in the sample -->
-<!-- site_daily$day <- 1:nrow(site_daily) -->
-<!-- # add a theme to clear axes and background in ggplot -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black"), # keep axis line -->
-<!--   ) -->
-<!-- } -->
-
-<!-- ``` -->
-
-
-<!-- ```{r Ex 11.2 moving averages plot, warning=FALSE} -->
-
-<!-- # Add loess smooth -->
-<!-- # Single day -->
-<!-- ozone.loess <- loess(max.ozone ~ day, span = 0.75, data = site_daily[,c("max.ozone", "day")]) -->
-<!-- ozone.predict <- predict(ozone.loess, data.frame(day = 1:nrow(site_daily))) -->
-<!-- ozone.predict_df <- data.frame(day = 1:nrow(site_daily),  -->
-<!--                                ozone.prediction = ozone.predict) -->
-
-<!-- ggplot(data = site_daily) + -->
-<!--   geom_line(aes(x = day, y = max.ozone, group = 1)) + -->
-<!--   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) + -->
-<!--   xlab("Day in 2013 at Los Angeles Site 060379033") +  -->
-<!--   ylab("Max Daily 8hr Ozone Level (ppm)") + -->
-<!--   ggtitle("Single day") +  -->
-<!--   theme_clear() -->
-
-<!-- # Three days -->
-<!-- ozone_SMA3 <- data.frame(sma = SMA(site_daily$max.ozone, n = 3), -->
-<!--                          day = 1:nrow(site_daily)) -->
-
-<!-- ggplot(data = ozone_SMA3) + -->
-<!--   geom_line(aes(x = day, y = sma, group = 1)) + -->
-<!--   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) + -->
-<!--   xlab("Day in 2013 at Los Angeles Site 060379033") +  -->
-<!--   ylab("Max Daily 8hr Ozone Level (ppm)") +   -->
-<!--   ggtitle("Three days") +  -->
-<!--   theme_clear() -->
+```{r Ex 11.1 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(ggplot2)
+
+# Load data for one site
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
+
+# change the format of the date column
+site_daily$date <- as.Date(site_daily$date, "%m/%d/%Y")
+
+# load hourly data from that same site
+site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
+
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+
+```
+
+
+Plot the daily and hourly time series.
+
+```{r Ex 11.1 plot time series}
+# Plot daily data
+ggplot(data = site_daily) +
+  geom_line(aes(x = date, y = max.ozone, group = 1)) +
+  # draw a line at the first data
+  geom_vline(xintercept = as.Date("2013-01-01"), color = "grey") +
+  # 8 hour regulatory standard of 0.075 (ppm)
+  geom_hline(yintercept = 0.075, color = "grey") +
+  xlab("Day in 2013 at Los Angeles Site 060379033") +
+  ylab("Max Daily 8hr Ozone Level (ppm)") + theme_clear()
+
+
+# Plot hourly data
+ggplot(data = site_hourly,) +
+  geom_line(aes(x = time, y = ozone, group = 1)) +
+  geom_vline(xintercept = 1, color = "grey") +
+   # 8 hour regulatory standard of 0.075 (ppm).
+  geom_hline(yintercept = 0.075, color = "grey") +
+  xlab("Hour in 2013's ozone season") +
+  ylab("Hourly Ozone Concentration (ppm)") +  theme_clear()
+
+```
+
+## Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average {-}
+
+```{r Ex 11.2 clean, include = FALSE}
+rm(list=ls())
+```
+
+For this example we will use the TTR package (Technical Trading Rules). This allow us to manipulate objects like time series for forecasting.
+
+
+```{r Ex 11.2 load data, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(TTR)
+# Load daily data
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
+# add an identifier column for each day in the sample
+site_daily$day <- 1:nrow(site_daily)
+# add a theme to clear axes and background in ggplot
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black"), # keep axis line
+  )
+}
+
+```
+
+
+```{r Ex 11.2 moving averages plot, warning=FALSE}
+
+# Add loess smooth
+# Single day
+ozone.loess <- loess(max.ozone ~ day, span = 0.75, data = site_daily[,c("max.ozone", "day")])
+ozone.predict <- predict(ozone.loess, data.frame(day = 1:nrow(site_daily)))
+ozone.predict_df <- data.frame(day = 1:nrow(site_daily),
+                               ozone.prediction = ozone.predict)
+
+ggplot(data = site_daily) +
+  geom_line(aes(x = day, y = max.ozone, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") +
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  ggtitle("Single day") +
+  theme_clear()
+
+# Three days
+ozone_SMA3 <- data.frame(sma = SMA(site_daily$max.ozone, n = 3),
+                         day = 1:nrow(site_daily))
+
+ggplot(data = ozone_SMA3) +
+  geom_line(aes(x = day, y = sma, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") +
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  ggtitle("Three days") +
+  theme_clear()
 
 
-<!-- # Six days -->
-<!-- ozone_SMA6 <- data.frame(sma = SMA(site_daily$max.ozone, n = 6), -->
-<!--                          day = 1:nrow(site_daily)) -->
+# Six days
+ozone_SMA6 <- data.frame(sma = SMA(site_daily$max.ozone, n = 6),
+                         day = 1:nrow(site_daily))
 
-<!-- ggplot(data = ozone_SMA6) + -->
-<!--   geom_line(aes(x = day, y = sma, group = 1)) + -->
-<!--   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) + -->
-<!--   xlab("Day in 2013 at Los Angeles Site 060379033") +  -->
-<!--   ylab("Max Daily 8hr Ozone Level (ppm)") +   -->
-<!--   ggtitle("Six days") +  -->
-<!--   theme_clear() -->
-
-
-<!-- # Twelve days -->
-<!-- ozone_SMA12 <- data.frame(sma = SMA(site_daily$max.ozone, n = 12), -->
-<!--                          day = 1:nrow(site_daily)) -->
+ggplot(data = ozone_SMA6) +
+  geom_line(aes(x = day, y = sma, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") +
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  ggtitle("Six days") +
+  theme_clear()
+
+
+# Twelve days
+ozone_SMA12 <- data.frame(sma = SMA(site_daily$max.ozone, n = 12),
+                         day = 1:nrow(site_daily))
 
-<!-- ggplot(data = ozone_SMA12) + -->
-<!--   geom_line(aes(x = day, y = sma, group = 1)) + -->
-<!--   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) + -->
-<!--   xlab("Day in 2013 at Los Angeles Site 060379033") +  -->
-<!--   ylab("Max Daily 8hr Ozone Level (ppm)") + -->
-<!--   ggtitle("Twelve days") +  -->
-<!--   theme_clear() -->
+ggplot(data = ozone_SMA12) +
+  geom_line(aes(x = day, y = sma, group = 1)) +
+  geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
+  xlab("Day in 2013 at Los Angeles Site 060379033") +
+  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  ggtitle("Twelve days") +
+  theme_clear()
 
-<!-- ``` -->
+```
 
-<!-- ## Example 11.13 Forecasting ozone levels {-} -->
+## Example 11.13 Forecasting ozone levels {-}
 
-<!-- ```{r Ex 11.12 clean, include = FALSE} -->
-<!-- rm(list = ls()) -->
-<!-- ``` -->
+```{r Ex 11.12 clean, include = FALSE}
+rm(list = ls())
+```
 
-<!-- ```{r Ex 11.13 load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
+```{r Ex 11.13 load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
-<!-- library(TTR) -->
-<!-- library(forecast) -->
-<!-- # Load hourly data for site 060379033 -->
-<!-- site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE) -->
-<!-- # one night hour per day missing for instrument calibration - imputed for simplicity -->
-<!-- imputeNA <- mean(site_hourly$ozone, na.rm = TRUE) -->
-<!-- site_hourly$ozone[is.na(site_hourly$ozone)] <- imputeNA -->
+library(TTR)
+library(forecast)
+# Load hourly data for site 060379033
+site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
+# one night hour per day missing for instrument calibration - imputed for simplicity
+imputeNA <- mean(site_hourly$ozone, na.rm = TRUE)
+site_hourly$ozone[is.na(site_hourly$ozone)] <- imputeNA
 
-<!-- ``` -->
+```
 
-<!-- ```{r Ex 11.13 data munge} -->
+```{r Ex 11.13 data munge}
 
-<!-- # Select the first seven days in july -->
-<!-- # days_pattern contains the dates for the first seven days -->
-<!-- days_pattern <- paste0("^2013070", 1:7, collapse="|")  -->
+# Select the first seven days in july
+# days_pattern contains the dates for the first seven days
+days_pattern <- paste0("^2013070", 1:7, collapse="|")
 
-<!-- # select all the rows that follow that pattern using grepl -->
-<!-- july_seven_days <- site_hourly[grepl(days_pattern, site_hourly$datetime),]  -->
-<!-- july_seven_days$hours <- 1:nrow(july_seven_days) -->
+# select all the rows that follow that pattern using grepl
+july_seven_days <- site_hourly[grepl(days_pattern, site_hourly$datetime),]
+july_seven_days$hours <- 1:nrow(july_seven_days)
 
-<!-- # Holt-Winters model fitting -->
-<!-- # Turn this into a time series object to use Holt-Winters forecast -->
-<!-- level_ts <- ts(july_seven_days$ozone, -->
-<!--                frequency = 24, -->
-<!--                start = c(1)) -->
-<!-- ozone_forecast <- HoltWinters(level_ts)  -->
+# Holt-Winters model fitting
+# Turn this into a time series object to use Holt-Winters forecast
+level_ts <- ts(july_seven_days$ozone,
+               frequency = 24,
+               start = c(1))
+ozone_forecast <- HoltWinters(level_ts)
 
-<!-- # Plot using the default function -->
-<!-- plot( -->
-<!--   ozone_forecast, -->
-<!--   xlab = "Hours - First Week -July 2013", -->
-<!--   ylab = "O3 (ppm)", -->
-<!--   col.predicted = 1, -->
-<!--   col = "black", -->
-<!--   bty = "n", -->
-<!--   lty = 2 -->
-<!-- ) -->
+# Plot using the default function
+plot(
+  ozone_forecast,
+  xlab = "Hours - First Week -July 2013",
+  ylab = "O3 (ppm)",
+  col.predicted = 1,
+  col = "black",
+  bty = "n",
+  lty = 2
+)
 
-<!-- # Holt- Winters 24 ahead forast on Day 8  -->
-<!-- # no need to specify Holt-Winters forecast as the object is already HoltWinters class -->
-<!-- ozoneforecast_day8 <- forecast(ozone_forecast, h=24) -->
+# Holt- Winters 24 ahead forast on Day 8
+# no need to specify Holt-Winters forecast as the object is already HoltWinters class
+ozoneforecast_day8 <- forecast(ozone_forecast, h=24)
 
-<!-- # Plot using default function -->
-<!-- plot(ozoneforecast_day8, bty = "n") -->
+# Plot using default function
+plot(ozoneforecast_day8, bty = "n")
 
-<!-- ``` -->
+```
 
-<!-- ## Example 11.14 Forecasting volcanic ash {-} -->
+## Example 11.14 Forecasting volcanic ash {-}
 
 
-<!-- ```{r Ex 11.14 clean, include = FALSE} -->
-<!-- rm(list = ls()) -->
-<!-- ``` -->
+```{r Ex 11.14 clean, include = FALSE}
+rm(list = ls())
+```
 
-<!-- The data in this example consists of atmospheric levels of volcanic ash from 1500AD to 2000AD.  -->
+The data in this example consists of atmospheric levels of volcanic ash from 1500AD to 2000AD.
 
-<!-- ```{r Ex 11.14 load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
+```{r Ex 11.14 load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
-<!-- library(ggplot2) -->
-<!-- library(forecast) -->
-<!-- library(TTR) -->
+library(ggplot2)
+library(forecast)
+library(TTR)
 
-<!-- # Load volcano dust data  -->
-<!-- ## REVIEW: Data source: Hyn�d�man, R.J.  Time Series Data Library, http://data.is/TSDLdemo -->
-<!-- # Data cover the period from 1500AD to 2000AD -->
-<!-- volcano_dust <- -->
-<!--   scan("https://robjhyndman.com/tsdldata/annual/dvi.dat", skip = 1) -->
+# Load volcano dust data
+## REVIEW: Data source: Hyn�d�man, R.J.  Time Series Data Library, http://data.is/TSDLdemo
+# Data cover the period from 1500AD to 2000AD
+volcano_dust <-
+  scan("https://robjhyndman.com/tsdldata/annual/dvi.dat", skip = 1)
 
-<!-- # Add a theme to clear axes and background in ggplot -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black"), # keep axis line -->
-<!--   ) -->
-<!-- } -->
+# Add a theme to clear axes and background in ggplot
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black"), # keep axis line
+  )
+}
 
 
-<!-- ``` -->
+```
 
-<!-- The following figure shows the plot of the original time series. -->
+The following figure shows the plot of the original time series.
 
-<!-- ```{r Ex 11.14 plot time series ACF and PACF} -->
+```{r Ex 11.14 plot time series ACF and PACF}
 
-<!-- # Turn data into data frame to plot it in ggplot -->
-<!-- volcano_dust_df <- data.frame(year = 1500:(1500+length(volcano_dust)-1), -->
-<!--                               dust = volcano_dust) -->
+# Turn data into data frame to plot it in ggplot
+volcano_dust_df <- data.frame(year = 1500:(1500+length(volcano_dust)-1),
+                              dust = volcano_dust)
 
-<!-- ggplot(data = volcano_dust_df) + -->
-<!--   geom_line(aes(x = year, y = dust, group = 1)) + -->
-<!--   xlab("Year") +  -->
-<!--   ylab("Atmospheric levels of volcanic ash") + theme_clear() -->
+ggplot(data = volcano_dust_df) +
+  geom_line(aes(x = year, y = dust, group = 1)) +
+  xlab("Year") +
+  ylab("Atmospheric levels of volcanic ash") + theme_clear()
 
-<!-- ``` -->
+```
 
-
-<!-- We can also plot the autocorrelogram (ACF) and partial autocorrelogram (PACF) to identify any autocorrelation in the time series. -->
-
-<!-- ```{r Ex 11.14 acf and pacf} -->
+
+We can also plot the autocorrelogram (ACF) and partial autocorrelogram (PACF) to identify any autocorrelation in the time series.
+
+```{r Ex 11.14 acf and pacf}
 
-<!-- # convert data into a time series object -->
-<!-- volcano_dust_series <- ts(volcano_dust, start = c(1500)) -->
-<!-- # Compute autocorrelogram with max lag 20 -->
-<!-- acf( -->
-<!--   volcano_dust_series, -->
-<!--   lag.max = 20, -->
-<!--   bty = "n", -->
-<!--   main = "Autocorrelogram volcano dust" -->
-<!-- ) -->
+# convert data into a time series object
+volcano_dust_series <- ts(volcano_dust, start = c(1500))
+# Compute autocorrelogram with max lag 20
+acf(
+  volcano_dust_series,
+  lag.max = 20,
+  bty = "n",
+  main = "Autocorrelogram volcano dust"
+)
 
-<!-- # Compute the partial autocorrelogram with max lag 20 -->
-<!-- pacf( -->
-<!--   volcano_dust_series, -->
-<!--   lag.max = 20, -->
-<!--   bty = "n", -->
-<!--   main = "Partial autocorrelogram volcano dust" -->
-<!-- ) -->
+# Compute the partial autocorrelogram with max lag 20
+pacf(
+  volcano_dust_series,
+  lag.max = 20,
+  bty = "n",
+  main = "Partial autocorrelogram volcano dust"
+)
 
-<!-- ``` -->
+```
 
-<!-- ```{r Ex 11.14 arima model} -->
+```{r Ex 11.14 arima model}
 
-<!-- # Finding an ARIMA model -->
-<!-- auto.arima(volcano_dust_series, ic = "aic") -->
+# Finding an ARIMA model
+auto.arima(volcano_dust_series, ic = "aic")
 
-<!-- # fitting the ARIMA(2,0,0) model -->
-<!-- volcano_dust_arima <- arima(volcano_dust_series, order = c(2, 0, 0)) -->
+# fitting the ARIMA(2,0,0) model
+volcano_dust_arima <- arima(volcano_dust_series, order = c(2, 0, 0))
 
-<!-- # forecast 31 years with the ARIMA(2,0,0) model -->
-<!-- volcano_dust_forecast <- forecast(volcano_dust_arima, h = 31) -->
-<!-- plot(volcano_dust_forecast, bty = "n") -->
-
-
-<!-- ``` -->
-
-<!-- ## Example 11.16 implementation of a dynamic linear model {-} -->
-<!-- ### Autoregressive model daily data {-} -->
-<!-- #### Stan {-} -->
-
-<!-- ```{r Ex 11.16 stan clean, include = FALSE} -->
-<!-- rm(list = ls()) -->
-<!-- ``` -->
-
-<!-- ```{r  Ex 11.16 stan load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
-<!-- library(coda) -->
-<!-- library(ggplot2) -->
-<!-- library(rstan) -->
-
-<!-- options(mc.cores = parallel::detectCores()) -->
-<!-- rstan_options(auto_write = TRUE) -->
+# forecast 31 years with the ARIMA(2,0,0) model
+volcano_dust_forecast <- forecast(volcano_dust_arima, h = 31)
+plot(volcano_dust_forecast, bty = "n")
+
+
+```
+
+## Example 11.16 implementation of a dynamic linear model {-}
+### Autoregressive model daily data {-}
+#### Stan {-}
+
+```{r Ex 11.16 stan clean, include = FALSE}
+rm(list = ls())
+```
+
+```{r  Ex 11.16 stan load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+library(coda)
+library(ggplot2)
+library(rstan)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
 
-<!-- # Load data for one site -->
-<!-- site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE) -->
+# Load data for one site
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
 
-<!-- # Add a theme to clear axes and background in ggplot (optional) -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black") # keep axis line -->
-<!--   ) -->
-<!-- } -->
-<!-- ``` -->
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+```
 
 
-<!-- ```{r engine='bash', comment='', echo = FALSE} -->
-<!-- cat functions/AR_Model.stan -->
-<!-- ```  -->
-
-
-<!-- ```{r Ex 11.16 stan ar model, results='hide', warning=FALSE, message= FALSE} -->
-<!-- # fit a linear growth model for the daily data -->
-<!-- yt <- site_daily$max.ozone -->
-<!-- N <- length(yt) -->
-
-<!-- ex.data <- list( -->
-<!--   N = length(yt), -->
-<!--   y = yt, -->
-<!--   m0 = mean(yt), -->
-<!--   C0 = 10 -->
-<!-- ) -->
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/AR_Model.stan
+```
+
+
+```{r Ex 11.16 stan ar model, results='hide', warning=FALSE, message= FALSE}
+# fit a linear growth model for the daily data
+yt <- site_daily$max.ozone
+N <- length(yt)
+
+ex.data <- list(
+  N = length(yt),
+  y = yt,
+  m0 = mean(yt),
+  C0 = 10
+)
 
-<!-- # Run the model in Stan -->
-<!-- Ex11_16StanAR <- stan( -->
-<!--   file = "functions/AR_Model.stan", -->
-<!--   data = ex.data, -->
-<!--   chains = 3, -->
-<!--   iter = 10000, -->
-<!--   warmup = 3000, -->
-<!--   thin = 14, -->
-<!--   # QUESTION: should we explain this? -->
-<!--   control = list(adapt_delta = 0.8, max_treedepth = 15),  -->
-<!--   init = "random", -->
-<!--   pars = c( "beta", "sigma", "theta","W", "theta0", "yfit"), -->
-<!--   include = TRUE -->
-<!-- ) -->
-
-
-<!-- ``` -->
-
-
-<!-- ```{r Ex 11.16 stan ar traceplot} -->
-<!-- # traceplots of parameters a and b -->
-<!-- rstan::traceplot(Ex11_16StanAR, pars = c("beta", "W","sigma")) -->
-<!-- # traceplots of some fitted values -->
-<!-- rstan::traceplot(Ex11_16StanAR, pars = c("theta[2]", "theta[50]", "theta[100]",  -->
-<!--                                 "theta[150]", "theta[250]", "theta[350]"), nrow = 2) -->
+# Run the model in Stan
+Ex11_16StanAR <- stan(
+  file = "functions/AR_Model.stan",
+  data = ex.data,
+  chains = 3,
+  iter = 10000,
+  warmup = 3000,
+  thin = 14,
+  # QUESTION: should we explain this?
+  control = list(adapt_delta = 0.8, max_treedepth = 15),
+  init = "random",
+  pars = c( "beta", "sigma", "theta","W", "theta0", "yfit"),
+  include = TRUE
+)
+
+
+```
+
+
+```{r Ex 11.16 stan ar traceplot}
+# traceplots of parameters a and b
+rstan::traceplot(Ex11_16StanAR, pars = c("beta", "W","sigma"))
+# traceplots of some fitted values
+rstan::traceplot(Ex11_16StanAR, pars = c("theta[2]", "theta[50]", "theta[100]",
+                                "theta[150]", "theta[250]", "theta[350]"), nrow = 2)
 
-<!-- summary_fit <- -->
-<!--   summary(Ex11_16StanAR, pars = c( "beta", "sigma", "W"), probs = c(0.05, 0.95))$summary |> as.data.frame() -->
-<!-- summary_fit -->
-<!-- ``` -->
-
-<!-- Plot fitted values  -->
-
-<!-- ```{r Ex 11.16 stan plot fitted values} -->
-<!-- # Posterior summary of state vector -->
-<!-- summary_theta <- -->
-<!--   summary(Ex11_16StanAR, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame() -->
-
-<!-- summary_theta$time <- 1:length(yt) -->
-
-<!-- # Plot mean and 95% CIs for the state vector -->
-<!-- ggplot(summary_theta) +  -->
-<!--   geom_ribbon(aes(x = time, ymin = `5%` , ymax = `95%`), -->
-<!--               alpha = 0.5, fill = "lightgray",) +  -->
-<!--   geom_path(aes(x = time, y = mean), colour = "blue", size = 0.8) + -->
-<!--   theme_clear() +  -->
-<!--   ggtitle("State vector") -->
-<!-- # Posterior summary of fitted values -->
-<!-- summary_fit <- -->
-<!--   summary(Ex11_16StanAR, pars = c("yfit"), probs = c(0.05, 0.95))$summary |> as.data.frame() -->
-<!-- summary_fit$real <- yt -->
-<!-- summary_fit$time <- 1:length(yt) -->
-<!-- # Plot mean and 95% CIs for the fitted values -->
-<!-- ggplot(summary_fit) +  -->
-<!--   geom_ribbon(aes(x = time, ymin = `5%` , ymax = `95%`), alpha = 0.5, fill = "lightgrey")+ -->
-<!--   geom_path(aes(x = time, y = mean), colour = "blue", size = 0.8) +  -->
-<!--   geom_point(aes(x = time, y = real)) +  -->
-<!--   theme_clear() + ggtitle("Fitted values") -->
-
-
-
-<!-- ``` -->
-
-<!-- #### Nimble {-} -->
-
-<!-- ```{r Ex 11.16 clean nimble, include = FALSE} -->
-<!-- rm(list = ls()) -->
-<!-- ``` -->
-
-<!-- ```{r  Ex 11.16 load nimble, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
-
-<!-- library(coda) -->
-<!-- library(nimble) -->
-<!-- library(ggplot2) -->
-
-<!-- # Load data for one site -->
-<!-- site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE) -->
-
-<!-- # Add a theme to clear axes and background in ggplot (optional) -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black") # keep axis line -->
-<!--   ) -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- ```{r Ex 11.16 nimble AR model, warning = FALSE} -->
-
-<!-- Example11_16Nimble <-  nimbleCode ({ -->
-
-<!--   theta0  ~  dnorm(m0, var = C0) -->
-<!--   theta[1] ~  dnorm(theta0, sd = W) -->
+summary_fit <-
+  summary(Ex11_16StanAR, pars = c( "beta", "sigma", "W"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+summary_fit
+```
 
-<!--   for (i in 2:Tt) { -->
-<!--     theta[i]  ~  dnorm(theta[i-1], sd = W) -->
-<!--     mu[i] <- theta[i] + beta * y[i-1] -->
-<!--     y[i] ~  dnorm(mu[i], sd = sigma) -->
-<!--   } -->
+Plot fitted values
 
-<!--   # Priors -->
-<!--   sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf) -->
-<!--   W ~ T(dt(mu = 0, sigma = 1, df = 0.01), 0, Inf) -->
-
-<!--   # prior for the intercept term -->
-<!--   beta ~ dnorm (0, sd = 10) -->
-
-<!--   # fitted values -->
-<!--   yfit[1] <-  y[1] -->
-<!--   for (j in 2:Tt){ -->
-<!--   mufit[j] <- theta[j] + beta * yfit[j-1] -->
-<!--   yfit[j]  ~ dnorm(mufit[j], sd = sigma) -->
-<!--     } -->
-<!-- })  -->
-
-<!-- ``` -->
-
-
-<!-- Run model in nimble  -->
-
-<!-- ```{r Ex 11.16 nimble ar run, error = FALSE, message = FALSE, results='hide', eval = FALSE} -->
-<!-- # constants list -->
-<!-- constants <- list( -->
-<!--   Tt = length(site_daily$max.ozone), -->
-<!--   m0 = mean(site_daily$max.ozone), -->
-<!--   C0 = 10 -->
-<!-- ) -->
-<!-- # data list -->
-<!-- ex.data <- -->
-<!--   list(  y = site_daily$max.ozone) # vector of covariates -->
-
-<!-- inits <-  list( -->
-<!--   beta = rnorm(1), -->
-<!--   sigma = 1, -->
-<!--   W = 0.001 -->
-<!-- ) -->
-<!-- # Run model in nimble -->
-<!-- ARModel <- nimbleModel(code = Example11_16Nimble, -->
-<!--                               data = ex.data, -->
-<!--                               constants = constants, -->
-<!--                               inits = inits, -->
-<!--                               check = FALSE) -->
-
-<!-- C_ARModel <- compileNimble(ARModel) -->
-<!-- AR_mcmcConfig <- configureMCMC(ARModel, enableWAIC = TRUE) -->
-<!-- AR_mcmcConfig$addMonitors("beta", "sigma", "W", "theta", "yfit") -->
-<!-- AR_mcmcConfig$removeSamplers(c('theta')) -->
-<!-- AR_mcmcConfig$addSampler(target = c('theta'), type = 'AF_slice') -->
-
-<!-- AR_mcmc <- buildMCMC(AR_mcmcConfig) -->
-<!-- C_AR_mcmc <- compileNimble(AR_mcmc, project = ARModel) -->
-
-<!-- mcmc.out <- -->
-<!--   runMCMC( -->
-<!--     C_AR_mcmc, -->
-<!--     niter = 60000, -->
-<!--   nburnin = 24000, -->
-<!--   thin = 40, -->
-<!--   WAIC = TRUE, -->
-<!--   nchains = 2, -->
-<!--   summary = TRUE, -->
-<!--   samplesAsCodaMCMC = TRUE -->
-<!--   ) -->
-
-<!-- ``` -->
-
-
-<!-- ```{r Ex 11.16 WAIC, ESS and traceplots, eval = FALSE } -->
-
-<!-- mcmc.out$WAIC -->
-<!-- min(coda::effectiveSize(mcmc.out$samples)) -->
-<!-- plot(mcmc.out$samples[, c("beta")], bty = "n") -->
-<!-- plot(mcmc.out$samples[, c("sigma")], bty = "n") -->
-<!-- plot(mcmc.out$samples[, c("W")], bty = "n") -->
-
-<!-- plot(mcmc.out$samples[, c("theta[10]")], bty = "n") -->
-<!-- plot(mcmc.out$samples[, c("theta[100]")], bty = "n") -->
-<!-- plot(mcmc.out$samples[, c("theta[150]")], bty = "n") -->
-
-<!-- ``` -->
-
-
-<!-- ```{r Ex 11.16 nimble AR summary, echo = TRUE, eval = FALSE} -->
-
-<!-- variables <- c("beta", "sigma", "W") -->
-
-<!-- summary_AR_nimble <- mcmc.out$summary$all.chains  -->
-<!-- summary_AR_nimble[variables,] -->
-
-<!-- ``` -->
-
-
-<!-- Plot fitted values and state vector -->
-
-<!-- ```{r Ex 11.16 nimble plot fitted values, eval = FALSE} -->
-<!-- # Posterior summary of fitted values -->
-<!-- fitted_AR_nimble <- summary_AR_nimble[grepl("yfit\\[", rownames(summary_AR_nimble)),] |> as.data.frame()  -->
-
-<!-- fitted_AR_nimble$real <- site_daily$max.ozone -->
-<!-- fitted_AR_nimble$time <- 1:length(site_daily$max.ozone) -->
-
-<!-- # Plot mean and 95% CIs for the fitted values -->
-<!-- ggplot(fitted_AR_nimble) +  -->
-<!--   geom_ribbon(aes(x = time, ymin = `95%CI_low` , ymax = `95%CI_upp`),  -->
-<!--               alpha = 0.5, fill = "lightgrey")+ -->
-<!--   geom_path(aes(x = time, y = Mean), colour = "blue", size = 0.8) +  -->
-<!--   geom_point(aes(x = time, y = real)) +  -->
-<!--   theme_clear() + ggtitle("Fitted values") -->
-
-<!-- # Posterior summary of the state vector -->
-<!-- theta_AR_nimble <- summary_AR_nimble[grepl("theta\\[", rownames(summary_AR_nimble)),] |> as.data.frame()  -->
-<!-- theta_AR_nimble$time <- 1:length(site_daily$max.ozone) -->
-<!-- # Plot mean and 95% CIs for the state vector -->
-<!-- ggplot(theta_AR_nimble) +  -->
-<!--   geom_ribbon(aes(x = time, ymin = `95%CI_low` , ymax = `95%CI_upp`),  -->
-<!--               alpha = 0.5, fill = "lightgrey")+ -->
-<!--   geom_path(aes(x = time, y = Mean), colour = "blue", size = 0.8) +  -->
-<!--   theme_clear() + ggtitle("State vector") -->
-
-<!-- ``` -->
-
-<!-- ### UK ozone data RW {-} -->
-
-<!-- ```{r Ex 11.16 uk clean RW, include = FALSE} -->
-<!-- rm(list = ls()) -->
-<!-- ``` -->
-
-<!-- ```{r Ex 11.16 uk load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE} -->
-<!-- library(ggplot2) -->
-<!-- library(rstan) -->
-<!-- # Stan options for multiple cores -->
-<!-- options(mc.cores = parallel::detectCores()) -->
-<!-- rstan_options(auto_write = TRUE) -->
-
-<!-- # Load ozone UK data -->
-<!-- uk_ozone <- read.csv("data/uk_ozone_one_site.csv") -->
-<!-- # change the format of the date column -->
-<!-- uk_ozone$date <- as.Date(uk_ozone$date, "%Y-%m-%d") -->
-
-
-<!-- # Add a theme to clear axes and background in ggplot (optional) -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black") # keep axis line -->
-<!--   ) -->
-<!-- } -->
-
-<!-- ``` -->
-
-<!-- Plot the UK ozone data -->
-
-<!-- ```{r Ex 11.16 uk ozone plot} -->
-
-<!-- # TODO: change y label for ozone concentration? -->
-<!-- ggplot(uk_ozone) + geom_path(aes(x = date, y = ozone), colour = "dimgray") + theme_clear() -->
-
-<!-- ``` -->
-
-
-
-
-<!-- ```{r Ex 11.16 uk ozone acf} -->
-<!-- # convert data into a time series object -->
-<!-- uk_ozone_ts <- ts(uk_ozone$ozone) -->
-<!-- # Compute autocorrelogram with max lag 20 -->
-<!-- acf( -->
-<!--   uk_ozone_ts, -->
-<!--   lag.max = 30, -->
-<!--   bty = "n", -->
-<!--   main = "Autocorrelogram UK ozone" -->
-<!-- ) -->
-
-<!-- # Compute the partial autocorrelogram with max lag 20 -->
-<!-- pacf( -->
-<!--   uk_ozone_ts, -->
-<!--   lag.max = 30, -->
-<!--   bty = "n", -->
-<!--   main = "Partial autocorrelogram UK ozone" -->
-<!-- ) -->
-<!-- ``` -->
-
-<!-- ```{r Ex 11.16 uk ozone rw model} -->
-<!-- # fit a varying mean model for the daily data -->
-<!-- ex.data <- list( -->
-<!--   N = length(uk_ozone$ozone), -->
-<!--   y = uk_ozone$ozone, -->
-<!--   p = 2, -->
-<!--   X = as.data.frame(scale(uk_ozone[,c("temp", "wind")])), -->
-<!--   m0 = mean(uk_ozone$ozone), -->
-<!--   C0 = 10 -->
-<!-- ) -->
-
-<!-- # Run the model in Stan -->
-<!-- Ex11_16StanRW <- stan( -->
-<!--   file = "functions/RW_Model.stan", -->
-<!--   data = ex.data, -->
-<!--   chains = 3, -->
-<!--   iter = 30000, -->
-<!--   warmup = 9000, -->
-<!--   thin = 14, -->
-<!--   control = list(adapt_delta = 0.8, max_treedepth = 15),  -->
-<!--   init = "random", -->
-<!--   pars = c( "beta", "sigma", "theta","theta0","W", "yfit"), -->
-<!--   include = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-
-
-<!-- Show trace plots for some of the parameters. -->
-
-<!-- ```{r Ex 11.16 stan waic and traceplots, message= FALSE, warning=FALSE} -->
-
-<!-- # traceplots of parameters a and b -->
-<!-- traceplot(Ex11_16StanRW, pars = c("beta", "sigma", "W")) -->
-<!-- # traceplots of parameter theta -->
-<!-- traceplot(Ex11_16StanRW, pars = c("theta[1]", "theta[2]", "theta[3]")) -->
-
-<!-- summary_fit <- -->
-<!--   summary(Ex11_16StanRW, pars = c( "beta", "sigma", "W"), probs = c(0.05, 0.95))$summary |> as.data.frame() -->
-<!-- summary_fit -->
-
-<!-- ``` -->
-
-<!-- Plot the state vector and the fitted values. -->
-
-<!-- ```{r Ex 11.16 uk ozone} -->
-<!-- summary_theta <- -->
-<!--   summary(Ex11_16StanRW, -->
-<!--           pars = c("theta"), -->
-<!--           probs = c(0.05, 0.95))$summary |> as.data.frame() -->
-
-<!-- summary_theta$time <- 1:nrow(summary_theta) -->
-
-<!-- ggplot(summary_theta) +  -->
-<!--   geom_ribbon(aes(x = time, ymin = `5%`, ymax = `95%`), alpha = 0.5, fill = "lightgrey") + -->
-<!--   geom_line(aes(x = time, y = mean), colour = "blue", size = 0.8) +  theme_clear() + ggtitle("State vector") -->
-
-<!-- summary_fitted <- -->
-<!--   summary(Ex11_16StanRW, -->
-<!--           pars = c("yfit"), -->
-<!--           probs = c(0.05, 0.95))$summary |> as.data.frame() -->
-<!-- summary_fitted$real <- uk_ozone$ozone -->
-<!-- summary_fitted$time <- 1:nrow(uk_ozone) -->
-
-<!-- # Plot mean and 95% CIs for the fitted values -->
-<!-- ggplot(summary_fitted) + -->
-<!--   geom_ribbon(aes(x = time, ymin = `5%` , ymax = `95%`), -->
-<!--               alpha = 0.5, -->
-<!--               fill = "lightgrey") + -->
-<!--   geom_path(aes(x = time, y = mean), colour = "blue", size = 0.8) + -->
-<!--   geom_point(aes(x = time, y = real)) + -->
-<!--   theme_clear() + ggtitle("Fitted values") -->
-
-<!-- ``` -->
-
-<!-- ### UK ozone data linear growth {-} -->
-
-<!-- ```{r Ex 11.16 uk clean lg, include = FALSE, eval = FALSE} -->
-<!-- rm(list = ls()) -->
-<!-- ``` -->
-
-<!-- ```{r Ex 11.16 uk load lg, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE, eval = FALSE} -->
-<!-- library(ggplot2) -->
-<!-- library(rstan) -->
-<!-- # Stan options for multiple cores -->
-<!-- options(mc.cores = parallel::detectCores()) -->
-<!-- rstan_options(auto_write = TRUE) -->
-
-<!-- # Load ozone UK data -->
-<!-- uk_ozone <- read.csv("data/uk_ozone_one_site.csv") -->
-<!-- # change the format of the date column -->
-<!-- uk_ozone$date <- as.Date(uk_ozone$date, "%Y-%m-%d") -->
-
-<!-- # Add a theme to clear axes and background in ggplot (optional) -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black") # keep axis line -->
-<!--   ) -->
-<!-- } -->
-
-<!-- ``` -->
-
-
-
-<!-- ```{r Ex 11.16 uk ozone lg, eval = FALSE} -->
-<!-- # fit a varying mean model for the daily data -->
-<!-- q <- 3 -->
-<!-- N <- length(uk_ozone$ozone) -->
-<!-- FF <- matrix(0, nrow = N, ncol = q) -->
-<!-- FF[1:N,1] <- 1 -->
-<!-- FF[,2] <- as.vector(scale(uk_ozone$temp)) -->
-<!-- FF[,3] <- as.vector(scale(uk_ozone$wind)) -->
-
-<!-- ex.data <- list( -->
-<!--   N = N, -->
-<!--   y = uk_ozone$ozone, -->
-<!--   q = q, -->
-<!--   FF = FF, -->
-<!--   GG = diag(q), -->
-<!--   m0 = c(mean(uk_ozone$ozone),0, 0), -->
-<!--   C0 = diag(c(1,1, 1)) -->
-<!-- ) -->
-
-<!-- # Run the model in Stan -->
-<!-- Ex11_16Stan <- stan( -->
-<!--   file = "functions/DLM.stan", -->
-<!--   data = ex.data, -->
-<!--   chains = 2, -->
-<!--   iter = 10000, -->
-<!--   warmup = 4000, -->
-<!--   thin = 14, -->
-<!--   control = list(adapt_delta = 0.8, max_treedepth = 15),  -->
-<!--   init = "random", -->
-<!--   pars = c( "sigma", "theta","theta0","W", "yfit"), -->
-<!--   include = TRUE -->
-<!-- ) -->
-
-<!-- ``` -->
-
-<!-- Show trace plots for some of the parameters. -->
-
-<!-- ```{r Ex 11.16 stan waic and traceplots uk lg, message= FALSE, warning=FALSE, eval = FALSE} -->
-
-<!-- # traceplots of parameters a and b -->
-<!-- rstan::traceplot(Ex11_16Stan, pars = c( "sigma", "W")) -->
-<!-- # traceplots of parameter theta -->
-<!-- rstan::traceplot(Ex11_16Stan, pars = c("theta[1,1]", "theta[2,1]",  "theta[3,1]", -->
-<!--                                 "theta[1,100]", "theta[2,100]",  "theta[3,100]"), nrow = 2) -->
-
-<!-- ``` -->
-
-
-<!-- ```{r Ex 11.16 extract summary, eval = FALSE} -->
-<!-- # Extract samples -->
-<!-- summary_RW_stan <- -->
-<!--   summary( -->
-<!--     Ex11_16Stan, -->
-<!--     pars = c( "sigma","W"), -->
-<!--     probs = c(0.025, 0.975) -->
-<!--   ) -->
-
-<!-- summary_RW_stan -->
-<!-- ``` -->
+```{r Ex 11.16 stan plot fitted values}
+# Posterior summary of state vector
+summary_theta <-
+  summary(Ex11_16StanAR, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+
+summary_theta$time <- 1:length(yt)
+
+# Plot mean and 95% CIs for the state vector
+ggplot(summary_theta) +
+  geom_ribbon(aes(x = time, ymin = `5%` , ymax = `95%`),
+              alpha = 0.5, fill = "lightgray",) +
+  geom_path(aes(x = time, y = mean), colour = "blue", size = 0.8) +
+  theme_clear() +
+  ggtitle("State vector")
+# Posterior summary of fitted values
+summary_fit <-
+  summary(Ex11_16StanAR, pars = c("yfit"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+summary_fit$real <- yt
+summary_fit$time <- 1:length(yt)
+# Plot mean and 95% CIs for the fitted values
+ggplot(summary_fit) +
+  geom_ribbon(aes(x = time, ymin = `5%` , ymax = `95%`), alpha = 0.5, fill = "lightgrey")+
+  geom_path(aes(x = time, y = mean), colour = "blue", size = 0.8) +
+  geom_point(aes(x = time, y = real)) +
+  theme_clear() + ggtitle("Fitted values")
+
+
+
+```
+
+#### Nimble {-}
+
+```{r Ex 11.16 clean nimble, include = FALSE}
+rm(list = ls())
+```
+
+```{r  Ex 11.16 load nimble, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+
+library(coda)
+library(nimble)
+library(ggplot2)
+
+# Load data for one site
+site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
+
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+```
+
+```{r Ex 11.16 nimble AR model, warning = FALSE}
+
+Example11_16Nimble <-  nimbleCode ({
+
+  theta0  ~  dnorm(m0, var = C0)
+  theta[1] ~  dnorm(theta0, sd = W)
+
+  for (i in 2:Tt) {
+    theta[i]  ~  dnorm(theta[i-1], sd = W)
+    mu[i] <- theta[i] + beta * y[i-1]
+    y[i] ~  dnorm(mu[i], sd = sigma)
+  }
+
+  # Priors
+  sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  W ~ T(dt(mu = 0, sigma = 1, df = 0.01), 0, Inf)
+
+  # prior for the intercept term
+  beta ~ dnorm (0, sd = 10)
+
+  # fitted values
+  yfit[1] <-  y[1]
+  for (j in 2:Tt){
+  mufit[j] <- theta[j] + beta * yfit[j-1]
+  yfit[j]  ~ dnorm(mufit[j], sd = sigma)
+    }
+})
+
+```
+
+
+Run model in nimble
+
+```{r Ex 11.16 nimble ar run, error = FALSE, message = FALSE, results='hide', eval = FALSE}
+
+# NOTE: This takes too long to run
+
+# constants list
+# constants <- list(
+#   Tt = length(site_daily$max.ozone),
+#   m0 = mean(site_daily$max.ozone),
+#   C0 = 10
+# )
+# # data list
+# ex.data <-
+#   list(  y = site_daily$max.ozone) # vector of covariates
+# 
+# inits <-  list(
+#   beta = rnorm(1),
+#   sigma = 1,
+#   W = 0.001
+# )
+# # Run model in nimble
+# ARModel <- nimbleModel(code = Example11_16Nimble,
+#                               data = ex.data,
+#                               constants = constants,
+#                               inits = inits,
+#                               check = FALSE)
+# 
+# C_ARModel <- compileNimble(ARModel)
+# AR_mcmcConfig <- configureMCMC(ARModel, enableWAIC = TRUE)
+# AR_mcmcConfig$addMonitors("beta", "sigma", "W", "theta", "yfit")
+# AR_mcmcConfig$removeSamplers(c('theta'))
+# AR_mcmcConfig$addSampler(target = c('theta'), type = 'AF_slice')
+# 
+# AR_mcmc <- buildMCMC(AR_mcmcConfig)
+# C_AR_mcmc <- compileNimble(AR_mcmc, project = ARModel)
+
+# mcmc.out <-
+#   runMCMC(
+#     C_AR_mcmc,
+#     niter = 60000,
+#   nburnin = 24000,
+#   thin = 40,
+#   WAIC = TRUE,
+#   nchains = 2,
+#   summary = TRUE,
+#   samplesAsCodaMCMC = TRUE
+#   )
+
+```
+
+
+```{r Ex 11.16 WAIC, ESS and traceplots, eval = FALSE }
+
+# mcmc.out$WAIC
+# min(coda::effectiveSize(mcmc.out$samples))
+# plot(mcmc.out$samples[, c("beta")], bty = "n")
+# plot(mcmc.out$samples[, c("sigma")], bty = "n")
+# plot(mcmc.out$samples[, c("W")], bty = "n")
+# 
+# plot(mcmc.out$samples[, c("theta[10]")], bty = "n")
+# plot(mcmc.out$samples[, c("theta[100]")], bty = "n")
+# plot(mcmc.out$samples[, c("theta[150]")], bty = "n")
+
+```
+
+
+```{r Ex 11.16 nimble AR summary, echo = TRUE, eval = FALSE}
+
+# variables <- c("beta", "sigma", "W")
+# 
+# summary_AR_nimble <- mcmc.out$summary$all.chains
+# summary_AR_nimble[variables,]
+
+```
+
+
+Plot fitted values and state vector
+
+```{r Ex 11.16 nimble plot fitted values, eval = FALSE}
+# Posterior summary of fitted values
+# fitted_AR_nimble <- summary_AR_nimble[grepl("yfit\\[", rownames(summary_AR_nimble)),] |> as.data.frame()
+# 
+# fitted_AR_nimble$real <- site_daily$max.ozone
+# fitted_AR_nimble$time <- 1:length(site_daily$max.ozone)
+# 
+# # Plot mean and 95% CIs for the fitted values
+# ggplot(fitted_AR_nimble) +
+#   geom_ribbon(aes(x = time, ymin = `95%CI_low` , ymax = `95%CI_upp`),
+#               alpha = 0.5, fill = "lightgrey")+
+#   geom_path(aes(x = time, y = Mean), colour = "blue", size = 0.8) +
+#   geom_point(aes(x = time, y = real)) +
+#   theme_clear() + ggtitle("Fitted values")
+# 
+# # Posterior summary of the state vector
+# theta_AR_nimble <- summary_AR_nimble[grepl("theta\\[", rownames(summary_AR_nimble)),] |> as.data.frame()
+# theta_AR_nimble$time <- 1:length(site_daily$max.ozone)
+# # Plot mean and 95% CIs for the state vector
+# ggplot(theta_AR_nimble) +
+#   geom_ribbon(aes(x = time, ymin = `95%CI_low` , ymax = `95%CI_upp`),
+#               alpha = 0.5, fill = "lightgrey")+
+#   geom_path(aes(x = time, y = Mean), colour = "blue", size = 0.8) +
+#   theme_clear() + ggtitle("State vector")
+
+```
+
+### UK ozone data RW {-}
+
+```{r Ex 11.16 uk clean RW, include = FALSE}
+rm(list = ls())
+```
+
+```{r Ex 11.16 uk load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+library(ggplot2)
+library(rstan)
+# Stan options for multiple cores
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+# Load ozone UK data
+uk_ozone <- read.csv("data/uk_ozone_one_site.csv")
+# change the format of the date column
+uk_ozone$date <- as.Date(uk_ozone$date, "%Y-%m-%d")
+
+
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+
+```
+
+Plot the UK ozone data
+
+```{r Ex 11.16 uk ozone plot}
+
+# TODO: change y label for ozone concentration?
+ggplot(uk_ozone) + geom_path(aes(x = date, y = ozone), colour = "dimgray") + theme_clear()
+
+```
+
+
+
+
+```{r Ex 11.16 uk ozone acf}
+# convert data into a time series object
+uk_ozone_ts <- ts(uk_ozone$ozone)
+# Compute autocorrelogram with max lag 20
+acf(
+  uk_ozone_ts,
+  lag.max = 30,
+  bty = "n",
+  main = "Autocorrelogram UK ozone"
+)
+
+# Compute the partial autocorrelogram with max lag 20
+pacf(
+  uk_ozone_ts,
+  lag.max = 30,
+  bty = "n",
+  main = "Partial autocorrelogram UK ozone"
+)
+```
+
+```{r Ex 11.16 uk ozone rw model}
+# fit a varying mean model for the daily data
+ex.data <- list(
+  N = length(uk_ozone$ozone),
+  y = uk_ozone$ozone,
+  p = 2,
+  X = as.data.frame(scale(uk_ozone[,c("temp", "wind")])),
+  m0 = mean(uk_ozone$ozone),
+  C0 = 10
+)
+
+# Run the model in Stan
+Ex11_16StanRW <- stan(
+  file = "functions/RW_Model.stan",
+  data = ex.data,
+  chains = 3,
+  iter = 30000,
+  warmup = 9000,
+  thin = 14,
+  control = list(adapt_delta = 0.8, max_treedepth = 15),
+  init = "random",
+  pars = c( "beta", "sigma", "theta","theta0","W", "yfit"),
+  include = TRUE
+)
+```
+
+
+Show trace plots for some of the parameters.
+
+```{r Ex 11.16 stan waic and traceplots, message= FALSE, warning=FALSE}
+
+# traceplots of parameters a and b
+rstan::traceplot(Ex11_16StanRW, pars = c("beta", "sigma", "W"))
+# traceplots of parameter theta
+rstan::traceplot(Ex11_16StanRW, pars = c("theta[1]", "theta[2]", "theta[3]"))
+
+summary_fit <-
+  summary(Ex11_16StanRW, pars = c( "beta", "sigma", "W"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+summary_fit
+
+```
+
+Plot the state vector and the fitted values.
+
+```{r Ex 11.16 uk ozone}
+summary_theta <-
+  summary(Ex11_16StanRW,
+          pars = c("theta"),
+          probs = c(0.05, 0.95))$summary |> as.data.frame()
+
+summary_theta$time <- 1:nrow(summary_theta)
+
+ggplot(summary_theta) +
+  geom_ribbon(aes(x = time, ymin = `5%`, ymax = `95%`), alpha = 0.5, fill = "lightgrey") +
+  geom_line(aes(x = time, y = mean), colour = "blue", size = 0.8) +  theme_clear() + ggtitle("State vector")
+
+summary_fitted <-
+  summary(Ex11_16StanRW,
+          pars = c("yfit"),
+          probs = c(0.05, 0.95))$summary |> as.data.frame()
+summary_fitted$real <- uk_ozone$ozone
+summary_fitted$time <- 1:nrow(uk_ozone)
+
+# Plot mean and 95% CIs for the fitted values
+ggplot(summary_fitted) +
+  geom_ribbon(aes(x = time, ymin = `5%` , ymax = `95%`),
+              alpha = 0.5,
+              fill = "lightgrey") +
+  geom_path(aes(x = time, y = mean), colour = "blue", size = 0.8) +
+  geom_point(aes(x = time, y = real)) +
+  theme_clear() + ggtitle("Fitted values")
+
+```
+
+### UK ozone data linear growth {-}
+
+```{r Ex 11.16 uk clean lg, include = FALSE, eval = FALSE}
+rm(list = ls())
+```
+
+```{r Ex 11.16 uk load lg, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE, eval = FALSE}
+library(ggplot2)
+library(rstan)
+# Stan options for multiple cores
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+# Load ozone UK data
+uk_ozone <- read.csv("data/uk_ozone_one_site.csv")
+# change the format of the date column
+uk_ozone$date <- as.Date(uk_ozone$date, "%Y-%m-%d")
+
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+
+```
+
+
+
+```{r Ex 11.16 uk ozone lg, eval = FALSE}
+# fit a varying mean model for the daily data
+q <- 3
+N <- length(uk_ozone$ozone)
+FF <- matrix(0, nrow = N, ncol = q)
+FF[1:N,1] <- 1
+FF[,2] <- as.vector(scale(uk_ozone$temp))
+FF[,3] <- as.vector(scale(uk_ozone$wind))
+
+ex.data <- list(
+  N = N,
+  y = uk_ozone$ozone,
+  q = q,
+  FF = FF,
+  GG = diag(q),
+  m0 = c(mean(uk_ozone$ozone),0, 0),
+  C0 = diag(c(1,1, 1))
+)
+
+# Run the model in Stan
+Ex11_16Stan <- stan(
+  file = "functions/DLM.stan",
+  data = ex.data,
+  chains = 2,
+  iter = 10000,
+  warmup = 4000,
+  thin = 14,
+  control = list(adapt_delta = 0.8, max_treedepth = 15),
+  init = "random",
+  pars = c( "sigma", "theta","theta0","W", "yfit"),
+  include = TRUE
+)
+
+```
+
+Show trace plots for some of the parameters.
+
+```{r Ex 11.16 stan waic and traceplots uk lg, message= FALSE, warning=FALSE, eval = FALSE}
+
+# traceplots of parameters a and b
+rstan::traceplot(Ex11_16Stan, pars = c( "sigma", "W"))
+# traceplots of parameter theta
+rstan::traceplot(Ex11_16Stan, pars = c("theta[1,1]", "theta[2,1]",  "theta[3,1]",
+                                "theta[1,100]", "theta[2,100]",  "theta[3,100]"), nrow = 2)
+
+```
+
+
+```{r Ex 11.16 extract summary, eval = FALSE}
+# Extract samples
+summary_RW_stan <-
+  summary(
+    Ex11_16Stan,
+    pars = c( "sigma","W"),
+    probs = c(0.025, 0.975)
+  )
+
+summary_RW_stan
+```
 

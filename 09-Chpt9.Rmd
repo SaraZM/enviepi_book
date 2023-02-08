@@ -455,8 +455,6 @@ CAR_Cmodel = compileNimble(CAR_Model)
 CAR_Cmcmc = compileNimble(CAR_MCMC, project = CAR_Model)
 CAR_runMCMC = runMCMC(
   CAR_Cmcmc,
-  nburnin = 20000,
->>>>>>> chpt11
   niter = 40000,
   nburnin = 20000,
   thin = 80,
