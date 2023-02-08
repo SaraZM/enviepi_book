@@ -440,11 +440,8 @@ mcmc.out <- nimbleMCMC(
   code = Example9_3Nimble,
   constants = constants,
   data = ex.data,
-<<<<<<< HEAD
   inits = inits,
-  monitors = params,
-=======
-  inits = inits
+  monitors = params
 )
 # QUESTION: can I run this model without configuring it as I did in the previous examples? 
 CAR_conf <-
