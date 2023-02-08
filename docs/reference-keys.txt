@@ -28,12 +28,7 @@ i-does-an-sdis-still-occur-why-or-why-not
 ii-compute-hatbeta_1-and-hatbeta_2-and-repeat-the-bonus-question-of-exercise-13.17.-what-has-changed-do-the-changes-match-your-observations
 monitoring
 frontiers
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 41d80c51b298a9043efe603ab8b74380eabeaad1
->>>>>>> 86b836d99dab52bc69c60ad3f762d1fc0ae12c61
+
 tab:unnamed-chunk-1
 tab:unnamed-chunk-2
 tab:unnamed-chunk-3
@@ -43,4 +38,8 @@ tab:unnamed-chunk-6
 question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r.
 question-13.17-using-the-italy-and-china-data-stratified-by-the-age-groups-70-and-geq-70-obtain-empirical-estimates-of-p_1-and-p_2-as-defined-in-an-sdis.-in-the-following-questions-assume-that-p_1-and-p_2-are-the-population-values.
 question-13.18-stratify-the-italy-and-china-data-by-the-age-groups-50-and-geq-50.-display-the-corresponding-contingency-tables.
->>>>>>> 41d80c51b298a9043efe603ab8b74380eabeaad1
+
+example-10.13
+example-10.11-inla-creating-a-mesh
+example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal
+example-10.13-directional-variograms

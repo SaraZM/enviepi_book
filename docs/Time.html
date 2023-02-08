@@ -23,7 +23,8 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-01-24" />
+
+<meta name="date" content="2023-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -556,6 +557,7 @@ generated quantities{
 <span id="cb24-2"><a href="Time.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Ex11_16StanAR, <span class="at">pars =</span> <span class="fu">c</span>( <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;W&quot;</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))<span class="sc">$</span>summary <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb24-3"><a href="Time.html#cb24-3" aria-hidden="true" tabindex="-1"></a>summary_fit</span></code></pre></div>
 <pre><code>##               mean      se_mean           sd           5%         95%     n_eff
+<<<<<<< HEAD
 ## beta  0.4039633908 2.524835e-03 0.0576695651 0.3081241956 0.501192792  521.7079
 ## sigma 0.0090207199 9.667749e-06 0.0003619963 0.0084322375 0.009591262 1402.0303
 ## W     0.0009363853 1.563960e-05 0.0002440387 0.0006063233 0.001380387  243.4815
@@ -563,6 +565,15 @@ generated quantities{
 ## beta  0.9997423
 ## sigma 1.0001204
 ## W     1.0006257</code></pre>
+=======
+## beta  0.4018852533 2.477597e-03 0.0572147465 0.3092139584 0.492683976  533.2791
+## sigma 0.0090048694 1.011824e-05 0.0003738325 0.0084072990 0.009643267 1365.0355
+## W     0.0009579185 1.716305e-05 0.0002552966 0.0006319935 0.001411269  221.2591
+##           Rhat
+## beta  1.004249
+## sigma 1.001962
+## W     1.014515</code></pre>
+>>>>>>> chpt10
 <p>Plot fitted values</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Time.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary of state vector</span></span>
 <span id="cb26-2"><a href="Time.html#cb26-2" aria-hidden="true" tabindex="-1"></a>summary_theta <span class="ot">&lt;-</span></span>
@@ -797,11 +808,19 @@ generated quantities{
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="Time.html#cb43-1" aria-hidden="true" tabindex="-1"></a>summary_fit <span class="ot">&lt;-</span></span>
 <span id="cb43-2"><a href="Time.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Ex11_16StanRW, <span class="at">pars =</span> <span class="fu">c</span>( <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;W&quot;</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))<span class="sc">$</span>summary <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
 <span id="cb43-3"><a href="Time.html#cb43-3" aria-hidden="true" tabindex="-1"></a>summary_fit</span></code></pre></div>
+<<<<<<< HEAD
 <pre><code>##              mean     se_mean        sd        5%       95%     n_eff     Rhat
 ## beta[1] -2.980512 0.021520624 1.3113010 -5.141523 -0.815494 3712.7447 1.000660
 ## beta[2]  2.542256 0.009548572 0.6468023  1.466906  3.575093 4588.4530 1.000078
 ## sigma    8.555816 0.013867992 0.5572687  7.661117  9.506954 1614.7382 1.001608
 ## W        2.521218 0.027534154 0.7450927  1.348325  3.782560  732.2799 1.002983</code></pre>
+=======
+<pre><code>##              mean    se_mean        sd        5%        95%     n_eff      Rhat
+## beta[1] -2.962300 0.02202475 1.2772120 -5.040400 -0.8839865 3362.8245 1.0003757
+## beta[2]  2.547453 0.01026070 0.6546240  1.465244  3.6236008 4070.3302 0.9997331
+## sigma    8.562761 0.01485384 0.5610602  7.647440  9.4834493 1426.7279 1.0001668
+## W        2.519147 0.02520017 0.7319989  1.359672  3.7891084  843.7505 1.0000615</code></pre>
+>>>>>>> chpt10
 <p>Plot the state vector and the fitted values.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="Time.html#cb45-1" aria-hidden="true" tabindex="-1"></a>summary_theta <span class="ot">&lt;-</span></span>
 <span id="cb45-2"><a href="Time.html#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Ex11_16StanRW,</span>

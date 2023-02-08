@@ -26,6 +26,8 @@ library(dplyr)
 library(readxl)
 library(spdep)
 library(data.table)
+
+## December benzene -----
 VOCs <- read_excel("data/VOCDec2005.xlsx") 
 VOCS_IDs <- read_excel("data/VOClogsheetDec2005.xlsx") 
 
@@ -58,8 +60,7 @@ colnames(benzene_geo_df) <- c("ID", "Benzene", "lon", "lat")
 write.csv(benzene_geo_df, "data/montreal_benzene.csv", row.names = FALSE)
 
 
-# Chapter 10 ----
-# California temperature
+## California temperature ----
 cal_sites <- read.csv("data/metadataCA.txt", sep = "\t")
 cal_temp <- read.csv("data/MaxCaliforniaTemp.csv")
 
@@ -72,6 +73,39 @@ colnames(cal_temp_oneday) <- c("Location", 'MaxTemp')
 cal_sites$MaxTemp <- cal_temp_oneday[,2]
 
 write.csv(cal_sites, "data/CalTempData.csv", row.names = FALSE)
+
+## April benzene
+VOCs <- read_excel("data/VOCApr2006.xlsx") 
+VOCS_IDs <- read_excel("data/VOClogsheetApr2006.xlsx") 
+
+VOCs_coords <- VOCS_IDs[,c("ID", "X", "Y")]
+benzene <- VOCs[,c("ID", "Benzene")]
+# avoid dealing with replicates
+benzene <- benzene[unique(benzene$ID),]
+
+benzene_coords <- merge(benzene, VOCs_coords, by = "ID") %>% 
+  distinct(X, Y, .keep_all = TRUE)
+
+# Note: the coordinates for site 26 are wrong, they were fixed for the article 
+# but I just removed them
+benzene_coords <- benzene_coords[-c(4,5,23,92,104),]
+# Also, in order to make the code cleaner in the chapter, I will transform the 
+# coordinates to lon lat (for the map)
+
+benzene_utm <-
+  SpatialPointsDataFrame(
+    coords = benzene_coords[, c("X", "Y")],
+    data = benzene_coords[, c("ID", "Benzene")],
+    proj4string = CRS("+proj=utm +zone=18 +ellps=WGS72")
+  ) 
+
+benzene_geo <- spTransform(benzene_utm, CRS("+proj=longlat +datum=WGS84"))
+benzene_geo_df <- as.data.frame(benzene_geo)
+
+colnames(benzene_geo_df) <- c("ID", "Benzene", "lon", "lat")
+
+write.csv(benzene_geo_df[,-c( 1)], 
+          "data/montreal_benzene_apr.csv", row.names = FALSE)
 
 # Chapter 11 -----
 
