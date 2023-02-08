@@ -208,7 +208,7 @@ cat functions/Example8_1.stan
 
 Define the data for the model, similar to `nimble`. 
 
-```{r Ex 8.1 stan define data, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 98.1 stan define data, error = FALSE, message = FALSE, results='hide'}
 # observations
 y <- observed$Y2010
 # offset
@@ -241,7 +241,7 @@ mod0 <- stan(
 
 Compute the WAIC, show the trace plots and posterior summaries of the parameters.
 
-```{r Ex 8.1 stan waic and traceplots, message= FALSE, warning=FALSE}
+```{r Ex 9.1 stan waic and traceplots, message= FALSE, warning=FALSE}
 
 loglik0 <- extract_log_lik(mod0)
 waic0 <- waic(loglik0)
@@ -255,7 +255,7 @@ traceplot(mod0, pars = c("theta[1]", "theta[2]", "theta[3]"))
 ```
 
 
-```{r Ex 8.1 stan posterior summary}
+```{r Ex 9.1 stan posterior summary}
 
 summary_theta <-
   summary(mod0, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame()
@@ -380,7 +380,7 @@ Example9_3Code <- nimbleCode({
 
 Define the constants, data and initial values lists and run the model. 
 
-```{r Ex 8.3 nimble car run, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 9.3 nimble car run, error = FALSE, message = FALSE, results='hide'}
 # constants list
 constants <- list(
   N = N,
@@ -408,7 +408,7 @@ CAR_Model <- nimbleModel(
 )
 # QUESTION: can I run this model without configuring it as I did in the previous examples? 
 CAR_conf <-
-  configureMCMC(Example9_3Code, monitors = c("beta0", "fitted", "b", "sigma_b"))
+  configureMCMC(CAR_Model, monitors = c("beta0", "fitted", "b", "sigma_b"))
 CAR_MCMC = buildMCMC(
   CAR_Model,
   enableWAIC = T,
