@@ -257,9 +257,11 @@ proj4string(Mtl_centroids) <- CRS("+proj=longlat +datum=WGS84")
 
 Mtl_centroids_utm <- spTransform(Mtl_centroids,
                         CRS("+proj=utm +zone=18 +ellps=WGS72"))
-plot(Mtl_centroids_utm, pch = 16, cex = 0.5)
 # Save the utm as a data frame
 Mtl_centroids_df <- as.data.frame(Mtl_centroids_utm)
+
+
+colnames(Mtl_centroids_df) <- c("easting", "northing")
 
 ```
 
@@ -271,52 +273,74 @@ mcmc_samples <- do.call(rbind, mcmc.out$samples) |> as.data.frame()
 niter <- nrow(mcmc_samples)
 
 spat.pred.nimble <-
-  function(coords,
-           pred_coords,
-           y_obs,
-           mu,
-           beta0_post,
-           beta1_post,
-           beta2_post,
-           phi_post,
-           sigma_post,
-           tau_post) {
+  function(mcmc_output) {
+    beta0 <- mcmc_output["beta0"]
+    beta1 <- mcmc_output["beta1"]
+    beta2 <- mcmc_output["beta2"]
+    phi <- mcmc_output["phi"]
+    sigma <- mcmc_output["sigma"]
+    tau <- mcmc_output["tau"]
     
+    coords  <-  as.data.frame(scale(Mtl_benzene_sample[, c("easting", "northing")]))
+    pred_coords_df <-  Mtl_centroids_df / 1000
+    pred_coords <- as.data.frame(scale(pred_coords_df)) # TODO: this scaling is wrong
+    y_obs  <-  Mtl_benzene_sample[, "y"]
     norg <- nrow(coords)
     npred <- nrow(pred_coords)
     
     mu <-
-      beta0_post + beta1_post * coords[,"easting"] + beta2_post *
-      coords[,"northing"]
-    
+      rep(beta0, nrow(coords)) + beta1 * coords[, "easting"] + beta2 * coords[, "northing"]
     mu_u <-
-      beta0_post + beta1_post * pred_coords[, "easting"] + beta2_post *
-      pred_coords[, "northing"]
+      rep(beta0, nrow(pred_coords)) + beta1 * pred_coords[, "easting"] + beta2 * pred_coords[, "northing"]
     
-    all_dist <- rdist::rdist(pred_coords, coords)
-    
-    Sigma <- tau_post ^ 2 * diag(pred_coords + coords) +
-      sigma_post ^ 2 * exp(-all_dist / phi_post)
+    all_coord <- rbind(pred_coords_df, coords)
+    all_dist <- as.matrix(dist(all_coord))
+
+    Sigma <-
+      tau ^ 2 * diag(norg + npred) + sigma ^ 2 * exp(-all_dist / phi)
     
     Sigma_unobs <- Sigma[1:npred, 1:npred]
-   
+    
     Sigma_obs <-
-      Sigma[(npred + 1:npred + norg), (npred + 1:npred + norg)]
+      Sigma[(npred + 1):(npred + norg), (npred + 1):(npred + norg)]
     
     Sigma_unobs_obs <- Sigma[1:npred, (npred + 1):(norg + npred)]
     
     mu_pred <-
       mu_u + Sigma_unobs_obs %*% solve(Sigma_obs) %*% (y_obs - mu)
     
-    Sigma_pred <- Sigma_unobs-Sigma_unobs_obs %*% solve(Sigma_obs) %*% t(Sigma_unobs_obs)
+    Sigma_pred <-
+      Sigma_unobs - Sigma_unobs_obs %*% solve(Sigma_obs) %*% t(Sigma_unobs_obs)
     
     Y_u <- mvtnorm::rmvnorm(1, mu_pred, Sigma_pred)
+    return(Y_u)
     
   }
 
 
-do.call("mapply", c(list(funcion_prueba), mcmc_samples))
+spatial_pred_MTL <- apply(mcmc_samples, 1, spat.pred.nimble)
 
+
+# TODO: reduce the grid, it takes too long
+
+
+```
+
+```{r Ex 10.9 plot predictions}
+
+
+Mtl_shape <- readOGR("data/montreal_shp/temp1.shp")
+
+Mtl_centroids_df$mean_benzene <- rowMeans(spatial_pred_MTL)
+
+ggplot(Mtl_centroids_df) + 
+  geom_point(aes(x = easting, y = northing, color = mean_benzene), size = 10) + 
+  theme_void()
+
+
+Mtl_shape$mean_benzene <- rowMeans(spatial_pred_MTL)
+
+plot(Mtl_shape)
 ```
 
 ### Stan
