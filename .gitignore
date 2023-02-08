@@ -38,4 +38,3 @@ docs/libs/
 _book/
 # mac
 .DS_Store
-docs/search_index.json
