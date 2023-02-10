@@ -188,7 +188,7 @@ Example10_9Code <-  nimbleCode ({
   # Set up the priors for the spatial model
   sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-   phi_inv ~ dgamma(shape =  5, rate = 5)
+   phi_inv ~ dgamma(shape =  2, scale = 2)
    phi <- 1/phi_inv
   # prior for the coefficients 
     beta0 ~ dnorm (0, 10)
@@ -318,29 +318,36 @@ spat.pred.nimble <-
   }
 
 
-spatial_pred_MTL <- apply(mcmc_samples, 1, spat.pred.nimble)
+#spatial_pred_MTL <- apply(mcmc_samples, 1, spat.pred.nimble)
 
 
 # TODO: reduce the grid, it takes too long
+# REVIEW: Need to change the priors it seems like I am forcing phi
 
 
 ```
 
-```{r Ex 10.9 plot predictions}
+```{r Ex 10.9 plot predictions, messages = FALSE}
+# Mtl_shape <- st_read("data/montreal_shp/temp1.shp") %>% st_as_sf()
+# Mtl_shape$mean_benzene <- rowMeans(spatial_pred_MTL)
+# Mtl_shape$sd <- apply(spatial_pred_MTL, 1, sd)
+# 
+# benzene_post_mean <- ggplot() +
+#   geom_sf(data = Mtl_shape, aes(fill = mean_benzene), color = NA) +
+#   geom_point(data = benzene,
+#              aes(x = lon, y = lat),
+#              color = "midnightblue") +
+#   theme_void() + labs(fill = "Posterior mean")
+# 
+# benzene_post_sd <- ggplot() +
+#   geom_sf(data = Mtl_shape, aes(fill = sd), color = NA) +
+#   geom_point(data = benzene,
+#              aes(x = lon, y = lat),
+#              color = "midnightblue") +
+#   theme_void() + labs(fill = "Posterior sd")
+# 
+# plot_grid(benzene_post_mean, benzene_post_sd, labels = "auto")
 
-
-Mtl_shape <- readOGR("data/montreal_shp/temp1.shp")
-
-Mtl_centroids_df$mean_benzene <- rowMeans(spatial_pred_MTL)
-
-ggplot(Mtl_centroids_df) + 
-  geom_point(aes(x = easting, y = northing, color = mean_benzene), size = 10) + 
-  theme_void()
-
-
-Mtl_shape$mean_benzene <- rowMeans(spatial_pred_MTL)
-
-plot(Mtl_shape)
 ```
 
 ### Stan

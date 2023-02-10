@@ -12,9 +12,7 @@ output:
         collapsed: false
         smooth_scroll: false
       theme: lumen
-bibliography: [book.bib]
 link-citations: yes
-github-repo: rstudio/bookdown-demo
 cover-image: "img/cover.jpg"
 
 ---

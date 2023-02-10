@@ -6,13 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology</title>
   <meta name="description" content="Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
   <meta property="og:type" content="book" />
   <meta property="og:image" content="/img/cover.jpg" />
   
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
+  
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2022-12-20" />
+<meta name="date" content="2023-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Spatio-temporal methods in environmental epidemiology</a></li>
+<li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
@@ -171,11 +171,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="hazards.html"><a href="hazards.html"><i class="fa fa-check"></i><b>10</b> Environmental hazards-spatial models</a>
 <ul>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1"><i class="fa fa-check"></i>Example 10.1</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9"><i class="fa fa-check"></i>Example 10.9</a>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1-spatial-patterns-of-benzene-concentrations-in-montreal-qc-canada"><i class="fa fa-check"></i>Example 10.1 Spatial patterns of benzene concentrations in Montreal, QC, Canada</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.2-examining-the-log-concentrations-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.2: Examining the log concentrations of benzene in Montreal</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.5-variogram"><i class="fa fa-check"></i>Example 10.5: Variogram</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.9 Spatial modelling of Benzene in Montreal</a>
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="10.0.1" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i><b>10.0.1</b> Stan</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -185,11 +192,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.14-forecasting-volcanic-ash"><i class="fa fa-check"></i>Example 11.14 Forecasting volcanic ash</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model"><i class="fa fa-check"></i>Example 11.16 implementation of a dynamic linear model</a>
 <ul>
-<li class="chapter" data-level="11.0.1" data-path="Time.html"><a href="Time.html#nimble-3"><i class="fa fa-check"></i><b>11.0.1</b> Nimble</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#autoregressive-model-daily-data"><i class="fa fa-check"></i>Autoregressive model daily data</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#uk-ozone-data-rw"><i class="fa fa-check"></i>UK ozone data RW</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#uk-ozone-data-linear-growth"><i class="fa fa-check"></i>UK ozone data linear growth</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
-<li class="chapter" data-level="13" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>13</b> Causality-roadblocks on the way to it</a></li>
+<li class="chapter" data-level="13" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>13</b> Causality-roadblocks on the way to it</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="causality.html"><a href="causality.html#solutions-to-selected-exercises"><i class="fa fa-check"></i><b>13.1</b> Solutions to Selected Exercises</a>
+<ul>
+<li class="chapter" data-level="13.1.1" data-path="causality.html"><a href="causality.html#question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r."><i class="fa fa-check"></i><b>13.1.1</b> Question 13.16: Load the Italy and China data, described in Example 13.3, and included in the supplementary Bookdown material into R.</a></li>
+<li class="chapter" data-level="13.1.2" data-path="causality.html"><a href="causality.html#question-13.17-using-the-italy-and-china-data-stratified-by-the-age-groups-70-and-geq-70-obtain-empirical-estimates-of-p_1-and-p_2-as-defined-in-an-sdis.-in-the-following-questions-assume-that-p_1-and-p_2-are-the-population-values."><i class="fa fa-check"></i><b>13.1.2</b> Question 13.17: Using the Italy and China data stratified by the age groups <span class="math inline">\(&lt;70\)</span> and <span class="math inline">\(\geq 70\)</span>, obtain empirical estimates of <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>, as defined in an SDis. In the following questions, assume that <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span> are the population values.</a></li>
+<li class="chapter" data-level="13.1.3" data-path="causality.html"><a href="causality.html#question-13.18-stratify-the-italy-and-china-data-by-the-age-groups-50-and-geq-50.-display-the-corresponding-contingency-tables."><i class="fa fa-check"></i><b>13.1.3</b> Question 13.18: Stratify the Italy and China data by the age groups <span class="math inline">\(&lt;50\)</span> and <span class="math inline">\(\geq 50\)</span>. Display the corresponding contingency tables.</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="14" data-path="monitoring.html"><a href="monitoring.html"><i class="fa fa-check"></i><b>14</b> Better monitoring network design-getting better measurements</a></li>
 <li class="chapter" data-level="15" data-path="frontiers.html"><a href="frontiers.html"><i class="fa fa-check"></i><b>15</b> Current frontiers</a></li>
 <li class="chapter" data-level="" data-path="course.html"><a href="course.html"><i class="fa fa-check"></i>Course</a></li>
@@ -414,7 +431,7 @@ the areas.</p>
 <span id="cb16-17"><a href="tactics.html#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb16-18"><a href="tactics.html#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">rect =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb16-19"><a href="tactics.html#cb16-19" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20map-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20map-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r" class="section level3 unnumbered hasAnchor">
 <h3>Modelling a Poisson-Gamma with an MCMC implemented in <code>R</code><a href="tactics.html#modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -510,25 +527,25 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <span id="cb19-19"><a href="tactics.html#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(b[seqaux], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
 <span id="cb19-20"><a href="tactics.html#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(b[seqaux], <span class="at">prob =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
 <span id="cb19-21"><a href="tactics.html#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">dexp</span>(xx, lambda_b), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20convergence-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20convergence-1.png" width="672" /></p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="tactics.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Traceplots of theta&#39;s</span></span>
 <span id="cb20-2"><a href="tactics.html#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="tactics.html#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
 <span id="cb20-4"><a href="tactics.html#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
 <span id="cb20-5"><a href="tactics.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(theta[seqaux, i], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20convergence-2.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20convergence-2.png" width="672" /></p>
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 <p>Given the convergence issues, we can also check the estimated sampled size and Rhat using the package <code>coda</code>.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="tactics.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ESS a:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ESS a:&quot;</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="tactics.html#cb23-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]) </span></code></pre></div>
 <pre><code>##     var1 
-## 39.00681</code></pre>
+## 46.42355</code></pre>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="tactics.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ESS b:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ESS b:&quot;</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="tactics.html#cb27-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux])</span></code></pre></div>
 <pre><code>##     var1 
-## 42.29559</code></pre>
+## 48.35987</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="tactics.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;ESS theta[1]:&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]:&quot;</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="tactics.html#cb31-1" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>])</span></code></pre></div>
@@ -563,7 +580,7 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <span id="cb37-20"><a href="tactics.html#cb37-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
 <span id="cb37-21"><a href="tactics.html#cb37-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(i, q025theta[i], i, q975theta[i])</span>
 <span id="cb37-22"><a href="tactics.html#cb37-22" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="tactics.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary of fitted values</span></span>
 <span id="cb38-2"><a href="tactics.html#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-3"><a href="tactics.html#cb38-3" aria-hidden="true" tabindex="-1"></a>meanfit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, mean)</span>
@@ -588,7 +605,7 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <span id="cb38-22"><a href="tactics.html#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
 <span id="cb38-23"><a href="tactics.html#cb38-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(y[i], q025fit[i], y[i], q975fit[i])</span>
 <span id="cb38-24"><a href="tactics.html#cb38-24" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="example-6.3-fitting-a-poisson-regression-model-in-nimble" class="section level2 unnumbered hasAnchor">
@@ -652,23 +669,23 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="tactics.html#cb42-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.364
+## [1] 3049.447
 ## Field &quot;lppd&quot;:
-## [1] -1514.458
+## [1] -1514.418
 ## Field &quot;pWAIC&quot;:
-## [1] 10.22433</code></pre>
+## [1] 10.30548</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="tactics.html#cb44-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
 <span id="cb44-2"><a href="tactics.html#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-3"><a href="tactics.html#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of beta1</span></span>
 <span id="cb44-4"><a href="tactics.html#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.3%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="tactics.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of base</span></span>
 <span id="cb45-2"><a href="tactics.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-2.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.3%20traceplots-2.png" width="672" /></p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="tactics.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of RR</span></span>
 <span id="cb46-2"><a href="tactics.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-3.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.3%20traceplots-3.png" width="672" /></p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="tactics.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of base</span></span>
 <span id="cb47-2"><a href="tactics.html#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -681,12 +698,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.1288584      0.0122649      0.0001939      0.0001969 
+##      1.1287597      0.0128518      0.0002032      0.0002093 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.105 1.121 1.129 1.137 1.153</code></pre>
+## 1.104 1.120 1.129 1.137 1.154</code></pre>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="tactics.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
 <span id="cb49-2"><a href="tactics.html#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -699,12 +716,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0148438      0.0174738      0.0002763      0.0004220 
+##      1.0144102      0.0177951      0.0002814      0.0004463 
 ## 
 ## 2. Quantiles for each variable:
 ## 
-##  2.5%   25%   50%   75% 97.5% 
-## 0.981 1.003 1.015 1.026 1.050</code></pre>
+##   2.5%    25%    50%    75%  97.5% 
+## 0.9799 1.0025 1.0142 1.0264 1.0509</code></pre>
 
 </div>
 </div>
@@ -745,7 +762,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-Chpt6.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-Chpt6.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -756,7 +773,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf", "_main.epub"],
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
 "search": {
 "engine": "fuse",
 "options": null
