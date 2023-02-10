@@ -1,3 +1,57 @@
 # Why spatio-temporal epidemiology? {#why}
 
 This chapter provides a overview of methods for spatio-temporal modelling and their use in epidemiological studies 
+
+
+## Example 1.5 {-}
+
+```{r Ex 1.5 load data, message = FALSE, warning=FALSE, error=FALSE}
+# Loading relevant libraries
+library(ggmap)
+library(sp)
+library(rgdal)
+
+# Load Meuse river 
+data(meuse)
+
+```
+
+
+```{r Ex 1.5 coordinates and map}
+
+# Assign a reference system used in the Netherlands
+coordinates(meuse) <- ~ x + y
+proj4string(meuse) <- CRS('+init=epsg:28992') 
+
+# Convert it to latitude - longitude scale
+meuse_ll <- spTransform(meuse,CRS("+proj=longlat +datum=WGS84"))
+meuse_ll_df <- as.data.frame(meuse_ll)
+# Specify the bounding box 
+latLongBox = bbox(meuse_ll)
+location = c(latLongBox[1, 1] - 0.01,
+             latLongBox[2, 1] - 0.01,
+             latLongBox[1, 2] + 0.01,
+             latLongBox[2, 2] + 0.01)
+
+# Create map with location dots marked on it in
+MeuseMap <-
+  get_stamenmap(
+    bbox =  location,
+    zoom = 5
+  )
+
+ggmap(MeuseMap) + geom_point(
+  data = meuse_ll_df,
+  aes(
+    x = x,
+    y = y
+  )) + theme_void()
+
+
+```
+```{r Ex 1.5 }
+###Finally we write the result that can be read by Google maps
+writeOGR(meuse_ll, "meuse.kml", "meuse", driver="KML")
+
+```
+
