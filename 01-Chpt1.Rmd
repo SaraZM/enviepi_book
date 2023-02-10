@@ -37,15 +37,16 @@ location = c(latLongBox[1, 1] - 0.01,
 MeuseMap <-
   get_stamenmap(
     bbox =  location,
-    zoom = 5
+    zoom = 14
   )
 
 ggmap(MeuseMap) + geom_point(
   data = meuse_ll_df,
   aes(
     x = x,
-    y = y
-  )) + theme_void()
+    y = y, 
+    color = "red"
+  )) + theme_void() + theme(legend.position="none")
 
 
 ```
