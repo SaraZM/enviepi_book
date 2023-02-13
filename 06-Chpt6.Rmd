@@ -268,17 +268,11 @@ Given the convergence issues, we can also check the estimated sampled size and R
 
 ```{r Ex 6.2 ESS and Rhat}
 
-print("ESS a:")
-coda::effectiveSize(a[seqaux]) 
-print("ESS b:")
+print0("ESS a: ", coda::effectiveSize(a[seqaux]))
+print0("ESS b: ", coda::effectiveSize(b[seqaux]))
+print0("ESS theta[1]: ", coda::effectiveSize(theta[seqaux, 1]))
+print0("ESS theta[10]: ",coda::effectiveSize(theta[seqaux, 10]))
 
-coda::effectiveSize(b[seqaux])
-
-print("ESS theta[1]:")
-coda::effectiveSize(theta[seqaux, 1])
-
-print("ESS theta[10]:")
-coda::effectiveSize(theta[seqaux, 10])
   
 ```
 

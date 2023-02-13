@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Epidemiology-the basics | Spatio-temporal methods in environmental epidemiology</title>
   <meta name="description" content="Chapter 2 Epidemiology-the basics | Spatio-temporal methods in environmental epidemiology" />
-  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Epidemiology-the basics | Spatio-temporal methods in environmental epidemiology" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-08" />
+<meta name="date" content="2023-02-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -133,13 +133,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Spatio-temporal methods in environmental epidemiology</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="" data-path="preface-2nd-edition.html"><a href="preface-2nd-edition.html"><i class="fa fa-check"></i>Preface (2nd edition)</a></li>
-<li class="chapter" data-level="1" data-path="why.html"><a href="why.html"><i class="fa fa-check"></i><b>1</b> Why spatio-temporal epidemiology?</a></li>
-<li class="chapter" data-level="2" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>2</b> Epidemiology-the basics</a></li>
+<li class="chapter" data-level="1" data-path="why.html"><a href="why.html"><i class="fa fa-check"></i><b>1</b> Why spatio-temporal epidemiology?</a>
+<ul>
+<li class="chapter" data-level="" data-path="why.html"><a href="why.html#example-1.5"><i class="fa fa-check"></i>Example 1.5</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>2</b> Epidemiology-the basics</a>
+<ul>
+<li class="chapter" data-level="" data-path="basics.html"><a href="basics.html#example-2.9-estimating-the-smr-using-a-poisson-glm"><i class="fa fa-check"></i>Example 2.9: Estimating the SMR using a Poisson GLM</a></li>
+<li class="chapter" data-level="" data-path="basics.html"><a href="basics.html#example-2.10-estimating-the-smr-using-quasi-likelihood"><i class="fa fa-check"></i>Example 2.10: Estimating the SMR using quasi-likelihood</a></li>
+<li class="chapter" data-level="" data-path="basics.html"><a href="basics.html#example-2.11-modelling-differences-in-smrs-in-relation-to-differences-in-exposures"><i class="fa fa-check"></i>Example 2.11: Modelling differences in SMRs in relation to differences in exposures</a></li>
+<li class="chapter" data-level="" data-path="basics.html"><a href="basics.html#example-2.12-modelling-the-risks-associated-with-lagged-effects-of-air-pollution"><i class="fa fa-check"></i>Example 2.12: Modelling the risks associated with lagged effects of air pollution</a></li>
+<li class="chapter" data-level="" data-path="basics.html"><a href="basics.html#example-2.13-estimating-the-odds-ratio-in-a-case-control-study-using-a-logistic-model"><i class="fa fa-check"></i>Example 2.13: Estimating the odds ratio in a case-control study using a logistic model</a></li>
+<li class="chapter" data-level="" data-path="basics.html"><a href="basics.html#example-2.14-estimating-the-odds-ratio-of-asthma-associated-with-proximity-to-roads"><i class="fa fa-check"></i>Example 2.14: Estimating the odds ratio of asthma associated with proximity to roads</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="uncertainty.html"><a href="uncertainty.html"><i class="fa fa-check"></i><b>3</b> Uncertainty and its reduction</a></li>
 <li class="chapter" data-level="4" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>4</b> Data: increasing information and reducing uncertainty</a></li>
 <li class="chapter" data-level="5" data-path="embracing.html"><a href="embracing.html"><i class="fa fa-check"></i><b>5</b> Embracing uncertainty: the Bayesian approach</a></li>
@@ -241,7 +252,97 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Modelling the effect of exposures on health and allowing for the possible effects of covariates.</li>
 <li>Cumulative exposures to environmental hazards.</li>
 </ul>
+<div id="example-2.9-estimating-the-smr-using-a-poisson-glm" class="section level2 unnumbered hasAnchor">
+<h2>Example 2.9: Estimating the SMR using a Poisson GLM<a href="basics.html#example-2.9-estimating-the-smr-using-a-poisson-glm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="basics.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding MLE and SE of log(SMR) = beta0 on one single area</span></span>
+<span id="cb1-2"><a href="basics.html#cb1-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">29</span>  <span class="co"># Total observed death</span></span>
+<span id="cb1-3"><a href="basics.html#cb1-3" aria-hidden="true" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fl">19.88</span> <span class="co"># Expected deaths</span></span>
+<span id="cb1-4"><a href="basics.html#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="basics.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)), <span class="at">family =</span> <span class="st">&quot;poisson&quot;</span>))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ offset(log(E)), family = &quot;poisson&quot;)
+## 
+## Deviance Residuals: 
+## [1]  0
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)   0.3776     0.1857   2.033    0.042 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 6.6613e-16  on 0  degrees of freedom
+## Residual deviance: 4.4409e-15  on 0  degrees of freedom
+## AIC: 7.2109
+## 
+## Number of Fisher Scoring iterations: 3</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="basics.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding MLE and SE of log(SMR) = beta0 over multiple areas</span></span>
+<span id="cb3-2"><a href="basics.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)),<span class="at">family=</span><span class="st">&quot;poisson&quot;</span>, <span class="at">data=</span>data))</span></code></pre></div>
+</div>
+<div id="example-2.10-estimating-the-smr-using-quasi-likelihood" class="section level2 unnumbered hasAnchor">
+<h2>Example 2.10: Estimating the SMR using quasi-likelihood<a href="basics.html#example-2.10-estimating-the-smr-using-quasi-likelihood" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="basics.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using quasi-likelihood to find the MLE and standard error of log(SMR) = beta0</span></span>
+<span id="cb4-2"><a href="basics.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)), <span class="at">family=</span><span class="st">&quot;quasipoisson&quot;</span>), <span class="at">data =</span> data)</span></code></pre></div>
+</div>
+<div id="example-2.11-modelling-differences-in-smrs-in-relation-to-differences-in-exposures" class="section level2 unnumbered hasAnchor">
+<h2>Example 2.11: Modelling differences in SMRs in relation to differences in exposures<a href="basics.html#example-2.11-modelling-differences-in-smrs-in-relation-to-differences-in-exposures" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="basics.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting a model to estimate the relative risk associated with air pollution</span></span>
+<span id="cb5-2"><a href="basics.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1, <span class="at">family=</span><span class="st">&quot;poisson&quot;</span>, <span class="at">data=</span>data))</span>
+<span id="cb5-3"><a href="basics.html#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="basics.html#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting a model to estimate the relative risk associated with air pollution </span></span>
+<span id="cb5-5"><a href="basics.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># using a Quasi-Poisson approach</span></span>
+<span id="cb5-6"><a href="basics.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1, <span class="at">family =</span> <span class="st">&quot;quasipoisson&quot;</span>, <span class="at">data =</span> data))</span>
+<span id="cb5-7"><a href="basics.html#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="basics.html#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Fitting a Poisson GLM with air pollution and deprivation</span></span>
+<span id="cb5-9"><a href="basics.html#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">family =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">data =</span> data))</span>
+<span id="cb5-10"><a href="basics.html#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="basics.html#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting a Quasi-Poisson GLM with air pollution and deprivation</span></span>
+<span id="cb5-12"><a href="basics.html#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">family =</span> <span class="st">&quot;quasipoisson&quot;</span>, <span class="at">data =</span></span>
+<span id="cb5-13"><a href="basics.html#cb5-13" aria-hidden="true" tabindex="-1"></a>              data))</span></code></pre></div>
+<p>Perform tests between the deviances of two models.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="basics.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test 1: Effect on Quasi-Poisson models with and without deprivation</span></span>
+<span id="cb6-2"><a href="basics.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(</span>
+<span id="cb6-3"><a href="basics.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1, <span class="at">family =</span> <span class="st">&quot;quasipoisson&quot;</span>, <span class="at">data =</span> data),</span>
+<span id="cb6-4"><a href="basics.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Model 1</span></span>
+<span id="cb6-5"><a href="basics.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">family =</span> <span class="st">&quot;quasipoisson&quot;</span>, <span class="at">data =</span> data),</span>
+<span id="cb6-6"><a href="basics.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Model2</span></span>
+<span id="cb6-7"><a href="basics.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">test =</span> <span class="st">&quot;Chisq&quot;</span></span>
+<span id="cb6-8"><a href="basics.html#cb6-8" aria-hidden="true" tabindex="-1"></a>) <span class="co"># Chi-Squared test</span></span>
+<span id="cb6-9"><a href="basics.html#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="basics.html#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Test 2: Effect on Quasi-Poisson models with and without air pollution</span></span>
+<span id="cb6-11"><a href="basics.html#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(</span>
+<span id="cb6-12"><a href="basics.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1 <span class="sc">+</span> X2, <span class="at">family =</span> <span class="st">&quot;quasipoisson&quot;</span>, <span class="at">data =</span> data),</span>
+<span id="cb6-13"><a href="basics.html#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Model 1</span></span>
+<span id="cb6-14"><a href="basics.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X2, <span class="at">family =</span> <span class="st">&quot;quasipoisson&quot;</span>, <span class="at">data =</span> data),</span>
+<span id="cb6-15"><a href="basics.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Model 2</span></span>
+<span id="cb6-16"><a href="basics.html#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">test =</span> <span class="st">&quot;Chisq&quot;</span></span>
+<span id="cb6-17"><a href="basics.html#cb6-17" aria-hidden="true" tabindex="-1"></a>) <span class="co"># Chi-Squared test</span></span></code></pre></div>
+</div>
+<div id="example-2.12-modelling-the-risks-associated-with-lagged-effects-of-air-pollution" class="section level2 unnumbered hasAnchor">
+<h2>Example 2.12: Modelling the risks associated with lagged effects of air pollution<a href="basics.html#example-2.12-modelling-the-risks-associated-with-lagged-effects-of-air-pollution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="basics.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting quasi-poisson model</span></span>
+<span id="cb7-2"><a href="basics.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(</span>
+<span id="cb7-3"><a href="basics.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> Y <span class="sc">~</span> <span class="fu">offset</span>(<span class="fu">log</span>(E)) <span class="sc">+</span> X1 <span class="sc">+</span> X1t1 <span class="sc">+</span> X1t2,</span>
+<span id="cb7-4"><a href="basics.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family  =</span> <span class="st">&quot;quasipoisson&quot;</span>,</span>
+<span id="cb7-5"><a href="basics.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data    =</span> data</span>
+<span id="cb7-6"><a href="basics.html#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="example-2.13-estimating-the-odds-ratio-in-a-case-control-study-using-a-logistic-model" class="section level2 unnumbered hasAnchor">
+<h2>Example 2.13: Estimating the odds ratio in a case-control study using a logistic model<a href="basics.html#example-2.13-estimating-the-odds-ratio-in-a-case-control-study-using-a-logistic-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="basics.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting Odds Ratio</span></span>
+<span id="cb8-2"><a href="basics.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(<span class="at">formula =</span> Y <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb8-3"><a href="basics.html#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb8-4"><a href="basics.html#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data)</span></code></pre></div>
+</div>
+<div id="example-2.14-estimating-the-odds-ratio-of-asthma-associated-with-proximity-to-roads" class="section level2 unnumbered hasAnchor">
+<h2>Example 2.14: Estimating the odds ratio of asthma associated with proximity to roads<a href="basics.html#example-2.14-estimating-the-odds-ratio-of-asthma-associated-with-proximity-to-roads" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="basics.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting Odds Ratio</span></span>
+<span id="cb9-2"><a href="basics.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(Y <span class="sc">~</span> X, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, <span class="at">data =</span> data)</span></code></pre></div>
 
+</div>
 </div>
             </section>
 
@@ -280,7 +381,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/02-Chpt2.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Chpt2.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -291,7 +392,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"download": ["_main.pdf", "_main.epub"],
 "search": {
 "engine": "fuse",
 "options": null

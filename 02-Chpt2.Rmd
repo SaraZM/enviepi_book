@@ -7,3 +7,106 @@ This chapter contains the basic principles of epidemiological analysis and how e
 - The use of generalised linear models (GLMS) to model counts of disease and case--control indicators.
 - Modelling the effect of exposures on health and allowing for the possible effects of covariates.
 - Cumulative exposures to environmental hazards.
+
+
+## Example 2.9: Estimating the SMR using a Poisson GLM {-}
+
+
+```{r Ex 2.9 smr poisson one location}
+
+# Finding MLE and SE of log(SMR) = beta0 on one single area
+y <- 29  # Total observed death
+E <- 19.88 # Expected deaths
+
+summary(glm(y ~ offset(log(E)), family = "poisson"))
+
+```
+```{r Ex 2.9 smr poisson multiple locations, eval = FALSE}
+# Finding MLE and SE of log(SMR) = beta0 over multiple areas
+summary(glm(Y ~ offset(log(E)),family="poisson", data=data))
+
+```
+
+
+## Example 2.10: Estimating the SMR using quasi-likelihood {-}
+
+```{r Ex 2.10 smr quasi-likelihood, eval = FALSE}
+# Using quasi-likelihood to find the MLE and standard error of log(SMR) = beta0
+summary(glm(y ~ offset(log(E)), family="quasipoisson"), data = data)
+
+```
+
+
+## Example 2.11: Modelling differences in SMRs in relation to differences in exposures {-}
+
+```{r Ex 2.11 relative risk, eval = FALSE}
+# Fitting a model to estimate the relative risk associated with air pollution
+summary(glm(Y ~ offset(log(E)) + X1, family="poisson", data=data))
+
+# Fitting a model to estimate the relative risk associated with air pollution 
+# using a Quasi-Poisson approach
+summary(glm(Y ~ offset(log(E)) + X1, family = "quasipoisson", data = data))
+
+#Fitting a Poisson GLM with air pollution and deprivation
+summary(glm(Y ~ offset(log(E)) + X1 + X2, family = "poisson", data = data))
+
+# Fitting a Quasi-Poisson GLM with air pollution and deprivation
+summary(glm(Y ~ offset(log(E)) + X1 + X2, family = "quasipoisson", data =
+              data))
+
+```
+
+Perform tests between the deviances of two models.
+
+```{r Ex 2.11 tests, eval = FALSE}
+
+# Test 1: Effect on Quasi-Poisson models with and without deprivation
+anova(
+  glm(Y ~ offset(log(E)) + X1, family = "quasipoisson", data = data),
+  # Model 1
+  glm(Y ~ offset(log(E)) + X1 + X2, family = "quasipoisson", data = data),
+  # Model2
+  test = "Chisq"
+) # Chi-Squared test
+
+# Test 2: Effect on Quasi-Poisson models with and without air pollution
+anova(
+  glm(Y ~ offset(log(E)) + X1 + X2, family = "quasipoisson", data = data),
+  # Model 1
+  glm(Y ~ offset(log(E)) + X2, family = "quasipoisson", data = data),
+  # Model 2
+  test = "Chisq"
+) # Chi-Squared test
+
+```
+
+## Example 2.12: Modelling the risks associated with lagged effects of air pollution {-}
+
+```{r Ex 2.12 lagged effects, eval = FALSE}
+# Fitting quasi-poisson model
+glm(
+  formula = Y ~ offset(log(E)) + X1 + X1t1 + X1t2,
+  family  = "quasipoisson",
+  data    = data
+)
+```
+
+## Example 2.13: Estimating the odds ratio in a case-control study using a logistic model {-}  
+
+```{r Ex 2.13 odds ratio, eval = FALSE}
+# Fitting Odds Ratio
+glm(formula = Y ~ 1,
+    family = "binomial",
+    data = data)
+```
+
+## Example 2.14: Estimating the odds ratio of asthma associated with proximity to roads {-}
+
+```{r Ex 2.14 odds ratio asma, eval = FALSE}
+# Fitting Odds Ratio
+glm(Y ~ X, family = "binomial", data = data)
+
+```
+
+
+

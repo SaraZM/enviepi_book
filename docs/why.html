@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 Why spatio-temporal epidemiology? | Spatio-temporal methods in environmental epidemiology</title>
   <meta name="description" content="Chapter 1 Why spatio-temporal epidemiology? | Spatio-temporal methods in environmental epidemiology" />
-  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 Why spatio-temporal epidemiology? | Spatio-temporal methods in environmental epidemiology" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-08" />
+<meta name="date" content="2023-02-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -133,12 +133,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Spatio-temporal methods in environmental epidemiology</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="" data-path="preface-2nd-edition.html"><a href="preface-2nd-edition.html"><i class="fa fa-check"></i>Preface (2nd edition)</a></li>
-<li class="chapter" data-level="1" data-path="why.html"><a href="why.html"><i class="fa fa-check"></i><b>1</b> Why spatio-temporal epidemiology?</a></li>
+<li class="chapter" data-level="1" data-path="why.html"><a href="why.html"><i class="fa fa-check"></i><b>1</b> Why spatio-temporal epidemiology?</a>
+<ul>
+<li class="chapter" data-level="" data-path="why.html"><a href="why.html#example-1.5"><i class="fa fa-check"></i>Example 1.5</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>2</b> Epidemiology-the basics</a></li>
 <li class="chapter" data-level="3" data-path="uncertainty.html"><a href="uncertainty.html"><i class="fa fa-check"></i><b>3</b> Uncertainty and its reduction</a></li>
 <li class="chapter" data-level="4" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>4</b> Data: increasing information and reducing uncertainty</a></li>
@@ -234,7 +237,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="why" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Why spatio-temporal epidemiology?<a href="why.html#why" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This chapter provides a overview of methods for spatio-temporal modelling and their use in epidemiological studies</p>
+<div id="example-1.5" class="section level2 unnumbered hasAnchor">
+<h2>Example 1.5<a href="why.html#example-1.5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="why.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading relevant libraries</span></span>
+<span id="cb1-2"><a href="why.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
+<span id="cb1-3"><a href="why.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb1-4"><a href="why.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb1-5"><a href="why.html#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="why.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Meuse river </span></span>
+<span id="cb1-7"><a href="why.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="why.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign a reference system used in the Netherlands</span></span>
+<span id="cb2-2"><a href="why.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(meuse) <span class="ot">&lt;-</span> <span class="er">~</span> x <span class="sc">+</span> y</span>
+<span id="cb2-3"><a href="why.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(meuse) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&#39;+init=epsg:28992&#39;</span>) </span>
+<span id="cb2-4"><a href="why.html#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="why.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert it to latitude - longitude scale</span></span>
+<span id="cb2-6"><a href="why.html#cb2-6" aria-hidden="true" tabindex="-1"></a>meuse_ll <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(meuse,<span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning: PROJ support is provided by the sf and terra packages among others</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="why.html#cb4-1" aria-hidden="true" tabindex="-1"></a>meuse_ll_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(meuse_ll)</span>
+<span id="cb4-2"><a href="why.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the bounding box </span></span>
+<span id="cb4-3"><a href="why.html#cb4-3" aria-hidden="true" tabindex="-1"></a>latLongBox <span class="ot">=</span> <span class="fu">bbox</span>(meuse_ll)</span>
+<span id="cb4-4"><a href="why.html#cb4-4" aria-hidden="true" tabindex="-1"></a>location <span class="ot">=</span> <span class="fu">c</span>(latLongBox[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.01</span>,</span>
+<span id="cb4-5"><a href="why.html#cb4-5" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.01</span>,</span>
+<span id="cb4-6"><a href="why.html#cb4-6" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">1</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.01</span>,</span>
+<span id="cb4-7"><a href="why.html#cb4-7" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.01</span>)</span>
+<span id="cb4-8"><a href="why.html#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="why.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with location dots marked on it in</span></span>
+<span id="cb4-10"><a href="why.html#cb4-10" aria-hidden="true" tabindex="-1"></a>MeuseMap <span class="ot">&lt;-</span></span>
+<span id="cb4-11"><a href="why.html#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_stamenmap</span>(</span>
+<span id="cb4-12"><a href="why.html#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">bbox =</span>  location,</span>
+<span id="cb4-13"><a href="why.html#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">zoom =</span> <span class="dv">14</span></span>
+<span id="cb4-14"><a href="why.html#cb4-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## ℹ Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="why.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(MeuseMap) <span class="sc">+</span> <span class="fu">geom_point</span>(</span>
+<span id="cb6-2"><a href="why.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> meuse_ll_df,</span>
+<span id="cb6-3"><a href="why.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb6-4"><a href="why.html#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> x,</span>
+<span id="cb6-5"><a href="why.html#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> y, </span>
+<span id="cb6-6"><a href="why.html#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;red&quot;</span></span>
+<span id="cb6-7"><a href="why.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span> <span class="fu">theme_void</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%201.5%20coordinates%20and%20map-1.png" width="672" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="why.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">###Finally we write the result that can be read by Google maps</span></span>
+<span id="cb7-2"><a href="why.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#writeOGR(meuse_ll, &quot;meuse.kml&quot;, &quot;meuse&quot;, driver=&quot;KML&quot;)</span></span></code></pre></div>
 
+</div>
 </div>
             </section>
 
@@ -273,7 +318,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-Chpt1.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-Chpt1.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -284,7 +329,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"download": ["_main.pdf", "_main.epub"],
 "search": {
 "engine": "fuse",
 "options": null

@@ -50,9 +50,10 @@ ggmap(MeuseMap) + geom_point(
 
 
 ```
-```{r Ex 1.5 }
-###Finally we write the result that can be read by Google maps
-#writeOGR(meuse_ll, "meuse.kml", "meuse", driver="KML")
+```{r Ex 1.5 write ogr data, eval = FALSE}
+
+# Finally we write the result that can be read by Google maps
+writeOGR(meuse_ll, "meuse.kml", "meuse", driver="KML")
 
 ```
 
