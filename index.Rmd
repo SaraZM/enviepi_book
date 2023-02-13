@@ -29,6 +29,9 @@ All the codes used for the examples in the book are presented here to ensure the
 
 Please feel free to contact us if you find any typos, or error in our code *Errare humanum est*.
 
+We would like to thank Yang ‘Seagle’ Liu, Yiping Dou, and Yi Liu for allowing us to include their code and other material in the book and in the online resources.
+
+We would also like to thank [Johnny Xi](https://xijohnny.github.io/), [Paritosh Kumar Roy](https://github.com/paritoshkroy) and [Sara Zapata-Marin](https://github.com/SaraZM)  for their help developing some of the additional examples and exercises for this edition. 
 
 
 

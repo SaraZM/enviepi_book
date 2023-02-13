@@ -23,6 +23,7 @@ library(ggmap)
 library(spdep)
 # Load data on benzene concentration in Montreal
 benzene <- read.csv("data/montreal_benzene_apr.csv")
+# TODO: Add description of the data, this is the April campaign
 ```
 
 ```{r Ex 10.1 map data, message = FALSE, warning=FALSE, error=FALSE}
@@ -73,19 +74,56 @@ plot(benzene_geodata)
 
 ```{r Ex 10.2 plot hist and qqplot log}
 # Histogram for the log of the benzene concentration
+par(mfrow=c(1,2))
 log_histogram <- hist(log(benzene$Benzene), main = "", xlab = "log(Benzene)")
-# qqplot for the log of the benzene concentration
-qqnorm(log(benzene$Benzene), bty = "n");
+qqnorm(log(benzene$Benzene), bty = "n")
 qqline(log(benzene$Benzene))
 
 ```
 <!-- NOTE: I don't know how to generate the plot in Figure 9.4 -->
 
+## Example 10.3: Mapping the locations of ozone monitoring sites in New York State
+
+```{r Ex 10.3 plot ozone sites NY, message = FALSE, warning=FALSE, error=FALSE}
+# Load the metadata giving the site coordinates 
+ny_data <- read.csv("data/NY_metadata.txt", sep="") 
+# Now copy ny_data into ny_data_sp and convert data to "sp" format 
+ny_data_sp <- ny_data
+coordinates(ny_data_sp) <- ~Longitude+Latitude 
+
+# assign a reference system to ny_data_sp 
+proj4string(ny_data_sp) <- CRS("+proj=longlat +ellps=WGS84") 
+
+# We next specify a bounding box - a 2 x 2 matrix of corners of the geographic 
+# area. Then specify the range of locations within the box. 
+# Note: location must bounding box format be in left -bottom -right -top 
+latLongBox  <-  bbox(ny_data_sp)
+location <-  c(latLongBox [1, 1] - 0.2 ,
+               latLongBox [2, 1] - 0.2,
+               latLongBox [1, 2] + 0.2 ,
+               latLongBox [2, 2] + 0.2)
+
+# Now create the map with location dots 
+NYmap <-
+  get_stamenmap(
+   bbox = location,
+   zoom = 8
+  )
+
+ggmap(NYmap) + geom_point(
+  data = ny_data,
+  aes(x = Longitude , y = Latitude),
+  size = 4,
+  color = "darkred"
+) + theme_void()
+
+```
+
+
 ## Example 10.5: Variogram {-}
 
 
 ```{r Ex 10.5 plot variogram}
-
 library(gstat)
 benzene_utm_geo <- benzene_utm_df
 # get the coordinates in kms and turn into a Spatial object
@@ -102,7 +140,7 @@ plot(benzene_vgm, benzene_vgm_fit)
 ## Example 10.6 Basic spatial modelling and prediction of benzene in Montreal {-}
 
 
-```{r Ex 10.6 kriging predictions, message = "FALSE", warning = "FALSE"}
+```{r Ex 10.6 kriging predictions, message = FALSE, warning=FALSE, error=FALSE}
 # Generate grid
 MtlPred <- expand.grid(seq (580, 615 , 0.5),
                              seq (5020, 5060 , 0.5) )
