@@ -297,6 +297,16 @@ plot(volcano_dust_forecast, bty = "n")
 ```
 
 ## Example 11.16 implementation of a dynamic linear model {-}
+
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+**NOTE**
+:::
+
+The code for the implementation of DLMs in Stan and Nimble was developed by Paritosh Kumar Roy. This code and other more complex DLM structures are available through his [github](https://github.com/paritoshkroy). 
+
+::::
+
 ### Nile river data {-}
 Measurements of the annual flow of the river Nile at Aswan (formerly Assuan), 1871–1970, in $10^8$ $m^3$, “with apparent change point near 1898” (\ref{Cobb1978}, Table 1, p.249).
 
