@@ -352,14 +352,12 @@ C0 <- 100
   
 stan_data <- list(
   T = J,
-  p = 1,
   y = y,
   F = Ft,
   G = Gt,
   m0 = m0,
   C0 = C0
 )
-stan_data
 ```
 
 
@@ -369,7 +367,6 @@ cat functions/Example11_16_Nile.stan
 
 
 ```{r Ex 11.16 nile run stan}
-
 Example11_16_Nile_Stan  <- stan(
   file = "functions/Example11_16_Nile.stan",
   data = stan_data,
@@ -379,18 +376,11 @@ Example11_16_Nile_Stan  <- stan(
   include = TRUE
 )
 
-elapsed_time <- get_elapsed_time(Example11_16_Nile_Stan)
-print(elapsed_time)
 
 rstan::traceplot(Example11_16_Nile_Stan, pars = c("tau","sqrt_W"))
 rstan::traceplot(Example11_16_Nile_Stan, pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), "]"))
 
 stanfit_summary <- summary(Example11_16_Nile_Stan, pars = c("tau","sqrt_W","theta"))
-head(stanfit_summary$summary)
-tail(stanfit_summary$summary)
-summary(stanfit_summary$summary[,"Rhat"])
-summary(stanfit_summary$summary[,"n_eff"])
-
 head(stanfit_summary$summary)
 
 stan_fit_df <- data.frame(stanfit_summary$summary) |>
@@ -406,6 +396,7 @@ ggplot(data = stan_fit_df, aes(x = date)) +
               col = "gray99") +
   theme_clear() + xlab("year")
 
+# TODO: I am still missing the plots for the fitted values here
 ```
 
 
@@ -422,6 +413,7 @@ library(coda)
 library(ggplot2)
 library(nimble)
 library(tidybayes)
+library(tidyverse)
 
 source("functions/FFBS_functions_nimble.R") # load necessary functions for ffbs
 
@@ -496,10 +488,10 @@ conf$printSamplers(executionOrder = TRUE)
 Rmcmc <- buildMCMC(conf)
 Cmcmc <- compileNimble(Rmcmc, project = Cmodel, resetFunctions = TRUE, 
                        showCompilerOutput = TRUE)
-niters <- 20000
+niters <- 40000
 nburnins <- 0.5*niters
 nchains <- 2
-nthins <- 1
+nthins <- 14
 post_samples <- runMCMC(
   Cmcmc,
   niter = niters,
@@ -514,74 +506,242 @@ post_samples <- runMCMC(
 
 post_summary <- nimSummary(post_samples)
 
-tidy_post_samples <- post_samples %>% tidy_draws()
+tidy_post_samples <- post_samples |> tidy_draws()
 
-tidy_post_samples %>%
-  select(.chain,.iteration,.draw,'tau') %>%
-  gather(vars,value,-.chain,-.iteration,-.draw) %>%
-  ggplot(aes(x=.iteration,y=value)) +
+# Traceplots
+tidy_post_samples |>
+  select(.chain, .iteration, .draw, 'tau') |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
   geom_path(aes(color = factor(.chain)), size = 0.25,
             show.legend = FALSE) +
-  facet_wrap(~vars, scales = "free_y", nrow = 1) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 1) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+tidy_post_samples |>
+  select(.chain, .iteration, .draw, 'sqrt_Wt_diag') |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), size = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 1) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+tidy_post_samples |>
+  select(.chain, .iteration, .draw, paste0('theta[', sample.int(J, size = 4, replace = FALSE),"]")) |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), size = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 2) +
   theme_bw() +
   theme(panel.grid = element_blank(),
         strip.background = element_blank())
 
 
-post_sum_theta <- as.data.frame(post_summary) %>%  rownames_to_column() %>%
-  filter(str_detect(rowname, "theta")) %>% 
-  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname))) %>%
-  select(time,post.mean,post.sd,q2.5,q50,q97.5)
+```
 
-ggplot(data = post_sum_theta, aes(x = time)) + 
-  geom_path(aes(y = q50), col = "blue", size = 0.6) +
-  geom_ribbon(aes(ymin = q2.5,ymax = q97.5), fill = "lightgray", alpha = 0.7)+
+```{r 11.16 nile nimble posterior summary}
+
+head(post_summary)
+post_sum_theta <-
+  as.data.frame(post_summary) |>  rownames_to_column() |>
+  filter(str_detect(rowname, "theta")) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname))) |>
+  select(time, post.mean, post.sd, q2.5, q50, q97.5)
+
+ggplot(data = post_sum_theta, aes(x = time)) +
+  geom_ribbon(aes(ymin = q2.5, ymax = q97.5),
+              fill = "lightgray",
+              alpha = 0.7) +
+  geom_path(aes(y = q50), col = "blue", linewidth = 0.6) +
   ylab("") + xlab("Time") + theme_clear()
-
+# REVIEW: it is not giving the same results as Stan and the credible intervals
+# are wider
 ```
 
 ```{r Ex 11.16 nile nimble fitted values }
 
 npsamples <- niters - nburnins
 
-Cnim_postfit_uous <- compileNimble(nim_postfit_uous, showCompilerOutput = FALSE)
+Cnim_postfit_uous <-
+  compileNimble(nim_postfit_uous, showCompilerOutput = FALSE)
 post_tau <- tidy_post_samples$tau
 post_sqrt_Wt_diag <- tidy_post_samples$sqrt_Wt_diag
 
-post_ft_list <- lapply(1:(nchains*npsamples), function(i) {
-  post_Vt <- post_tau[i]^2
-  post_Wt <- post_sqrt_Wt_diag[i]^2
-  post_ft <- Cnim_postfit_uous(yt = dat_list$yt, 
-                               Ft = dat_list$Ft, 
-                               Vt = post_Vt,
-                               Gt = dat_list$Gt, 
-                               Wt = post_Wt,
-                               m0 = dat_list$m0, 
-                               C0 = dat_list$C0)
-  post_ft <- data.frame(ft = post_ft) %>% mutate(time = row_number())
+post_ft_list <- lapply(1:(nchains * npsamples), function(i) {
+  post_Vt <- post_tau[i] ^ 2
+  post_Wt <- post_sqrt_Wt_diag[i] ^ 2
+  post_ft <- Cnim_postfit_uous(
+    yt = dat_list$yt,
+    Ft = dat_list$Ft,
+    Vt = post_Vt,
+    Gt = dat_list$Gt,
+    Wt = post_Wt,
+    m0 = dat_list$m0,
+    C0 = dat_list$C0
+  )
+  post_ft <-
+    data.frame(ft = post_ft) %>% mutate(time = row_number())
   return(post_ft)
 })
 
 tidy_post_ft <- do.call("rbind", post_ft_list)
 
 ## posterior summaries of ft
-post_sum_ft <- tidy_post_ft %>% group_by(time) %>% 
-  summarise(post.mean = mean(ft),
-            post.sd = sd(ft),
-            q2.5 = quantile(ft, prob = 0.025),
-            q50 = quantile(ft, prob = 0.50),
-            q97.5 = quantile(ft, prob = 0.975)) %>%
+post_sum_ft <- tidy_post_ft |> group_by(time) |>
+  summarise(
+    post.mean = mean(ft),
+    post.sd = sd(ft),
+    q2.5 = quantile(ft, prob = 0.025),
+    q50 = quantile(ft, prob = 0.50),
+    q97.5 = quantile(ft, prob = 0.975)
+  ) |>
   ungroup()
 
-ggplot(data = post_sum_ft, aes(x = time)) + 
-  geom_ribbon(aes(ymin = q2.5,ymax = q97.5), fill = "lightblue") +
-  geom_path(aes(y = post.mean), col = "red", size = 0.25) +
-  geom_point(aes(y=yt), size = 0.25) +
+ggplot(data = post_sum_ft, aes(x = time)) +
+  geom_ribbon(aes(ymin = q2.5, ymax = q97.5), fill = "lightblue") +
+  geom_path(aes(y = post.mean), col = "red", linewidth = 0.25) +
+  geom_point(aes(y = yt), size = 0.25) +
   ylab("") +
   xlab("Time") +
   theme_clear()
+
+```
+### UK ozone data
+
+#### Stan
+
+```{r Ex 11.16 ozone clean stan, include = FALSE}
+rm(list = ls())
 ```
 
+
+```{r  Ex 11.16 ozone stan load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+library(coda)
+library(ggplot2)
+library(gridExtra)
+library(rstan)
+library(tidyverse)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+# Load data for RW case
+UK_ozone <- read.csv("data/uk_ozone_one_site.csv")
+# Add a theme to clear axes and background in ggplot (optional)
+theme_clear <- function(){
+  theme(
+    panel.grid.major = element_blank(), # remove background grid
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), # remove grey background
+    axis.line = element_line(colour = "black") # keep axis line
+  )
+}
+```
+
+
+```{r  Ex 11.16 ozone prepare data stan}
+y <- UK_ozone$ozone
+temp <- UK_ozone$temp
+wind <- UK_ozone$wind
+
+J <- length(y)
+p <- 3 # (intercept, wind, temp)
+
+Ft <- array(0, dim = c(J, p))
+Ft[, 1] <- 1
+Ft[, 2] <- (wind[1:J] - mean(wind[1:J])) / sd(wind[1:J])
+Ft[, 3] <- (temp[1:J] - mean(temp[1:J])) / sd(temp[1:J])
+
+Gt <- diag(x = 1, nrow = p, ncol = p)
+m0 <- c(mean(y), 0, 0)
+C0 <- diag(x = 1, nrow = p, ncol = p)
+
+stan_data <- list(T = J, p = p, y = y, F = Ft, G = Gt, m0= m0, C0 = C0)
+
+```
+
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/Example11_16_UK.stan
+``` 
+
+```{r Ex 11.16 ozone run stan}
+Example11_16_UK_Stan  <- stan(
+  file = "functions/Example11_16_UK.stan",
+  data = stan_data,
+  warmup = 5000,
+  iter = 10000,
+  chains = 3,
+  include = TRUE
+)
+
+
+rstan::traceplot(Example11_16_UK_Stan,
+                 pars = c("tau", "sqrt_W_diag", "theta[1,1]"))
+rstan::traceplot(Example11_16_UK_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",1]"))
+rstan::traceplot(Example11_16_UK_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",2]"))
+rstan::traceplot(Example11_16_UK_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",3]"))
+stanfit_summary <-
+  summary(Example11_16_UK_Stan, pars = c("tau", "sqrt_W_diag", "theta"))
+head(stanfit_summary$summary)
+
+fixedpars_summary <-
+  summary(Example11_16_UK_Stan, pars = c("tau", "sqrt_W_diag"))$summary
+fixedpars_summary
+
+theta_summary <-
+  summary(Example11_16_UK_Stan, pars = c("theta"))$summary
+
+p1 <- data.frame(theta_summary) %>%
+  rownames_to_column() %>%
+  filter(rowname %in% paste0("theta[", 1:J, ",1]")) %>%
+  mutate(date = as.Date(UK_ozone$date[1:J])) %>%
+  ggplot(aes(x = date, group = 1)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Intercept") + theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p2 <- data.frame(theta_summary) %>%
+  rownames_to_column() %>%
+  filter(rowname %in% paste0("theta[", 1:J, ",2]")) %>%
+  mutate(date = as.Date(UK_ozone$date[1:J])) %>%
+  ggplot(aes(x = date)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Wind") +  theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+p3 <- data.frame(theta_summary) %>%
+  rownames_to_column() %>%
+  filter(rowname %in% paste0("theta[", 1:J, ",3]")) %>%
+  mutate(date = as.Date(UK_ozone$date[1:J])) %>%
+  ggplot(aes(x = date)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Temperature") +  theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+grid.arrange(p1,p2,p3, ncol = 2)
+# TODO: I am still missing the plots for the fitted values here
+```
+
+#### Nimble
 
 
 <!-- Run model in nimble -->
