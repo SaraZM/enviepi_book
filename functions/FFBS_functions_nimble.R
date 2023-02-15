@@ -2,7 +2,11 @@
 # d function, r function, ffbs function and samplers
 # Univariate observation equation, and univariate system equation
 #######################################################################
-
+#######################################################################
+#### THIS CODE WAS DEVELOPED BY PARITOSH KUMAR ROY ####
+#### MORE ON THIS CAN BE FOUND IN HIS GITHUB PAGE #####
+####      https://github.com/paritoshkroy/       #####
+#######################################################
 
 ## d function
 ddlm_uous <- nimbleFunction(

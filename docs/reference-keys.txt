@@ -33,3 +33,6 @@ i-does-an-sdis-still-occur-why-or-why-not
 ii-compute-hatbeta_1-and-hatbeta_2-and-repeat-the-bonus-question-of-exercise-13.17.-what-has-changed-do-the-changes-match-your-observations
 monitoring
 frontiers
+uk-ozone-data
+stan-4
+nimble-4
