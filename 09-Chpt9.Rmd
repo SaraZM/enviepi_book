@@ -134,7 +134,7 @@ summary(mvSamples[, c("a", "b")])
 # posterior summaries of theta_i
 post_summary <- mcmc.out$summary$all.chains |> as.data.frame() |>
   tibble::rownames_to_column("variable")
-# pot the mean and 95% CIs for the thetas
+# plot the mean and 95% CIs for the thetas
 post_theta <-  post_summary[grepl("theta\\[", post_summary$variable), ]
 
 par(mfrow = c(1, 1))
