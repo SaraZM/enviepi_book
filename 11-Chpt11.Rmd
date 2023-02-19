@@ -613,7 +613,7 @@ ggplot(data = post_sum_ft, aes(x = time)) +
 
 ```
 
-### UK ozone data
+### UK ozone data {-}
 
 #### Stan
 

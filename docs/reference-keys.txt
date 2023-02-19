@@ -1,9 +1,9 @@
-tab:unnamed-chunk-5
 tab:unnamed-chunk-6
 tab:unnamed-chunk-7
 tab:unnamed-chunk-8
 tab:unnamed-chunk-9
 tab:unnamed-chunk-10
+tab:unnamed-chunk-11
 why
 basics
 uncertainty
@@ -14,8 +14,11 @@ strategies
 trusted
 Disease
 hazards
+example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state
 stan-2
 Time
+stan-4
+nimble-4
 exposure
 causality
 solutions-to-selected-exercises
@@ -33,6 +36,3 @@ i-does-an-sdis-still-occur-why-or-why-not
 ii-compute-hatbeta_1-and-hatbeta_2-and-repeat-the-bonus-question-of-exercise-13.17.-what-has-changed-do-the-changes-match-your-observations
 monitoring
 frontiers
-uk-ozone-data
-stan-4
-nimble-4
