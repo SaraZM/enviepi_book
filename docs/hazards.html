@@ -163,8 +163,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies-implementing uncertainty models</a></li>
-<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But-can the data be trusted</a></li>
+<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
+<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a></li>
 <li class="chapter" data-level="9" data-path="Disease.html"><a href="Disease.html"><i class="fa fa-check"></i><b>9</b> Disease-spatial patterns</a>
 <ul>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 9.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
@@ -478,13 +478,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="hazards.html#cb140-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] -32.73525
+## [1] -33.15757
 ## Field &quot;lppd&quot;:
-## [1] 19.16314
+## [1] 19.21762
 ## Field &quot;pWAIC&quot;:
-## [1] 2.795521</code></pre>
+## [1] 2.638828</code></pre>
 <div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="hazards.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
-<pre><code>## [1] 290.9268</code></pre>
+<pre><code>## [1] 413.6893</code></pre>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="hazards.html#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;beta0&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="hazards.html#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;beta1&quot;</span>)</span></code></pre></div>
@@ -498,13 +498,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="hazards.html#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;phi&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;phi&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-6.png" width="672" /></p>
 <div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="hazards.html#cb150-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span></code></pre></div>
-<pre><code>##             Mean     Median     St.Dev.   95%CI_low  95%CI_upp
-## beta0 0.09817715 0.12161199  0.14224637 -0.24482777  0.3149317
-## beta1 0.05944771 0.05639914  0.08005561 -0.10251535  0.2205685
-## beta2 0.04957883 0.05641087  0.08919270 -0.15066827  0.2018342
-## phi   9.36159945 5.79855390 13.56860254  1.78527206 35.7124810
-## sigma 0.28391261 0.25618497  0.09906472  0.17646333  0.5555522
-## tau   0.10598016 0.11175262  0.03545949  0.01784622  0.1614344</code></pre>
+<pre><code>##             Mean     Median    St.Dev.   95%CI_low  95%CI_upp
+## beta0 0.10129431 0.11708532 0.12861551 -0.22228502  0.3070483
+## beta1 0.05725549 0.05351269 0.07488840 -0.08413443  0.2181847
+## beta2 0.05183600 0.05971837 0.08472414 -0.12881820  0.2014183
+## phi   8.34137465 5.83173171 8.77488502  1.84217999 29.6757263
+## sigma 0.27533897 0.25581320 0.08272291  0.17558693  0.4911788
+## tau   0.10548374 0.11034936 0.03585949  0.01610892  0.1631482</code></pre>
 <!-- TODO: Predictions -->
 <div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="hazards.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load centroids for spatial prediction</span></span>
 <span id="cb152-2"><a href="hazards.html#cb152-2" aria-hidden="true" tabindex="-1"></a>Mtl_centroids <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/montreal_shp/centroids_mtl.csv&quot;</span>)</span>
@@ -696,19 +696,19 @@ model {
 <span id="cb159-7"><a href="hazards.html#cb159-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb159-8"><a href="hazards.html#cb159-8" aria-hidden="true" tabindex="-1"></a>summary_exp_stan<span class="sc">$</span>summary</span></code></pre></div>
 <pre><code>##               mean      se_mean         sd         2.5%     97.5%    n_eff
-## beta0   0.14893246 0.0018593798 0.08220871 -0.042639411 0.2884928 1954.787
-## beta[1] 0.04904091 0.0013895256 0.06065470 -0.061237124 0.1777383 1905.443
-## beta[2] 0.08012081 0.0016122414 0.06962843 -0.068109647 0.1976168 1865.147
-## phi     3.66598998 0.0505555251 2.15785660  1.501984647 9.3453046 1821.830
-## sigma   0.23373602 0.0009414231 0.04053610  0.170839165 0.3259002 1854.019
-## tau     0.08687971 0.0008899440 0.03972605  0.007490715 0.1531355 1992.624
+## beta0   0.15066917 0.0017748205 0.08048681 -0.032006446 0.2824975 2056.556
+## beta[1] 0.04795528 0.0014569630 0.06076747 -0.070144602 0.1777605 1739.583
+## beta[2] 0.08213447 0.0015044817 0.06810539 -0.070537732 0.2027455 2049.223
+## phi     3.57607348 0.0491908276 2.12741293  1.441973488 9.2035576 1870.404
+## sigma   0.23242764 0.0008801386 0.03866237  0.168177755 0.3203229 1929.633
+## tau     0.08620589 0.0009084699 0.03926526  0.008386432 0.1534552 1868.081
 ##              Rhat
-## beta0   0.9993219
-## beta[1] 0.9993310
-## beta[2] 1.0005582
-## phi     0.9993339
-## sigma   0.9994360
-## tau     0.9994566</code></pre>
+## beta0   0.9999279
+## beta[1] 1.0011469
+## beta[2] 0.9995246
+## phi     1.0003477
+## sigma   1.0006025
+## tau     0.9992103</code></pre>
 <!-- TODO: Predictions -->
 </div>
 </div>

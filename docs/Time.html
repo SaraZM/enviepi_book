@@ -163,8 +163,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies-implementing uncertainty models</a></li>
-<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But-can the data be trusted</a></li>
+<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
+<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a></li>
 <li class="chapter" data-level="9" data-path="Disease.html"><a href="Disease.html"><i class="fa fa-check"></i><b>9</b> Disease-spatial patterns</a>
 <ul>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 9.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
@@ -647,19 +647,19 @@ generated quantities{
 <div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="Time.html#cb190-1" aria-hidden="true" tabindex="-1"></a>stanfit_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(Example11_16_Nile_Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>,<span class="st">&quot;sqrt_W&quot;</span>,<span class="st">&quot;theta&quot;</span>))</span>
 <span id="cb190-2"><a href="Time.html#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stanfit_summary<span class="sc">$</span>summary)</span></code></pre></div>
 <pre><code>##                mean     se_mean         sd       2.5%        25%        50%
-## tau        30.64012 0.007477773  0.6306083   29.38968   30.21458   30.63933
-## sqrt_W     17.22765 0.010128951  0.8768354   15.51145   16.63732   17.23209
-## theta[1] 1016.90754 0.124024130 14.4369276  988.93089 1007.22284 1016.83698
-## theta[2] 1056.98669 0.131643329 15.7365351 1026.24366 1046.41790 1057.04634
-## theta[3] 1064.58073 0.127264399 15.7665523 1034.04620 1054.07479 1064.49015
-## theta[4] 1104.72786 0.137710699 16.3874569 1072.84459 1093.72657 1104.83975
-##                 75%      97.5%     n_eff      Rhat
-## tau        31.07642   31.86899  7111.723 1.0000473
-## sqrt_W     17.82265   18.95709  7493.888 0.9999934
-## theta[1] 1026.62850 1045.09792 13549.934 0.9999569
-## theta[2] 1067.33826 1088.21344 14289.615 0.9999331
-## theta[3] 1075.35008 1095.41306 15348.276 0.9999071
-## theta[4] 1115.63348 1137.20989 14160.799 0.9998740</code></pre>
+## tau        30.64530 0.007920736  0.6386702   29.40268   30.20719   30.65299
+## sqrt_W     17.22285 0.010978482  0.8689194   15.50568   16.63147   17.22093
+## theta[1] 1016.84930 0.118484932 14.3771660  988.49623 1007.26296 1016.80398
+## theta[2] 1057.13256 0.134972393 15.7639805 1026.11449 1046.44506 1057.20401
+## theta[3] 1064.76542 0.130085891 15.8157847 1033.71226 1054.11433 1064.86941
+## theta[4] 1104.73561 0.140922362 16.2696361 1072.81337 1093.79165 1104.73694
+##                 75%     97.5%     n_eff      Rhat
+## tau        31.07629   31.8904  6501.630 1.0003943
+## sqrt_W     17.81078   18.9109  6264.327 1.0005176
+## theta[1] 1026.57528 1044.9459 14723.814 0.9998627
+## theta[2] 1067.85111 1087.7037 13640.864 0.9998562
+## theta[3] 1075.37272 1095.8316 14781.588 0.9999572
+## theta[4] 1115.61958 1136.9905 13328.947 1.0003811</code></pre>
 <div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="Time.html#cb192-1" aria-hidden="true" tabindex="-1"></a>stan_fit_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(stanfit_summary<span class="sc">$</span>summary) <span class="sc">|&gt;</span></span>
 <span id="cb192-2"><a href="Time.html#cb192-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
 <span id="cb192-3"><a href="Time.html#cb192-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
@@ -672,8 +672,7 @@ generated quantities{
 <span id="cb192-10"><a href="Time.html#cb192-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.25</span>,</span>
 <span id="cb192-11"><a href="Time.html#cb192-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">col =</span> <span class="st">&quot;gray99&quot;</span>) <span class="sc">+</span></span>
 <span id="cb192-12"><a href="Time.html#cb192-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&quot;year&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2
-## 3.4.0.
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ## ℹ Please use `linewidth` instead.</code></pre>
 <p><img src="_main_files/figure-html/Ex%2011.16%20nile%20post%20summaries%20stan-3.png" width="672" /></p>
 <div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="Time.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: I am still missing the plots for the fitted values here</span></span></code></pre></div>
@@ -804,12 +803,12 @@ generated quantities{
 <p><img src="_main_files/figure-html/Ex%2011.16%20nile%20nimble%20traceplots-3.png" width="672" /></p>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="Time.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(post_summary)</span></code></pre></div>
 <pre><code>##              post.mean post.sd    q2.5      q50    q97.5 f0    n.eff  Rhat
-## sqrt_Wt_diag    48.870  16.177  21.945   47.181   84.119  1  530.408 1.005
-## tau            120.122  13.363  94.304  119.810  146.666  1 1061.706 1.002
-## theta[1]       922.356   9.814 902.612  922.406  941.495  1 4028.421 1.000
-## theta[2]       985.009  44.949 907.262  980.566 1082.557  1 1676.648 1.001
-## theta[3]      1024.811  54.508 927.805 1021.861 1138.881  1 1420.673 1.001
-## theta[4]      1041.102  53.765 941.946 1038.931 1154.172  1 1893.448 1.003</code></pre>
+## sqrt_Wt_diag    49.796  16.377  23.005   48.013   86.607  1  519.285 1.000
+## tau            119.661  13.486  93.613  119.448  146.480  1 1031.817 1.000
+## theta[1]       922.373  10.215 902.589  922.449  942.280  1 3545.058 1.000
+## theta[2]       987.202  46.829 904.742  982.780 1091.411  1 1717.457 1.002
+## theta[3]      1027.340  55.827 932.120 1022.552 1148.930  1 1582.703 1.000
+## theta[4]      1041.875  54.669 941.100 1039.359 1153.744  1 2429.666 1.000</code></pre>
 <div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="Time.html#cb203-1" aria-hidden="true" tabindex="-1"></a>post_sum_theta <span class="ot">&lt;-</span></span>
 <span id="cb203-2"><a href="Time.html#cb203-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
 <span id="cb203-3"><a href="Time.html#cb203-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
@@ -1057,7 +1056,7 @@ generated quantities{
 <span id="cb211-6"><a href="Time.html#cb211-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">3</span>,</span>
 <span id="cb211-7"><a href="Time.html#cb211-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="cn">TRUE</span></span>
 <span id="cb211-8"><a href="Time.html#cb211-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<pre><code>## Warning: There were 4 divergent transitions after warmup. See
+<pre><code>## Warning: There were 6 divergent transitions after warmup. See
 ## https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 ## to find out why this is a problem and how to eliminate them.</code></pre>
 <pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
@@ -1077,15 +1076,15 @@ generated quantities{
 <span id="cb218-2"><a href="Time.html#cb218-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Example11_16_UK_Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sqrt_W_diag&quot;</span>))<span class="sc">$</span>summary</span>
 <span id="cb218-3"><a href="Time.html#cb218-3" aria-hidden="true" tabindex="-1"></a>fixedpars_summary</span></code></pre></div>
 <pre><code>##                     mean     se_mean        sd       2.5%       25%       50%
-## tau            7.3562269 0.004817310 0.4031321 6.56458460 7.0822942 7.3565641
-## sqrt_W_diag[1] 2.6513689 0.007440024 0.6063820 1.49848095 2.2279331 2.6332173
-## sqrt_W_diag[2] 0.2464038 0.001088435 0.1140337 0.08504414 0.1661444 0.2250847
-## sqrt_W_diag[3] 0.5924806 0.005661127 0.5218305 0.01753351 0.1868634 0.4390782
+## tau            7.3603875 0.004512119 0.3941424 6.58717932 7.0943015 7.3532913
+## sqrt_W_diag[1] 2.6382930 0.007638125 0.6088800 1.46651427 2.2172696 2.6319838
+## sqrt_W_diag[2] 0.2463700 0.001117621 0.1159750 0.08083543 0.1653061 0.2258814
+## sqrt_W_diag[3] 0.5947619 0.006257809 0.5288879 0.01742622 0.1863766 0.4367818
 ##                      75%     97.5%     n_eff     Rhat
-## tau            7.6262986 8.1401956  7003.024 1.000664
-## sqrt_W_diag[1] 3.0589619 3.8619942  6642.689 1.000820
-## sqrt_W_diag[2] 0.3040758 0.5274877 10976.428 1.000147
-## sqrt_W_diag[3] 0.8668005 1.9231985  8496.754 1.000017</code></pre>
+## tau            7.6282015 8.1361982  7630.362 1.000481
+## sqrt_W_diag[1] 3.0359756 3.8693050  6354.625 1.000639
+## sqrt_W_diag[2] 0.3031113 0.5295099 10768.123 1.000170
+## sqrt_W_diag[3] 0.8675453 1.9424862  7143.035 1.000599</code></pre>
 <div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="Time.html#cb220-1" aria-hidden="true" tabindex="-1"></a>theta_summary <span class="ot">&lt;-</span></span>
 <span id="cb220-2"><a href="Time.html#cb220-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Example11_16_UK_Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;theta&quot;</span>))<span class="sc">$</span>summary</span>
 <span id="cb220-3"><a href="Time.html#cb220-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1276,10 +1275,10 @@ generated quantities{
 <p><img src="_main_files/figure-html/Ex%2011.16%20o3%20nimble%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="Time.html#cb226-1" aria-hidden="true" tabindex="-1"></a>post_summary[<span class="fu">c</span>(<span class="st">&#39;tau&#39;</span>,<span class="st">&#39;sqrt_Wt_diag[1]&#39;</span>,<span class="st">&#39;sqrt_Wt_diag[2]&#39;</span>,<span class="st">&#39;sqrt_Wt_diag[3]&#39;</span>),]</span></code></pre></div>
 <pre><code>##                 post.mean post.sd  q2.5   q50 q97.5 f0    n.eff  Rhat
-## tau                 8.552   0.559 7.461 8.552 9.644  1  899.208 1.008
-## sqrt_Wt_diag[1]     2.212   0.738 1.041 2.148 3.825  1  876.016 1.012
-## sqrt_Wt_diag[2]     0.253   0.121 0.079 0.234 0.554  1 1573.313 1.000
-## sqrt_Wt_diag[3]     0.429   0.389 0.014 0.321 1.505  1  994.175 1.003</code></pre>
+## tau                 8.554   0.546 7.465 8.560 9.605  1  991.533 1.009
+## sqrt_Wt_diag[1]     2.211   0.729 1.010 2.152 3.721  1  777.876 1.004
+## sqrt_Wt_diag[2]     0.251   0.125 0.073 0.228 0.570  1 1448.734 1.006
+## sqrt_Wt_diag[3]     0.430   0.401 0.016 0.315 1.507  1  885.493 1.002</code></pre>
 <div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="Time.html#cb228-1" aria-hidden="true" tabindex="-1"></a>post_sum_theta <span class="ot">&lt;-</span></span>
 <span id="cb228-2"><a href="Time.html#cb228-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
 <span id="cb228-3"><a href="Time.html#cb228-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;theta&quot;</span>)) <span class="sc">|&gt;</span></span>
