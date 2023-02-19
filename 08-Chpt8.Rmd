@@ -1,4 +1,4 @@
-# But-can the data be trusted {#trusted}
+# But can the data be trusted {#trusted}
 
 This chapter considers some of the issues that will arise when dealing with 'real data’. Data will commonly have missing
 values and may be measured with error. This error might be random or may be due to systematic patterns in how it was

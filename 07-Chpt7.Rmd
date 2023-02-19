@@ -1,4 +1,4 @@
-# Strategies-implementing uncertainty models  {#strategies}
+# Strategies implementing uncertainty models  {#strategies}
 
 This chapter considers both some of the wider issues related to modelling and the generalisability of results and more
 technical material on the effect of covariates and model selection. From this chapter, the reader will have gained an
