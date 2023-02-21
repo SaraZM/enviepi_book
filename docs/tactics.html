@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-19" />
+<meta name="date" content="2023-02-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -184,17 +184,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1-spatial-patterns-of-benzene-concentrations-in-montreal-qc-canada"><i class="fa fa-check"></i>Example 10.1 Spatial patterns of benzene concentrations in Montreal, QC, Canada</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.2-examining-the-log-concentrations-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.2: Examining the log concentrations of benzene in Montreal</a></li>
-<li class="chapter" data-level="10.1" data-path="hazards.html"><a href="hazards.html#example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state"><i class="fa fa-check"></i><b>10.1</b> Example 10.3: Mapping the locations of ozone monitoring sites in New York State</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state"><i class="fa fa-check"></i>Example 10.3: Mapping the locations of ozone monitoring sites in New York State</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.5-variogram"><i class="fa fa-check"></i>Example 10.5: Variogram</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.9 Spatial modelling of Benzene in Montreal</a>
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="10.1.1" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i><b>10.1.1</b> Stan</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -548,9 +549,9 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 <p>Given the convergence issues, we can also check the estimated sampled size and Rhat using the package <code>coda</code>.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tactics.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS a: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS a: 51.1439794918514&quot;</code></pre>
+<pre><code>## [1] &quot;ESS a: 40.1799758620945&quot;</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="tactics.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS b: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS b: 50.3433067474565&quot;</code></pre>
+<pre><code>## [1] &quot;ESS b: 39.3625279293985&quot;</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="tactics.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[1]: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>]))</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]: 2001&quot;</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="tactics.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[10]: &quot;</span>,coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>]))</span></code></pre></div>
@@ -668,11 +669,11 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="tactics.html#cb50-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.448
+## [1] 3049.539
 ## Field &quot;lppd&quot;:
-## [1] -1514.43
+## [1] -1514.419
 ## Field &quot;pWAIC&quot;:
-## [1] 10.29415</code></pre>
+## [1] 10.35037</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="tactics.html#cb52-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
 <span id="cb52-2"><a href="tactics.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -697,12 +698,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.1283540      0.0126390      0.0001998      0.0002033 
+##      1.1286313      0.0125269      0.0001981      0.0002040 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.104 1.120 1.128 1.137 1.153</code></pre>
+## 1.104 1.120 1.129 1.137 1.153</code></pre>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="tactics.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
 <span id="cb57-2"><a href="tactics.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -715,12 +716,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0144843      0.0178759      0.0002826      0.0004626 
+##      1.0144513      0.0176789      0.0002795      0.0004498 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## 0.9789 1.0027 1.0146 1.0265 1.0495</code></pre>
+## 0.9796 1.0025 1.0144 1.0266 1.0494</code></pre>
 
 </div>
 </div>

@@ -512,7 +512,7 @@ tidy_post_samples <- post_samples |> tidy_draws()
 
 # Traceplots
 tidy_post_samples |>
-  select(.chain, .iteration, .draw, 'tau') |>
+  dplyr::select(.chain, .iteration, .draw, 'tau') |>
   gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
   geom_path(aes(color = factor(.chain)), size = 0.25,
@@ -523,7 +523,7 @@ tidy_post_samples |>
         strip.background = element_blank())
 
 tidy_post_samples |>
-  select(.chain, .iteration, .draw, 'sqrt_Wt_diag') |>
+  dplyr::select(.chain, .iteration, .draw, 'sqrt_Wt_diag') |>
   gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
   geom_path(aes(color = factor(.chain)), size = 0.25,
@@ -534,7 +534,7 @@ tidy_post_samples |>
         strip.background = element_blank())
 
 tidy_post_samples |>
-  select(.chain, .iteration, .draw, paste0('theta[', sample.int(J, size = 4, replace = FALSE),"]")) |>
+  dplyr::select(.chain, .iteration, .draw, paste0('theta[', sample.int(J, size = 4, replace = FALSE),"]")) |>
   gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
   geom_path(aes(color = factor(.chain)), linewidth = 0.25,
@@ -554,7 +554,7 @@ post_sum_theta <-
   as.data.frame(post_summary) |>  rownames_to_column() |>
   filter(str_detect(rowname, "theta")) |>
   mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname))) |>
-  select(time, post.mean, post.sd, q2.5, q50, q97.5)
+  dplyr::select(time, post.mean, post.sd, q2.5, q50, q97.5)
 
 ggplot(data = post_sum_theta, aes(x = time)) +
   geom_ribbon(aes(ymin = q2.5, ymax = q97.5),
@@ -894,7 +894,7 @@ post_summary <- nimSummary(post_samples)
 tidy_post_samples <- post_samples |> tidy_draws()
 
 tidy_post_samples |>
-  select(
+   dplyr::select(
     .chain,
     .iteration,
     .draw,
@@ -923,11 +923,11 @@ post_summary[c('tau','sqrt_Wt_diag[1]','sqrt_Wt_diag[2]','sqrt_Wt_diag[3]'),]
 post_sum_theta <-
   as.data.frame(post_summary) |>  rownames_to_column() |>
   filter(str_detect(rowname, "theta")) |>
-  select(rowname, q2.5, q50, q97.5) |>
+  dplyr::select(rowname, q2.5, q50, q97.5) |>
   separate(rowname, into = c("x1", "x2"), sep = ",") |>
   mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) |>
   mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) |>
-  select(component, time, q2.5, q50, q97.5)
+  dplyr::select(component, time, q2.5, q50, q97.5)
 
 ggplot(data = post_sum_theta, aes(x = time)) +
   geom_ribbon(aes(ymin = q2.5, ymax = q97.5),

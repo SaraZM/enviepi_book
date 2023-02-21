@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-19" />
+<meta name="date" content="2023-02-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -184,17 +184,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.1-spatial-patterns-of-benzene-concentrations-in-montreal-qc-canada"><i class="fa fa-check"></i>Example 10.1 Spatial patterns of benzene concentrations in Montreal, QC, Canada</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.2-examining-the-log-concentrations-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.2: Examining the log concentrations of benzene in Montreal</a></li>
-<li class="chapter" data-level="10.1" data-path="hazards.html"><a href="hazards.html#example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state"><i class="fa fa-check"></i><b>10.1</b> Example 10.3: Mapping the locations of ozone monitoring sites in New York State</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state"><i class="fa fa-check"></i>Example 10.3: Mapping the locations of ozone monitoring sites in New York State</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.5-variogram"><i class="fa fa-check"></i>Example 10.5: Variogram</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.9 Spatial modelling of Benzene in Montreal</a>
 <ul>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="10.1.1" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i><b>10.1.1</b> Stan</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -259,39 +260,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r." class="section level3 hasAnchor" number="13.1.1">
 <h3><span class="header-section-number">13.1.1</span> Question 13.16: Load the Italy and China data, described in Example 13.3, and included in the supplementary Bookdown material into R.<a href="causality.html#question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r." class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The data for this exercise follows that of Exercise 13.3, we can load it as follows.</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="causality.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb230-2"><a href="causality.html#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
-<span id="cb230-3"><a href="causality.html#cb230-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb230-4"><a href="causality.html#cb230-4" aria-hidden="true" tabindex="-1"></a>vonK_Data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/vonK_China_Italy.csv&quot;</span>)</span>
-<span id="cb230-5"><a href="causality.html#cb230-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate these datasets to have just two age ranges---$&lt;70$ and $\geq 70$.</span></span>
-<span id="cb230-6"><a href="causality.html#cb230-6" aria-hidden="true" tabindex="-1"></a>vonK_Data_70 <span class="ot">&lt;-</span></span>
-<span id="cb230-7"><a href="causality.html#cb230-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb230-8"><a href="causality.html#cb230-8" aria-hidden="true" tabindex="-1"></a>    vonK_Data,</span>
-<span id="cb230-9"><a href="causality.html#cb230-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">&quot;unused&quot;</span>,</span>
-<span id="cb230-10"><a href="causality.html#cb230-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age_Range =</span> <span class="fu">fct_collapse</span>(</span>
-<span id="cb230-11"><a href="causality.html#cb230-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Age group</span><span class="st">`</span>,</span>
-<span id="cb230-12"><a href="causality.html#cb230-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">Over_70 =</span> <span class="fu">c</span>(<span class="st">&quot;70-79&quot;</span>, <span class="st">&quot;80+&quot;</span>),</span>
-<span id="cb230-13"><a href="causality.html#cb230-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">other_level =</span> <span class="st">&quot;Under_70&quot;</span></span>
-<span id="cb230-14"><a href="causality.html#cb230-14" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb230-15"><a href="causality.html#cb230-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb230-16"><a href="causality.html#cb230-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb230-17"><a href="causality.html#cb230-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum up all death data grouped by age range and country</span></span>
-<span id="cb230-18"><a href="causality.html#cb230-18" aria-hidden="true" tabindex="-1"></a>vonK_Data_70 <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Age_Range, Country) <span class="sc">|&gt;</span></span>
-<span id="cb230-19"><a href="causality.html#cb230-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb230-20"><a href="causality.html#cb230-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fatalities =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed fatalities</span><span class="st">`</span>),</span>
-<span id="cb230-21"><a href="causality.html#cb230-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Cases =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed cases</span><span class="st">`</span>),</span>
-<span id="cb230-22"><a href="causality.html#cb230-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop_last&quot;</span></span>
-<span id="cb230-23"><a href="causality.html#cb230-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb230-24"><a href="causality.html#cb230-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> Total_Cases <span class="sc">-</span> Fatalities, <span class="at">.before =</span> Total_Cases) <span class="sc">|&gt;</span>  <span class="do">## Convert from fatalities to survivals</span></span>
-<span id="cb230-25"><a href="causality.html#cb230-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Country) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="causality.html#cb273-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb273-2"><a href="causality.html#cb273-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb273-3"><a href="causality.html#cb273-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb273-4"><a href="causality.html#cb273-4" aria-hidden="true" tabindex="-1"></a>vonK_Data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/vonK_China_Italy.csv&quot;</span>)</span>
+<span id="cb273-5"><a href="causality.html#cb273-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate these datasets to have just two age ranges---$&lt;70$ and $\geq 70$.</span></span>
+<span id="cb273-6"><a href="causality.html#cb273-6" aria-hidden="true" tabindex="-1"></a>vonK_Data_70 <span class="ot">&lt;-</span></span>
+<span id="cb273-7"><a href="causality.html#cb273-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb273-8"><a href="causality.html#cb273-8" aria-hidden="true" tabindex="-1"></a>    vonK_Data,</span>
+<span id="cb273-9"><a href="causality.html#cb273-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">&quot;unused&quot;</span>,</span>
+<span id="cb273-10"><a href="causality.html#cb273-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age_Range =</span> <span class="fu">fct_collapse</span>(</span>
+<span id="cb273-11"><a href="causality.html#cb273-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Age group</span><span class="st">`</span>,</span>
+<span id="cb273-12"><a href="causality.html#cb273-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">Over_70 =</span> <span class="fu">c</span>(<span class="st">&quot;70-79&quot;</span>, <span class="st">&quot;80+&quot;</span>),</span>
+<span id="cb273-13"><a href="causality.html#cb273-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">other_level =</span> <span class="st">&quot;Under_70&quot;</span></span>
+<span id="cb273-14"><a href="causality.html#cb273-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb273-15"><a href="causality.html#cb273-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb273-16"><a href="causality.html#cb273-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb273-17"><a href="causality.html#cb273-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum up all death data grouped by age range and country</span></span>
+<span id="cb273-18"><a href="causality.html#cb273-18" aria-hidden="true" tabindex="-1"></a>vonK_Data_70 <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Age_Range, Country) <span class="sc">|&gt;</span></span>
+<span id="cb273-19"><a href="causality.html#cb273-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb273-20"><a href="causality.html#cb273-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fatalities =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed fatalities</span><span class="st">`</span>),</span>
+<span id="cb273-21"><a href="causality.html#cb273-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Cases =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed cases</span><span class="st">`</span>),</span>
+<span id="cb273-22"><a href="causality.html#cb273-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop_last&quot;</span></span>
+<span id="cb273-23"><a href="causality.html#cb273-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb273-24"><a href="causality.html#cb273-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> Total_Cases <span class="sc">-</span> Fatalities, <span class="at">.before =</span> Total_Cases) <span class="sc">|&gt;</span>  <span class="do">## Convert from fatalities to survivals</span></span>
+<span id="cb273-25"><a href="causality.html#cb273-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Country) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()</span></code></pre></div>
 <div id="i-display-a-2-by-2-contingency-table-of-deathssurvivors-vs.-chinaitaly-aggregated-over-all-age-groups." class="section level4 hasAnchor" number="13.1.1.1">
 <h4><span class="header-section-number">13.1.1.1</span> i): Display a 2 by 2 contingency table of deaths/survivors vs. China/Italy aggregated over all age groups.<a href="causality.html#i-display-a-2-by-2-contingency-table-of-deathssurvivors-vs.-chinaitaly-aggregated-over-all-age-groups." class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="causality.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Sum up all deaths by country</span></span>
-<span id="cb231-2"><a href="causality.html#cb231-2" aria-hidden="true" tabindex="-1"></a>vonK_Aggregated_Table <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span></span>
-<span id="cb231-3"><a href="causality.html#cb231-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
-<span id="cb231-4"><a href="causality.html#cb231-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country) <span class="sc">|&gt;</span></span>
-<span id="cb231-5"><a href="causality.html#cb231-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(<span class="at">.funs =</span> <span class="fu">c</span>(sum)) <span class="sc">|&gt;</span></span>
-<span id="cb231-6"><a href="causality.html#cb231-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="causality.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Sum up all deaths by country</span></span>
+<span id="cb274-2"><a href="causality.html#cb274-2" aria-hidden="true" tabindex="-1"></a>vonK_Aggregated_Table <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span></span>
+<span id="cb274-3"><a href="causality.html#cb274-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
+<span id="cb274-4"><a href="causality.html#cb274-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country) <span class="sc">|&gt;</span></span>
+<span id="cb274-5"><a href="causality.html#cb274-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(<span class="at">.funs =</span> <span class="fu">c</span>(sum)) <span class="sc">|&gt;</span></span>
+<span id="cb274-6"><a href="causality.html#cb274-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span></code></pre></div>
 <table>
 <caption><span id="tab:unnamed-chunk-6">Table 13.1: </span>Aggregated Contingency Table</caption>
 <thead>
@@ -326,15 +327,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ii-display-2-by-2-contingency-tables-stratified-by-the-age-groups-70-and-geq-70." class="section level4 hasAnchor" number="13.1.1.2">
 <h4><span class="header-section-number">13.1.1.2</span> ii): Display 2 by 2 contingency tables stratified by the age groups <span class="math inline">\(&lt;70\)</span> and <span class="math inline">\(\geq 70\)</span>.<a href="causality.html#ii-display-2-by-2-contingency-tables-stratified-by-the-age-groups-70-and-geq-70." class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="causality.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter by age range and then sum up deaths</span></span>
-<span id="cb232-2"><a href="causality.html#cb232-2" aria-hidden="true" tabindex="-1"></a>vonK_Under70_Table <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span></span>
-<span id="cb232-3"><a href="causality.html#cb232-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Under_70&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb232-4"><a href="causality.html#cb232-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
-<span id="cb232-5"><a href="causality.html#cb232-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span>
-<span id="cb232-6"><a href="causality.html#cb232-6" aria-hidden="true" tabindex="-1"></a>vonK_Over70_Table <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span></span>
-<span id="cb232-7"><a href="causality.html#cb232-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Over_70&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb232-8"><a href="causality.html#cb232-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
-<span id="cb232-9"><a href="causality.html#cb232-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="causality.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter by age range and then sum up deaths</span></span>
+<span id="cb275-2"><a href="causality.html#cb275-2" aria-hidden="true" tabindex="-1"></a>vonK_Under70_Table <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span></span>
+<span id="cb275-3"><a href="causality.html#cb275-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Under_70&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb275-4"><a href="causality.html#cb275-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
+<span id="cb275-5"><a href="causality.html#cb275-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span>
+<span id="cb275-6"><a href="causality.html#cb275-6" aria-hidden="true" tabindex="-1"></a>vonK_Over70_Table <span class="ot">&lt;-</span> vonK_Data_70 <span class="sc">|&gt;</span></span>
+<span id="cb275-7"><a href="causality.html#cb275-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Over_70&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb275-8"><a href="causality.html#cb275-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
+<span id="cb275-9"><a href="causality.html#cb275-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span></code></pre></div>
 <table>
 <caption><span id="tab:unnamed-chunk-7">Table 13.2: </span>Under 70 Contingency Table</caption>
 <thead>
@@ -406,22 +407,22 @@ P_1 = Pr(S|T), \; P_2 = Pr(S|\tilde{T}), \; R_1 = Pr(S|\bar{C}T), \\ R_2 = Pr(S|
 \]</span>
 A Simpson’s disaggregation occurs when <span class="math inline">\(P_1 &gt; P_2\)</span>, while <span class="math inline">\(R_1 &lt; R_2\)</span> and <span class="math inline">\(Q_1 &lt; Q_2\)</span>.</p>
 <p>We compute the empirical values denoted <span class="math inline">\(\hat{P}_1, \hat{P}_2, \hat{Q}_1, \hat{Q}_2, \hat{R}_1, \hat{R}_2\)</span>:</p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="causality.html#cb233-1" aria-hidden="true" tabindex="-1"></a>P_hats <span class="ot">=</span> <span class="fu">head</span>(vonK_Aggregated_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Aggregated_Table<span class="sc">$</span>Total_Cases,</span>
-<span id="cb233-2"><a href="causality.html#cb233-2" aria-hidden="true" tabindex="-1"></a>              <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb233-3"><a href="causality.html#cb233-3" aria-hidden="true" tabindex="-1"></a>Q_hats <span class="ot">=</span> <span class="fu">head</span>(vonK_Under70_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Under70_Table<span class="sc">$</span>Total_Cases,</span>
-<span id="cb233-4"><a href="causality.html#cb233-4" aria-hidden="true" tabindex="-1"></a>              <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb233-5"><a href="causality.html#cb233-5" aria-hidden="true" tabindex="-1"></a>R_hats <span class="ot">=</span> <span class="fu">head</span>(vonK_Over70_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Over70_Table<span class="sc">$</span>Total_Cases,</span>
-<span id="cb233-6"><a href="causality.html#cb233-6" aria-hidden="true" tabindex="-1"></a>              <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb233-7"><a href="causality.html#cb233-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb233-8"><a href="causality.html#cb233-8" aria-hidden="true" tabindex="-1"></a>Solution <span class="ot">&lt;-</span></span>
-<span id="cb233-9"><a href="causality.html#cb233-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb233-10"><a href="causality.html#cb233-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
-<span id="cb233-11"><a href="causality.html#cb233-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">P_hat =</span> P_hats,</span>
-<span id="cb233-12"><a href="causality.html#cb233-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Q_hat =</span> Q_hats,</span>
-<span id="cb233-13"><a href="causality.html#cb233-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">R_hat =</span> R_hats</span>
-<span id="cb233-14"><a href="causality.html#cb233-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb233-15"><a href="causality.html#cb233-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb233-16"><a href="causality.html#cb233-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Solution)</span></code></pre></div>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="causality.html#cb276-1" aria-hidden="true" tabindex="-1"></a>P_hats <span class="ot">=</span> <span class="fu">head</span>(vonK_Aggregated_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Aggregated_Table<span class="sc">$</span>Total_Cases,</span>
+<span id="cb276-2"><a href="causality.html#cb276-2" aria-hidden="true" tabindex="-1"></a>              <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb276-3"><a href="causality.html#cb276-3" aria-hidden="true" tabindex="-1"></a>Q_hats <span class="ot">=</span> <span class="fu">head</span>(vonK_Under70_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Under70_Table<span class="sc">$</span>Total_Cases,</span>
+<span id="cb276-4"><a href="causality.html#cb276-4" aria-hidden="true" tabindex="-1"></a>              <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb276-5"><a href="causality.html#cb276-5" aria-hidden="true" tabindex="-1"></a>R_hats <span class="ot">=</span> <span class="fu">head</span>(vonK_Over70_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Over70_Table<span class="sc">$</span>Total_Cases,</span>
+<span id="cb276-6"><a href="causality.html#cb276-6" aria-hidden="true" tabindex="-1"></a>              <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb276-7"><a href="causality.html#cb276-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-8"><a href="causality.html#cb276-8" aria-hidden="true" tabindex="-1"></a>Solution <span class="ot">&lt;-</span></span>
+<span id="cb276-9"><a href="causality.html#cb276-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb276-10"><a href="causality.html#cb276-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb276-11"><a href="causality.html#cb276-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">P_hat =</span> P_hats,</span>
+<span id="cb276-12"><a href="causality.html#cb276-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Q_hat =</span> Q_hats,</span>
+<span id="cb276-13"><a href="causality.html#cb276-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">R_hat =</span> R_hats</span>
+<span id="cb276-14"><a href="causality.html#cb276-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb276-15"><a href="causality.html#cb276-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-16"><a href="causality.html#cb276-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Solution)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -478,13 +479,13 @@ implying that <span class="math inline">\(\gamma_1 &gt; 0.583\)</span>. Being co
 <div id="iii-compute-empirical-estimates-of-beta_1-and-beta_2-and-interpret-these-values." class="section level4 hasAnchor" number="13.1.2.3">
 <h4><span class="header-section-number">13.1.2.3</span> iii): Compute empirical estimates of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>, and interpret these values.<a href="causality.html#iii-compute-empirical-estimates-of-beta_1-and-beta_2-and-interpret-these-values." class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Recall that <span class="math inline">\(\beta_1 = Pr(T|\bar{C}), \beta_2 = Pr(T|C)\)</span>. In our context, an empirical estimate of <span class="math inline">\(\beta_1\)</span> is hence the proportion of Chinese patients over 70, and <span class="math inline">\(\beta_2\)</span> the proportion of Chinese patients under 70.</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="causality.html#cb234-1" aria-hidden="true" tabindex="-1"></a>beta_hat_1 <span class="ot">&lt;-</span></span>
-<span id="cb234-2"><a href="causality.html#cb234-2" aria-hidden="true" tabindex="-1"></a>  vonK_Over70_Table<span class="sc">$</span>Total_Cases[<span class="dv">1</span>] <span class="sc">/</span> vonK_Over70_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
-<span id="cb234-3"><a href="causality.html#cb234-3" aria-hidden="true" tabindex="-1"></a>beta_hat_2 <span class="ot">&lt;-</span></span>
-<span id="cb234-4"><a href="causality.html#cb234-4" aria-hidden="true" tabindex="-1"></a>  vonK_Under70_Table<span class="sc">$</span>Total_Cases[<span class="dv">2</span>] <span class="sc">/</span> vonK_Over70_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
-<span id="cb234-5"><a href="causality.html#cb234-5" aria-hidden="true" tabindex="-1"></a>beta_hats <span class="ot">&lt;-</span> <span class="fu">c</span>(beta_hat_1, beta_hat_2)</span>
-<span id="cb234-6"><a href="causality.html#cb234-6" aria-hidden="true" tabindex="-1"></a>Solution <span class="ot">&lt;-</span> Solution <span class="sc">|&gt;</span> <span class="fu">add_column</span>(<span class="at">beta_hat =</span> beta_hats)</span>
-<span id="cb234-7"><a href="causality.html#cb234-7" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Solution)</span></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="causality.html#cb277-1" aria-hidden="true" tabindex="-1"></a>beta_hat_1 <span class="ot">&lt;-</span></span>
+<span id="cb277-2"><a href="causality.html#cb277-2" aria-hidden="true" tabindex="-1"></a>  vonK_Over70_Table<span class="sc">$</span>Total_Cases[<span class="dv">1</span>] <span class="sc">/</span> vonK_Over70_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
+<span id="cb277-3"><a href="causality.html#cb277-3" aria-hidden="true" tabindex="-1"></a>beta_hat_2 <span class="ot">&lt;-</span></span>
+<span id="cb277-4"><a href="causality.html#cb277-4" aria-hidden="true" tabindex="-1"></a>  vonK_Under70_Table<span class="sc">$</span>Total_Cases[<span class="dv">2</span>] <span class="sc">/</span> vonK_Over70_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
+<span id="cb277-5"><a href="causality.html#cb277-5" aria-hidden="true" tabindex="-1"></a>beta_hats <span class="ot">&lt;-</span> <span class="fu">c</span>(beta_hat_1, beta_hat_2)</span>
+<span id="cb277-6"><a href="causality.html#cb277-6" aria-hidden="true" tabindex="-1"></a>Solution <span class="ot">&lt;-</span> Solution <span class="sc">|&gt;</span> <span class="fu">add_column</span>(<span class="at">beta_hat =</span> beta_hats)</span>
+<span id="cb277-7"><a href="causality.html#cb277-7" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Solution)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -517,7 +518,7 @@ implying that <span class="math inline">\(\gamma_1 &gt; 0.583\)</span>. Being co
 <div id="iv-bonus-what-is-the-tightest-centered-interval-at-frac12hatbeta_1---hatbeta_2-for-gamma_1-and-gamma_2-such-that-a-controlled-sdis-can-theoretically-exist-assuming-population-parameters-how-well-does-it-cover-the-estimated-hatbeta_i-if-at-all-was-the-empirically-observed-sdis-surprising-given-these-results" class="section level4 hasAnchor" number="13.1.2.4">
 <h4><span class="header-section-number">13.1.2.4</span> iv) (Bonus): What is the tightest centered interval at <span class="math inline">\(\frac{1}{2}(\hat{\beta}_1 - \hat{\beta}_2)\)</span> for <span class="math inline">\(\gamma_1\)</span> and <span class="math inline">\(\gamma_2\)</span> such that a controlled SDis can theoretically exist (assuming population parameters)? How well does it cover the estimated <span class="math inline">\(\hat{\beta}_i\)</span> (if at all)? Was the empirically observed SDis surprising given these results?<a href="causality.html#iv-bonus-what-is-the-tightest-centered-interval-at-frac12hatbeta_1---hatbeta_2-for-gamma_1-and-gamma_2-such-that-a-controlled-sdis-can-theoretically-exist-assuming-population-parameters-how-well-does-it-cover-the-estimated-hatbeta_i-if-at-all-was-the-empirically-observed-sdis-surprising-given-these-results" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We compute the average:</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="causality.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(beta_hat_1, beta_hat_2))</span></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="causality.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(beta_hat_1, beta_hat_2))</span></code></pre></div>
 <pre><code>## [1] 0.5805276</code></pre>
 <p>We wish to have the tightest interval centered at <span class="math inline">\(0.581\)</span> such that <span class="math inline">\(\gamma_1, \gamma_2\)</span> satisfy
 <span class="math display">\[
@@ -533,40 +534,40 @@ This indicates that <span class="math inline">\(\gamma = 0.080\)</span> is a bou
 <div id="question-13.18-stratify-the-italy-and-china-data-by-the-age-groups-50-and-geq-50.-display-the-corresponding-contingency-tables." class="section level3 hasAnchor" number="13.1.3">
 <h3><span class="header-section-number">13.1.3</span> Question 13.18: Stratify the Italy and China data by the age groups <span class="math inline">\(&lt;50\)</span> and <span class="math inline">\(\geq 50\)</span>. Display the corresponding contingency tables.<a href="causality.html#question-13.18-stratify-the-italy-and-china-data-by-the-age-groups-50-and-geq-50.-display-the-corresponding-contingency-tables." class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Re-loading the data and re-stratifying:</p>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="causality.html#cb237-1" aria-hidden="true" tabindex="-1"></a>vonK_Data_50 <span class="ot">&lt;-</span></span>
-<span id="cb237-2"><a href="causality.html#cb237-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb237-3"><a href="causality.html#cb237-3" aria-hidden="true" tabindex="-1"></a>    vonK_Data,</span>
-<span id="cb237-4"><a href="causality.html#cb237-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">&quot;unused&quot;</span>,</span>
-<span id="cb237-5"><a href="causality.html#cb237-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age_Range =</span> <span class="fu">fct_collapse</span>(</span>
-<span id="cb237-6"><a href="causality.html#cb237-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Age group</span><span class="st">`</span>,</span>
-<span id="cb237-7"><a href="causality.html#cb237-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">Over_50 =</span> <span class="fu">c</span>(<span class="st">&quot;50-59&quot;</span>, <span class="st">&quot;60-69&quot;</span>, <span class="st">&quot;70-79&quot;</span>, <span class="st">&quot;80+&quot;</span>),</span>
-<span id="cb237-8"><a href="causality.html#cb237-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">other_level =</span> <span class="st">&quot;Under_50&quot;</span></span>
-<span id="cb237-9"><a href="causality.html#cb237-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb237-10"><a href="causality.html#cb237-10" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="causality.html#cb280-1" aria-hidden="true" tabindex="-1"></a>vonK_Data_50 <span class="ot">&lt;-</span></span>
+<span id="cb280-2"><a href="causality.html#cb280-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb280-3"><a href="causality.html#cb280-3" aria-hidden="true" tabindex="-1"></a>    vonK_Data,</span>
+<span id="cb280-4"><a href="causality.html#cb280-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.keep =</span> <span class="st">&quot;unused&quot;</span>,</span>
+<span id="cb280-5"><a href="causality.html#cb280-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age_Range =</span> <span class="fu">fct_collapse</span>(</span>
+<span id="cb280-6"><a href="causality.html#cb280-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Age group</span><span class="st">`</span>,</span>
+<span id="cb280-7"><a href="causality.html#cb280-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">Over_50 =</span> <span class="fu">c</span>(<span class="st">&quot;50-59&quot;</span>, <span class="st">&quot;60-69&quot;</span>, <span class="st">&quot;70-79&quot;</span>, <span class="st">&quot;80+&quot;</span>),</span>
+<span id="cb280-8"><a href="causality.html#cb280-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">other_level =</span> <span class="st">&quot;Under_50&quot;</span></span>
+<span id="cb280-9"><a href="causality.html#cb280-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb280-10"><a href="causality.html#cb280-10" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
 <div id="i-does-an-sdis-still-occur-why-or-why-not" class="section level4 hasAnchor" number="13.1.3.1">
 <h4><span class="header-section-number">13.1.3.1</span> i): Does an SDis still occur? Why or why not?<a href="causality.html#i-does-an-sdis-still-occur-why-or-why-not" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We reproduce the contingency tables of Exercise 13.16.</p>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="causality.html#cb238-1" aria-hidden="true" tabindex="-1"></a>vonK_Data_50 <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Age_Range, Country) <span class="sc">|&gt;</span></span>
-<span id="cb238-2"><a href="causality.html#cb238-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb238-3"><a href="causality.html#cb238-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fatalities =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed fatalities</span><span class="st">`</span>),</span>
-<span id="cb238-4"><a href="causality.html#cb238-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Cases =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed cases</span><span class="st">`</span>),</span>
-<span id="cb238-5"><a href="causality.html#cb238-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop_last&quot;</span></span>
-<span id="cb238-6"><a href="causality.html#cb238-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb238-7"><a href="causality.html#cb238-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> Total_Cases <span class="sc">-</span> Fatalities, <span class="at">.before =</span> Total_Cases) <span class="sc">|&gt;</span></span>
-<span id="cb238-8"><a href="causality.html#cb238-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Country) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()</span>
-<span id="cb238-9"><a href="causality.html#cb238-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb238-10"><a href="causality.html#cb238-10" aria-hidden="true" tabindex="-1"></a>vonK_Aggregated_Table <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span></span>
-<span id="cb238-11"><a href="causality.html#cb238-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
-<span id="cb238-12"><a href="causality.html#cb238-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country) <span class="sc">|&gt;</span></span>
-<span id="cb238-13"><a href="causality.html#cb238-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(<span class="at">.funs =</span> <span class="fu">c</span>(sum)) <span class="sc">|&gt;</span></span>
-<span id="cb238-14"><a href="causality.html#cb238-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span>
-<span id="cb238-15"><a href="causality.html#cb238-15" aria-hidden="true" tabindex="-1"></a>vonK_Under50_Table <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span></span>
-<span id="cb238-16"><a href="causality.html#cb238-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Under_50&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb238-17"><a href="causality.html#cb238-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span> <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span>
-<span id="cb238-18"><a href="causality.html#cb238-18" aria-hidden="true" tabindex="-1"></a>vonK_Over50_Table <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span></span>
-<span id="cb238-19"><a href="causality.html#cb238-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Over_50&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb238-20"><a href="causality.html#cb238-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
-<span id="cb238-21"><a href="causality.html#cb238-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="causality.html#cb281-1" aria-hidden="true" tabindex="-1"></a>vonK_Data_50 <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Age_Range, Country) <span class="sc">|&gt;</span></span>
+<span id="cb281-2"><a href="causality.html#cb281-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb281-3"><a href="causality.html#cb281-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Fatalities =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed fatalities</span><span class="st">`</span>),</span>
+<span id="cb281-4"><a href="causality.html#cb281-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Total_Cases =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Confirmed cases</span><span class="st">`</span>),</span>
+<span id="cb281-5"><a href="causality.html#cb281-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop_last&quot;</span></span>
+<span id="cb281-6"><a href="causality.html#cb281-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb281-7"><a href="causality.html#cb281-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Survived =</span> Total_Cases <span class="sc">-</span> Fatalities, <span class="at">.before =</span> Total_Cases) <span class="sc">|&gt;</span></span>
+<span id="cb281-8"><a href="causality.html#cb281-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Country) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()</span>
+<span id="cb281-9"><a href="causality.html#cb281-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-10"><a href="causality.html#cb281-10" aria-hidden="true" tabindex="-1"></a>vonK_Aggregated_Table <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span></span>
+<span id="cb281-11"><a href="causality.html#cb281-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
+<span id="cb281-12"><a href="causality.html#cb281-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country) <span class="sc">|&gt;</span></span>
+<span id="cb281-13"><a href="causality.html#cb281-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(<span class="at">.funs =</span> <span class="fu">c</span>(sum)) <span class="sc">|&gt;</span></span>
+<span id="cb281-14"><a href="causality.html#cb281-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span>
+<span id="cb281-15"><a href="causality.html#cb281-15" aria-hidden="true" tabindex="-1"></a>vonK_Under50_Table <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span></span>
+<span id="cb281-16"><a href="causality.html#cb281-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Under_50&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb281-17"><a href="causality.html#cb281-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span> <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span>
+<span id="cb281-18"><a href="causality.html#cb281-18" aria-hidden="true" tabindex="-1"></a>vonK_Over50_Table <span class="ot">&lt;-</span> vonK_Data_50 <span class="sc">|&gt;</span></span>
+<span id="cb281-19"><a href="causality.html#cb281-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age_Range <span class="sc">==</span> <span class="st">&quot;Over_50&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb281-20"><a href="causality.html#cb281-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Age_Range) <span class="sc">|&gt;</span></span>
+<span id="cb281-21"><a href="causality.html#cb281-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>)</span></code></pre></div>
 <p>Displaying the tables:</p>
 <table>
 <caption><span id="tab:unnamed-chunk-9">Table 13.4: </span>Aggregated Contingency Table</caption>
@@ -662,25 +663,25 @@ This indicates that <span class="math inline">\(\gamma = 0.080\)</span> is a bou
 </tbody>
 </table>
 <p>Now, checking if an SDis still occurs.</p>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="causality.html#cb239-1" aria-hidden="true" tabindex="-1"></a>P_hats <span class="ot">&lt;-</span></span>
-<span id="cb239-2"><a href="causality.html#cb239-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(vonK_Aggregated_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Aggregated_Table<span class="sc">$</span>Total_Cases,</span>
-<span id="cb239-3"><a href="causality.html#cb239-3" aria-hidden="true" tabindex="-1"></a>       <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb239-4"><a href="causality.html#cb239-4" aria-hidden="true" tabindex="-1"></a>Q_hats <span class="ot">&lt;-</span></span>
-<span id="cb239-5"><a href="causality.html#cb239-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(vonK_Under50_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Under50_Table<span class="sc">$</span>Total_Cases,</span>
-<span id="cb239-6"><a href="causality.html#cb239-6" aria-hidden="true" tabindex="-1"></a>       <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb239-7"><a href="causality.html#cb239-7" aria-hidden="true" tabindex="-1"></a>R_hats <span class="ot">&lt;-</span></span>
-<span id="cb239-8"><a href="causality.html#cb239-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(vonK_Over50_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Over50_Table<span class="sc">$</span>Total_Cases,</span>
-<span id="cb239-9"><a href="causality.html#cb239-9" aria-hidden="true" tabindex="-1"></a>       <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb239-10"><a href="causality.html#cb239-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb239-11"><a href="causality.html#cb239-11" aria-hidden="true" tabindex="-1"></a>Solution <span class="ot">&lt;-</span></span>
-<span id="cb239-12"><a href="causality.html#cb239-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb239-13"><a href="causality.html#cb239-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
-<span id="cb239-14"><a href="causality.html#cb239-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">P_hat =</span> P_hats,</span>
-<span id="cb239-15"><a href="causality.html#cb239-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Q_hat =</span> Q_hats,</span>
-<span id="cb239-16"><a href="causality.html#cb239-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">R_hat =</span> R_hats</span>
-<span id="cb239-17"><a href="causality.html#cb239-17" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb239-18"><a href="causality.html#cb239-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb239-19"><a href="causality.html#cb239-19" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Solution)</span></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="causality.html#cb282-1" aria-hidden="true" tabindex="-1"></a>P_hats <span class="ot">&lt;-</span></span>
+<span id="cb282-2"><a href="causality.html#cb282-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(vonK_Aggregated_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Aggregated_Table<span class="sc">$</span>Total_Cases,</span>
+<span id="cb282-3"><a href="causality.html#cb282-3" aria-hidden="true" tabindex="-1"></a>       <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb282-4"><a href="causality.html#cb282-4" aria-hidden="true" tabindex="-1"></a>Q_hats <span class="ot">&lt;-</span></span>
+<span id="cb282-5"><a href="causality.html#cb282-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(vonK_Under50_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Under50_Table<span class="sc">$</span>Total_Cases,</span>
+<span id="cb282-6"><a href="causality.html#cb282-6" aria-hidden="true" tabindex="-1"></a>       <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb282-7"><a href="causality.html#cb282-7" aria-hidden="true" tabindex="-1"></a>R_hats <span class="ot">&lt;-</span></span>
+<span id="cb282-8"><a href="causality.html#cb282-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(vonK_Over50_Table<span class="sc">$</span>Survived <span class="sc">/</span> vonK_Over50_Table<span class="sc">$</span>Total_Cases,</span>
+<span id="cb282-9"><a href="causality.html#cb282-9" aria-hidden="true" tabindex="-1"></a>       <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb282-10"><a href="causality.html#cb282-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb282-11"><a href="causality.html#cb282-11" aria-hidden="true" tabindex="-1"></a>Solution <span class="ot">&lt;-</span></span>
+<span id="cb282-12"><a href="causality.html#cb282-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb282-13"><a href="causality.html#cb282-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">index =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb282-14"><a href="causality.html#cb282-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">P_hat =</span> P_hats,</span>
+<span id="cb282-15"><a href="causality.html#cb282-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Q_hat =</span> Q_hats,</span>
+<span id="cb282-16"><a href="causality.html#cb282-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">R_hat =</span> R_hats</span>
+<span id="cb282-17"><a href="causality.html#cb282-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb282-18"><a href="causality.html#cb282-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb282-19"><a href="causality.html#cb282-19" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(Solution)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -714,13 +715,13 @@ This indicates that <span class="math inline">\(\gamma = 0.080\)</span> is a bou
 \frac{\gamma_2/(1-\gamma_2)}{\gamma_1/(1-\gamma_1)} &lt; 0.511, \; \gamma_2 \leq \gamma_1.
 \]</span></p>
 <p>We first compute <span class="math inline">\(\hat{\beta_i}\)</span> again.</p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="causality.html#cb240-1" aria-hidden="true" tabindex="-1"></a>beta_hat_1 <span class="ot">&lt;-</span></span>
-<span id="cb240-2"><a href="causality.html#cb240-2" aria-hidden="true" tabindex="-1"></a>  vonK_Over50_Table<span class="sc">$</span>Total_Cases[<span class="dv">1</span>] <span class="sc">/</span> vonK_Over50_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
-<span id="cb240-3"><a href="causality.html#cb240-3" aria-hidden="true" tabindex="-1"></a>beta_hat_2 <span class="ot">&lt;-</span></span>
-<span id="cb240-4"><a href="causality.html#cb240-4" aria-hidden="true" tabindex="-1"></a>  vonK_Under50_Table<span class="sc">$</span>Total_Cases[<span class="dv">1</span>] <span class="sc">/</span> vonK_Over50_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
-<span id="cb240-5"><a href="causality.html#cb240-5" aria-hidden="true" tabindex="-1"></a>beta_hats <span class="ot">&lt;-</span> <span class="fu">c</span>(beta_hat_1, beta_hat_2)</span>
-<span id="cb240-6"><a href="causality.html#cb240-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb240-7"><a href="causality.html#cb240-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(beta_hats)</span></code></pre></div>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="causality.html#cb283-1" aria-hidden="true" tabindex="-1"></a>beta_hat_1 <span class="ot">&lt;-</span></span>
+<span id="cb283-2"><a href="causality.html#cb283-2" aria-hidden="true" tabindex="-1"></a>  vonK_Over50_Table<span class="sc">$</span>Total_Cases[<span class="dv">1</span>] <span class="sc">/</span> vonK_Over50_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
+<span id="cb283-3"><a href="causality.html#cb283-3" aria-hidden="true" tabindex="-1"></a>beta_hat_2 <span class="ot">&lt;-</span></span>
+<span id="cb283-4"><a href="causality.html#cb283-4" aria-hidden="true" tabindex="-1"></a>  vonK_Under50_Table<span class="sc">$</span>Total_Cases[<span class="dv">1</span>] <span class="sc">/</span> vonK_Over50_Table<span class="sc">$</span>Total_Cases[<span class="dv">3</span>]</span>
+<span id="cb283-5"><a href="causality.html#cb283-5" aria-hidden="true" tabindex="-1"></a>beta_hats <span class="ot">&lt;-</span> <span class="fu">c</span>(beta_hat_1, beta_hat_2)</span>
+<span id="cb283-6"><a href="causality.html#cb283-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb283-7"><a href="causality.html#cb283-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(beta_hats)</span></code></pre></div>
 <pre><code>## [1] 0.7930566 0.6882088</code></pre>
 <p>We obtain <span class="math inline">\(\hat{\beta}_1 = 0.793\)</span>, while <span class="math inline">\(\hat{\beta}_2 = 0.688\)</span>. We compute their mid-point to be <span class="math inline">\(0.741\)</span>. Hence, we look for an interval of the form <span class="math inline">\([0.741 - \gamma, 0.741 + \gamma]\)</span>. Repeating the exercise, we obtain
 <span class="math display">\[

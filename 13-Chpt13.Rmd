@@ -50,7 +50,7 @@ vonK_Data_70 <- vonK_Data_70 |> group_by(Age_Range, Country) |>
 
 ## Sum up all deaths by country
 vonK_Aggregated_Table <- vonK_Data_70 |>
-  select(-Age_Range) |>
+  dplyr::select(-Age_Range) |>
   group_by(Country) |>
   summarise_all(.funs = c(sum)) |>
   adorn_totals("row")
@@ -69,11 +69,11 @@ knitr::kable(vonK_Aggregated_Table, caption = "Aggregated Contingency Table", la
 ## Filter by age range and then sum up deaths
 vonK_Under70_Table <- vonK_Data_70 |>
   filter(Age_Range == "Under_70") |>
-  select(-Age_Range) |>
+  dplyr::select(-Age_Range) |>
   adorn_totals("row")
 vonK_Over70_Table <- vonK_Data_70 |>
   filter(Age_Range == "Over_70") |>
-  select(-Age_Range) |>
+  dplyr::select(-Age_Range) |>
   adorn_totals("row")
 ```
 
@@ -213,16 +213,16 @@ vonK_Data_50 <- vonK_Data_50 |> group_by(Age_Range, Country) |>
   arrange(Country) |> ungroup()
 
 vonK_Aggregated_Table <- vonK_Data_50 |>
-  select(-Age_Range) |>
+  dplyr::select(-Age_Range) |>
   group_by(Country) |>
   summarise_all(.funs = c(sum)) |>
   adorn_totals("row")
 vonK_Under50_Table <- vonK_Data_50 |>
   filter(Age_Range == "Under_50") |>
-  select(-Age_Range) |> adorn_totals("row")
+  dplyr::select(-Age_Range) |> adorn_totals("row")
 vonK_Over50_Table <- vonK_Data_50 |>
   filter(Age_Range == "Over_50") |>
-  select(-Age_Range) |>
+  dplyr::select(-Age_Range) |>
   adorn_totals("row")
 ```
 

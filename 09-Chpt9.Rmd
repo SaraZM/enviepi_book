@@ -460,14 +460,14 @@ Show the WAIC, effective sample size, and trace plots for some of the parameters
 
 mcmc.out$WAIC
 min(coda::effectiveSize(mcmc.out$samples))
-plot(mcmc.out$samples[, c("beta0")], bty = "n")
+plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
 plot(mcmc.out$samples[, c("beta1")], bty = "n")
 plot(mcmc.out$samples[, c("b[2]")], bty = "n")
 plot(mcmc.out$samples[, c("sigma_b")], bty = "n")
 ```
 
 
-```{r Ex 8.3 nimble CAR summary, echo = TRUE}
+```{r Ex 9.3 nimble CAR summary, echo = TRUE}
 
 # Extract samples
 variables <- c("beta0", "beta1","sigma_b")
@@ -478,7 +478,7 @@ summary_CAR_nimble[variables,]
 
 Map the mean of the posterior estimate for the latent effect.
 
-```{r plot map nimble}
+```{r Ex 9.3 plot map nimble}
 
 samples_CAR_b <-
   summary_CAR_nimble[grepl("b\\[", rownames(summary_CAR_nimble)), ] |> as.data.frame()
@@ -510,15 +510,7 @@ library(ggplot2)
 library(loo) # To calculate WAIC and loo later
 library(rstan) 
 library(spdep) 
-# Add a theme to clear axes and background in ggplot (optional)
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_blank() # remove axis line
-  )
-}
+
 # Additional settings for stan
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
@@ -936,4 +928,3 @@ ggplot() +
   theme_void()
 
 ```
-

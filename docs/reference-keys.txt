@@ -14,8 +14,6 @@ strategies
 trusted
 Disease
 hazards
-example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state
-stan-2
 Time
 stan-4
 nimble-4
