@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-21" />
+<meta name="date" content="2023-02-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -195,7 +195,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a>
+<ul>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-3"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-3"><i class="fa fa-check"></i>Stan</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -336,13 +340,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="Disease.html#cb62-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 2416.325
+## [1] 2416.236
 ## Field &quot;lppd&quot;:
-## [1] -1060.217
+## [1] -1060.074
 ## Field &quot;pWAIC&quot;:
-## [1] 147.9458</code></pre>
+## [1] 148.0436</code></pre>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="Disease.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
-<pre><code>## [1] 237.6157</code></pre>
+<pre><code>## [1] 203.6635</code></pre>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="Disease.html#cb66-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> mcmc.out<span class="sc">$</span>samples</span>
 <span id="cb66-2"><a href="Disease.html#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-3"><a href="Disease.html#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co"># trace plot of a</span></span>
@@ -368,14 +372,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##    plus standard error of the mean:
 ## 
 ##    Mean    SD Naive SE Time-series SE
-## a 11.80 1.096  0.02450        0.07310
-## b 12.13 1.137  0.02542        0.07709
+## a 11.65 1.053  0.02354        0.07487
+## b 11.99 1.106  0.02473        0.07778
 ## 
 ## 2. Quantiles for each variable:
 ## 
-##     2.5%   25%   50%   75% 97.5%
-## a  9.794 11.02 11.74 12.52 14.16
-## b 10.081 11.33 12.06 12.87 14.51</code></pre>
+##    2.5%   25%   50%  75% 97.5%
+## a 9.723 10.90 11.62 12.3 13.80
+## b 9.995 11.22 11.94 12.7 14.32</code></pre>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="Disease.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior summaries of theta_i</span></span>
 <span id="cb71-2"><a href="Disease.html#cb71-2" aria-hidden="true" tabindex="-1"></a>post_summary <span class="ot">&lt;-</span> mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
 <span id="cb71-3"><a href="Disease.html#cb71-3" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="st">&quot;variable&quot;</span>)</span>
@@ -513,11 +517,11 @@ generated quantities {
 ## Computed from 1500 by 324 log-likelihood matrix
 ## 
 ##           Estimate   SE
-## elpd_waic  -1209.6  7.6
-## p_waic       149.1  3.5
-## waic        2419.3 15.2
+## elpd_waic  -1208.1  7.5
+## p_waic       147.9  3.3
+## waic        2416.2 15.0
 ## 
-## 178 (54.9%) p_waic estimates greater than 0.4. We recommend trying loo instead.</code></pre>
+## 179 (55.2%) p_waic estimates greater than 0.4. We recommend trying loo instead.</code></pre>
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="Disease.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># traceplots of parameters a and b</span></span>
 <span id="cb78-2"><a href="Disease.html#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">traceplot</span>(Ex9_1Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>))</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%209.1%20stan%20waic%20and%20traceplots-1.png" width="672" /></p>
@@ -686,13 +690,13 @@ generated quantities {
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="Disease.html#cb88-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 2390.119
+## [1] 2390.368
 ## Field &quot;lppd&quot;:
-## [1] -1079.968
+## [1] -1079.624
 ## Field &quot;pWAIC&quot;:
-## [1] 115.0914</code></pre>
+## [1] 115.5599</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="Disease.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
-<pre><code>## [1] 293.4107</code></pre>
+<pre><code>## [1] 327.2235</code></pre>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="Disease.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;beta0&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%209.3%20WAIC,%20ESS%20and%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="Disease.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
@@ -705,10 +709,10 @@ generated quantities {
 <span id="cb96-2"><a href="Disease.html#cb96-2" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>,<span class="st">&quot;sigma_b&quot;</span>)</span>
 <span id="cb96-3"><a href="Disease.html#cb96-3" aria-hidden="true" tabindex="-1"></a>summary_CAR_nimble <span class="ot">&lt;-</span> mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span>
 <span id="cb96-4"><a href="Disease.html#cb96-4" aria-hidden="true" tabindex="-1"></a>summary_CAR_nimble[variables,]</span></code></pre></div>
-<pre><code>##                Mean      Median     St.Dev.   95%CI_low   95%CI_upp
-## beta0   -0.06867242 -0.06837594 0.007491519 -0.08358385 -0.05395009
-## beta1    0.18190571  0.18184365 0.012191587  0.15922933  0.20757992
-## sigma_b  0.25902890  0.25762168 0.020494885  0.21814733  0.30239182</code></pre>
+<pre><code>##                Mean      Median    St.Dev.   95%CI_low   95%CI_upp
+## beta0   -0.06934509 -0.06918944 0.00728883 -0.08358613 -0.05576674
+## beta1    0.18255969  0.18250770 0.01233243  0.15900974  0.20643942
+## sigma_b  0.25860212  0.25793856 0.02124031  0.22052174  0.30230312</code></pre>
 <p>Map the mean of the posterior estimate for the latent effect.</p>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="Disease.html#cb98-1" aria-hidden="true" tabindex="-1"></a>samples_CAR_b <span class="ot">&lt;-</span></span>
 <span id="cb98-2"><a href="Disease.html#cb98-2" aria-hidden="true" tabindex="-1"></a>  summary_CAR_nimble[<span class="fu">grepl</span>(<span class="st">&quot;b</span><span class="sc">\\</span><span class="st">[&quot;</span>, <span class="fu">rownames</span>(summary_CAR_nimble)), ] <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
@@ -870,17 +874,17 @@ generated quantities {
 <span id="cb103-3"><a href="Disease.html#cb103-3" aria-hidden="true" tabindex="-1"></a>loglikcar <span class="ot">&lt;-</span> <span class="fu">extract_log_lik</span>(Example9_3Stan)</span>
 <span id="cb103-4"><a href="Disease.html#cb103-4" aria-hidden="true" tabindex="-1"></a>waiccar <span class="ot">&lt;-</span> <span class="fu">waic</span>(loglikcar)</span></code></pre></div>
 <pre><code>## Warning: 
-## 90 (27.8%) p_waic estimates greater than 0.4. We recommend trying loo instead.</code></pre>
+## 89 (27.5%) p_waic estimates greater than 0.4. We recommend trying loo instead.</code></pre>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="Disease.html#cb105-1" aria-hidden="true" tabindex="-1"></a>waiccar</span></code></pre></div>
 <pre><code>## 
 ## Computed from 2000 by 324 log-likelihood matrix
 ## 
 ##           Estimate   SE
-## elpd_waic  -1195.5 14.2
-## p_waic       115.7  7.0
-## waic        2390.9 28.3
+## elpd_waic  -1195.0 14.2
+## p_waic       115.2  7.0
+## waic        2390.0 28.5
 ## 
-## 90 (27.8%) p_waic estimates greater than 0.4. We recommend trying loo instead.</code></pre>
+## 89 (27.5%) p_waic estimates greater than 0.4. We recommend trying loo instead.</code></pre>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="Disease.html#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">traceplot</span>(Example9_3Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;sigma_s&quot;</span>))</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%209.3%20stan%20CAR%20traceplots-1.png" width="672" /></p>
 <p>Show the posterior summary for the parameters if interest.
@@ -894,14 +898,14 @@ Keep in mind that in the stan model the we are sampling the standard deviation o
 <span id="cb108-7"><a href="Disease.html#cb108-7" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb108-8"><a href="Disease.html#cb108-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb108-9"><a href="Disease.html#cb108-9" aria-hidden="true" tabindex="-1"></a>summary_CAR_stan<span class="sc">$</span>summary</span></code></pre></div>
-<pre><code>##                mean      se_mean         sd        2.5%       97.5%    n_eff
-## beta0   -0.06896168 0.0001710399 0.00763998 -0.08407673 -0.05454262 1995.215
-## beta[1]  0.18182301 0.0003243504 0.01249706  0.15713924  0.20630621 1484.523
-## sigma_s  0.25803052 0.0004793074 0.02002336  0.22132885  0.29876491 1745.203
+<pre><code>##                mean      se_mean          sd        2.5%       97.5%    n_eff
+## beta0   -0.06913945 0.0001725615 0.007573474 -0.08415352 -0.05409504 1926.204
+## beta[1]  0.18236182 0.0003068650 0.012391680  0.15845708  0.20677608 1630.668
+## sigma_s  0.25816410 0.0004736017 0.020196757  0.21856544  0.29901741 1818.598
 ##              Rhat
-## beta0   0.9991897
-## beta[1] 1.0003395
-## sigma_s 0.9994225</code></pre>
+## beta0   0.9990422
+## beta[1] 1.0000011
+## sigma_s 0.9998656</code></pre>
 <p>Map the mean of the posterior estimate for the latent effect.</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="Disease.html#cb110-1" aria-hidden="true" tabindex="-1"></a>summary_CAR_stan_b <span class="ot">&lt;-</span></span>
 <span id="cb110-2"><a href="Disease.html#cb110-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(</span>
@@ -995,27 +999,27 @@ Keep in mind that in the stan model the we are sampling the standard deviation o
 <span id="cb114-4"><a href="Disease.html#cb114-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing first six rows of smoothed SMRs</span></span>
 <span id="cb114-5"><a href="Disease.html#cb114-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(SMR_smooth)</span></code></pre></div>
 <pre><code>##        SMR2010
-## 00AA 0.6752763
-## 00AB 1.3172134
-## 00AC 0.6650183
-## 00AD 0.9440104
-## 00AE 0.7485545
-## 00AF 0.8310662</code></pre>
+## 00AA 0.6745004
+## 00AB 1.3172750
+## 00AC 0.6651658
+## 00AD 0.9435512
+## 00AE 0.7478023
+## 00AF 0.8292262</code></pre>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r foldable"><code class="sourceCode r"><span id="cb116-1"><a href="Disease.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarizing smoothed SMRs</span></span>
 <span id="cb116-2"><a href="Disease.html#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(SMR_smooth)</span></code></pre></div>
 <pre><code>##     SMR2010      
-##  Min.   :0.6016  
-##  1st Qu.:0.7895  
-##  Median :0.9012  
-##  Mean   :0.9639  
-##  3rd Qu.:1.0822  
-##  Max.   :1.7984</code></pre>
+##  Min.   :0.6033  
+##  1st Qu.:0.7901  
+##  Median :0.9008  
+##  Mean   :0.9637  
+##  3rd Qu.:1.0813  
+##  Max.   :1.7950</code></pre>
 <div class="sourceCode" id="cb118"><pre class="sourceCode r foldable"><code class="sourceCode r"><span id="cb118-1"><a href="Disease.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the parameters under the CAR model.</span></span>
 <span id="cb118-2"><a href="Disease.html#cb118-2" aria-hidden="true" tabindex="-1"></a>Ex9_4<span class="sc">$</span>summary.results[]</span></code></pre></div>
 <pre><code>##                  Mean    2.5%   97.5% n.sample % accept n.effective Geweke.diag
-## (Intercept)   -0.0688 -0.0842 -0.0539     8000       32      6736.2         0.4
-## Average.Score  0.1816  0.1580  0.2055     8000       32      2233.8         1.8
-## tau2           0.0650  0.0463  0.0876     8000      100      3665.7         0.7
+## (Intercept)   -0.0689 -0.0843 -0.0538     8000       37      7657.0         0.9
+## Average.Score  0.1821  0.1588  0.2059     8000       37      2332.6        -0.1
+## tau2           0.0651  0.0465  0.0873     8000      100      3700.2        -1.3
 ## rho            1.0000  1.0000  1.0000       NA       NA          NA          NA</code></pre>
 <!-- QUESTION: What do we want the latent effect or the fitted values? -->
 <p>Use <code>ggplot()</code> and <code>geom_sf()</code> to plot the map of the latent spatial effect.</p>
@@ -1072,7 +1076,7 @@ Keep in mind that in the stan model the we are sampling the standard deviation o
 ##    = inla.mode, safe = FALSE, debug = debug, &quot;, &quot; .parent.frame = 
 ##    .parent.frame)&quot;) 
 ## Time used:
-##     Pre = 0.492, Running = 0.227, Post = 6.86, Total = 7.58 
+##     Pre = 0.484, Running = 0.253, Post = 6.24, Total = 6.97 
 ## Fixed effects:
 ##                 mean    sd 0.025quant 0.5quant 0.975quant mode kld
 ## (Intercept)   -0.069 0.008     -0.084   -0.069     -0.054   NA   0
@@ -1084,7 +1088,7 @@ Keep in mind that in the stan model the we are sampling the standard deviation o
 ## 
 ## Model hyperparameters:
 ##                   mean   sd 0.025quant 0.5quant 0.975quant mode
-## Precision for ID 15.94 2.61      11.55    15.69      21.64   NA
+## Precision for ID 15.94 2.61      11.54    15.69      21.64   NA
 ## 
 ## Marginal log-Likelihood:  -1493.26 
 ##  is computed 

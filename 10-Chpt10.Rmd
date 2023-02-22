@@ -561,7 +561,9 @@ plot(CA.vario4)
 
 ## Example 10.14: Spatial modeling of malaria in Gambia {-}
 
-
+```{r Ex 10.14 clean, include = FALSE}
+rm(list=ls())
+```
 
 ```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE}
 
@@ -666,6 +668,7 @@ head(malaria_village)
 
 <!-- NOTE: I am not doing a Matern cause I don't know how to code it, I'll use an exponential instead -->
 
+###  Nimble {-} 
 
 ```{r Ex 10.14 nimble model}
 
@@ -755,7 +758,7 @@ post_samples <- runMCMC(
 )
 ```
 
-```{r Ex 10.14 traceplots ESS }
+```{r Ex 10.14 nimble traceplots ESS }
 
 plot(post_samples$samples[, c("b0")], bty = "n", main = "b0")
 plot(post_samples$samples[, c("b1")], bty = "n", main = "b1")
@@ -764,12 +767,8 @@ plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
 plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]")
 plot(post_samples$samples[, c("S[13]")], bty = "n", main = "S[13]")
-plot(post_samples$samples[, c("S[23]")], bty = "n", main = "S[23]")
-plot(post_samples$samples[, c("S[45]")], bty = "n", main = "S[45]")
-plot(post_samples$samples[, c("S[60]")], bty = "n", main = "S[60]")
 plot(post_samples$samples[, c("p[1]")], bty = "n", main = "p[1]")
 plot(post_samples$samples[, c("p[13]")], bty = "n", main = "p[13]")
-plot(post_samples$samples[, c("p[50]")], bty = "n", main = "p[50]")
 
 # Get minimum effective size (ESS) and which variable has the min ESS
 min(coda::effectiveSize(post_samples$samples))
@@ -778,6 +777,13 @@ mcmc_variable_names <- colnames(post_samples$samples$chain1)
 mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda::effectiveSize(post_samples$samples)))]
 
 ```
+
+
+
+
+
+
+
 ```{r Ex 10.14 nimble summary, echo = TRUE}
 
 # Extract samples
@@ -804,8 +810,10 @@ post_sum_S$village <-
 ggplot(data = post_sum_S, aes(x = village)) +
   geom_pointrange(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`, y = Mean)) +
   geom_hline(yintercept = 0, linetype = "dotted") +
-  theme_clear() + theme(axis.text.x = element_text(angle = 90)) + 
-  ylab("") + xlab("village") + ggtitle("Posterior summary spatial random effect by village")
+  scale_x_discrete(
+    breaks = post_sum_S$village[seq(1, length(post_sum_S$village), by = 5)]) +
+  theme_clear() +  ylab("") + xlab("village") +
+  ggtitle("Posterior summary spatial random effect by village")
 
 ```
 ```{r Ex 10.14 nimble summary S, echo = TRUE}
@@ -821,8 +829,112 @@ post_sum_p$village <-
 
 ggplot(data = post_sum_p, aes(x = village)) +
   geom_pointrange(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`, y = Mean)) +
-  theme_clear() + theme(axis.text.x = element_text(angle = 90)) + 
-  ylab("") + xlab("village") + ggtitle("Posterior summary probabilities by village")
+   scale_x_discrete(
+    breaks = post_sum_p$village[seq(1, length(post_sum_p$village), by = 5)]) +
+  theme_clear() + ylab("") + xlab("village") + 
+  ggtitle("Posterior summary probabilities by village")
 
+```
+
+### Stan {-}
+
+```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+# load rstan with options
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/Example10_14.stan
+```
+```{r Ex 10.14 stan data, warning = FALSE}
+
+ex.data <- list(y = malaria_village$positive, # malaria prevalence 
+                 N = malaria_village$total, # people sampled per village
+                 X = as.vector(scale(altitude)), # altitude per village
+                 dist_matrix = obs_dist_mat, # distance matrix in km
+                 n = nrow(malaria_village) # number of villages
+                 )
+
+Example10_14Stan  <- stan(
+  file = "functions/Example10_14.stan",
+  data = ex.data,
+  warmup = 15000,
+  iter = 30000,
+  chains = 2,
+  thin = 10,
+  pars = c("beta0", "beta","sigma", "tau", "phi", "S", "p"),
+  include = TRUE
+)
+
+```
+
+```{r Ex 10.14 stan traceplots}
+#computing WAIC using the package loo
+
+traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
+
+```
+
+
+```{r Ex 10.14 stan summary, echo = TRUE}
+
+# Extract samples
+summary_stan <-
+  summary(
+    Example10_14Stan,
+    pars = c("beta0","beta", "tau", "sigma", "phi"),
+    probs = c(0.025, 0.975)
+  )
+
+summary_stan$summary
+
+```
+
+
+
+```{r Ex 10.14 stan posterior plots}
+S_summary <-
+  summary(Example10_14Stan, pars = c("S"))$summary
+
+S_summary_df <- data.frame(S_summary) |>
+  tibble::rownames_to_column() |>
+  filter(rowname %in% paste0("S[", 1:65, "]")) |>
+  mutate(village = 1:65) |>
+  dplyr::select(mean,  X2.5., X97.5., village)
+  
+S_summary_df$village <-
+  factor(S_summary_df$village , levels = 1:65)
+
+
+  ggplot(S_summary_df, aes(x = village, group = 1)) +
+  geom_pointrange(aes(ymin = X2.5., ymax = X97.5., y = mean)) +
+  geom_hline(yintercept = 0, linetype = "dotted") +
+  scale_x_discrete(
+    breaks = S_summary_df$village[seq(1, length(S_summary_df$village), by = 5)]) +
+  theme_clear() +  ylab("") + xlab("village") +
+  ggtitle("Posterior summary spatial random effect by village")
+  
+  
+p_summary <-
+  summary(Example10_14Stan, pars = c("p"))$summary
+
+p_summary_df <- data.frame(p_summary) |>
+  tibble::rownames_to_column() |>
+  filter(rowname %in% paste0("p[", 1:65, "]")) |>
+  mutate(village = 1:65) |>
+  dplyr::select(mean,  X2.5., X97.5., village)
+  
+p_summary_df$village <-
+  factor(p_summary_df$village , levels = 1:65)
+
+  ggplot(p_summary_df, aes(x = village, group = 1)) +
+  geom_pointrange(aes(ymin = X2.5., ymax = X97.5., y = mean)) +
+  scale_x_discrete(
+    breaks = p_summary_df$village[seq(1, length(p_summary_df$village), by = 5)]) +
+  theme_clear() +  ylab("") + xlab("village") +
+  ggtitle("Posterior summary probabilities by village")
 ```
 
