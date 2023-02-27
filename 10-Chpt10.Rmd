@@ -129,12 +129,31 @@ benzene_utm_geo <- benzene_utm_df
 # get the coordinates in kms and turn into a Spatial object
 benzene_utm_geo[,c("X", "Y")] <- benzene_utm_geo[,c("X", "Y")]/1000
 coordinates(benzene_utm_geo) <- ~ X + Y
-# Plot the variogram and fit one
-benzene_vgm <- variogram(log(Benzene)~ X + Y, data = benzene_utm_geo)
-benzene_vgm_fit = fit.variogram(benzene_vgm,
-                                model = vgm(0.1, "Exp",6))
+# Estimate variogram intercept only
+benzene_inter_vgm <- variogram(log(Benzene)~ 1, data = benzene_utm_geo,
+                         cutoff = 20, # cutoff distance
+                         width = 20/10 # bins width 
+                         )
+
+benzene_inter_vgm_fit <- fit.variogram(benzene_inter_vgm,
+                                model = vgm(0.1, "Exp", 15, 0.02))
+
+benzene_inter_vgm_fit
+
+# Estimate variogram using coordinates
+benzene_vgm <- variogram(log(Benzene)~ X + Y, data = benzene_utm_geo,
+                         cutoff = 20, # cutoff distance
+                         width = 20/10 # bins width
+                         )
+
+benzene_vgm_fit <- fit.variogram(benzene_vgm,
+                                model = vgm(0.1, "Exp", 3, 0.02))
 benzene_vgm_fit
-plot(benzene_vgm, benzene_vgm_fit)
+
+plot_inter_variog <- plot(benzene_inter_vgm, benzene_inter_vgm_fit, bty = "n")
+plot_coord_variog <- plot(benzene_vgm, benzene_vgm_fit, bty = "n")
+
+plot_grid(plot_inter_variog, plot_coord_variog, labels = "auto")
 ```
 
 ## Example 10.6 Basic spatial modelling and prediction of benzene in Montreal {-}
@@ -151,7 +170,7 @@ names(MtlPred)[ names(MtlPred)=="Var2"] <- "Y"
 coordinates (MtlPred) = ~ X + Y
 gridded(MtlPred) = TRUE
 # define the model based on the variogram fit from the previous example
-mod <- vgm (0.053 , "Exp", 2.159 )
+mod <- vgm (0.053 , "Exp", 5.54, 0.0122)
 # use ordinary kriging to predict values in the grid
 x <- krige(log(Benzene) ~ X + Y, benzene_utm_geo , MtlPred , model = mod )
 # Plot the ordinary kriging predictions and their variance
