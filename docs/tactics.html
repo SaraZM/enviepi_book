@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-22" />
+<meta name="date" content="2023-02-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="embracing.html"/>
-<link rel="next" href="strategies.html"/>
+<link rel="next" href="Strategies.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -163,8 +163,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
-<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a></li>
+<li class="chapter" data-level="7" data-path="Strategies.html"><a href="Strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
+<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="trusted.html"><a href="trusted.html#solutions-to-selected-exercises"><i class="fa fa-check"></i><b>8.1</b> Solutions to Selected Exercises</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="trusted.html"><a href="trusted.html#placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-the-naive-model."><i class="fa fa-check"></i><b>8.1.1</b> PLACEHOLDER: Repeat the Black Smoke analysis conducted in Watson et al. 2019. in the “naive” model.</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="Disease.html"><a href="Disease.html"><i class="fa fa-check"></i><b>9</b> Disease-spatial patterns</a>
 <ul>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 9.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
@@ -216,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
 <li class="chapter" data-level="13" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>13</b> Causality-roadblocks on the way to it</a>
 <ul>
-<li class="chapter" data-level="13.1" data-path="causality.html"><a href="causality.html#solutions-to-selected-exercises"><i class="fa fa-check"></i><b>13.1</b> Solutions to Selected Exercises</a>
+<li class="chapter" data-level="13.1" data-path="causality.html"><a href="causality.html#solutions-to-selected-exercises-1"><i class="fa fa-check"></i><b>13.1</b> Solutions to Selected Exercises</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="causality.html"><a href="causality.html#question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r."><i class="fa fa-check"></i><b>13.1.1</b> Question 13.16: Load the Italy and China data, described in Example 13.3, and included in the supplementary Bookdown material into R.</a></li>
 <li class="chapter" data-level="13.1.2" data-path="causality.html"><a href="causality.html#question-13.17-using-the-italy-and-china-data-stratified-by-the-age-groups-70-and-geq-70-obtain-empirical-estimates-of-p_1-and-p_2-as-defined-in-an-sdis.-in-the-following-questions-assume-that-p_1-and-p_2-are-the-population-values."><i class="fa fa-check"></i><b>13.1.2</b> Question 13.17: Using the Italy and China data stratified by the age groups <span class="math inline">\(&lt;70\)</span> and <span class="math inline">\(\geq 70\)</span>, obtain empirical estimates of <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>, as defined in an SDis. In the following questions, assume that <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span> are the population values.</a></li>
@@ -553,9 +559,9 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 <p>Given the convergence issues, we can also check the estimated sampled size and Rhat using the package <code>coda</code>.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tactics.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS a: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS a: 74.5071357042438&quot;</code></pre>
+<pre><code>## [1] &quot;ESS a: 48.0412552413763&quot;</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="tactics.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS b: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS b: 78.7498099882976&quot;</code></pre>
+<pre><code>## [1] &quot;ESS b: 50.7520221626538&quot;</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="tactics.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[1]: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>]))</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]: 2001&quot;</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="tactics.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[10]: &quot;</span>,coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>]))</span></code></pre></div>
@@ -673,11 +679,11 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="tactics.html#cb50-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.391
+## [1] 3049.493
 ## Field &quot;lppd&quot;:
-## [1] -1514.457
+## [1] -1514.416
 ## Field &quot;pWAIC&quot;:
-## [1] 10.23836</code></pre>
+## [1] 10.33089</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="tactics.html#cb52-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
 <span id="cb52-2"><a href="tactics.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -702,12 +708,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##       1.129015       0.012524       0.000198       0.000198 
+##      1.1289039      0.0124046      0.0001961      0.0002059 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.104 1.121 1.129 1.137 1.154</code></pre>
+## 1.105 1.121 1.129 1.137 1.154</code></pre>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="tactics.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
 <span id="cb57-2"><a href="tactics.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -720,12 +726,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0141464      0.0177278      0.0002803      0.0004414 
+##      1.0149610      0.0177154      0.0002801      0.0004258 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## 0.9788 1.0019 1.0143 1.0260 1.0492</code></pre>
+## 0.9804 1.0031 1.0150 1.0267 1.0507</code></pre>
 
 </div>
 </div>
@@ -735,7 +741,7 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
         </div>
       </div>
 <a href="embracing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="strategies.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="Strategies.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -93,13 +93,15 @@ hull = inla.nonconvex.hull(cbind(BlackSmokePrefData$east, BlackSmokePrefData$nor
 cutoff_dist = 16000 / sd_x # 16km as min edge
 max.edge = 100000 / sd_x # 100km max edge as in Shaddick and Zidek
 
+# NOTE: JOHNNY, I HAD TO COMMENT THE CUTOFF VARIABLE CAUSE OTHERWISE IT WOULDN'T WORK
+
 mesh = inla.mesh.2d(
   loc = cbind(BlackSmokePrefData$east, BlackSmokePrefData$north),
   boundary = hull,
-  offset = c(0.1, 0.2),
-  max.edge = c(cutoff_dist, 0.5),
-  cutoff = c(cutoff_dist, 0.5),
-  min.angle = 26
+   offset = c(0.1, 0.2),
+   max.edge = c(cutoff_dist, 0.5),
+   #cutoff = c(cutoff_dist, 1), 
+   min.angle = 26
 )
 
 plot(mesh)

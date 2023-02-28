@@ -10,8 +10,10 @@ uncertainty
 data
 embracing
 tactics
-strategies
+Strategies
 trusted
+solutions-to-selected-exercises
+placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-the-naive-model.
 Disease
 hazards
 Time
@@ -19,7 +21,7 @@ stan-5
 nimble-5
 exposure
 causality
-solutions-to-selected-exercises
+solutions-to-selected-exercises-1
 question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r.
 i-display-a-2-by-2-contingency-table-of-deathssurvivors-vs.-chinaitaly-aggregated-over-all-age-groups.
 ii-display-2-by-2-contingency-tables-stratified-by-the-age-groups-70-and-geq-70.

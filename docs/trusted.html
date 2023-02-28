@@ -23,14 +23,14 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-22" />
+<meta name="date" content="2023-02-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="strategies.html"/>
+<link rel="prev" href="Strategies.html"/>
 <link rel="next" href="Disease.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -163,8 +163,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="strategies.html"><a href="strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
-<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a></li>
+<li class="chapter" data-level="7" data-path="Strategies.html"><a href="Strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
+<li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="trusted.html"><a href="trusted.html#solutions-to-selected-exercises"><i class="fa fa-check"></i><b>8.1</b> Solutions to Selected Exercises</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="trusted.html"><a href="trusted.html#placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-the-naive-model."><i class="fa fa-check"></i><b>8.1.1</b> PLACEHOLDER: Repeat the Black Smoke analysis conducted in Watson et al. 2019. in the “naive” model.</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="9" data-path="Disease.html"><a href="Disease.html"><i class="fa fa-check"></i><b>9</b> Disease-spatial patterns</a>
 <ul>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 9.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
@@ -216,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
 <li class="chapter" data-level="13" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>13</b> Causality-roadblocks on the way to it</a>
 <ul>
-<li class="chapter" data-level="13.1" data-path="causality.html"><a href="causality.html#solutions-to-selected-exercises"><i class="fa fa-check"></i><b>13.1</b> Solutions to Selected Exercises</a>
+<li class="chapter" data-level="13.1" data-path="causality.html"><a href="causality.html#solutions-to-selected-exercises-1"><i class="fa fa-check"></i><b>13.1</b> Solutions to Selected Exercises</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="causality.html"><a href="causality.html#question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r."><i class="fa fa-check"></i><b>13.1.1</b> Question 13.16: Load the Italy and China data, described in Example 13.3, and included in the supplementary Bookdown material into R.</a></li>
 <li class="chapter" data-level="13.1.2" data-path="causality.html"><a href="causality.html#question-13.17-using-the-italy-and-china-data-stratified-by-the-age-groups-70-and-geq-70-obtain-empirical-estimates-of-p_1-and-p_2-as-defined-in-an-sdis.-in-the-following-questions-assume-that-p_1-and-p_2-are-the-population-values."><i class="fa fa-check"></i><b>13.1.2</b> Question 13.17: Using the Italy and China data stratified by the age groups <span class="math inline">\(&lt;70\)</span> and <span class="math inline">\(\geq 70\)</span>, obtain empirical estimates of <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>, as defined in an SDis. In the following questions, assume that <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span> are the population values.</a></li>
@@ -260,14 +266,413 @@ collected. From this chapter, the reader will have gained an understanding of th
 <li>Preferential sampling, where the process that determines the locations of monitoring sites and the process being modelled are in some ways dependent.</li>
 <li>How preferential sampling can bias the measurements that arise from environmental monitoring networks</li>
 </ul>
+<div id="solutions-to-selected-exercises" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Solutions to Selected Exercises<a href="trusted.html#solutions-to-selected-exercises" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-the-naive-model." class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> PLACEHOLDER: Repeat the Black Smoke analysis conducted in Watson et al. 2019. in the “naive” model.<a href="trusted.html#placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-the-naive-model." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If INLA is not already installed, it needs to be done manually (<a href="https://www.r-inla.org/download-install" class="uri">https://www.r-inla.org/download-install</a>):</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="trusted.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb59-2"><a href="trusted.html#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;INLA&quot;</span>,</span>
+<span id="cb59-3"><a href="trusted.html#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(<span class="fu">getOption</span>(<span class="st">&quot;repos&quot;</span>), <span class="at">INLA =</span> <span class="st">&quot;https://inla.r-inla-download.org/R/stable&quot;</span>),</span>
+<span id="cb59-4"><a href="trusted.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">dep =</span> <span class="cn">TRUE</span></span>
+<span id="cb59-5"><a href="trusted.html#cb59-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>After INLA is installed load all the necessary packages.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="trusted.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span></code></pre></div>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## Loading required package: foreach</code></pre>
+<pre><code>## Loading required package: parallel</code></pre>
+<pre><code>## This is INLA_22.12.16 built 2022-12-23 13:24:10 UTC.
+##  - See www.r-inla.org/contact-us for how to get help.</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="trusted.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
+<span id="cb65-2"><a href="trusted.html#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(boot)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;boot&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:nimble&#39;:
+## 
+##     logit</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="trusted.html#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span></code></pre></div>
+<pre><code>## --------------------------------------------------------------
+##  Analysis of Geostatistical Data
+##  For an Introduction to geoR go to http://www.leg.ufpr.br/geoR
+##  geoR version 1.9-2 (built on 2022-08-09) is now loaded
+## --------------------------------------------------------------</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="trusted.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb70-2"><a href="trusted.html#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb70-3"><a href="trusted.html#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<p>Assuming the data is held in the file <code>BlackSmokePrefData.csv</code> in a <code>/data</code> directory:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="trusted.html#cb71-1" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/BlackSmokePrefData.csv&quot;</span>)</span>
+<span id="cb71-2"><a href="trusted.html#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="trusted.html#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(BlackSmokePrefData)</span></code></pre></div>
+<pre><code>##           site   east  north AMEAN66 AMEAN67 AMEAN68 AMEAN69 AMEAN70 AMEAN71
+## 1 ADDLESTONE 1 505200 164600      92     103      68      47      47      45
+## 2   BARNSLEY 8 434800 409400      NA      NA      NA      NA      NA      NA
+## 3   BARNSLEY 9 437000 405500      NA      NA      NA      NA      NA      NA
+## 4    BOLTON 24 371500 409200     132     108      75      77      78      74
+## 5   BRADFORD 6 416300 432900     202     151     122     110      90     118
+## 6   CARDIFF 12 319300 177300      NA      NA      NA      NA      NA      NA
+##   AMEAN72 AMEAN73 AMEAN74 AMEAN75 AMEAN76 AMEAN77 AMEAN78 AMEAN79 AMEAN80
+## 1      52      41      36      31      33      24      20      17      11
+## 2      NA      NA      NA      NA      NA      NA      NA      NA      NA
+## 3      NA      NA      NA      NA      23      18      19      19      12
+## 4     149     137      NA      NA      NA      NA      NA      NA      NA
+## 5     172     191      74      NA      NA      NA      NA      NA      NA
+## 6      NA      NA      NA      NA      NA      NA      24      19      12
+##   AMEAN81 AMEAN82 AMEAN83 AMEAN84 AMEAN85 AMEAN86 AMEAN87 AMEAN88 AMEAN89
+## 1      15       9       8      15      12      10      13       7       9
+## 2      NA      NA      NA      NA      NA      NA      NA      NA      NA
+## 3      19      NA      NA      NA      NA      NA      NA      NA      NA
+## 4      NA      NA      NA      NA      NA      NA      NA      NA      NA
+## 5      NA      NA      NA      NA      NA      NA      NA      NA      NA
+## 6      10      11      16      19      18      14      11       9      11
+##   AMEAN90 AMEAN91 AMEAN92 AMEAN93 AMEAN94 AMEAN95 AMEAN96
+## 1      11       6      NA      NA      NA      NA      NA
+## 2      NA      13       6      11       6       6       5
+## 3      NA      NA      NA      NA      NA      NA      NA
+## 4      NA      NA      NA      NA      NA      NA      NA
+## 5      NA      NA      NA      NA      NA      NA      NA
+## 6      12      12       9      11       9      19      11</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="trusted.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="do">## standardize location coordinates</span></span>
+<span id="cb73-2"><a href="trusted.html#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="trusted.html#cb73-3" aria-hidden="true" tabindex="-1"></a>sd_x <span class="ot">&lt;-</span> <span class="fu">sd</span>(BlackSmokePrefData[, <span class="fu">c</span>(<span class="dv">2</span>)])</span>
+<span id="cb73-4"><a href="trusted.html#cb73-4" aria-hidden="true" tabindex="-1"></a>sd_y <span class="ot">&lt;-</span> <span class="fu">sd</span>(BlackSmokePrefData[, <span class="fu">c</span>(<span class="dv">3</span>)])</span>
+<span id="cb73-5"><a href="trusted.html#cb73-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-6"><a href="trusted.html#cb73-6" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData[, <span class="dv">2</span>] <span class="ot">&lt;-</span> BlackSmokePrefData[, <span class="dv">2</span>] <span class="sc">/</span> sd_x</span>
+<span id="cb73-7"><a href="trusted.html#cb73-7" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData[, <span class="dv">3</span>] <span class="ot">&lt;-</span> BlackSmokePrefData[, <span class="dv">3</span>] <span class="sc">/</span> sd_y </span></code></pre></div>
+<p>We need to reshape the data to have one observation per row, as required by INLA.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="trusted.html#cb74-1" aria-hidden="true" tabindex="-1"></a>yearmeans <span class="ot">=</span> <span class="fu">colMeans</span>(BlackSmokePrefData[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)], <span class="at">na.rm =</span> T)  <span class="do">## save means for each year</span></span>
+<span id="cb74-2"><a href="trusted.html#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="trusted.html#cb74-3" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData <span class="ot">&lt;-</span></span>
+<span id="cb74-4"><a href="trusted.html#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(</span>
+<span id="cb74-5"><a href="trusted.html#cb74-5" aria-hidden="true" tabindex="-1"></a>    BlackSmokePrefData,</span>
+<span id="cb74-6"><a href="trusted.html#cb74-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb74-7"><a href="trusted.html#cb74-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable.name =</span> <span class="st">&#39;year&#39;</span>,</span>
+<span id="cb74-8"><a href="trusted.html#cb74-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">value.name =</span> <span class="st">&#39;bsmoke&#39;</span></span>
+<span id="cb74-9"><a href="trusted.html#cb74-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb74-10"><a href="trusted.html#cb74-10" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData<span class="sc">$</span>year <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(<span class="fu">factor</span>(BlackSmokePrefData<span class="sc">$</span>year, <span class="at">labels =</span></span>
+<span id="cb74-11"><a href="trusted.html#cb74-11" aria-hidden="true" tabindex="-1"></a>                                                           <span class="dv">66</span><span class="sc">:</span><span class="dv">96</span>)))</span>
+<span id="cb74-12"><a href="trusted.html#cb74-12" aria-hidden="true" tabindex="-1"></a><span class="do">## standardize by mean of mean of each year to make it unitless</span></span>
+<span id="cb74-13"><a href="trusted.html#cb74-13" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData<span class="sc">$</span>bsmoke <span class="ot">=</span> BlackSmokePrefData<span class="sc">$</span>bsmoke <span class="sc">/</span> <span class="fu">mean</span>(yearmeans)</span>
+<span id="cb74-14"><a href="trusted.html#cb74-14" aria-hidden="true" tabindex="-1"></a><span class="do">## log-transform to eliminate right skew</span></span>
+<span id="cb74-15"><a href="trusted.html#cb74-15" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData<span class="sc">$</span>bsmoke <span class="ot">=</span> <span class="fu">log</span>(BlackSmokePrefData<span class="sc">$</span>bsmoke)</span></code></pre></div>
+<p>Producing the 2-d mesh of the UK:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="trusted.html#cb75-1" aria-hidden="true" tabindex="-1"></a>no_sites <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">length</span>(<span class="fu">unique</span>(BlackSmokePrefData<span class="sc">$</span>site))) <span class="co"># number of sites</span></span>
+<span id="cb75-2"><a href="trusted.html#cb75-2" aria-hidden="true" tabindex="-1"></a>no_T <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">length</span>(<span class="fu">unique</span>(BlackSmokePrefData<span class="sc">$</span>year))) <span class="co"># number of years</span></span>
+<span id="cb75-3"><a href="trusted.html#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-4"><a href="trusted.html#cb75-4" aria-hidden="true" tabindex="-1"></a>ncol <span class="ot">=</span> <span class="dv">100</span> <span class="co"># grid for projection</span></span>
+<span id="cb75-5"><a href="trusted.html#cb75-5" aria-hidden="true" tabindex="-1"></a>nrow <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb75-6"><a href="trusted.html#cb75-6" aria-hidden="true" tabindex="-1"></a>L <span class="ot">=</span> nrow <span class="sc">*</span> ncol <span class="co"># number of grid sites</span></span>
+<span id="cb75-7"><a href="trusted.html#cb75-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-8"><a href="trusted.html#cb75-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Form the regular mesh #</span></span>
+<span id="cb75-9"><a href="trusted.html#cb75-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a rough convex boundary for the UK #</span></span>
+<span id="cb75-10"><a href="trusted.html#cb75-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Form the grid independently from the sites to avoid preferential grid selection #</span></span>
+<span id="cb75-11"><a href="trusted.html#cb75-11" aria-hidden="true" tabindex="-1"></a>UK_domain <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">7.7</span>, <span class="fl">7.7</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">6</span>, <span class="fl">13.5</span>, <span class="fl">13.5</span>, <span class="dv">12</span>))</span>
+<span id="cb75-12"><a href="trusted.html#cb75-12" aria-hidden="true" tabindex="-1"></a>hull <span class="ot">=</span> <span class="fu">inla.nonconvex.hull</span>(<span class="fu">cbind</span>(BlackSmokePrefData<span class="sc">$</span>east, BlackSmokePrefData<span class="sc">$</span>north))</span>
+<span id="cb75-13"><a href="trusted.html#cb75-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-14"><a href="trusted.html#cb75-14" aria-hidden="true" tabindex="-1"></a>cutoff_dist <span class="ot">=</span> <span class="dv">16000</span> <span class="sc">/</span> sd_x <span class="co"># 16km as min edge</span></span>
+<span id="cb75-15"><a href="trusted.html#cb75-15" aria-hidden="true" tabindex="-1"></a>max.edge <span class="ot">=</span> <span class="dv">100000</span> <span class="sc">/</span> sd_x <span class="co"># 100km max edge as in Shaddick and Zidek</span></span>
+<span id="cb75-16"><a href="trusted.html#cb75-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-17"><a href="trusted.html#cb75-17" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: JOHNNY, I HAD TO COMMENT THE CUTOFF VARIABLE CAUSE OTHERWISE IT WOULDN&#39;T WORK</span></span>
+<span id="cb75-18"><a href="trusted.html#cb75-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-19"><a href="trusted.html#cb75-19" aria-hidden="true" tabindex="-1"></a>mesh <span class="ot">=</span> <span class="fu">inla.mesh.2d</span>(</span>
+<span id="cb75-20"><a href="trusted.html#cb75-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">loc =</span> <span class="fu">cbind</span>(BlackSmokePrefData<span class="sc">$</span>east, BlackSmokePrefData<span class="sc">$</span>north),</span>
+<span id="cb75-21"><a href="trusted.html#cb75-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">boundary =</span> hull,</span>
+<span id="cb75-22"><a href="trusted.html#cb75-22" aria-hidden="true" tabindex="-1"></a>   <span class="at">offset =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>),</span>
+<span id="cb75-23"><a href="trusted.html#cb75-23" aria-hidden="true" tabindex="-1"></a>   <span class="at">max.edge =</span> <span class="fu">c</span>(cutoff_dist, <span class="fl">0.5</span>),</span>
+<span id="cb75-24"><a href="trusted.html#cb75-24" aria-hidden="true" tabindex="-1"></a>   <span class="co">#cutoff = c(cutoff_dist, 1), </span></span>
+<span id="cb75-25"><a href="trusted.html#cb75-25" aria-hidden="true" tabindex="-1"></a>   <span class="at">min.angle =</span> <span class="dv">26</span></span>
+<span id="cb75-26"><a href="trusted.html#cb75-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb75-27"><a href="trusted.html#cb75-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-28"><a href="trusted.html#cb75-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mesh)</span>
+<span id="cb75-29"><a href="trusted.html#cb75-29" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(BlackSmokePrefData<span class="sc">$</span>east, BlackSmokePrefData<span class="sc">$</span>north, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/mesh%20analysis-1.png" width="672" /></p>
+<p>Now we define and fit our INLA model.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="trusted.html#cb76-1" aria-hidden="true" tabindex="-1"></a>spde_obj <span class="ot">=</span> <span class="fu">inla.spde2.pcmatern</span>(</span>
+<span id="cb76-2"><a href="trusted.html#cb76-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mesh =</span> mesh,</span>
+<span id="cb76-3"><a href="trusted.html#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="dv">2</span>,</span>
+<span id="cb76-4"><a href="trusted.html#cb76-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior.range =</span> <span class="fu">c</span>(<span class="fl">0.04</span>, <span class="fl">0.05</span>),</span>
+<span id="cb76-5"><a href="trusted.html#cb76-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior.sigma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.01</span>),</span>
+<span id="cb76-6"><a href="trusted.html#cb76-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">constr =</span> T</span>
+<span id="cb76-7"><a href="trusted.html#cb76-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb76-8"><a href="trusted.html#cb76-8" aria-hidden="true" tabindex="-1"></a>A_proj <span class="ot">=</span> <span class="fu">inla.spde.make.A</span>(</span>
+<span id="cb76-9"><a href="trusted.html#cb76-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mesh =</span> mesh,</span>
+<span id="cb76-10"><a href="trusted.html#cb76-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">loc =</span> <span class="fu">as.matrix</span>(<span class="fu">cbind</span>(</span>
+<span id="cb76-11"><a href="trusted.html#cb76-11" aria-hidden="true" tabindex="-1"></a>    BlackSmokePrefData<span class="sc">$</span>east, BlackSmokePrefData<span class="sc">$</span>north</span>
+<span id="cb76-12"><a href="trusted.html#cb76-12" aria-hidden="true" tabindex="-1"></a>  )),</span>
+<span id="cb76-13"><a href="trusted.html#cb76-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> BlackSmokePrefData<span class="sc">$</span>year <span class="sc">-</span> <span class="dv">65</span>,</span>
+<span id="cb76-14"><a href="trusted.html#cb76-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># group membership needs to be 1:no_T</span></span>
+<span id="cb76-15"><a href="trusted.html#cb76-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.group =</span> no_T</span>
+<span id="cb76-16"><a href="trusted.html#cb76-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb76-17"><a href="trusted.html#cb76-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-18"><a href="trusted.html#cb76-18" aria-hidden="true" tabindex="-1"></a>s_index <span class="ot">=</span> <span class="fu">inla.spde.make.index</span>(<span class="at">name =</span> <span class="st">&quot;spatial.field&quot;</span>,</span>
+<span id="cb76-19"><a href="trusted.html#cb76-19" aria-hidden="true" tabindex="-1"></a>                               <span class="at">n.spde =</span> spde_obj<span class="sc">$</span>n.spde,</span>
+<span id="cb76-20"><a href="trusted.html#cb76-20" aria-hidden="true" tabindex="-1"></a>                               <span class="at">n.group =</span> no_T)</span>
+<span id="cb76-21"><a href="trusted.html#cb76-21" aria-hidden="true" tabindex="-1"></a>time <span class="ot">=</span> (<span class="dv">1</span><span class="sc">:</span>no_T) <span class="sc">/</span> no_T</span>
+<span id="cb76-22"><a href="trusted.html#cb76-22" aria-hidden="true" tabindex="-1"></a>time2 <span class="ot">=</span> time <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb76-23"><a href="trusted.html#cb76-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-24"><a href="trusted.html#cb76-24" aria-hidden="true" tabindex="-1"></a><span class="co"># create the stack object for estimating observation process y #</span></span>
+<span id="cb76-25"><a href="trusted.html#cb76-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-26"><a href="trusted.html#cb76-26" aria-hidden="true" tabindex="-1"></a>cov_y <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb76-27"><a href="trusted.html#cb76-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">year =</span> <span class="fu">rep</span>(time, <span class="at">each =</span> no_sites),</span>
+<span id="cb76-28"><a href="trusted.html#cb76-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">year_2 =</span> <span class="fu">rep</span>(time2, <span class="at">each =</span> no_sites),</span>
+<span id="cb76-29"><a href="trusted.html#cb76-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">spatial_ind =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>no_sites, <span class="at">times =</span> no_T),</span>
+<span id="cb76-30"><a href="trusted.html#cb76-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">spatial_ind2 =</span> no_sites <span class="sc">+</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>no_sites, <span class="at">times =</span> no_T)</span>
+<span id="cb76-31"><a href="trusted.html#cb76-31" aria-hidden="true" tabindex="-1"></a>) <span class="co"># site-specific random intercepts</span></span>
+<span id="cb76-32"><a href="trusted.html#cb76-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-33"><a href="trusted.html#cb76-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Needs copies to include covariate twice</span></span>
+<span id="cb76-34"><a href="trusted.html#cb76-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-35"><a href="trusted.html#cb76-35" aria-hidden="true" tabindex="-1"></a>s_index_copy <span class="ot">=</span> s_index</span>
+<span id="cb76-36"><a href="trusted.html#cb76-36" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(s_index_copy) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;spatial.field.copy&#39;</span>,</span>
+<span id="cb76-37"><a href="trusted.html#cb76-37" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;spatial.field.group.copy&quot;</span>,</span>
+<span id="cb76-38"><a href="trusted.html#cb76-38" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;spatial.field.repl.copy&quot;</span>)</span>
+<span id="cb76-39"><a href="trusted.html#cb76-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-40"><a href="trusted.html#cb76-40" aria-hidden="true" tabindex="-1"></a>s_index_copy2 <span class="ot">=</span> s_index</span>
+<span id="cb76-41"><a href="trusted.html#cb76-41" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(s_index_copy2) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;spatial.field.copy2&#39;</span>,</span>
+<span id="cb76-42"><a href="trusted.html#cb76-42" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;spatial.field.group.copy2&quot;</span>,</span>
+<span id="cb76-43"><a href="trusted.html#cb76-43" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;spatial.field.repl.copy2&quot;</span>)</span>
+<span id="cb76-44"><a href="trusted.html#cb76-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-45"><a href="trusted.html#cb76-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-46"><a href="trusted.html#cb76-46" aria-hidden="true" tabindex="-1"></a>stack_y_est <span class="ot">=</span> <span class="fu">inla.stack</span>(</span>
+<span id="cb76-47"><a href="trusted.html#cb76-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">list</span>(</span>
+<span id="cb76-48"><a href="trusted.html#cb76-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> BlackSmokePrefData<span class="sc">$</span>bsmoke,</span>
+<span id="cb76-49"><a href="trusted.html#cb76-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">#single model</span></span>
+<span id="cb76-50"><a href="trusted.html#cb76-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">alldata =</span> <span class="fu">cbind</span>(BlackSmokePrefData<span class="sc">$</span>bsmoke, <span class="cn">NA</span>, <span class="cn">NA</span>),</span>
+<span id="cb76-51"><a href="trusted.html#cb76-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ntrials =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> <span class="fu">length</span>(BlackSmokePrefData<span class="sc">$</span>bsmoke))</span>
+<span id="cb76-52"><a href="trusted.html#cb76-52" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb76-53"><a href="trusted.html#cb76-53" aria-hidden="true" tabindex="-1"></a>  <span class="co">#joint model</span></span>
+<span id="cb76-54"><a href="trusted.html#cb76-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">A =</span> <span class="fu">list</span>(A_proj, A_proj, A_proj, <span class="dv">1</span>),</span>
+<span id="cb76-55"><a href="trusted.html#cb76-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">effects =</span> <span class="fu">list</span>(</span>
+<span id="cb76-56"><a href="trusted.html#cb76-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(s_index, <span class="fu">list</span>(<span class="at">Intercept =</span> <span class="dv">1</span>)),</span>
+<span id="cb76-57"><a href="trusted.html#cb76-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(s_index_copy, <span class="fu">list</span>(<span class="at">Intercept_copy =</span> <span class="dv">1</span>)),</span>
+<span id="cb76-58"><a href="trusted.html#cb76-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(s_index_copy2, <span class="fu">list</span>(<span class="at">Intercept_copy2 =</span> <span class="dv">1</span>)),</span>
+<span id="cb76-59"><a href="trusted.html#cb76-59" aria-hidden="true" tabindex="-1"></a>    cov_y</span>
+<span id="cb76-60"><a href="trusted.html#cb76-60" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb76-61"><a href="trusted.html#cb76-61" aria-hidden="true" tabindex="-1"></a>  <span class="at">tag =</span> <span class="st">&#39;y_est&#39;</span></span>
+<span id="cb76-62"><a href="trusted.html#cb76-62" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb76-63"><a href="trusted.html#cb76-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-64"><a href="trusted.html#cb76-64" aria-hidden="true" tabindex="-1"></a>formula_naive <span class="ot">=</span> y <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> Intercept <span class="sc">+</span></span>
+<span id="cb76-65"><a href="trusted.html#cb76-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(spatial.field, <span class="at">model =</span> spde_obj) <span class="sc">+</span></span>
+<span id="cb76-66"><a href="trusted.html#cb76-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(spatial.field.copy, <span class="fu">I</span>(spatial.field.group.copy <span class="sc">/</span> no_T), <span class="at">model =</span> spde_obj) <span class="sc">+</span></span>
+<span id="cb76-67"><a href="trusted.html#cb76-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(spatial.field.copy2, <span class="fu">I</span>((spatial.field.group.copy2 <span class="sc">/</span> no_T) <span class="sc">^</span> <span class="dv">2</span>), <span class="at">model =</span> spde_obj) <span class="sc">+</span></span>
+<span id="cb76-68"><a href="trusted.html#cb76-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">I</span>(spatial.field.group <span class="sc">/</span> no_T) <span class="sc">+</span> <span class="fu">I</span>((spatial.field.group <span class="sc">/</span> no_T) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb76-69"><a href="trusted.html#cb76-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(year, <span class="at">model =</span> <span class="st">&#39;ar1&#39;</span>) <span class="sc">+</span></span>
+<span id="cb76-70"><a href="trusted.html#cb76-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(spatial_ind,</span>
+<span id="cb76-71"><a href="trusted.html#cb76-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="st">&quot;iid2d&quot;</span>,</span>
+<span id="cb76-72"><a href="trusted.html#cb76-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> no_sites <span class="sc">*</span> <span class="dv">2</span>,</span>
+<span id="cb76-73"><a href="trusted.html#cb76-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">constr =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="co">#random site-specific intercepts</span></span>
+<span id="cb76-74"><a href="trusted.html#cb76-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">f</span>(spatial_ind2, year, <span class="at">copy =</span> <span class="st">&quot;spatial_ind&quot;</span>)</span>
+<span id="cb76-75"><a href="trusted.html#cb76-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-76"><a href="trusted.html#cb76-76" aria-hidden="true" tabindex="-1"></a>theta.ini <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb76-77"><a href="trusted.html#cb76-77" aria-hidden="true" tabindex="-1"></a>  <span class="fl">1.597900</span>,</span>
+<span id="cb76-78"><a href="trusted.html#cb76-78" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fl">1.277423</span>,</span>
+<span id="cb76-79"><a href="trusted.html#cb76-79" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fl">0.443820</span>,</span>
+<span id="cb76-80"><a href="trusted.html#cb76-80" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fl">1.441220</span>,</span>
+<span id="cb76-81"><a href="trusted.html#cb76-81" aria-hidden="true" tabindex="-1"></a>  <span class="fl">0.036510</span>,</span>
+<span id="cb76-82"><a href="trusted.html#cb76-82" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="fl">1.441336</span>,</span>
+<span id="cb76-83"><a href="trusted.html#cb76-83" aria-hidden="true" tabindex="-1"></a>  <span class="fl">0.016919</span>,</span>
+<span id="cb76-84"><a href="trusted.html#cb76-84" aria-hidden="true" tabindex="-1"></a>  <span class="fl">4.462918</span>,</span>
+<span id="cb76-85"><a href="trusted.html#cb76-85" aria-hidden="true" tabindex="-1"></a>  <span class="fl">1.437147</span>,</span>
+<span id="cb76-86"><a href="trusted.html#cb76-86" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,</span>
+<span id="cb76-87"><a href="trusted.html#cb76-87" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,</span>
+<span id="cb76-88"><a href="trusted.html#cb76-88" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span></span>
+<span id="cb76-89"><a href="trusted.html#cb76-89" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb76-90"><a href="trusted.html#cb76-90" aria-hidden="true" tabindex="-1"></a>out.naive <span class="ot">=</span> <span class="fu">inla</span>(</span>
+<span id="cb76-91"><a href="trusted.html#cb76-91" aria-hidden="true" tabindex="-1"></a>  formula_naive,</span>
+<span id="cb76-92"><a href="trusted.html#cb76-92" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&#39;gaussian&#39;</span>,</span>
+<span id="cb76-93"><a href="trusted.html#cb76-93" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">inla.stack.data</span>(stack_y_est),</span>
+<span id="cb76-94"><a href="trusted.html#cb76-94" aria-hidden="true" tabindex="-1"></a>  <span class="at">control.predictor =</span> <span class="fu">list</span>(<span class="at">A =</span> <span class="fu">inla.stack.A</span>(stack_y_est), <span class="at">compute =</span> F),</span>
+<span id="cb76-95"><a href="trusted.html#cb76-95" aria-hidden="true" tabindex="-1"></a>  <span class="at">control.compute =</span> <span class="fu">list</span>(<span class="at">dic =</span> F, <span class="at">config =</span> T, <span class="at">cpo =</span> F),</span>
+<span id="cb76-96"><a href="trusted.html#cb76-96" aria-hidden="true" tabindex="-1"></a>  <span class="at">control.inla =</span> <span class="fu">list</span>(<span class="at">strategy =</span> <span class="st">&quot;gaussian&quot;</span>, <span class="at">int.strategy =</span> <span class="st">&#39;eb&#39;</span>),</span>
+<span id="cb76-97"><a href="trusted.html#cb76-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">control.mode =</span> <span class="fu">list</span>(<span class="at">theta =</span> theta.ini, <span class="at">restart =</span> T),</span>
+<span id="cb76-98"><a href="trusted.html#cb76-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> T,</span>
+<span id="cb76-99"><a href="trusted.html#cb76-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.threads =</span> <span class="dv">2</span></span>
+<span id="cb76-100"><a href="trusted.html#cb76-100" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>We can now take posteriors from the model.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="trusted.html#cb77-1" aria-hidden="true" tabindex="-1"></a>m_samples <span class="ot">=</span> <span class="dv">50</span></span>
+<span id="cb77-2"><a href="trusted.html#cb77-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-3"><a href="trusted.html#cb77-3" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> <span class="fu">inla.posterior.sample</span>(m_samples, out.naive)</span>
+<span id="cb77-4"><a href="trusted.html#cb77-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-5"><a href="trusted.html#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m_samples)</span>
+<span id="cb77-6"><a href="trusted.html#cb77-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb77-7"><a href="trusted.html#cb77-7" aria-hidden="true" tabindex="-1"></a>samp[[i]]<span class="sc">$</span>latent <span class="ot">=</span> samp[[i]]<span class="sc">$</span>latent[<span class="sc">-</span><span class="fu">c</span>(<span class="fu">grep</span>(<span class="st">&#39;Predictor&#39;</span>, <span class="fu">rownames</span>(samp[[i]]<span class="sc">$</span>latent), <span class="at">fixed =</span> T)), ]</span>
+<span id="cb77-8"><a href="trusted.html#cb77-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Finally, summarize and plot the outputs:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="trusted.html#cb78-1" aria-hidden="true" tabindex="-1"></a>stepsize <span class="ot">=</span> <span class="dv">5000</span> <span class="sc">/</span> sd_x</span>
+<span id="cb78-2"><a href="trusted.html#cb78-2" aria-hidden="true" tabindex="-1"></a>nxy <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">diff</span>(<span class="fu">range</span>(</span>
+<span id="cb78-3"><a href="trusted.html#cb78-3" aria-hidden="true" tabindex="-1"></a>  BlackSmokePrefData<span class="sc">$</span>east</span>
+<span id="cb78-4"><a href="trusted.html#cb78-4" aria-hidden="true" tabindex="-1"></a>)),</span>
+<span id="cb78-5"><a href="trusted.html#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="fu">diff</span>(<span class="fu">range</span>(</span>
+<span id="cb78-6"><a href="trusted.html#cb78-6" aria-hidden="true" tabindex="-1"></a>  BlackSmokePrefData<span class="sc">$</span>north</span>
+<span id="cb78-7"><a href="trusted.html#cb78-7" aria-hidden="true" tabindex="-1"></a>))) <span class="sc">/</span> stepsize)  <span class="do">## how many points?</span></span>
+<span id="cb78-8"><a href="trusted.html#cb78-8" aria-hidden="true" tabindex="-1"></a>proj_grid <span class="ot">=</span> <span class="fu">inla.mesh.projector</span>(</span>
+<span id="cb78-9"><a href="trusted.html#cb78-9" aria-hidden="true" tabindex="-1"></a>  mesh,</span>
+<span id="cb78-10"><a href="trusted.html#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">range</span>(BlackSmokePrefData<span class="sc">$</span>east),</span>
+<span id="cb78-11"><a href="trusted.html#cb78-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">range</span>(BlackSmokePrefData<span class="sc">$</span>north),</span>
+<span id="cb78-12"><a href="trusted.html#cb78-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">dims =</span> nxy</span>
+<span id="cb78-13"><a href="trusted.html#cb78-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb78-14"><a href="trusted.html#cb78-14" aria-hidden="true" tabindex="-1"></a>A.grid <span class="ot">=</span> <span class="fu">inla.spde.make.A</span>(mesh,</span>
+<span id="cb78-15"><a href="trusted.html#cb78-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">loc =</span> <span class="fu">cbind</span>(BlackSmokePrefData<span class="sc">$</span>east, BlackSmokePrefData<span class="sc">$</span>north))</span>
+<span id="cb78-16"><a href="trusted.html#cb78-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-17"><a href="trusted.html#cb78-17" aria-hidden="true" tabindex="-1"></a><span class="do">## define placeholders</span></span>
+<span id="cb78-18"><a href="trusted.html#cb78-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-19"><a href="trusted.html#cb78-19" aria-hidden="true" tabindex="-1"></a>tmp2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> no_T, <span class="at">ncol =</span> mesh<span class="sc">$</span>n)</span>
+<span id="cb78-20"><a href="trusted.html#cb78-20" aria-hidden="true" tabindex="-1"></a>year <span class="ot">=</span> (<span class="dv">1</span><span class="sc">:</span>no_T) <span class="sc">/</span> no_T</span>
+<span id="cb78-21"><a href="trusted.html#cb78-21" aria-hidden="true" tabindex="-1"></a>year2 <span class="ot">=</span> year <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb78-22"><a href="trusted.html#cb78-22" aria-hidden="true" tabindex="-1"></a>Post_Array2 <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(m_samples, no_T, mesh<span class="sc">$</span>n))</span>
+<span id="cb78-23"><a href="trusted.html#cb78-23" aria-hidden="true" tabindex="-1"></a>Post_Sites_Array2 <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(m_samples, no_T, <span class="fu">dim</span>(BlackSmokePrefData)[<span class="dv">1</span>]))</span>
+<span id="cb78-24"><a href="trusted.html#cb78-24" aria-hidden="true" tabindex="-1"></a>residuals_array <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(m_samples, no_T, <span class="fu">dim</span>(BlackSmokePrefData)[<span class="dv">1</span>]))</span>
+<span id="cb78-25"><a href="trusted.html#cb78-25" aria-hidden="true" tabindex="-1"></a>RI_array <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(m_samples, no_T, <span class="fu">dim</span>(BlackSmokePrefData)[<span class="dv">1</span>])) <span class="co"># random intercepts</span></span>
+<span id="cb78-26"><a href="trusted.html#cb78-26" aria-hidden="true" tabindex="-1"></a>RS_array <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(m_samples, no_T, <span class="fu">dim</span>(BlackSmokePrefData)[<span class="dv">1</span>])) <span class="co"># random slopes</span></span>
+<span id="cb78-27"><a href="trusted.html#cb78-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-28"><a href="trusted.html#cb78-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m_samples) {</span>
+<span id="cb78-29"><a href="trusted.html#cb78-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Creating predictions for Y process</span></span>
+<span id="cb78-30"><a href="trusted.html#cb78-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_T)</span>
+<span id="cb78-31"><a href="trusted.html#cb78-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># loop over the years</span></span>
+<span id="cb78-32"><a href="trusted.html#cb78-32" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb78-33"><a href="trusted.html#cb78-33" aria-hidden="true" tabindex="-1"></a>    Post_Array2[i, j, ] <span class="ot">&lt;-</span> samp[[i]]<span class="sc">$</span>latent[<span class="st">&#39;Intercept:1&#39;</span>] <span class="sc">+</span> <span class="co"># Intercept</span></span>
+<span id="cb78-34"><a href="trusted.html#cb78-34" aria-hidden="true" tabindex="-1"></a>      samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;year:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))][j] <span class="sc">*</span> year[j] <span class="sc">+</span> <span class="co"># linear fixed effect</span></span>
+<span id="cb78-35"><a href="trusted.html#cb78-35" aria-hidden="true" tabindex="-1"></a>      <span class="co">#samp[[i]]$latent[&#39;year_2&#39;] * year2[j] + # quadratic fixed effect</span></span>
+<span id="cb78-36"><a href="trusted.html#cb78-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial.field:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))]) <span class="sc">+</span> <span class="co"># Spatial Intercept</span></span>
+<span id="cb78-37"><a href="trusted.html#cb78-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial.field.copy:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))]) <span class="sc">*</span> year[j] <span class="sc">+</span> <span class="co"># Spatial linear slope</span></span>
+<span id="cb78-38"><a href="trusted.html#cb78-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial.field.copy2:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))]) <span class="sc">*</span> year2[j]  <span class="co"># Spatial quadratic slope</span></span>
+<span id="cb78-39"><a href="trusted.html#cb78-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Project onto the site locations and add random site-specific effects #</span></span>
+<span id="cb78-40"><a href="trusted.html#cb78-40" aria-hidden="true" tabindex="-1"></a>    Post_Sites_Array2[i, j, ] <span class="ot">=</span> <span class="fu">as.numeric</span>(A.grid <span class="sc">%*%</span> Post_Array2[i, j, ]) <span class="sc">+</span></span>
+<span id="cb78-41"><a href="trusted.html#cb78-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial_ind:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))[<span class="dv">1</span><span class="sc">:</span>no_sites]]) <span class="sc">+</span> <span class="co"># random Intercept</span></span>
+<span id="cb78-42"><a href="trusted.html#cb78-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial_ind2:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))[no_sites <span class="sc">+</span></span>
+<span id="cb78-43"><a href="trusted.html#cb78-43" aria-hidden="true" tabindex="-1"></a>                                                                                                             (<span class="dv">1</span><span class="sc">:</span>no_sites)]]) <span class="sc">*</span> year[j] <span class="co"># random slope</span></span>
+<span id="cb78-44"><a href="trusted.html#cb78-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the random intercepts #</span></span>
+<span id="cb78-45"><a href="trusted.html#cb78-45" aria-hidden="true" tabindex="-1"></a>    RI_array[i, j, ] <span class="ot">=</span> <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial_ind:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))[<span class="dv">1</span><span class="sc">:</span>no_sites]])</span>
+<span id="cb78-46"><a href="trusted.html#cb78-46" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb78-47"><a href="trusted.html#cb78-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the random slopes #</span></span>
+<span id="cb78-48"><a href="trusted.html#cb78-48" aria-hidden="true" tabindex="-1"></a>    RS_array[i, j, ] <span class="ot">=</span> <span class="fu">as.numeric</span>(samp[[i]]<span class="sc">$</span>latent[<span class="fu">which</span>(<span class="fu">startsWith</span>(<span class="at">prefix =</span> <span class="st">&#39;spatial_ind2:&#39;</span>, <span class="at">x =</span> <span class="fu">names</span>(samp[[i]]<span class="sc">$</span>latent)))[no_sites <span class="sc">+</span></span>
+<span id="cb78-49"><a href="trusted.html#cb78-49" aria-hidden="true" tabindex="-1"></a>                                                                                                                              (<span class="dv">1</span><span class="sc">:</span>no_sites)]])</span>
+<span id="cb78-50"><a href="trusted.html#cb78-50" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb78-51"><a href="trusted.html#cb78-51" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb78-52"><a href="trusted.html#cb78-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-53"><a href="trusted.html#cb78-53" aria-hidden="true" tabindex="-1"></a><span class="do">## summarizing</span></span>
+<span id="cb78-54"><a href="trusted.html#cb78-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-55"><a href="trusted.html#cb78-55" aria-hidden="true" tabindex="-1"></a>Post_mean2 <span class="ot">&lt;-</span></span>
+<span id="cb78-56"><a href="trusted.html#cb78-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(<span class="fu">apply</span>(Post_Array2, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb78-57"><a href="trusted.html#cb78-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-58"><a href="trusted.html#cb78-58" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb78-59"><a href="trusted.html#cb78-59" aria-hidden="true" tabindex="-1"></a>Post_sd2 <span class="ot">&lt;-</span></span>
+<span id="cb78-60"><a href="trusted.html#cb78-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(<span class="fu">apply</span>(Post_Array2, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb78-61"><a href="trusted.html#cb78-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sd</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-62"><a href="trusted.html#cb78-62" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb78-63"><a href="trusted.html#cb78-63" aria-hidden="true" tabindex="-1"></a>Post_LCL2 <span class="ot">&lt;-</span></span>
+<span id="cb78-64"><a href="trusted.html#cb78-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>((<span class="fu">apply</span>(Post_Array2, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb78-65"><a href="trusted.html#cb78-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-66"><a href="trusted.html#cb78-66" aria-hidden="true" tabindex="-1"></a>  })), <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>))</span>
+<span id="cb78-67"><a href="trusted.html#cb78-67" aria-hidden="true" tabindex="-1"></a>Post_UCL2 <span class="ot">&lt;-</span></span>
+<span id="cb78-68"><a href="trusted.html#cb78-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">apply</span>((<span class="fu">apply</span>(Post_Array2, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb78-69"><a href="trusted.html#cb78-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-70"><a href="trusted.html#cb78-70" aria-hidden="true" tabindex="-1"></a>  })), <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.975</span>))</span>
+<span id="cb78-71"><a href="trusted.html#cb78-71" aria-hidden="true" tabindex="-1"></a>RI_array <span class="ot">&lt;-</span></span>
+<span id="cb78-72"><a href="trusted.html#cb78-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(<span class="fu">apply</span>(RI_array, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb78-73"><a href="trusted.html#cb78-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-74"><a href="trusted.html#cb78-74" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb78-75"><a href="trusted.html#cb78-75" aria-hidden="true" tabindex="-1"></a>RS_array <span class="ot">&lt;-</span></span>
+<span id="cb78-76"><a href="trusted.html#cb78-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(<span class="fu">apply</span>(RS_array, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="cf">function</span>(x) {</span>
+<span id="cb78-77"><a href="trusted.html#cb78-77" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb78-78"><a href="trusted.html#cb78-78" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb78-79"><a href="trusted.html#cb78-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-80"><a href="trusted.html#cb78-80" aria-hidden="true" tabindex="-1"></a><span class="do">## placeholders for uniform grid posterior blacksmoke values (not necessarily in dataset)</span></span>
+<span id="cb78-81"><a href="trusted.html#cb78-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-82"><a href="trusted.html#cb78-82" aria-hidden="true" tabindex="-1"></a>post_Matrix_grid_mean2 <span class="ot">=</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(nxy[<span class="dv">1</span>], nxy[<span class="dv">2</span>], no_T))</span>
+<span id="cb78-83"><a href="trusted.html#cb78-83" aria-hidden="true" tabindex="-1"></a>post_Matrix_grid_sd2 <span class="ot">=</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(nxy[<span class="dv">1</span>], nxy[<span class="dv">2</span>], no_T))</span>
+<span id="cb78-84"><a href="trusted.html#cb78-84" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_T)</span>
+<span id="cb78-85"><a href="trusted.html#cb78-85" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb78-86"><a href="trusted.html#cb78-86" aria-hidden="true" tabindex="-1"></a>  post_Matrix_grid_mean2[, , i] <span class="ot">=</span> <span class="fu">inla.mesh.project</span>(proj_grid, Post_mean2[, i])</span>
+<span id="cb78-87"><a href="trusted.html#cb78-87" aria-hidden="true" tabindex="-1"></a>  post_Matrix_grid_sd2[, , i] <span class="ot">=</span> <span class="fu">inla.mesh.project</span>(proj_grid, Post_sd2[, i])</span>
+<span id="cb78-88"><a href="trusted.html#cb78-88" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb78-89"><a href="trusted.html#cb78-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-90"><a href="trusted.html#cb78-90" aria-hidden="true" tabindex="-1"></a><span class="do">## placeholders for observed (R1 = active, R0 = inactive) site blacksmoke values</span></span>
+<span id="cb78-91"><a href="trusted.html#cb78-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-92"><a href="trusted.html#cb78-92" aria-hidden="true" tabindex="-1"></a>R1_results2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> no_T, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="co"># prediction means, sd, LCL, UCL</span></span>
+<span id="cb78-93"><a href="trusted.html#cb78-93" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(R1_results2) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;predciction mean&#39;</span>, <span class="st">&#39;prediction sd&#39;</span>, <span class="st">&#39;LCL&#39;</span>, <span class="st">&#39;UCL&#39;</span>)</span>
+<span id="cb78-94"><a href="trusted.html#cb78-94" aria-hidden="true" tabindex="-1"></a>R0_results2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> no_T, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="co"># prediction means, sd, LCL, UCL</span></span>
+<span id="cb78-95"><a href="trusted.html#cb78-95" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(R0_results2) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;predciction mean&#39;</span>, <span class="st">&#39;prediction sd&#39;</span>, <span class="st">&#39;LCL&#39;</span>, <span class="st">&#39;UCL&#39;</span>)</span>
+<span id="cb78-96"><a href="trusted.html#cb78-96" aria-hidden="true" tabindex="-1"></a>Grid_results2 <span class="ot">=</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> no_T, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="co"># prediction means, sd, LCL, UCL</span></span>
+<span id="cb78-97"><a href="trusted.html#cb78-97" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Grid_results2) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;predciction mean&#39;</span>, <span class="st">&#39;prediction sd&#39;</span>, <span class="st">&#39;LCL&#39;</span>, <span class="st">&#39;UCL&#39;</span>)</span>
+<span id="cb78-98"><a href="trusted.html#cb78-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-99"><a href="trusted.html#cb78-99" aria-hidden="true" tabindex="-1"></a>BlackSmokePrefData_original <span class="ot">&lt;-</span></span>
+<span id="cb78-100"><a href="trusted.html#cb78-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">&quot;data/BlackSmokePrefData.csv&quot;</span>) <span class="do">## need original columns here</span></span>
+<span id="cb78-101"><a href="trusted.html#cb78-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-102"><a href="trusted.html#cb78-102" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_T)</span>
+<span id="cb78-103"><a href="trusted.html#cb78-103" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb78-104"><a href="trusted.html#cb78-104" aria-hidden="true" tabindex="-1"></a>  R1_results2[j, <span class="dv">1</span>] <span class="ot">=</span> <span class="fu">mean</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-105"><a href="trusted.html#cb78-105" aria-hidden="true" tabindex="-1"></a>                                                                                             j]))], <span class="at">na.rm =</span> T)</span>
+<span id="cb78-106"><a href="trusted.html#cb78-106" aria-hidden="true" tabindex="-1"></a>  R1_results2[j, <span class="dv">2</span>] <span class="ot">=</span> <span class="fu">sd</span>(<span class="fu">apply</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-107"><a href="trusted.html#cb78-107" aria-hidden="true" tabindex="-1"></a>                                                                                                 j]))], <span class="fu">c</span>(<span class="dv">1</span>), mean, <span class="at">na.rm =</span> T))</span>
+<span id="cb78-108"><a href="trusted.html#cb78-108" aria-hidden="true" tabindex="-1"></a>  R1_results2[j, <span class="dv">3</span>] <span class="ot">=</span> <span class="fu">quantile</span>(<span class="fu">apply</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-109"><a href="trusted.html#cb78-109" aria-hidden="true" tabindex="-1"></a>                                                                                                       j]))], <span class="dv">1</span>, mean, <span class="at">na.rm =</span> T), <span class="at">probs =</span> <span class="fl">0.025</span>)</span>
+<span id="cb78-110"><a href="trusted.html#cb78-110" aria-hidden="true" tabindex="-1"></a>  R1_results2[j, <span class="dv">4</span>] <span class="ot">=</span> <span class="fu">quantile</span>(<span class="fu">apply</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="sc">!</span><span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-111"><a href="trusted.html#cb78-111" aria-hidden="true" tabindex="-1"></a>                                                                                                       j]))], <span class="dv">1</span>, mean, <span class="at">na.rm =</span> T), <span class="at">probs =</span> <span class="fl">0.975</span>)</span>
+<span id="cb78-112"><a href="trusted.html#cb78-112" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb78-113"><a href="trusted.html#cb78-113" aria-hidden="true" tabindex="-1"></a>  R0_results2[j, <span class="dv">1</span>] <span class="ot">=</span> <span class="fu">mean</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-114"><a href="trusted.html#cb78-114" aria-hidden="true" tabindex="-1"></a>                                                                                            j]))], <span class="at">na.rm =</span> T)</span>
+<span id="cb78-115"><a href="trusted.html#cb78-115" aria-hidden="true" tabindex="-1"></a>  R0_results2[j, <span class="dv">2</span>] <span class="ot">=</span> <span class="fu">sd</span>(<span class="fu">apply</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-116"><a href="trusted.html#cb78-116" aria-hidden="true" tabindex="-1"></a>                                                                                                j]))], <span class="fu">c</span>(<span class="dv">1</span>), mean, <span class="at">na.rm =</span> T))</span>
+<span id="cb78-117"><a href="trusted.html#cb78-117" aria-hidden="true" tabindex="-1"></a>  R0_results2[j, <span class="dv">3</span>] <span class="ot">=</span> <span class="fu">quantile</span>(<span class="fu">apply</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-118"><a href="trusted.html#cb78-118" aria-hidden="true" tabindex="-1"></a>                                                                                                      j]))], <span class="dv">1</span>, mean, <span class="at">na.rm =</span> T), <span class="at">probs =</span> <span class="fl">0.025</span>)</span>
+<span id="cb78-119"><a href="trusted.html#cb78-119" aria-hidden="true" tabindex="-1"></a>  R0_results2[j, <span class="dv">4</span>] <span class="ot">=</span> <span class="fu">quantile</span>(<span class="fu">apply</span>(Post_Sites_Array2[, j, <span class="fu">which</span>(<span class="fu">is.na</span>(BlackSmokePrefData_original[, <span class="dv">3</span> <span class="sc">+</span></span>
+<span id="cb78-120"><a href="trusted.html#cb78-120" aria-hidden="true" tabindex="-1"></a>                                                                                                      j]))], <span class="dv">1</span>, mean, <span class="at">na.rm =</span> T), <span class="at">probs =</span> <span class="fl">0.975</span>)</span>
+<span id="cb78-121"><a href="trusted.html#cb78-121" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb78-122"><a href="trusted.html#cb78-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-123"><a href="trusted.html#cb78-123" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_T)</span>
+<span id="cb78-124"><a href="trusted.html#cb78-124" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb78-125"><a href="trusted.html#cb78-125" aria-hidden="true" tabindex="-1"></a>  Grid_results2[i, <span class="dv">1</span>] <span class="ot">=</span> <span class="fu">mean</span>(post_Matrix_grid_mean2[, , i], <span class="at">na.rm =</span> T)</span>
+<span id="cb78-126"><a href="trusted.html#cb78-126" aria-hidden="true" tabindex="-1"></a>  Grid_results2[i, <span class="dv">2</span>] <span class="ot">=</span> <span class="fu">mean</span>(post_Matrix_grid_sd2[, , i], <span class="at">na.rm =</span> T)</span>
+<span id="cb78-127"><a href="trusted.html#cb78-127" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb78-128"><a href="trusted.html#cb78-128" aria-hidden="true" tabindex="-1"></a>Grid_results2[, <span class="dv">3</span>] <span class="ot">=</span> Post_LCL2</span>
+<span id="cb78-129"><a href="trusted.html#cb78-129" aria-hidden="true" tabindex="-1"></a>Grid_results2[, <span class="dv">4</span>] <span class="ot">=</span> Post_UCL2</span>
+<span id="cb78-130"><a href="trusted.html#cb78-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-131"><a href="trusted.html#cb78-131" aria-hidden="true" tabindex="-1"></a><span class="do">## Revert to the original scale (exponentiating and scaling up)</span></span>
+<span id="cb78-132"><a href="trusted.html#cb78-132" aria-hidden="true" tabindex="-1"></a>Grid_df_2 <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb78-133"><a href="trusted.html#cb78-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">exp</span>(<span class="fu">c</span>(</span>
+<span id="cb78-134"><a href="trusted.html#cb78-134" aria-hidden="true" tabindex="-1"></a>    Grid_results2[, <span class="dv">1</span>], R1_results2[, <span class="dv">1</span>], R0_results2[, <span class="dv">1</span>]</span>
+<span id="cb78-135"><a href="trusted.html#cb78-135" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">*</span> <span class="fu">mean</span>(yearmeans),</span>
+<span id="cb78-136"><a href="trusted.html#cb78-136" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rep</span>(<span class="dv">66</span><span class="sc">:</span><span class="dv">96</span>, <span class="at">times =</span> <span class="dv">3</span>),</span>
+<span id="cb78-137"><a href="trusted.html#cb78-137" aria-hidden="true" tabindex="-1"></a>  <span class="at">ymin =</span> <span class="fu">exp</span>(<span class="fu">c</span>(Post_LCL2, R1_results2[, <span class="dv">3</span>], R0_results2[, <span class="dv">3</span>])) <span class="sc">*</span></span>
+<span id="cb78-138"><a href="trusted.html#cb78-138" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(yearmeans),</span>
+<span id="cb78-139"><a href="trusted.html#cb78-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">ymax =</span> <span class="fu">exp</span>(<span class="fu">c</span>(Post_UCL2, R1_results2[, <span class="dv">4</span>], R0_results2[, <span class="dv">4</span>])) <span class="sc">*</span></span>
+<span id="cb78-140"><a href="trusted.html#cb78-140" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(yearmeans),</span>
+<span id="cb78-141"><a href="trusted.html#cb78-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(</span>
+<span id="cb78-142"><a href="trusted.html#cb78-142" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&#39;Whole UK&#39;</span>, <span class="at">times =</span> <span class="dv">31</span>),</span>
+<span id="cb78-143"><a href="trusted.html#cb78-143" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&#39;R1&#39;</span>, <span class="at">times =</span> <span class="dv">31</span>),</span>
+<span id="cb78-144"><a href="trusted.html#cb78-144" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&#39;R0&#39;</span>, <span class="at">times =</span> <span class="dv">31</span>)</span>
+<span id="cb78-145"><a href="trusted.html#cb78-145" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb78-146"><a href="trusted.html#cb78-146" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb78-147"><a href="trusted.html#cb78-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-148"><a href="trusted.html#cb78-148" aria-hidden="true" tabindex="-1"></a><span class="do">## plotting</span></span>
+<span id="cb78-149"><a href="trusted.html#cb78-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-150"><a href="trusted.html#cb78-150" aria-hidden="true" tabindex="-1"></a>Grid_plot_2 <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
+<span id="cb78-151"><a href="trusted.html#cb78-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x,</span>
+<span id="cb78-152"><a href="trusted.html#cb78-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y,</span>
+<span id="cb78-153"><a href="trusted.html#cb78-153" aria-hidden="true" tabindex="-1"></a>  <span class="at">ymin =</span> ymin,</span>
+<span id="cb78-154"><a href="trusted.html#cb78-154" aria-hidden="true" tabindex="-1"></a>  <span class="at">ymax =</span> ymax,</span>
+<span id="cb78-155"><a href="trusted.html#cb78-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.05</span></span>
+<span id="cb78-156"><a href="trusted.html#cb78-156" aria-hidden="true" tabindex="-1"></a>), <span class="at">data =</span> Grid_df_2) <span class="sc">+</span></span>
+<span id="cb78-157"><a href="trusted.html#cb78-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(</span>
+<span id="cb78-158"><a href="trusted.html#cb78-158" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> group,</span>
+<span id="cb78-159"><a href="trusted.html#cb78-159" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.05</span>,</span>
+<span id="cb78-160"><a href="trusted.html#cb78-160" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> group</span>
+<span id="cb78-161"><a href="trusted.html#cb78-161" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb78-162"><a href="trusted.html#cb78-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&#39;year&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;posterior mean bs on transformed scale&#39;</span>) <span class="sc">+</span></span>
+<span id="cb78-163"><a href="trusted.html#cb78-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(</span>
+<span id="cb78-164"><a href="trusted.html#cb78-164" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Naive posterior means of BS at the selected, unselected sites and across the UK (R1, R0 and Whole UK resp.). &#39;</span></span>
+<span id="cb78-165"><a href="trusted.html#cb78-165" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb78-166"><a href="trusted.html#cb78-166" aria-hidden="true" tabindex="-1"></a>Grid_plot_2</span></code></pre></div>
+<p><img src="_main_files/figure-html/summarize-1.png" width="672" /></p>
 
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="strategies.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Strategies.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="Disease.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
