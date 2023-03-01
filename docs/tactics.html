@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology</title>
   <meta name="description" content="Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Tactics-implementing uncertainty models | Spatio-temporal methods in environmental epidemiology" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-27" />
+<meta name="date" content="2023-03-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -198,14 +198,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a>
-<ul>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-3"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-3"><i class="fa fa-check"></i>Stan</a></li>
-</ul></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -453,7 +447,7 @@ the areas.</p>
 <span id="cb32-17"><a href="tactics.html#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb32-18"><a href="tactics.html#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">rect =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb32-19"><a href="tactics.html#cb32-19" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20map-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20map-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r" class="section level3 unnumbered hasAnchor">
 <h3>Modelling a Poisson-Gamma with an MCMC implemented in <code>R</code><a href="tactics.html#modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -549,19 +543,19 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <span id="cb35-19"><a href="tactics.html#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(b[seqaux], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
 <span id="cb35-20"><a href="tactics.html#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(b[seqaux], <span class="at">prob =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
 <span id="cb35-21"><a href="tactics.html#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">dexp</span>(xx, lambda_b), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20convergence-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20convergence-1.png" width="672" /></p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="tactics.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Traceplots of theta&#39;s</span></span>
 <span id="cb36-2"><a href="tactics.html#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="tactics.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
 <span id="cb36-4"><a href="tactics.html#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
 <span id="cb36-5"><a href="tactics.html#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(theta[seqaux, i], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20convergence-2.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20convergence-2.png" width="672" /></p>
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 <p>Given the convergence issues, we can also check the estimated sampled size and Rhat using the package <code>coda</code>.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tactics.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS a: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS a: 48.0412552413763&quot;</code></pre>
+<pre><code>## [1] &quot;ESS a: 43.8854656120712&quot;</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="tactics.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS b: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS b: 50.7520221626538&quot;</code></pre>
+<pre><code>## [1] &quot;ESS b: 47.6743541032327&quot;</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="tactics.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[1]: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>]))</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]: 2001&quot;</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="tactics.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[10]: &quot;</span>,coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>]))</span></code></pre></div>
@@ -590,7 +584,7 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <span id="cb45-20"><a href="tactics.html#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
 <span id="cb45-21"><a href="tactics.html#cb45-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(i, q025theta[i], i, q975theta[i])</span>
 <span id="cb45-22"><a href="tactics.html#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="tactics.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary of fitted values</span></span>
 <span id="cb46-2"><a href="tactics.html#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb46-3"><a href="tactics.html#cb46-3" aria-hidden="true" tabindex="-1"></a>meanfit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, mean)</span>
@@ -615,7 +609,7 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <span id="cb46-22"><a href="tactics.html#cb46-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
 <span id="cb46-23"><a href="tactics.html#cb46-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(y[i], q025fit[i], y[i], q975fit[i])</span>
 <span id="cb46-24"><a href="tactics.html#cb46-24" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="example-6.3-fitting-a-poisson-regression-model-in-nimble" class="section level2 unnumbered hasAnchor">
@@ -679,23 +673,23 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="tactics.html#cb50-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.493
+## [1] 3049.634
 ## Field &quot;lppd&quot;:
-## [1] -1514.416
+## [1] -1514.39
 ## Field &quot;pWAIC&quot;:
-## [1] 10.33089</code></pre>
+## [1] 10.4274</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="tactics.html#cb52-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
 <span id="cb52-2"><a href="tactics.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-3"><a href="tactics.html#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of beta1</span></span>
 <span id="cb52-4"><a href="tactics.html#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.3%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="tactics.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of base</span></span>
 <span id="cb53-2"><a href="tactics.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-2.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.3%20traceplots-2.png" width="672" /></p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="tactics.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of RR</span></span>
 <span id="cb54-2"><a href="tactics.html#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-3.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/Ex%206.3%20traceplots-3.png" width="672" /></p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="tactics.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of base</span></span>
 <span id="cb55-2"><a href="tactics.html#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -708,12 +702,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.1289039      0.0124046      0.0001961      0.0002059 
+##      1.1284738      0.0124003      0.0001961      0.0001904 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.105 1.121 1.129 1.137 1.154</code></pre>
+## 1.105 1.120 1.128 1.137 1.152</code></pre>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="tactics.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
 <span id="cb57-2"><a href="tactics.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -726,12 +720,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0149610      0.0177154      0.0002801      0.0004258 
+##      1.0148175      0.0179830      0.0002843      0.0004284 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## 0.9804 1.0031 1.0150 1.0267 1.0507</code></pre>
+## 0.9795 1.0025 1.0150 1.0272 1.0494</code></pre>
 
 </div>
 </div>
@@ -772,7 +766,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/06-Chpt6.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-Chpt6.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -783,7 +777,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf", "_main.epub"],
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
 "search": {
 "engine": "fuse",
 "options": null
