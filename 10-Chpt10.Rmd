@@ -180,21 +180,23 @@ mod <- vgm (0.053 , "Exp", 5.54, 0.0122)
 x <- krige(log(Benzene) ~ X + Y, benzene_utm_geo , MtlPred , model = mod )
 # Plot the ordinary kriging predictions and their variance
 
-monitor_loc <- list('sp.points', benzene_utm_geo, pch=19, cex=.8, col='midnightblue')
+monitor_loc <- list('sp.points', benzene_utm_geo, pch=19, cex=.8, col='cornsilk4')
 
 krig_pred <-
   spplot (
     x["var1.pred"],
     main = "Ordinary kriging predictions ",
-    col.regions = viridis::plasma(20),
-    sp.layout = list(monitor_loc)
+    col.regions = viridis::plasma(60),
+    sp.layout = list(monitor_loc),
+    at = seq(-0.3, 0.8, 0.02)
   )
 krig_var <-
   spplot (
     x["var1.var"],
     main = "Ordinary kriging variance ",
-    col.regions = viridis::plasma(20),
-    sp.layout = list(monitor_loc)
+    col.regions = viridis::plasma(60),
+    sp.layout = list(monitor_loc),
+    at = seq(0, 0.2, 0.01)
   )
 
 plot_grid(krig_pred, krig_var, labels = "auto")
@@ -208,9 +210,15 @@ plot_grid(krig_pred, krig_var, labels = "auto")
 
 
 ```{r Ex 10.9 load data, message = FALSE, warning=FALSE, error=FALSE}
-library(nimble)
+library(coda)
 library(geoR)
+library(magrittr)
+library(nimble)
 library(spdep)
+library(tidyverse)
+library(tidybayes)
+
+source("functions/utilityfunctions.R")
 ```
 
 ```{r Ex 10.9 benzene to spatial data, message = FALSE, warning=FALSE, error=FALSE}
@@ -233,70 +241,82 @@ Mtl_benzene_sample <-
     northing = benzene_utm_df$lat / 1000
   )
 # Compute the distance matrix
-Dist <- as.matrix(dist(Mtl_benzene_sample[,c("easting", "northing")]))
+obsCoords <- unname(as.matrix(Mtl_benzene_sample[,c("easting", "northing")]))
 
+obsDist <- fields::rdist(obsCoords)
+  
 ```
+
 
 ```{r Ex 10.9 nimble model}
 
 Example10_9Code <-  nimbleCode ({
   # Covariance matrix spatial effect
-  Sigma[1:n, 1:n] <- (sigma^2)*exp(-distMatrix[1:n,1:n]/phi) + (tau^2)*identityMatrix(d = n)
- 
-   for (site in 1:n) {
-    mean.site[site] <- beta0 + beta1*easting[site] + beta2*northing[site]
+  Sigma[1:n, 1:n] <-
+    sigma_sq * exp(-distMatrix[1:n, 1:n] / phi) + tau_sq * identityMatrix(d = n)
+
+    for (site in 1:n) {
+    mean.site[site] <-
+      beta0 + beta1 * easting[site] + beta2 * northing[site]
   }
   y[1:n]  ~  dmnorm(mean.site[1:n], cov = Sigma[1:n, 1:n])
   # Set up the priors for the spatial model
   sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  sigma_sq <- sigma^2
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-   phi_inv ~ dgamma(shape =  2, scale = 2)
-   phi <- 1/phi_inv
-  # prior for the coefficients 
-    beta0 ~ dnorm (0, 10)
-    beta1 ~ dnorm (0, 10)
-    beta2 ~ dnorm (0, 10)
-
+  tau_sq <- tau^2
+  phi_inv ~ dgamma(shape =  5, rate = 5)
+  phi <- 1 / phi_inv
+  # prior for the coefficients
+  beta0 ~ dnorm (0, 10)
+  beta1 ~ dnorm (0, 10)
+  beta2 ~ dnorm (0, 10)
+  
 }) 
 
 ```
 
-
 Define the constants, data and initials lists for the `nimble` model.
-
-
 
 ```{r nimble Ex 10.9 set constants and inits, error = FALSE, message = FALSE, results='hide'}
 # Define the constants, data, parameters and initial values
+set.seed(1)
+easting_scaled <- as.vector(scale(Mtl_benzene_sample$easting))
+northing_scaled <- as.vector(scale(Mtl_benzene_sample$northing))
+
 constants <-
   list(n = nrow(Mtl_benzene_sample))
 ex.data <-
   list(y = Mtl_benzene_sample$y,
-       easting = as.vector(scale(Mtl_benzene_sample$easting)),
-       northing = as.vector(scale(Mtl_benzene_sample$northing)),
-       distMatrix = Dist)
-params <- c(  "beta0", "beta1","beta2", "sigma", "phi", "tau")
-inits <- list( sigma = 0.1, phi_inv = 6/max(Dist), tau = 0.1)
+       easting = easting_scaled,
+       northing = northing_scaled,
+       distMatrix = obsDist)
+params <- c( "beta0",  "beta1","beta2", "phi",  "tau", "sigma", "tau_sq", "sigma_sq")
+inits <- list( sigma = 0.1, phi_inv = 6/max(obsDist), tau = 0.1)
 # Run model in nimble
+start_time <- Sys.time()
+
 mcmc.out <- nimbleMCMC(
   code = Example10_9Code,
   constants = constants,
   data = ex.data,
   inits = inits,
   monitors = params,
-  niter = 30000,
-  nburnin = 15000,
+  niter = 40000,
+  nburnin = 20000,
   thin = 14,
   WAIC = TRUE,
   nchains = 2,
   summary = TRUE,
   samplesAsCodaMCMC = TRUE
 )
+end_time <- Sys.time()
+run_time <- end_time - start_time
+run_time
 
 ```
 
 ```{r Ex 10.9 nimble WAIC, ESS and traceplots }
-
 mcmc.out$WAIC
 min(coda::effectiveSize(mcmc.out$samples))
 plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
@@ -305,123 +325,113 @@ plot(mcmc.out$samples[, c("beta2")], bty = "n", main = "beta2")
 plot(mcmc.out$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(mcmc.out$samples[, c("tau")], bty = "n", main = "tau")
 plot(mcmc.out$samples[, c("phi")], bty = "n", main = "phi")
-mcmc.out$summary$all.chains
+mcmc.out$summary$all.chains[c("beta0", "beta1", "beta2", "sigma_sq", "tau_sq", "phi"), ]
 ```
 
-<!-- TODO: Predictions -->
-
-
-```{r Ex 10.9 load montreal shapefile}
-# Load centroids for spatial prediction
-Mtl_centroids <- read.csv("data/montreal_shp/centroids_mtl.csv")
-coordinates(Mtl_centroids) <- ~ X + Y
-proj4string(Mtl_centroids) <- CRS("+proj=longlat +datum=WGS84")
-
-Mtl_centroids_utm <- spTransform(Mtl_centroids,
-                        CRS("+proj=utm +zone=18 +ellps=WGS72"))
-# Save the utm as a data frame
-Mtl_centroids_df <- as.data.frame(Mtl_centroids_utm)
-
-
-colnames(Mtl_centroids_df) <- c("easting", "northing")
+```{r Ex 10.9 nimble rediction locations}
+# Obtain coordinates for predictions 
+# note that we are using the same coordinates as the one generated for 
+# the kriging example
+Mtl_centroids_df <- as.data.frame(MtlPred)
+predCoords <- unname(as.matrix(Mtl_centroids_df))
 
 ```
 
-Spatial predictions are done through a function in Rcpp that can be found on the **functions** folder. 
+Following the posterior predictive distribution we have to define a model for the predictions. 
 
+```{r Ex 10.9 nimble predictions}
+# Extract samples from nimble model
+tidy_post_samples <- mcmc.out$samples %>% tidy_draws()
 
-```{r Ex 10.9 predictions}
+# Extract posterior samples for each of the parameters of interest
+post_beta0 <- tidy_post_samples$beta0
+post_beta1 <- tidy_post_samples$beta1
+post_beta2 <- tidy_post_samples$beta2
+post_sigmasq <- tidy_post_samples$sigma_sq
+post_phi <- tidy_post_samples$phi
+post_tausq <- tidy_post_samples$tau_sq
+
+# Scale coordinates for predictive locations
+predCoords_sc <- predCoords 
+predCoords_sc[,1] <-
+  (predCoords_sc[,1] - mean(Mtl_benzene_sample$easting)) / sd(Mtl_benzene_sample$easting)
+predCoords_sc[,2] <- 
+  (predCoords_sc[,2] - mean(Mtl_benzene_sample$northing)) / sd(Mtl_benzene_sample$northing)
+  
+n0 <- nrow(predCoords_sc)
+L <- length(post_tausq)
+
+obsMu <- cbind(1, easting_scaled, northing_scaled) %*% t(cbind(post_beta0, post_beta1, post_beta2))
+
+predMu <- cbind(1, as.matrix(predCoords_sc)) %*% t(cbind(post_beta0, post_beta1, post_beta2))
+
+pred2obsDist <- fields::rdist(predCoords, obsCoords)
 
 ```
 
 
+```{r Ex 10.8 nimble predictions using Rcpp}
 
+Rcpp::sourceCpp("functions/prediction_marginal_gp12.cpp")
+args(prediction_marginal_gp12)
+system.time(
+  pred_samples <- prediction_marginal_gp12(
+    y = Mtl_benzene_sample$y,
+    obsMu = obsMu,
+    predMu = predMu,
+    obsDistMat = obsDist,
+    pred2ObsDistMat = pred2obsDist,
+    sigmasq = post_sigmasq,
+    phi = post_phi,
+    tausq = post_tausq,
+    iterprint = 1000
+  )
+)
 
+str(pred_samples)
 
-
-
-
-```{r Ex 10.9 predictions function}
-
-mcmc_samples <- do.call(rbind, mcmc.out$samples) |> as.data.frame()
-# Extract chains for each parameter
-niter <- nrow(mcmc_samples)
-
-spat.pred.nimble <-
-  function(mcmc_output) {
-    beta0 <- mcmc_output["beta0"]
-    beta1 <- mcmc_output["beta1"]
-    beta2 <- mcmc_output["beta2"]
-    phi <- mcmc_output["phi"]
-    sigma <- mcmc_output["sigma"]
-    tau <- mcmc_output["tau"]
-    
-    coords  <-  as.data.frame(scale(Mtl_benzene_sample[, c("easting", "northing")]))
-    pred_coords_df <-  Mtl_centroids_df / 1000
-    pred_coords <- as.data.frame(scale(pred_coords_df)) # TODO: this scaling is wrong
-    y_obs  <-  Mtl_benzene_sample[, "y"]
-    norg <- nrow(coords)
-    npred <- nrow(pred_coords)
-    
-    mu <-
-      rep(beta0, nrow(coords)) + beta1 * coords[, "easting"] + beta2 * coords[, "northing"]
-    mu_u <-
-      rep(beta0, nrow(pred_coords)) + beta1 * pred_coords[, "easting"] + beta2 * pred_coords[, "northing"]
-    
-    all_coord <- rbind(pred_coords_df, coords)
-    all_dist <- as.matrix(dist(all_coord))
-
-    Sigma <-
-      tau ^ 2 * diag(norg + npred) + sigma ^ 2 * exp(-all_dist / phi)
-    
-    Sigma_unobs <- Sigma[1:npred, 1:npred]
-    
-    Sigma_obs <-
-      Sigma[(npred + 1):(npred + norg), (npred + 1):(npred + norg)]
-    
-    Sigma_unobs_obs <- Sigma[1:npred, (npred + 1):(norg + npred)]
-    
-    mu_pred <-
-      mu_u + Sigma_unobs_obs %*% solve(Sigma_obs) %*% (y_obs - mu)
-    
-    Sigma_pred <-
-      Sigma_unobs - Sigma_unobs_obs %*% solve(Sigma_obs) %*% t(Sigma_unobs_obs)
-    
-    Y_u <- mvtnorm::rmvnorm(1, mu_pred, Sigma_pred)
-    return(Y_u)
-    
-  }
-
-
-#spatial_pred_MTL <- apply(mcmc_samples, 1, spat.pred.nimble)
-
-
-# TODO: reduce the grid, it takes too long
-# REVIEW: Need to change the priors it seems like I am forcing phi
+predict_res_dt <- data.frame(
+  xcoord = predCoords[, 1],
+  ycoord = predCoords[, 2],
+  post.mean = apply(pred_samples, 1, mean),
+  post.var = apply(pred_samples, 1, var),
+  q2.5 = apply(pred_samples, 1, function(x)
+    quantile(x, prob = 0.025)),
+  q50 = apply(pred_samples, 1, function(x)
+    quantile(x, prob = 0.5)),
+  q97.5 = apply(pred_samples, 1, function(x)
+    quantile(x, prob = 0.975))
+)
 
 
 ```
 
-```{r Ex 10.9 plot predictions, messages = FALSE}
-# Mtl_shape <- st_read("data/montreal_shp/temp1.shp") %>% st_as_sf()
-# Mtl_shape$mean_benzene <- rowMeans(spatial_pred_MTL)
-# Mtl_shape$sd <- apply(spatial_pred_MTL, 1, sd)
-# 
-# benzene_post_mean <- ggplot() +
-#   geom_sf(data = Mtl_shape, aes(fill = mean_benzene), color = NA) +
-#   geom_point(data = benzene,
-#              aes(x = lon, y = lat),
-#              color = "midnightblue") +
-#   theme_void() + labs(fill = "Posterior mean")
-# 
-# benzene_post_sd <- ggplot() +
-#   geom_sf(data = Mtl_shape, aes(fill = sd), color = NA) +
-#   geom_point(data = benzene,
-#              aes(x = lon, y = lat),
-#              color = "midnightblue") +
-#   theme_void() + labs(fill = "Posterior sd")
-# 
-# plot_grid(benzene_post_mean, benzene_post_sd, labels = "auto")
+
+
+```{r Ex 10.9 nimble plot predictions, messages = FALSE}
+
+x$nimble.pred <- predict_res_dt$post.mean
+x$nimble.var <- predict_res_dt$post.var
+
+nimble_pred <-
+  spplot (
+    x["nimble.pred"],
+    main = "Nimble spatial predictions ",
+    col.regions = viridis::plasma(60),
+    sp.layout = list(monitor_loc),
+    at = seq(-0.3, 0.8, 0.02)
+  )
+nimble_var <-
+  spplot (
+    x["nimble.var"],
+    main = "Nimble predictions variance ",
+    col.regions = viridis::plasma(60),
+    sp.layout = list(monitor_loc),
+    at = seq(0, 0.2, 0.01)
+
+  )
+
+plot_grid(krig_pred, krig_var, labels = "auto")
 
 ```
 
@@ -456,7 +466,9 @@ Mtl_benzene_sample <-
     northing = benzene_utm_df$lat / 1000
   )
 # Compute the distance matrix
-Dist <- as.matrix(dist(Mtl_benzene_sample[,c("easting", "northing")]))
+obsCoords <- unname(as.matrix(Mtl_benzene_sample[,c("easting", "northing")]))
+
+obsDist <- fields::rdist(obsCoords)
 
 ```
 
@@ -467,18 +479,21 @@ cat functions/Example10_9.stan
 ``` 
 
 
-```{r Ex 10.9 stan exponential model, warning = FALSE}
+```{r Ex 10.9 stan exponential model, warning = FALSE, message = FALSE}
+set.seed(1)
+easting_scaled <- as.vector(scale(Mtl_benzene_sample$easting))
+northing_scaled <- as.vector(scale(Mtl_benzene_sample$northing))
 
 N <- nrow(benzene_utm_df)
 # Change coordinates to kilometers
-X <- data.frame(easting = as.vector(scale(Mtl_benzene_sample$easting/1000)),
-                northing = as.vector(scale(Mtl_benzene_sample$northing/1000))) 
+X <- data.frame(easting = easting_scaled,
+                northing = northing_scaled) 
 
 ex.data <- list(
   N = N,
   p = 2,
   y =   log(benzene_utm_df$Benzene),
-  dist_matrix = Dist,
+  dist_matrix = obsDist,
   X = as.matrix(X)
 )
 
@@ -489,7 +504,7 @@ Example10_9Stan  <- stan(
   iter = 20000,
   chains = 2,
   thin = 10,
-  pars = c("beta0", "beta","sigma", "tau", "phi"),
+  pars = c("beta0", "beta", "sigma_sq", "tau_sq", "phi"),
   include = TRUE
 )
 
@@ -498,7 +513,7 @@ Example10_9Stan  <- stan(
 
 ```{r  Ex 10.9 stan exp traceplots, warning = FALSE}
 
-traceplot(Example10_9Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
+traceplot(Example10_9Stan, pars = c("beta0","beta","sigma_sq", "tau_sq", "phi"))
 
 ```
 
@@ -506,16 +521,116 @@ traceplot(Example10_9Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
 summary_exp_stan <-
   summary(
     Example10_9Stan,
-    pars = c("beta0","beta", "phi", "sigma", "tau"),
+    pars = c("beta0","beta", "phi", "sigma_sq", "tau_sq"),
     probs = c(0.025, 0.975)
   )
 
 summary_exp_stan$summary
 
 ```
+```{r Ex 10.9 stan rediction locations}
+# Obtain coordinates for predictions 
+# note that we are using the same coordinates as the one generated for 
+# the kriging example
+Mtl_centroids_df <- as.data.frame(MtlPred)
+predCoords <- unname(as.matrix(Mtl_centroids_df))
 
-<!-- TODO: Predictions -->
+```
 
+```{r Ex 10.9 stan predictions}
+# Extract samples from nimble model
+stan_post_samples <- extract(Example10_9Stan,
+    pars = c("beta0","beta", "phi", "sigma_sq", "tau_sq"))
+
+# Extract posterior samples for each of the parameters of interest
+post_beta0 <- stan_post_samples$beta0
+post_beta <- stan_post_samples$beta
+# post_beta2 <- stan_post_samples$beta2
+post_sigmasq <- stan_post_samples$sigma_sq
+post_phi <- stan_post_samples$phi
+post_tausq <- stan_post_samples$tau_sq
+
+# Scale coordinates for predictive locations
+predCoords_sc <- predCoords 
+predCoords_sc[,1] <-
+  (predCoords_sc[,1] - mean(Mtl_benzene_sample$easting)) / sd(Mtl_benzene_sample$easting)
+predCoords_sc[,2] <- 
+  (predCoords_sc[,2] - mean(Mtl_benzene_sample$northing)) / sd(Mtl_benzene_sample$northing)
+  
+n0 <- nrow(predCoords_sc)
+L <- length(post_tausq)
+
+obsMu <- cbind(1, easting_scaled, northing_scaled) %*% t(cbind(post_beta0, post_beta))
+
+predMu <- cbind(1, as.matrix(predCoords_sc)) %*% t(cbind(post_beta0, post_beta))
+
+pred2obsDist <- fields::rdist(predCoords, obsCoords)
+
+```
+
+
+```{r Ex 10.8 nimble predictions using Rcpp}
+
+Rcpp::sourceCpp("functions/prediction_marginal_gp12.cpp")
+args(prediction_marginal_gp12)
+system.time(
+  pred_samples <- prediction_marginal_gp12(
+    y = Mtl_benzene_sample$y,
+    obsMu = obsMu,
+    predMu = predMu,
+    obsDistMat = obsDist,
+    pred2ObsDistMat = pred2obsDist,
+    sigmasq = post_sigmasq,
+    phi = post_phi,
+    tausq = post_tausq,
+    iterprint = 1000
+  )
+)
+
+predict_res_dt <- data.frame(
+  xcoord = predCoords[, 1],
+  ycoord = predCoords[, 2],
+  post.mean = apply(pred_samples, 1, mean),
+  post.var = apply(pred_samples, 1, var),
+  q2.5 = apply(pred_samples, 1, function(x)
+    quantile(x, prob = 0.025)),
+  q50 = apply(pred_samples, 1, function(x)
+    quantile(x, prob = 0.5)),
+  q97.5 = apply(pred_samples, 1, function(x)
+    quantile(x, prob = 0.975))
+)
+
+
+```
+
+
+
+```{r Ex 10.9 nimble plot predictions, messages = FALSE}
+
+x$stan.pred <- predict_res_dt$post.mean
+x$stan.var <- predict_res_dt$post.var
+
+
+stan_pred <-
+  spplot (
+    x["stan.pred"],
+    main = "Stan spatial predictions ",
+    col.regions = viridis::plasma(60),
+    sp.layout = list(monitor_loc),
+    at = seq(-0.3, 0.8, 0.02)
+  )
+stan_var <-
+  spplot (
+    x["stan.var"],
+    main = "Stan predictions variance ",
+    col.regions = viridis::plasma(60),
+    sp.layout = list(monitor_loc),
+    at = seq(0, 0.2, 0.01)
+  )
+
+plot_grid(krig_pred, krig_var, labels = "auto")
+
+```
 ## Example 10.11: INLA, creating a mesh {-}
 
 ```{r Ex 10.11 load data for INLA, message = FALSE, warning=FALSE, error=FALSE}
@@ -602,7 +717,7 @@ plot(CA.vario4)
 rm(list=ls())
 ```
 
-```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE}
+```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE, eval = FALSE}
 
 library(dplyr) # to manipulate the data
 library(geoR) # to get the dataset
@@ -631,7 +746,7 @@ theme_clear <- function(){
 Since the data is given at the individual level, we want to aggregate the malaria tests by village. 
 If we explore the data frame we see that there are 2035 individuals at 65 villages. 
 
-```{r Ex 10.14 explore data}
+```{r Ex 10.14 explore data, eval = FALSE}
 head(gambia)
 dim(gambia)
 dim(unique(gambia[, c("x", "y")]))
@@ -639,7 +754,7 @@ dim(unique(gambia[, c("x", "y")]))
 
 We create a new data frame aggregated by village containing the coordinates, the number of malaria tests, the prevalence and the altitude. 
 
-```{r Ex 10.14 aggregate data}
+```{r Ex 10.14 aggregate data, eval = FALSE}
 
 malaria_village <- group_by(gambia, x, y) |>
   summarize(total = n(),
@@ -649,7 +764,7 @@ malaria_village <- group_by(gambia, x, y) |>
 head(malaria_village)
 ```
 
-```{r Ex 10.14 plot prevalence}
+```{r Ex 10.14 plot prevalence, eval = FALSE}
 
 # create a new variable in "sp" format and define coordinates
 malaria_utm <- malaria_village
@@ -680,7 +795,9 @@ ggmap(GambiaMap) + geom_point(data = malaria_village,
                               size = 2) + scale_color_viridis() + theme_void()
 
 ```
-```{r Ex 10.14 load covariates and plot altitude, warning=FALSE}
+
+
+```{r Ex 10.14 load covariates and plot altitude, warning=FALSE,eval = FALSE}
 
 altitude_gambia <- getData(name = "alt", country = "GMB", mask = TRUE) %>% projectRaster(crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 # Convert raster to polygons to plot using ggmap
@@ -696,7 +813,7 @@ ggmap(GambiaMap) +
   )  + theme_void()
 ```
 
-```{r Ex 10.14 extract altitude at locations}
+```{r Ex 10.14 extract altitude at locations, eval = FALSE}
 # extract from altitude_gambia the altitude values at malaria_village locations and add it to data frame
 malaria_village$alt <-
   raster::extract(altitude_gambia, malaria_village[, c("long", "lat")])
@@ -707,12 +824,15 @@ head(malaria_village)
 
 ###  Nimble {-} 
 
-```{r Ex 10.14 nimble model}
+```{r Ex 10.14 nimble model, eval = FALSE}
 
 Example10_14_Nimble <- nimbleCode({
   
+  # Define priors
   sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  sigma_sq <- sigma ^ 2
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  tau_sq <- tau  ^ 2
   phi ~ dexp(rate =  1/45.51057) # maxdist/6
   
   Sigma[1:n, 1:n] <-
@@ -733,7 +853,7 @@ Example10_14_Nimble <- nimbleCode({
 
 ```
 
-```{r Ex 10.14 run nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 10.14 run nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', eval = FALSE}
 # distance specification
 
 coords_sf <- sf::st_as_sf(malaria_village[,c("long","lat")], coords = c("long","lat")) |> 
@@ -795,7 +915,7 @@ post_samples <- runMCMC(
 )
 ```
 
-```{r Ex 10.14 nimble traceplots ESS }
+```{r Ex 10.14 nimble traceplots ESS, eval = FALSE }
 
 plot(post_samples$samples[, c("b0")], bty = "n", main = "b0")
 plot(post_samples$samples[, c("b1")], bty = "n", main = "b1")
@@ -821,7 +941,7 @@ mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda:
 
 
 
-```{r Ex 10.14 nimble summary, echo = TRUE}
+```{r Ex 10.14 nimble summary, echo = TRUE, eval = FALSE}
 
 # Extract samples
 variables <- c("b0", "b1","tau", "sigma", "phi")
@@ -831,7 +951,7 @@ summary_nimble[variables,]
 ```
 
 
-```{r Ex 10.14 nimble summary p, echo = TRUE}
+```{r Ex 10.14 nimble summary p, echo = TRUE, eval = FALSE}
 # Plot posterior summary for the spatial random effect by village
 post_summary <- post_samples$summary$all.chains 
 
@@ -853,7 +973,9 @@ ggplot(data = post_sum_S, aes(x = village)) +
   ggtitle("Posterior summary spatial random effect by village")
 
 ```
-```{r Ex 10.14 nimble summary S, echo = TRUE}
+
+
+```{r Ex 10.14 nimble summary S, echo = TRUE, eval = FALSE}
 # Plot posterior summary for the probabilities
 post_sum_p <-
   as.data.frame(post_summary) |>  tibble::rownames_to_column() |>
@@ -875,7 +997,7 @@ ggplot(data = post_sum_p, aes(x = village)) +
 
 ### Stan {-}
 
-```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, eval = FALSE}
 # load rstan with options
 library(rstan)
 options(mc.cores = parallel::detectCores())
@@ -883,10 +1005,12 @@ rstan_options(auto_write = TRUE)
 ```
 
 
-```{r engine='bash', comment='', echo = FALSE}
+```{r engine='bash', comment='', echo = FALSE, eval = FALSE}
 cat functions/Example10_14.stan
 ```
-```{r Ex 10.14 stan data, warning = FALSE}
+
+
+```{r Ex 10.14 stan data, warning = FALSE, eval = FALSE}
 
 ex.data <- list(y = malaria_village$positive, # malaria prevalence 
                  N = malaria_village$total, # people sampled per village
@@ -908,7 +1032,7 @@ Example10_14Stan  <- stan(
 
 ```
 
-```{r Ex 10.14 stan traceplots}
+```{r Ex 10.14 stan traceplots, eval = FALSE}
 #computing WAIC using the package loo
 
 traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
@@ -916,7 +1040,7 @@ traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
 ```
 
 
-```{r Ex 10.14 stan summary, echo = TRUE}
+```{r Ex 10.14 stan summary, echo = TRUE, eval = FALSE}
 
 # Extract samples
 summary_stan <-
@@ -932,7 +1056,7 @@ summary_stan$summary
 
 
 
-```{r Ex 10.14 stan posterior plots}
+```{r Ex 10.14 stan posterior plots, eval = FALSE}
 S_summary <-
   summary(Example10_14Stan, pars = c("S"))$summary
 

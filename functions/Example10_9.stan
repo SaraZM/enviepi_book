@@ -15,13 +15,14 @@ parameters {
   real beta0;
 
 }
+transformed parameters{
+  real<lower=0> sigma_sq = square(sigma);
+  real<lower=0> tau_sq = square(tau);
+}
 model {
   vector[N] mu;
   matrix[N, N] L;
   matrix[N, N] Sigma;
-
-  real sigma_sq = square(sigma);
-  real tau_sq = square(tau);
 
  for(i in 1:(N-1)){
    for(j in (i+1):N){
@@ -46,4 +47,3 @@ model {
 
   y ~ multi_normal_cholesky(mu, L);
 }
-

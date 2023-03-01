@@ -1,9 +1,3 @@
-tab:unnamed-chunk-7
-tab:unnamed-chunk-8
-tab:unnamed-chunk-9
-tab:unnamed-chunk-10
-tab:unnamed-chunk-11
-tab:unnamed-chunk-12
 why
 basics
 uncertainty
