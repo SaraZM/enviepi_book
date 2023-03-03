@@ -218,7 +218,6 @@ library(spdep)
 library(tidyverse)
 library(tidybayes)
 
-source("functions/utilityfunctions.R")
 ```
 
 ```{r Ex 10.9 benzene to spatial data, message = FALSE, warning=FALSE, error=FALSE}
@@ -370,7 +369,7 @@ pred2obsDist <- fields::rdist(predCoords, obsCoords)
 ```
 
 
-```{r Ex 10.8 nimble predictions using Rcpp}
+```{r Ex 10.9 nimble predictions using Rcpp}
 
 Rcpp::sourceCpp("functions/prediction_marginal_gp12.cpp")
 args(prediction_marginal_gp12)
@@ -431,7 +430,7 @@ nimble_var <-
 
   )
 
-plot_grid(krig_pred, krig_var, labels = "auto")
+plot_grid(nimble_pred, nimble_var, labels = "auto")
 
 ```
 
@@ -513,7 +512,7 @@ Example10_9Stan  <- stan(
 
 ```{r  Ex 10.9 stan exp traceplots, warning = FALSE}
 
-traceplot(Example10_9Stan, pars = c("beta0","beta","sigma_sq", "tau_sq", "phi"))
+rstan::traceplot(Example10_9Stan, pars = c("beta0","beta","sigma_sq", "tau_sq", "phi"))
 
 ```
 
@@ -528,6 +527,8 @@ summary_exp_stan <-
 summary_exp_stan$summary
 
 ```
+
+
 ```{r Ex 10.9 stan rediction locations}
 # Obtain coordinates for predictions 
 # note that we are using the same coordinates as the one generated for 
@@ -539,7 +540,7 @@ predCoords <- unname(as.matrix(Mtl_centroids_df))
 
 ```{r Ex 10.9 stan predictions}
 # Extract samples from nimble model
-stan_post_samples <- extract(Example10_9Stan,
+stan_post_samples <- rstan::extract(Example10_9Stan,
     pars = c("beta0","beta", "phi", "sigma_sq", "tau_sq"))
 
 # Extract posterior samples for each of the parameters of interest
@@ -569,7 +570,7 @@ pred2obsDist <- fields::rdist(predCoords, obsCoords)
 ```
 
 
-```{r Ex 10.8 nimble predictions using Rcpp}
+```{r Ex 10.9 stan predictions using Rcpp}
 
 Rcpp::sourceCpp("functions/prediction_marginal_gp12.cpp")
 args(prediction_marginal_gp12)
@@ -605,7 +606,7 @@ predict_res_dt <- data.frame(
 
 
 
-```{r Ex 10.9 nimble plot predictions, messages = FALSE}
+```{r Ex 10.9 stan plot predictions, messages = FALSE}
 
 x$stan.pred <- predict_res_dt$post.mean
 x$stan.var <- predict_res_dt$post.var
@@ -628,7 +629,7 @@ stan_var <-
     at = seq(0, 0.2, 0.01)
   )
 
-plot_grid(krig_pred, krig_var, labels = "auto")
+plot_grid(stan_pred, stan_var, labels = "auto")
 
 ```
 ## Example 10.11: INLA, creating a mesh {-}
@@ -957,10 +958,6 @@ mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda:
 
 
 
-
-
-
-
 ```{r Ex 10.14 nimble summary, echo = TRUE, eval = FALSE}
 
 # Extract samples
@@ -971,9 +968,10 @@ summary_nimble[variables,]
 ```
 
 
+
 ```{r Ex 10.14 nimble summary p, echo = TRUE, eval = FALSE}
 # Plot posterior summary for the spatial random effect by village
-post_summary <- post_samples$summary$all.chains 
+post_summary <- post_samples$summary$all.chains
 
 post_sum_S <-
   as.data.frame(post_summary) |>  tibble::rownames_to_column() |>
@@ -996,6 +994,7 @@ ggplot(data = post_sum_S, aes(x = village)) +
 
 
 
+
 ### Stan {-}
 
 ```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, eval = FALSE}
@@ -1013,9 +1012,9 @@ cat functions/Example10_14.stan
 
 ```{r Ex 10.14 stan data, warning = FALSE, eval = FALSE}
 
-ex.data <- list(y =, # malaria prevalence 
+ex.data <- list(y = malaria_village$positive, # malaria prevalence
                  N = malaria_village$total, # people sampled per village
-                 X = X, # altitude per village
+                 X = as.vector(scale(altitude)), # altitude per village
                  dist_matrix = obs_dist_mat, # distance matrix in km
                  n = nrow(malaria_village) # number of villages
                  )
@@ -1036,7 +1035,7 @@ Example10_14Stan  <- stan(
 ```{r Ex 10.14 stan traceplots, eval = FALSE}
 #computing WAIC using the package loo
 
-traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
+rstan::traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
 
 ```
 
@@ -1066,7 +1065,7 @@ S_summary_df <- data.frame(S_summary) |>
   filter(rowname %in% paste0("S[", 1:65, "]")) |>
   mutate(village = 1:65) |>
   dplyr::select(mean,  X2.5., X97.5., village)
-  
+
 S_summary_df$village <-
   factor(S_summary_df$village , levels = 1:65)
 
@@ -1078,8 +1077,8 @@ S_summary_df$village <-
     breaks = S_summary_df$village[seq(1, length(S_summary_df$village), by = 5)]) +
   theme_clear() +  ylab("") + xlab("village") +
   ggtitle("Posterior summary spatial random effect by village")
-  
-  
+
+
 p_summary <-
   summary(Example10_14Stan, pars = c("p"))$summary
 
@@ -1088,7 +1087,7 @@ p_summary_df <- data.frame(p_summary) |>
   filter(rowname %in% paste0("p[", 1:65, "]")) |>
   mutate(village = 1:65) |>
   dplyr::select(mean,  X2.5., X97.5., village)
-  
+
 p_summary_df$village <-
   factor(p_summary_df$village , levels = 1:65)
 
