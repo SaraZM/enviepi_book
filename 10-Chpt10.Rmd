@@ -715,7 +715,13 @@ plot(CA.vario4)
 
 ```{r Ex 10.14 clean, include = FALSE}
 rm(list=ls())
+# Vectorize(detach)(name=paste0("package:", c("raster")), unload=TRUE, character.only=TRUE)
 ```
+
+
+Note: There might be a warning when loading the $\texttt{raster}$ package, if necessary, uninstall and re-install the package. 
+
+For this example we are using the same $\texttt{gambia}$ data set from the $\texttt{geoR}$ package but an $\texttt{id_area}$ column was added using QGIS to differentiate the different areas as in the original paper.
 
 ```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE, eval = FALSE}
 
@@ -730,7 +736,9 @@ library(sp) # for manipulating spatial data
 library(stringr) # to analyze posterior
 library(viridis) # for a more cheerful color palette
 
-data(gambia) # gambia dataset from geoR package
+# Note, we are using the same Gambia dataset as in the geoR package but an id_area
+# attribute has been added using QGIS to a
+gambia <- read.csv("data/gambia_area.csv") # gambia dataset from geoR package
 
 theme_clear <- function(){
   theme(
@@ -752,7 +760,7 @@ dim(gambia)
 dim(unique(gambia[, c("x", "y")]))
 ```
 
-We create a new data frame aggregated by village containing the coordinates, the number of malaria tests, the prevalence and the altitude. 
+We create a new data frame aggregated by village containing the coordinates, the number of malaria tests, and the prevalence. 
 
 ```{r Ex 10.14 aggregate data, eval = FALSE}
 
@@ -764,7 +772,7 @@ malaria_village <- group_by(gambia, x, y) |>
 head(malaria_village)
 ```
 
-```{r Ex 10.14 plot prevalence, eval = FALSE}
+```{r Ex 10.14 plot prevalence, message = FALSE, warning=FALSE}
 
 # create a new variable in "sp" format and define coordinates
 malaria_utm <- malaria_village
@@ -797,28 +805,8 @@ ggmap(GambiaMap) + geom_point(data = malaria_village,
 ```
 
 
-```{r Ex 10.14 load covariates and plot altitude, warning=FALSE,eval = FALSE}
 
-altitude_gambia <- getData(name = "alt", country = "GMB", mask = TRUE) %>% projectRaster(crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
-# Convert raster to polygons to plot using ggmap
-altitude_pol <- rasterToPolygons(altitude_gambia)
 
-ggmap(GambiaMap) +
-  inset_raster(
-    as.raster(altitude_gambia),
-    xmin = altitude_gambia@extent[1],
-    xmax = altitude_gambia@extent[2],
-    ymin = altitude_gambia@extent[3],
-    ymax = altitude_gambia@extent[4]
-  )  + theme_void()
-```
-
-```{r Ex 10.14 extract altitude at locations, eval = FALSE}
-# extract from altitude_gambia the altitude values at malaria_village locations and add it to data frame
-malaria_village$alt <-
-  raster::extract(altitude_gambia, malaria_village[, c("long", "lat")])
-head(malaria_village)
-```
 
 <!-- NOTE: I am not doing a Matern cause I don't know how to code it, I'll use an exponential instead -->
 
@@ -833,21 +821,25 @@ Example10_14_Nimble <- nimbleCode({
   sigma_sq <- sigma ^ 2
   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
   tau_sq <- tau  ^ 2
-  phi ~ dexp(rate =  1/45.51057) # maxdist/6
+  phi_inv ~ dgamma(shape =  5, rate = 5)
+  phi <- 1 / phi_inv
   
-  Sigma[1:n, 1:n] <-
-    (sigma ^ 2) * exp(-obs_dist_mat[1:n, 1:n] / phi) + (tau ^ 2) * identityMatrix(d = n)
- # L[1:n,1:n] <- chol(Sigma[1:n, 1:n])
+  Sigma[1:N, 1:N] <-
+     sigma_sq * exp(-obs_dist_mat[1:N, 1:N] / phi) + tau_sq  * identityMatrix(d = N)
 
-  S[1:n] ~ dmnorm(zeroes[1:n], cov = Sigma[1:n,1:n])
+  S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
   
-  for(i in 1:n){
-    logit(p[i]) <- b0 + b1*altitude[i] + S[i]
-    y[i] ~ dbinom(size = N[i], prob = p[i])
+    for (j in 1:n) {  # by child
+    logit(p[j])  <-  b0 + inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
+    y[j] ~ dbinom(size = 1, prob = p[j])
+    }
+
+
+  for (l in 1:k){
+    b[l] ~ dnorm(0,100)
   }
-
+  
   b0 ~  dnorm(0,100)
-  b1 ~  dnorm(0,100)
 
 })
 
@@ -855,27 +847,53 @@ Example10_14_Nimble <- nimbleCode({
 
 ```{r Ex 10.14 run nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', eval = FALSE}
 # distance specification
-
 coords_sf <- sf::st_as_sf(malaria_village[,c("long","lat")], coords = c("long","lat")) |> 
   sf::st_set_crs(4326)
 obs_dist_mat <- sf::st_distance(coords_sf)
 obs_dist_mat <- units::set_units(obs_dist_mat, km)
 obs_dist_mat <- units::set_units(obs_dist_mat, NULL)
 
-# Model specification
-n = nrow(malaria_village)
-altitude <- malaria_village$alt
-# there are two missing values in the altitude that will be replaced with the mean
-altitude[is.na(altitude)] <- mean(altitude, na.rm = TRUE) 
+# define indicator variables for each village
 
-zeroes <- rep(0, n)
-  
-const_list <- list(n = n, # number of villages
-                   zeroes = zeroes)
-dat_list <- list(y = malaria_village$positive, # malaria prevalence 
-                 N = malaria_village$total, # people sampled per village
-                 altitude = as.vector(scale(altitude)), # altitude per village
-                 obs_dist_mat = obs_dist_mat # distance matrix in km
+gambia_df <- mutate(
+  gambia,
+  id_child = 1:nrow(gambia), # add an id for each child
+  value = 1, # this will be needed later for the villages
+  id_village = as.numeric(interaction( # add an id for the villages
+    x, y, drop = TRUE, lex.order = TRUE
+  ))
+) %>%
+  tidyr::spread(id_area, value, fill = 0) 
+
+## Model specification
+# Variables matrix
+X <- data.frame(age = as.vector(scale(gambia_df[,"age"])),
+                netuse = gambia_df[,"netuse"],
+                treated = gambia_df[,"treated"],
+                green = as.vector(scale(gambia_df[,"green"])),
+                phc = gambia_df[,"phc"],
+                area2 = gambia_df[,"2"],
+                area3 = gambia_df[,"3"],
+                area4 = gambia_df[,"4"],
+                area5 = gambia_df[,"5"] )
+
+index_village <- gambia_df[,"id_village"]
+
+n <- nrow(X) # child number
+zeroes <- rep(0, n) # auxiliary vector of zeroes for model
+N <- nrow(malaria_village)
+
+const_list <- list(n = n, # number of childs
+                   N = N, # number of villages
+                   zeroes = zeroes, # vector of zeroes 
+                   prior_max_dist = max(obs_dist_mat)/6, # max dist for phi prior
+                   k =  ncol(X) # number of predictors
+)
+
+dat_list <- list(y = gambia$pos, # malaria positive test 
+                 obs_dist_mat = obs_dist_mat, # distance matrix in km
+                 X = X, # predictors matrix
+                 index_village = index_village
                  )
 
 init_list <- list(tau = 0.01, sigma = 0.01, p = rep(0.01, n))
@@ -890,7 +908,7 @@ Rmodel <-
 Rmodel$initializeInfo()
 Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
-  configureMCMC(Rmodel, monitors = c("tau", "sigma", "phi", "b0", "b1", "p", "S"))
+  configureMCMC(Rmodel, monitors = c("tau", "sigma", "phi", "b0", "b", "S", "p"))
 
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
@@ -918,14 +936,16 @@ post_samples <- runMCMC(
 ```{r Ex 10.14 nimble traceplots ESS, eval = FALSE }
 
 plot(post_samples$samples[, c("b0")], bty = "n", main = "b0")
-plot(post_samples$samples[, c("b1")], bty = "n", main = "b1")
+plot(post_samples$samples[, c("b[1]")], bty = "n", main = "b[1]")
+plot(post_samples$samples[, c("b[2]")], bty = "n", main = "b[2]")
+plot(post_samples$samples[, c("b[3]")], bty = "n", main = "b[3]")
 plot(post_samples$samples[, c("tau")], bty = "n", main = "tau")
 plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
 plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]")
-plot(post_samples$samples[, c("S[13]")], bty = "n", main = "S[13]")
+plot(post_samples$samples[, c("S[29]")], bty = "n", main = "S[29]")
 plot(post_samples$samples[, c("p[1]")], bty = "n", main = "p[1]")
-plot(post_samples$samples[, c("p[13]")], bty = "n", main = "p[13]")
+plot(post_samples$samples[, c("p[1519]")], bty = "n", main = "p[1519]")
 
 # Get minimum effective size (ESS) and which variable has the min ESS
 min(coda::effectiveSize(post_samples$samples))
@@ -944,7 +964,7 @@ mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda:
 ```{r Ex 10.14 nimble summary, echo = TRUE, eval = FALSE}
 
 # Extract samples
-variables <- c("b0", "b1","tau", "sigma", "phi")
+variables <- c("b0", "b[1]", "b[2]", "b[3]", "b[4]", "b[5]", "b[6]", "b[7]", "b[8]","tau", "sigma", "phi")
 summary_nimble <- post_samples$summary$all.chains
 summary_nimble[variables,]
 
@@ -975,25 +995,6 @@ ggplot(data = post_sum_S, aes(x = village)) +
 ```
 
 
-```{r Ex 10.14 nimble summary S, echo = TRUE, eval = FALSE}
-# Plot posterior summary for the probabilities
-post_sum_p <-
-  as.data.frame(post_summary) |>  tibble::rownames_to_column() |>
-  filter(str_detect(rowname, "p\\[")) |>
-  dplyr::select(rowname, `95%CI_low`, Mean, `95%CI_upp`)  |>
-  mutate(village = gsub(".*?([0-9]+).*", "\\1", rowname))
-
-post_sum_p$village <-
-  factor(post_sum_p$village , levels = 1:65)
-
-ggplot(data = post_sum_p, aes(x = village)) +
-  geom_pointrange(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`, y = Mean)) +
-   scale_x_discrete(
-    breaks = post_sum_p$village[seq(1, length(post_sum_p$village), by = 5)]) +
-  theme_clear() + ylab("") + xlab("village") + 
-  ggtitle("Posterior summary probabilities by village")
-
-```
 
 ### Stan {-}
 
@@ -1012,9 +1013,9 @@ cat functions/Example10_14.stan
 
 ```{r Ex 10.14 stan data, warning = FALSE, eval = FALSE}
 
-ex.data <- list(y = malaria_village$positive, # malaria prevalence 
+ex.data <- list(y =, # malaria prevalence 
                  N = malaria_village$total, # people sampled per village
-                 X = as.vector(scale(altitude)), # altitude per village
+                 X = X, # altitude per village
                  dist_matrix = obs_dist_mat, # distance matrix in km
                  n = nrow(malaria_village) # number of villages
                  )
