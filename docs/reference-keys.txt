@@ -11,8 +11,8 @@ placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-
 Disease
 hazards
 Time
-stan-4
-nimble-4
+stan-5
+nimble-5
 exposure
 causality
 solutions-to-selected-exercises-1

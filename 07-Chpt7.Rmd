@@ -16,4 +16,3 @@ using predictions as inputs to a health model.
 - Methods for performing model selection, including the pros and cons of automatic selection procedures.
 - Model selection within the Bayesian setting and how the models themselves can be incorporated into the estimation
 process using Bayesian Model Averaging.
-

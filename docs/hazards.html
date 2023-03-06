@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 10 Environmental hazards-spatial models | Spatio-temporal methods in environmental epidemiology</title>
   <meta name="description" content="Chapter 10 Environmental hazards-spatial models | Spatio-temporal methods in environmental epidemiology" />
-  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 10 Environmental hazards-spatial models | Spatio-temporal methods in environmental epidemiology" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-03-01" />
+<meta name="date" content="2023-03-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -200,6 +200,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a>
+<ul>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-3"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-3"><i class="fa fa-check"></i>Stan</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
 <ul>
@@ -289,7 +294,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb134-18"><a href="hazards.html#cb134-18" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">size =</span> Benzene), </span>
 <span id="cb134-19"><a href="hazards.html#cb134-19" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">col =</span> <span class="st">&quot;#011f4b&quot;</span>,</span>
 <span id="cb134-20"><a href="hazards.html#cb134-20" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">alpha =</span> <span class="fl">0.45</span>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.1%20map%20data-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.1%20map%20data-1.png" width="672" /></p>
 <p>Using the <code>geoR</code> package we can also plot the following:</p>
 <ul>
 <li>the locations of the sampling sites</li>
@@ -306,7 +311,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb135-8"><a href="hazards.html#cb135-8" aria-hidden="true" tabindex="-1"></a>benzene_geodata <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>(benzene_utm_df,</span>
 <span id="cb135-9"><a href="hazards.html#cb135-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">data.col =</span> <span class="dv">1</span>)</span>
 <span id="cb135-10"><a href="hazards.html#cb135-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(benzene_geodata)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.1%20geoR%20plot-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.1%20geoR%20plot-1.png" width="672" /></p>
 </div>
 <div id="example-10.2-examining-the-log-concentrations-of-benzene-in-montreal" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.2: Examining the log concentrations of benzene in Montreal<a href="hazards.html#example-10.2-examining-the-log-concentrations-of-benzene-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -315,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb136-3"><a href="hazards.html#cb136-3" aria-hidden="true" tabindex="-1"></a>log_histogram <span class="ot">&lt;-</span> <span class="fu">hist</span>(<span class="fu">log</span>(benzene<span class="sc">$</span>Benzene), <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;log(Benzene)&quot;</span>)</span>
 <span id="cb136-4"><a href="hazards.html#cb136-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(<span class="fu">log</span>(benzene<span class="sc">$</span>Benzene), <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
 <span id="cb136-5"><a href="hazards.html#cb136-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(<span class="fu">log</span>(benzene<span class="sc">$</span>Benzene))</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.2%20plot%20hist%20and%20qqplot%20log-1.png" width="672" />
+<p><img src="_main_files/figure-html/Ex%2010.2%20plot%20hist%20and%20qqplot%20log-1.png" width="672" />
 <!-- NOTE: I don't know how to generate the plot in Figure 9.4 --></p>
 </div>
 <div id="example-10.3-mapping-the-locations-of-ozone-monitoring-sites-in-new-york-state" class="section level2 unnumbered hasAnchor">
@@ -351,7 +356,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb137-29"><a href="hazards.html#cb137-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> <span class="dv">4</span>,</span>
 <span id="cb137-30"><a href="hazards.html#cb137-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="st">&quot;darkred&quot;</span></span>
 <span id="cb137-31"><a href="hazards.html#cb137-31" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.3%20plot%20ozone%20sites%20NY-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.3%20plot%20ozone%20sites%20NY-1.png" width="672" /></p>
 </div>
 <div id="example-10.5-variogram" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.5: Variogram<a href="hazards.html#example-10.5-variogram" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -361,7 +366,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb138-4"><a href="hazards.html#cb138-4" aria-hidden="true" tabindex="-1"></a>benzene_utm_geo[,<span class="fu">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)] <span class="ot">&lt;-</span> benzene_utm_geo[,<span class="fu">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)]<span class="sc">/</span><span class="dv">1000</span></span>
 <span id="cb138-5"><a href="hazards.html#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(benzene_utm_geo) <span class="ot">&lt;-</span> <span class="er">~</span> X <span class="sc">+</span> Y</span>
 <span id="cb138-6"><a href="hazards.html#cb138-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate variogram intercept only</span></span>
-<span id="cb138-7"><a href="hazards.html#cb138-7" aria-hidden="true" tabindex="-1"></a>benzene_inter_vgm <span class="ot">&lt;-</span> <span class="fu">variogram</span>(<span class="fu">log</span>(Benzene)<span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> benzene_utm_geo,</span>
+<span id="cb138-7"><a href="hazards.html#cb138-7" aria-hidden="true" tabindex="-1"></a>benzene_inter_vgm <span class="ot">&lt;-</span> gstat<span class="sc">::</span><span class="fu">variogram</span>(<span class="fu">log</span>(Benzene)<span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> benzene_utm_geo,</span>
 <span id="cb138-8"><a href="hazards.html#cb138-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cutoff =</span> <span class="dv">20</span>, <span class="co"># cutoff distance</span></span>
 <span id="cb138-9"><a href="hazards.html#cb138-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">width =</span> <span class="dv">20</span><span class="sc">/</span><span class="dv">10</span> <span class="co"># bins width </span></span>
 <span id="cb138-10"><a href="hazards.html#cb138-10" aria-hidden="true" tabindex="-1"></a>                         )</span>
@@ -389,7 +394,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb142-2"><a href="hazards.html#cb142-2" aria-hidden="true" tabindex="-1"></a>plot_coord_variog <span class="ot">&lt;-</span> <span class="fu">plot</span>(benzene_vgm, benzene_vgm_fit, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
 <span id="cb142-3"><a href="hazards.html#cb142-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb142-4"><a href="hazards.html#cb142-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(plot_inter_variog, plot_coord_variog, <span class="at">labels =</span> <span class="st">&quot;auto&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.5%20plot%20variogram-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.5%20plot%20variogram-1.png" width="672" /></p>
 </div>
 <div id="example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal<a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -429,7 +434,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb145-20"><a href="hazards.html#cb145-20" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb145-21"><a href="hazards.html#cb145-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb145-22"><a href="hazards.html#cb145-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(krig_pred, krig_var, <span class="at">labels =</span> <span class="st">&quot;auto&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.6%20kriging%20predictions-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.6%20kriging%20predictions-1.png" width="672" /></p>
 </div>
 <div id="example-10.9-spatial-modelling-of-benzene-in-montreal" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.9 Spatial modelling of Benzene in Montreal<a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -533,17 +538,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="hazards.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(mcmc.out<span class="sc">$</span>samples))</span></code></pre></div>
 <pre><code>## [1] 985.2176</code></pre>
 <div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="hazards.html#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;beta0&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="hazards.html#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;beta1&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-2.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-2.png" width="672" /></p>
 <div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="hazards.html#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;beta2&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;beta2&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-3.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-3.png" width="672" /></p>
 <div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="hazards.html#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;sigma&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;sigma&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-4.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-4.png" width="672" /></p>
 <div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="hazards.html#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;tau&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-5.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-5.png" width="672" /></p>
 <div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="hazards.html#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mcmc.out<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;phi&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;phi&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-6.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20WAIC,%20ESS%20and%20traceplots-6.png" width="672" /></p>
 <div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="hazards.html#cb160-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>summary<span class="sc">$</span>all.chains[<span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;beta2&quot;</span>, <span class="st">&quot;sigma_sq&quot;</span>, <span class="st">&quot;tau_sq&quot;</span>, <span class="st">&quot;phi&quot;</span>), ]</span></code></pre></div>
 <pre><code>##                 Mean     Median     St.Dev.     95%CI_low  95%CI_upp
 ## beta0    0.143589662 0.15187505 0.081381727 -4.284934e-02 0.27866526
@@ -606,7 +611,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Prediction upto the 1000th MCMC sample is completed
 ## Prediction upto the 2000th MCMC sample is completed</code></pre>
 <pre><code>##    user  system elapsed 
-##  140.11    0.14  174.86</code></pre>
+##  144.33    0.03  169.41</code></pre>
 <div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="hazards.html#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(pred_samples)</span></code></pre></div>
 <pre><code>##  num [1:5751, 1:2856] -0.116 -0.805 -0.7 -0.327 -0.402 ...</code></pre>
 <div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="hazards.html#cb171-1" aria-hidden="true" tabindex="-1"></a>predict_res_dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -643,7 +648,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb172-20"><a href="hazards.html#cb172-20" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb172-21"><a href="hazards.html#cb172-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb172-22"><a href="hazards.html#cb172-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(nimble_pred, nimble_var, <span class="at">labels =</span> <span class="st">&quot;auto&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20nimble%20plot%20predictions-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20nimble%20plot%20predictions-1.png" width="672" /></p>
 </div>
 <div id="stan-2" class="section level3 unnumbered hasAnchor">
 <h3>Stan<a href="hazards.html#stan-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -745,7 +750,7 @@ model {
 <span id="cb175-26"><a href="hazards.html#cb175-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="cn">TRUE</span></span>
 <span id="cb175-27"><a href="hazards.html#cb175-27" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="hazards.html#cb176-1" aria-hidden="true" tabindex="-1"></a>rstan<span class="sc">::</span><span class="fu">traceplot</span>(Example10_9Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;sigma_sq&quot;</span>, <span class="st">&quot;tau_sq&quot;</span>, <span class="st">&quot;phi&quot;</span>))</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20stan%20exp%20traceplots-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.9%20stan%20exp%20traceplots-1.png" width="672" /></p>
 <div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="hazards.html#cb177-1" aria-hidden="true" tabindex="-1"></a>summary_exp_stan <span class="ot">&lt;-</span></span>
 <span id="cb177-2"><a href="hazards.html#cb177-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(</span>
 <span id="cb177-3"><a href="hazards.html#cb177-3" aria-hidden="true" tabindex="-1"></a>    Example10_9Stan,</span>
@@ -821,7 +826,7 @@ model {
 <pre><code>## Prediction upto the 0th MCMC sample is completed
 ## Prediction upto the 1000th MCMC sample is completed</code></pre>
 <pre><code>##    user  system elapsed 
-##   99.34    0.03  123.03</code></pre>
+##   95.44    0.10  118.83</code></pre>
 <div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="hazards.html#cb186-1" aria-hidden="true" tabindex="-1"></a>predict_res_dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb186-2"><a href="hazards.html#cb186-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">xcoord =</span> predCoords[, <span class="dv">1</span>],</span>
 <span id="cb186-3"><a href="hazards.html#cb186-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ycoord =</span> predCoords[, <span class="dv">2</span>],</span>
@@ -856,7 +861,7 @@ model {
 <span id="cb187-20"><a href="hazards.html#cb187-20" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb187-21"><a href="hazards.html#cb187-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb187-22"><a href="hazards.html#cb187-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(stan_pred, stan_var, <span class="at">labels =</span> <span class="st">&quot;auto&quot;</span>)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.9%20stan%20plot%20predictions-1.png" width="672" />
+<p><img src="_main_files/figure-html/Ex%2010.9%20stan%20plot%20predictions-1.png" width="672" />
 ## Example 10.11: INLA, creating a mesh {-}</p>
 <div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="hazards.html#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR)</span>
 <span id="cb188-2"><a href="hazards.html#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
@@ -883,7 +888,7 @@ model {
 <span id="cb188-23"><a href="hazards.html#cb188-23" aria-hidden="true" tabindex="-1"></a>mesh <span class="ot">=</span> <span class="fu">inla.mesh.create</span>(locations_df, <span class="at">cutoff =</span> <span class="fl">0.01</span>, </span>
 <span id="cb188-24"><a href="hazards.html#cb188-24" aria-hidden="true" tabindex="-1"></a>                       <span class="at">refine =</span>(<span class="fu">list</span>(<span class="at">min.angle =</span><span class="dv">20</span>)))</span>
 <span id="cb188-25"><a href="hazards.html#cb188-25" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mesh , <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>) </span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.11%20load%20data%20for%20INLA-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.11%20load%20data%20for%20INLA-1.png" width="672" /></p>
 <div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="hazards.html#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ukmap &lt;- readShapeLines(&quot;uk_BNG.shp&quot;) plot(mesh , col=&quot;gray&quot;, main=&quot;&quot;) </span></span>
 <span id="cb189-2"><a href="hazards.html#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lines(ukmap)</span></span>
 <span id="cb189-3"><a href="hazards.html#cb189-3" aria-hidden="true" tabindex="-1"></a><span class="co"># points(locations , col=&quot;red&quot;, pch=20,bg=&quot;red&quot;) </span></span></code></pre></div>
@@ -919,13 +924,13 @@ model {
 <span id="cb190-26"><a href="hazards.html#cb190-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb190-27"><a href="hazards.html#cb190-27" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>summary.fixed</span></code></pre></div>
 <pre><code>##                     mean           sd    0.025quant      0.5quant   0.975quant
-## (Intercept)  4.830402981 120.70808847 -186.92784218 -12.919627484 318.31464884
-## X            0.013798753   0.02139307   -0.02634336   0.012253906   0.06493462
-## Y           -0.002602772   0.02423337   -0.06477481   0.000935161   0.03597768
-##             mode          kld
-## (Intercept)   NA 1.151149e-04
-## X             NA 1.817937e-04
-## Y             NA 7.297007e-05</code></pre>
+## (Intercept)  8.263107109 118.01744834 -189.26686123 -5.4724133487 298.73720629
+## X            0.014532810   0.02130267   -0.02563718  0.0132910509   0.06340354
+## Y           -0.003363563   0.02371941   -0.06108419 -0.0006481981   0.03642514
+##                      mode          kld
+## (Intercept) -20.057620990 5.350437e-05
+## X             0.011915185 7.755183e-05
+## Y             0.002407428 3.418641e-05</code></pre>
 </div>
 <div id="example-10.13-directional-variograms" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.13: Directional variograms<a href="hazards.html#example-10.13-directional-variograms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -933,302 +938,423 @@ model {
 <span id="cb192-2"><a href="hazards.html#cb192-2" aria-hidden="true" tabindex="-1"></a>CA.geo <span class="ot">&lt;-</span> <span class="fu">as.geodata</span>( benzene_utm_df , <span class="at">coords.col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span> , <span class="at">data.col=</span><span class="dv">1</span>)</span>
 <span id="cb192-3"><a href="hazards.html#cb192-3" aria-hidden="true" tabindex="-1"></a>CA.vario4 <span class="ot">&lt;-</span> <span class="fu">variog4</span>(CA.geo )</span>
 <span id="cb192-4"><a href="hazards.html#cb192-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(CA.vario4)</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/Ex%2010.13%20directional%20variogram-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/Ex%2010.13%20directional%20variogram-1.png" width="672" /></p>
 <!-- REVIEW: I am not sure where this example goes -->
-<!-- ## Example 10.14: Spatial modeling of malaria in Gambia {-} -->
-<!-- ```{r Ex 10.14 clean, include = FALSE} -->
-<!-- rm(list=ls()) -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE, eval = FALSE} -->
-<!-- library(dplyr) # to manipulate the data -->
-<!-- library(geoR) # to get the dataset -->
-<!-- library(ggmap) # to plot the map -->
-<!-- library(nimble) # for modeling -->
-<!-- library(raster) # to get the environmental data -->
-<!-- library(rgdal) # for adding and transforming coordinates -->
-<!-- library(sf) # manipulate spatial data -->
-<!-- library(sp) # for manipulating spatial data -->
-<!-- library(stringr) # to analyze posterior -->
-<!-- library(viridis) # for a more cheerful color palette -->
-<!-- data(gambia) # gambia dataset from geoR package -->
-<!-- theme_clear <- function(){ -->
-<!--   theme( -->
-<!--     panel.grid.major = element_blank(), # remove background grid -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.background = element_blank(), # remove grey background -->
-<!--     axis.line = element_line(colour = "black"), # keep axis line -->
-<!--     text=element_text(size=12) -->
-<!--   ) -->
-<!-- } -->
-<!-- ``` -->
-<!-- Since the data is given at the individual level, we want to aggregate the malaria tests by village.  -->
-<!-- If we explore the data frame we see that there are 2035 individuals at 65 villages.  -->
-<!-- ```{r Ex 10.14 explore data, eval = FALSE} -->
-<!-- head(gambia) -->
-<!-- dim(gambia) -->
-<!-- dim(unique(gambia[, c("x", "y")])) -->
-<!-- ``` -->
-<!-- We create a new data frame aggregated by village containing the coordinates, the number of malaria tests, the prevalence and the altitude.  -->
-<!-- ```{r Ex 10.14 aggregate data, eval = FALSE} -->
-<!-- malaria_village <- group_by(gambia, x, y) |> -->
-<!--   summarize(total = n(), -->
-<!--             positive = sum(pos), -->
-<!--             prev = positive / total) |> as.data.frame() -->
-<!-- head(malaria_village) -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 plot prevalence, eval = FALSE} -->
-<!-- # create a new variable in "sp" format and define coordinates -->
-<!-- malaria_utm <- malaria_village -->
-<!-- coordinates(malaria_utm) <- ~ x + y -->
-<!-- proj4string(malaria_utm) <- CRS("+proj=utm +zone=28") -->
-<!-- # convert to long lat  -->
-<!-- malaria_geo <- spTransform(malaria_utm, CRS("+proj=longlat +datum=WGS84")) -->
-<!-- # add long lat coordinates to malaria dataframe -->
-<!-- malaria_village[, c("long", "lat")] <- coordinates(malaria_geo) -->
-<!-- # specify the bounding box -->
-<!-- latLongBox = bbox(malaria_geo) -->
-<!-- location = c(latLongBox[1, 1] - 0.05, -->
-<!--              latLongBox[2, 1] - 0.05, -->
-<!--              latLongBox[1, 2] + 0.05, -->
-<!--              latLongBox[2, 2] + 0.05) -->
-<!-- # create map with location dots marked on it in -->
-<!-- GambiaMap <- -->
-<!--   get_stamenmap(bbox =  location, -->
-<!--                 zoom = 11, -->
-<!--                 type = terrain-background) -->
-<!-- ggmap(GambiaMap) + geom_point(data = malaria_village, -->
-<!--                               aes(x = long, -->
-<!--                                   y = lat, -->
-<!--                                   col = prev), -->
-<!--                               size = 2) + scale_color_viridis() + theme_void() -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 load covariates and plot altitude, warning=FALSE,eval = FALSE} -->
-<!-- altitude_gambia <- getData(name = "alt", country = "GMB", mask = TRUE) %>% projectRaster(crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) -->
-<!-- # Convert raster to polygons to plot using ggmap -->
-<!-- altitude_pol <- rasterToPolygons(altitude_gambia) -->
-<!-- ggmap(GambiaMap) + -->
-<!--   inset_raster( -->
-<!--     as.raster(altitude_gambia), -->
-<!--     xmin = altitude_gambia@extent[1], -->
-<!--     xmax = altitude_gambia@extent[2], -->
-<!--     ymin = altitude_gambia@extent[3], -->
-<!--     ymax = altitude_gambia@extent[4] -->
-<!--   )  + theme_void() -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 extract altitude at locations, eval = FALSE} -->
-<!-- # extract from altitude_gambia the altitude values at malaria_village locations and add it to data frame -->
-<!-- malaria_village$alt <- -->
-<!--   raster::extract(altitude_gambia, malaria_village[, c("long", "lat")]) -->
-<!-- head(malaria_village) -->
-<!-- ``` -->
-<!-- <!-- NOTE: I am not doing a Matern cause I don't know how to code it, I'll use an exponential instead -->
-<p>–&gt;</p>
-<!-- ###  Nimble {-}  -->
-<!-- ```{r Ex 10.14 nimble model, eval = FALSE} -->
-<!-- Example10_14_Nimble <- nimbleCode({ -->
-<!--   # Define priors -->
-<!--   sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf) -->
-<!--   sigma_sq <- sigma ^ 2 -->
-<!--   tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf) -->
-<!--   tau_sq <- tau  ^ 2 -->
-<!--   phi ~ dexp(rate =  1/45.51057) # maxdist/6 -->
-<!--   Sigma[1:n, 1:n] <- -->
-<!--     (sigma ^ 2) * exp(-obs_dist_mat[1:n, 1:n] / phi) + (tau ^ 2) * identityMatrix(d = n) -->
-<!--  # L[1:n,1:n] <- chol(Sigma[1:n, 1:n]) -->
-<!--   S[1:n] ~ dmnorm(zeroes[1:n], cov = Sigma[1:n,1:n]) -->
-<!--   for(i in 1:n){ -->
-<!--     logit(p[i]) <- b0 + b1*altitude[i] + S[i] -->
-<!--     y[i] ~ dbinom(size = N[i], prob = p[i]) -->
-<!--   } -->
-<!--   b0 ~  dnorm(0,100) -->
-<!--   b1 ~  dnorm(0,100) -->
-<!-- }) -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 run nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', eval = FALSE} -->
-<!-- # distance specification -->
-<!-- coords_sf <- sf::st_as_sf(malaria_village[,c("long","lat")], coords = c("long","lat")) |>  -->
-<!--   sf::st_set_crs(4326) -->
-<!-- obs_dist_mat <- sf::st_distance(coords_sf) -->
-<!-- obs_dist_mat <- units::set_units(obs_dist_mat, km) -->
-<!-- obs_dist_mat <- units::set_units(obs_dist_mat, NULL) -->
-<!-- # Model specification -->
-<!-- n = nrow(malaria_village) -->
-<!-- altitude <- malaria_village$alt -->
-<!-- # there are two missing values in the altitude that will be replaced with the mean -->
-<!-- altitude[is.na(altitude)] <- mean(altitude, na.rm = TRUE)  -->
-<!-- zeroes <- rep(0, n) -->
-<!-- const_list <- list(n = n, # number of villages -->
-<!--                    zeroes = zeroes) -->
-<!-- dat_list <- list(y = malaria_village$positive, # malaria prevalence  -->
-<!--                  N = malaria_village$total, # people sampled per village -->
-<!--                  altitude = as.vector(scale(altitude)), # altitude per village -->
-<!--                  obs_dist_mat = obs_dist_mat # distance matrix in km -->
-<!--                  ) -->
-<!-- init_list <- list(tau = 0.01, sigma = 0.01, p = rep(0.01, n)) -->
-<!-- Rmodel <- -->
-<!--   nimbleModel( -->
-<!--     Example10_14_Nimble, -->
-<!--     constants = const_list, -->
-<!--     data = dat_list, -->
-<!--     inits = init_list -->
-<!--   ) -->
-<!-- Rmodel$initializeInfo() -->
-<!-- Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE) -->
-<!-- conf <- -->
-<!--   configureMCMC(Rmodel, monitors = c("tau", "sigma", "phi", "b0", "b1", "p", "S")) -->
-<!-- Rmcmc <- buildMCMC(conf) -->
-<!-- Cmcmc <- -->
-<!--   compileNimble( -->
-<!--     Rmcmc, -->
-<!--     project = Cmodel, -->
-<!--     resetFunctions = TRUE, -->
-<!--     showCompilerOutput = TRUE -->
-<!--   ) -->
-<!-- niters <- 60000 -->
-<!-- nburnins <- 0.5 * niters -->
-<!-- nchains <- 2 -->
-<!-- nthins <- 14 -->
-<!-- post_samples <- runMCMC( -->
-<!--   Cmcmc, -->
-<!--   niter = niters, -->
-<!--   nburnin = nburnins, -->
-<!--   thin = nthins, -->
-<!--   nchains = nchains, -->
-<!--   samplesAsCodaMCMC = TRUE, -->
-<!--   summary = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 nimble traceplots ESS, eval = FALSE } -->
-<!-- plot(post_samples$samples[, c("b0")], bty = "n", main = "b0") -->
-<!-- plot(post_samples$samples[, c("b1")], bty = "n", main = "b1") -->
-<!-- plot(post_samples$samples[, c("tau")], bty = "n", main = "tau") -->
-<!-- plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma") -->
-<!-- plot(post_samples$samples[, c("phi")], bty = "n", main = "phi") -->
-<!-- plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]") -->
-<!-- plot(post_samples$samples[, c("S[13]")], bty = "n", main = "S[13]") -->
-<!-- plot(post_samples$samples[, c("p[1]")], bty = "n", main = "p[1]") -->
-<!-- plot(post_samples$samples[, c("p[13]")], bty = "n", main = "p[13]") -->
-<!-- # Get minimum effective size (ESS) and which variable has the min ESS -->
-<!-- min(coda::effectiveSize(post_samples$samples)) -->
-<!-- mcmc_variable_names <- colnames(post_samples$samples$chain1) -->
-<!-- mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda::effectiveSize(post_samples$samples)))] -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 nimble summary, echo = TRUE, eval = FALSE} -->
-<!-- # Extract samples -->
-<!-- variables <- c("b0", "b1","tau", "sigma", "phi") -->
-<!-- summary_nimble <- post_samples$summary$all.chains -->
-<!-- summary_nimble[variables,] -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 nimble summary p, echo = TRUE, eval = FALSE} -->
-<!-- # Plot posterior summary for the spatial random effect by village -->
-<!-- post_summary <- post_samples$summary$all.chains  -->
-<!-- post_sum_S <- -->
-<!--   as.data.frame(post_summary) |>  tibble::rownames_to_column() |> -->
-<!--   filter(str_detect(rowname, "S")) |> -->
-<!--   dplyr::select(rowname, `95%CI_low`, Mean, `95%CI_upp`)  |> -->
-<!--   mutate(village = gsub(".*?([0-9]+).*", "\\1", rowname)) -->
-<!-- post_sum_S$village <- -->
-<!--   factor(post_sum_S$village , levels = 1:65) -->
-<!-- ggplot(data = post_sum_S, aes(x = village)) + -->
-<!--   geom_pointrange(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`, y = Mean)) + -->
-<!--   geom_hline(yintercept = 0, linetype = "dotted") + -->
-<!--   scale_x_discrete( -->
-<!--     breaks = post_sum_S$village[seq(1, length(post_sum_S$village), by = 5)]) + -->
-<!--   theme_clear() +  ylab("") + xlab("village") + -->
-<!--   ggtitle("Posterior summary spatial random effect by village") -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 nimble summary S, echo = TRUE, eval = FALSE} -->
-<!-- # Plot posterior summary for the probabilities -->
-<!-- post_sum_p <- -->
-<!--   as.data.frame(post_summary) |>  tibble::rownames_to_column() |> -->
-<!--   filter(str_detect(rowname, "p\\[")) |> -->
-<!--   dplyr::select(rowname, `95%CI_low`, Mean, `95%CI_upp`)  |> -->
-<!--   mutate(village = gsub(".*?([0-9]+).*", "\\1", rowname)) -->
-<!-- post_sum_p$village <- -->
-<!--   factor(post_sum_p$village , levels = 1:65) -->
-<!-- ggplot(data = post_sum_p, aes(x = village)) + -->
-<!--   geom_pointrange(aes(ymin = `95%CI_low`, ymax = `95%CI_upp`, y = Mean)) + -->
-<!--    scale_x_discrete( -->
-<!--     breaks = post_sum_p$village[seq(1, length(post_sum_p$village), by = 5)]) + -->
-<!--   theme_clear() + ylab("") + xlab("village") +  -->
-<!--   ggtitle("Posterior summary probabilities by village") -->
-<!-- ``` -->
-<!-- ### Stan {-} -->
-<!-- ```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, eval = FALSE} -->
-<!-- # load rstan with options -->
-<!-- library(rstan) -->
-<!-- options(mc.cores = parallel::detectCores()) -->
-<!-- rstan_options(auto_write = TRUE) -->
-<!-- ``` -->
-<!-- ```{r engine='bash', comment='', echo = FALSE, eval = FALSE} -->
-<!-- cat functions/Example10_14.stan -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 stan data, warning = FALSE, eval = FALSE} -->
-<!-- ex.data <- list(y = malaria_village$positive, # malaria prevalence  -->
-<!--                  N = malaria_village$total, # people sampled per village -->
-<!--                  X = as.vector(scale(altitude)), # altitude per village -->
-<!--                  dist_matrix = obs_dist_mat, # distance matrix in km -->
-<!--                  n = nrow(malaria_village) # number of villages -->
-<!--                  ) -->
-<!-- Example10_14Stan  <- stan( -->
-<!--   file = "functions/Example10_14.stan", -->
-<!--   data = ex.data, -->
-<!--   warmup = 15000, -->
-<!--   iter = 30000, -->
-<!--   chains = 2, -->
-<!--   thin = 10, -->
-<!--   pars = c("beta0", "beta","sigma", "tau", "phi", "S", "p"), -->
-<!--   include = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 stan traceplots, eval = FALSE} -->
-<!-- #computing WAIC using the package loo -->
-<!-- rstan::traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi")) -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 stan summary, echo = TRUE, eval = FALSE} -->
-<!-- # Extract samples -->
-<!-- summary_stan <- -->
-<!--   summary( -->
-<!--     Example10_14Stan, -->
-<!--     pars = c("beta0","beta", "tau", "sigma", "phi"), -->
-<!--     probs = c(0.025, 0.975) -->
-<!--   ) -->
-<!-- summary_stan$summary -->
-<!-- ``` -->
-<!-- ```{r Ex 10.14 stan posterior plots, eval = FALSE} -->
-<!-- S_summary <- -->
-<!--   summary(Example10_14Stan, pars = c("S"))$summary -->
-<!-- S_summary_df <- data.frame(S_summary) |> -->
-<!--   tibble::rownames_to_column() |> -->
-<!--   filter(rowname %in% paste0("S[", 1:65, "]")) |> -->
-<!--   mutate(village = 1:65) |> -->
-<!--   dplyr::select(mean,  X2.5., X97.5., village) -->
-<!-- S_summary_df$village <- -->
-<!--   factor(S_summary_df$village , levels = 1:65) -->
-<!--   ggplot(S_summary_df, aes(x = village, group = 1)) + -->
-<!--   geom_pointrange(aes(ymin = X2.5., ymax = X97.5., y = mean)) + -->
-<!--   geom_hline(yintercept = 0, linetype = "dotted") + -->
-<!--   scale_x_discrete( -->
-<!--     breaks = S_summary_df$village[seq(1, length(S_summary_df$village), by = 5)]) + -->
-<!--   theme_clear() +  ylab("") + xlab("village") + -->
-<!--   ggtitle("Posterior summary spatial random effect by village") -->
-<!-- p_summary <- -->
-<!--   summary(Example10_14Stan, pars = c("p"))$summary -->
-<!-- p_summary_df <- data.frame(p_summary) |> -->
-<!--   tibble::rownames_to_column() |> -->
-<!--   filter(rowname %in% paste0("p[", 1:65, "]")) |> -->
-<!--   mutate(village = 1:65) |> -->
-<!--   dplyr::select(mean,  X2.5., X97.5., village) -->
-<!-- p_summary_df$village <- -->
-<!--   factor(p_summary_df$village , levels = 1:65) -->
-<!--   ggplot(p_summary_df, aes(x = village, group = 1)) + -->
-<!--   geom_pointrange(aes(ymin = X2.5., ymax = X97.5., y = mean)) + -->
-<!--   scale_x_discrete( -->
-<!--     breaks = p_summary_df$village[seq(1, length(p_summary_df$village), by = 5)]) + -->
-<!--   theme_clear() +  ylab("") + xlab("village") + -->
-<!--   ggtitle("Posterior summary probabilities by village") -->
-<!-- ``` -->
+</div>
+<div id="example-10.14-spatial-modeling-of-malaria-in-gambia" class="section level2 unnumbered hasAnchor">
+<h2>Example 10.14: Spatial modeling of malaria in Gambia<a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Note: There might be a warning when loading the <span class="math inline">\(\texttt{raster}\)</span> package, if necessary, uninstall and re-install the package.</p>
+<p>For this example we are using the same <span class="math inline">\(\texttt{gambia}\)</span> data set from the <span class="math inline">\(\texttt{geoR}\)</span> package but an <span class="math inline">\(\texttt{id_area}\)</span> column was added using QGIS to differentiate the different areas as in the original paper.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="hazards.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># to manipulate the data</span></span>
+<span id="cb193-2"><a href="hazards.html#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geoR) <span class="co"># to get the dataset</span></span>
+<span id="cb193-3"><a href="hazards.html#cb193-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap) <span class="co"># to plot the map</span></span>
+<span id="cb193-4"><a href="hazards.html#cb193-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nimble) <span class="co"># for modeling</span></span>
+<span id="cb193-5"><a href="hazards.html#cb193-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(raster) # to get the environmental data</span></span>
+<span id="cb193-6"><a href="hazards.html#cb193-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal) <span class="co"># for adding and transforming coordinates</span></span>
+<span id="cb193-7"><a href="hazards.html#cb193-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf) <span class="co"># manipulate spatial data</span></span>
+<span id="cb193-8"><a href="hazards.html#cb193-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp) <span class="co"># for manipulating spatial data</span></span>
+<span id="cb193-9"><a href="hazards.html#cb193-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr) <span class="co"># to analyze posterior</span></span>
+<span id="cb193-10"><a href="hazards.html#cb193-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis) <span class="co"># for a more cheerful color palette</span></span>
+<span id="cb193-11"><a href="hazards.html#cb193-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-12"><a href="hazards.html#cb193-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Note, we are using the same Gambia dataset as in the geoR package but an id_area</span></span>
+<span id="cb193-13"><a href="hazards.html#cb193-13" aria-hidden="true" tabindex="-1"></a><span class="co"># attribute has been added using QGIS to a</span></span>
+<span id="cb193-14"><a href="hazards.html#cb193-14" aria-hidden="true" tabindex="-1"></a>gambia <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/gambia_area.csv&quot;</span>) <span class="co"># gambia dataset from geoR package</span></span>
+<span id="cb193-15"><a href="hazards.html#cb193-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-16"><a href="hazards.html#cb193-16" aria-hidden="true" tabindex="-1"></a>theme_clear <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb193-17"><a href="hazards.html#cb193-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb193-18"><a href="hazards.html#cb193-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(), <span class="co"># remove background grid</span></span>
+<span id="cb193-19"><a href="hazards.html#cb193-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb193-20"><a href="hazards.html#cb193-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(), <span class="co"># remove grey background</span></span>
+<span id="cb193-21"><a href="hazards.html#cb193-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">&quot;black&quot;</span>), <span class="co"># keep axis line</span></span>
+<span id="cb193-22"><a href="hazards.html#cb193-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>)</span>
+<span id="cb193-23"><a href="hazards.html#cb193-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb193-24"><a href="hazards.html#cb193-24" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Since the data is given at the individual level, we want to aggregate the malaria tests by village.
+If we explore the data frame we see that there are 2035 individuals at 65 villages.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="hazards.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gambia)</span></code></pre></div>
+<pre><code>##          x       y pos  age netuse treated green phc id_area
+## 1 349631.3 1458055   1 1783      0       0 40.85   1       1
+## 2 349631.3 1458055   0  404      1       0 40.85   1       1
+## 3 349631.3 1458055   0  452      1       0 40.85   1       1
+## 4 349631.3 1458055   1  566      1       0 40.85   1       1
+## 5 349631.3 1458055   0  598      1       0 40.85   1       1
+## 6 349631.3 1458055   1  590      1       0 40.85   1       1</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="hazards.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(gambia)</span></code></pre></div>
+<pre><code>## [1] 2035    9</code></pre>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="hazards.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">unique</span>(gambia[, <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)]))</span></code></pre></div>
+<pre><code>## [1] 65  2</code></pre>
+<p>We create a new data frame aggregated by village containing the coordinates, the number of malaria tests, and the prevalence.</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="hazards.html#cb200-1" aria-hidden="true" tabindex="-1"></a>malaria_village <span class="ot">&lt;-</span> <span class="fu">group_by</span>(gambia, x, y) <span class="sc">|&gt;</span></span>
+<span id="cb200-2"><a href="hazards.html#cb200-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total =</span> <span class="fu">n</span>(),</span>
+<span id="cb200-3"><a href="hazards.html#cb200-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">positive =</span> <span class="fu">sum</span>(pos),</span>
+<span id="cb200-4"><a href="hazards.html#cb200-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">prev =</span> positive <span class="sc">/</span> total) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;x&#39;. You can override using the `.groups`
+## argument.</code></pre>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="hazards.html#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(malaria_village)</span></code></pre></div>
+<pre><code>##          x       y total positive      prev
+## 1 349631.3 1458055    33       17 0.5151515
+## 2 358543.1 1460112    63       19 0.3015873
+## 3 360308.1 1460026    17        7 0.4117647
+## 4 363795.7 1496919    24        8 0.3333333
+## 5 366400.5 1460248    26       10 0.3846154
+## 6 366687.5 1463002    18        7 0.3888889</code></pre>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="hazards.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new variable in &quot;sp&quot; format and define coordinates</span></span>
+<span id="cb204-2"><a href="hazards.html#cb204-2" aria-hidden="true" tabindex="-1"></a>malaria_utm <span class="ot">&lt;-</span> malaria_village</span>
+<span id="cb204-3"><a href="hazards.html#cb204-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(malaria_utm) <span class="ot">&lt;-</span> <span class="er">~</span> x <span class="sc">+</span> y</span>
+<span id="cb204-4"><a href="hazards.html#cb204-4" aria-hidden="true" tabindex="-1"></a><span class="fu">proj4string</span>(malaria_utm) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=utm +zone=28&quot;</span>)</span>
+<span id="cb204-5"><a href="hazards.html#cb204-5" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to long lat </span></span>
+<span id="cb204-6"><a href="hazards.html#cb204-6" aria-hidden="true" tabindex="-1"></a>malaria_geo <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(malaria_utm, <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</span>
+<span id="cb204-7"><a href="hazards.html#cb204-7" aria-hidden="true" tabindex="-1"></a><span class="co"># add long lat coordinates to malaria dataframe</span></span>
+<span id="cb204-8"><a href="hazards.html#cb204-8" aria-hidden="true" tabindex="-1"></a>malaria_village[, <span class="fu">c</span>(<span class="st">&quot;long&quot;</span>, <span class="st">&quot;lat&quot;</span>)] <span class="ot">&lt;-</span> <span class="fu">coordinates</span>(malaria_geo)</span>
+<span id="cb204-9"><a href="hazards.html#cb204-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-10"><a href="hazards.html#cb204-10" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the bounding box</span></span>
+<span id="cb204-11"><a href="hazards.html#cb204-11" aria-hidden="true" tabindex="-1"></a>latLongBox <span class="ot">=</span> <span class="fu">bbox</span>(malaria_geo)</span>
+<span id="cb204-12"><a href="hazards.html#cb204-12" aria-hidden="true" tabindex="-1"></a>location <span class="ot">=</span> <span class="fu">c</span>(latLongBox[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.05</span>,</span>
+<span id="cb204-13"><a href="hazards.html#cb204-13" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">-</span> <span class="fl">0.05</span>,</span>
+<span id="cb204-14"><a href="hazards.html#cb204-14" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">1</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.05</span>,</span>
+<span id="cb204-15"><a href="hazards.html#cb204-15" aria-hidden="true" tabindex="-1"></a>             latLongBox[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> <span class="fl">0.05</span>)</span>
+<span id="cb204-16"><a href="hazards.html#cb204-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-17"><a href="hazards.html#cb204-17" aria-hidden="true" tabindex="-1"></a><span class="co"># create map with location dots marked on it in</span></span>
+<span id="cb204-18"><a href="hazards.html#cb204-18" aria-hidden="true" tabindex="-1"></a>GambiaMap <span class="ot">&lt;-</span></span>
+<span id="cb204-19"><a href="hazards.html#cb204-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_stamenmap</span>(<span class="at">bbox =</span>  location,</span>
+<span id="cb204-20"><a href="hazards.html#cb204-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">zoom =</span> <span class="dv">11</span>,</span>
+<span id="cb204-21"><a href="hazards.html#cb204-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> terrain<span class="sc">-</span>background)</span>
+<span id="cb204-22"><a href="hazards.html#cb204-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb204-23"><a href="hazards.html#cb204-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(GambiaMap) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> malaria_village,</span>
+<span id="cb204-24"><a href="hazards.html#cb204-24" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">aes</span>(<span class="at">x =</span> long,</span>
+<span id="cb204-25"><a href="hazards.html#cb204-25" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">y =</span> lat,</span>
+<span id="cb204-26"><a href="hazards.html#cb204-26" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">col =</span> prev),</span>
+<span id="cb204-27"><a href="hazards.html#cb204-27" aria-hidden="true" tabindex="-1"></a>                              <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_color_viridis</span>() <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20plot%20prevalence-1.png" width="672" /></p>
+<!-- NOTE: I am not doing a Matern cause I don't know how to code it, I'll use an exponential instead -->
+<div id="nimble-3" class="section level3 unnumbered hasAnchor">
+<h3>Nimble<a href="hazards.html#nimble-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="hazards.html#cb205-1" aria-hidden="true" tabindex="-1"></a>Example10_14_Nimble <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
+<span id="cb205-2"><a href="hazards.html#cb205-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb205-3"><a href="hazards.html#cb205-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define priors</span></span>
+<span id="cb205-4"><a href="hazards.html#cb205-4" aria-hidden="true" tabindex="-1"></a>  sigma <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb205-5"><a href="hazards.html#cb205-5" aria-hidden="true" tabindex="-1"></a>  sigma_sq <span class="ot">&lt;-</span> sigma <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb205-6"><a href="hazards.html#cb205-6" aria-hidden="true" tabindex="-1"></a>  tau <span class="sc">~</span> <span class="fu">T</span>(<span class="fu">dt</span>(<span class="at">mu =</span> <span class="dv">0</span>, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">df =</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="cn">Inf</span>)</span>
+<span id="cb205-7"><a href="hazards.html#cb205-7" aria-hidden="true" tabindex="-1"></a>  tau_sq <span class="ot">&lt;-</span> tau  <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb205-8"><a href="hazards.html#cb205-8" aria-hidden="true" tabindex="-1"></a>  phi_inv <span class="sc">~</span> <span class="fu">dgamma</span>(<span class="at">shape =</span>  <span class="dv">5</span>, <span class="at">rate =</span> <span class="dv">5</span>)</span>
+<span id="cb205-9"><a href="hazards.html#cb205-9" aria-hidden="true" tabindex="-1"></a>  phi <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> phi_inv</span>
+<span id="cb205-10"><a href="hazards.html#cb205-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb205-11"><a href="hazards.html#cb205-11" aria-hidden="true" tabindex="-1"></a>  Sigma[<span class="dv">1</span><span class="sc">:</span>N, <span class="dv">1</span><span class="sc">:</span>N] <span class="ot">&lt;-</span></span>
+<span id="cb205-12"><a href="hazards.html#cb205-12" aria-hidden="true" tabindex="-1"></a>     sigma_sq <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>obs_dist_mat[<span class="dv">1</span><span class="sc">:</span>N, <span class="dv">1</span><span class="sc">:</span>N] <span class="sc">/</span> phi) <span class="sc">+</span> tau_sq  <span class="sc">*</span> <span class="fu">identityMatrix</span>(<span class="at">d =</span> N)</span>
+<span id="cb205-13"><a href="hazards.html#cb205-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-14"><a href="hazards.html#cb205-14" aria-hidden="true" tabindex="-1"></a>  S[<span class="dv">1</span><span class="sc">:</span>N] <span class="sc">~</span> <span class="fu">dmnorm</span>(zeroes[<span class="dv">1</span><span class="sc">:</span>N], <span class="at">cov =</span> Sigma[<span class="dv">1</span><span class="sc">:</span>N,<span class="dv">1</span><span class="sc">:</span>N])</span>
+<span id="cb205-15"><a href="hazards.html#cb205-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb205-16"><a href="hazards.html#cb205-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {  <span class="co"># by child</span></span>
+<span id="cb205-17"><a href="hazards.html#cb205-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">logit</span>(p[j])  <span class="ot">&lt;-</span>  b0 <span class="sc">+</span> <span class="fu">inprod</span>(b[<span class="dv">1</span><span class="sc">:</span>k], X[j,<span class="dv">1</span><span class="sc">:</span>k]) <span class="sc">+</span> S[index_village[j]]</span>
+<span id="cb205-18"><a href="hazards.html#cb205-18" aria-hidden="true" tabindex="-1"></a>    y[j] <span class="sc">~</span> <span class="fu">dbinom</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p[j])</span>
+<span id="cb205-19"><a href="hazards.html#cb205-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb205-20"><a href="hazards.html#cb205-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-21"><a href="hazards.html#cb205-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-22"><a href="hazards.html#cb205-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k){</span>
+<span id="cb205-23"><a href="hazards.html#cb205-23" aria-hidden="true" tabindex="-1"></a>    b[l] <span class="sc">~</span> <span class="fu">dnorm</span>(<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb205-24"><a href="hazards.html#cb205-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb205-25"><a href="hazards.html#cb205-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb205-26"><a href="hazards.html#cb205-26" aria-hidden="true" tabindex="-1"></a>  b0 <span class="sc">~</span>  <span class="fu">dnorm</span>(<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb205-27"><a href="hazards.html#cb205-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-28"><a href="hazards.html#cb205-28" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="hazards.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="co"># distance specification</span></span>
+<span id="cb206-2"><a href="hazards.html#cb206-2" aria-hidden="true" tabindex="-1"></a>coords_sf <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(malaria_village[,<span class="fu">c</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;lat&quot;</span>)], <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;lat&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb206-3"><a href="hazards.html#cb206-3" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_crs</span>(<span class="dv">4326</span>)</span>
+<span id="cb206-4"><a href="hazards.html#cb206-4" aria-hidden="true" tabindex="-1"></a>obs_dist_mat <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_distance</span>(coords_sf)</span>
+<span id="cb206-5"><a href="hazards.html#cb206-5" aria-hidden="true" tabindex="-1"></a>obs_dist_mat <span class="ot">&lt;-</span> units<span class="sc">::</span><span class="fu">set_units</span>(obs_dist_mat, km)</span>
+<span id="cb206-6"><a href="hazards.html#cb206-6" aria-hidden="true" tabindex="-1"></a>obs_dist_mat <span class="ot">&lt;-</span> units<span class="sc">::</span><span class="fu">set_units</span>(obs_dist_mat, <span class="cn">NULL</span>)</span>
+<span id="cb206-7"><a href="hazards.html#cb206-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-8"><a href="hazards.html#cb206-8" aria-hidden="true" tabindex="-1"></a><span class="co"># define indicator variables for each village</span></span>
+<span id="cb206-9"><a href="hazards.html#cb206-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-10"><a href="hazards.html#cb206-10" aria-hidden="true" tabindex="-1"></a>gambia_df <span class="ot">&lt;-</span> <span class="fu">mutate</span>(</span>
+<span id="cb206-11"><a href="hazards.html#cb206-11" aria-hidden="true" tabindex="-1"></a>  gambia,</span>
+<span id="cb206-12"><a href="hazards.html#cb206-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">id_child =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(gambia), <span class="co"># add an id for each child</span></span>
+<span id="cb206-13"><a href="hazards.html#cb206-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="dv">1</span>, <span class="co"># this will be needed later for the villages</span></span>
+<span id="cb206-14"><a href="hazards.html#cb206-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">id_village =</span> <span class="fu">as.numeric</span>(<span class="fu">interaction</span>( <span class="co"># add an id for the villages</span></span>
+<span id="cb206-15"><a href="hazards.html#cb206-15" aria-hidden="true" tabindex="-1"></a>    x, y, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span></span>
+<span id="cb206-16"><a href="hazards.html#cb206-16" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb206-17"><a href="hazards.html#cb206-17" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb206-18"><a href="hazards.html#cb206-18" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">spread</span>(id_area, value, <span class="at">fill =</span> <span class="dv">0</span>) </span>
+<span id="cb206-19"><a href="hazards.html#cb206-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-20"><a href="hazards.html#cb206-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Model specification</span></span>
+<span id="cb206-21"><a href="hazards.html#cb206-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables matrix</span></span>
+<span id="cb206-22"><a href="hazards.html#cb206-22" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">age =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(gambia_df[,<span class="st">&quot;age&quot;</span>])),</span>
+<span id="cb206-23"><a href="hazards.html#cb206-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">netuse =</span> gambia_df[,<span class="st">&quot;netuse&quot;</span>],</span>
+<span id="cb206-24"><a href="hazards.html#cb206-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">treated =</span> gambia_df[,<span class="st">&quot;treated&quot;</span>],</span>
+<span id="cb206-25"><a href="hazards.html#cb206-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">green =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(gambia_df[,<span class="st">&quot;green&quot;</span>])),</span>
+<span id="cb206-26"><a href="hazards.html#cb206-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">phc =</span> gambia_df[,<span class="st">&quot;phc&quot;</span>],</span>
+<span id="cb206-27"><a href="hazards.html#cb206-27" aria-hidden="true" tabindex="-1"></a>                <span class="at">area2 =</span> gambia_df[,<span class="st">&quot;2&quot;</span>],</span>
+<span id="cb206-28"><a href="hazards.html#cb206-28" aria-hidden="true" tabindex="-1"></a>                <span class="at">area3 =</span> gambia_df[,<span class="st">&quot;3&quot;</span>],</span>
+<span id="cb206-29"><a href="hazards.html#cb206-29" aria-hidden="true" tabindex="-1"></a>                <span class="at">area4 =</span> gambia_df[,<span class="st">&quot;4&quot;</span>],</span>
+<span id="cb206-30"><a href="hazards.html#cb206-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">area5 =</span> gambia_df[,<span class="st">&quot;5&quot;</span>] )</span>
+<span id="cb206-31"><a href="hazards.html#cb206-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-32"><a href="hazards.html#cb206-32" aria-hidden="true" tabindex="-1"></a>index_village <span class="ot">&lt;-</span> gambia_df[,<span class="st">&quot;id_village&quot;</span>]</span>
+<span id="cb206-33"><a href="hazards.html#cb206-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-34"><a href="hazards.html#cb206-34" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X) <span class="co"># child number</span></span>
+<span id="cb206-35"><a href="hazards.html#cb206-35" aria-hidden="true" tabindex="-1"></a>zeroes <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, n) <span class="co"># auxiliary vector of zeroes for model</span></span>
+<span id="cb206-36"><a href="hazards.html#cb206-36" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(malaria_village)</span>
+<span id="cb206-37"><a href="hazards.html#cb206-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-38"><a href="hazards.html#cb206-38" aria-hidden="true" tabindex="-1"></a>const_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">n =</span> n, <span class="co"># number of childs</span></span>
+<span id="cb206-39"><a href="hazards.html#cb206-39" aria-hidden="true" tabindex="-1"></a>                   <span class="at">N =</span> N, <span class="co"># number of villages</span></span>
+<span id="cb206-40"><a href="hazards.html#cb206-40" aria-hidden="true" tabindex="-1"></a>                   <span class="at">zeroes =</span> zeroes, <span class="co"># vector of zeroes </span></span>
+<span id="cb206-41"><a href="hazards.html#cb206-41" aria-hidden="true" tabindex="-1"></a>                   <span class="at">prior_max_dist =</span> <span class="fu">max</span>(obs_dist_mat)<span class="sc">/</span><span class="dv">6</span>, <span class="co"># max dist for phi prior</span></span>
+<span id="cb206-42"><a href="hazards.html#cb206-42" aria-hidden="true" tabindex="-1"></a>                   <span class="at">k =</span>  <span class="fu">ncol</span>(X) <span class="co"># number of predictors</span></span>
+<span id="cb206-43"><a href="hazards.html#cb206-43" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb206-44"><a href="hazards.html#cb206-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-45"><a href="hazards.html#cb206-45" aria-hidden="true" tabindex="-1"></a>dat_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y =</span> gambia<span class="sc">$</span>pos, <span class="co"># malaria positive test </span></span>
+<span id="cb206-46"><a href="hazards.html#cb206-46" aria-hidden="true" tabindex="-1"></a>                 <span class="at">obs_dist_mat =</span> obs_dist_mat, <span class="co"># distance matrix in km</span></span>
+<span id="cb206-47"><a href="hazards.html#cb206-47" aria-hidden="true" tabindex="-1"></a>                 <span class="at">X =</span> X, <span class="co"># predictors matrix</span></span>
+<span id="cb206-48"><a href="hazards.html#cb206-48" aria-hidden="true" tabindex="-1"></a>                 <span class="at">index_village =</span> index_village</span>
+<span id="cb206-49"><a href="hazards.html#cb206-49" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb206-50"><a href="hazards.html#cb206-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-51"><a href="hazards.html#cb206-51" aria-hidden="true" tabindex="-1"></a>init_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">tau =</span> <span class="fl">0.01</span>, <span class="at">sigma =</span> <span class="fl">0.01</span>, <span class="at">p =</span> <span class="fu">rep</span>(<span class="fl">0.01</span>, n))</span>
+<span id="cb206-52"><a href="hazards.html#cb206-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-53"><a href="hazards.html#cb206-53" aria-hidden="true" tabindex="-1"></a>Rmodel <span class="ot">&lt;-</span></span>
+<span id="cb206-54"><a href="hazards.html#cb206-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nimbleModel</span>(</span>
+<span id="cb206-55"><a href="hazards.html#cb206-55" aria-hidden="true" tabindex="-1"></a>    Example10_14_Nimble,</span>
+<span id="cb206-56"><a href="hazards.html#cb206-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">constants =</span> const_list,</span>
+<span id="cb206-57"><a href="hazards.html#cb206-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dat_list,</span>
+<span id="cb206-58"><a href="hazards.html#cb206-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">inits =</span> init_list</span>
+<span id="cb206-59"><a href="hazards.html#cb206-59" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb206-60"><a href="hazards.html#cb206-60" aria-hidden="true" tabindex="-1"></a>Rmodel<span class="sc">$</span><span class="fu">initializeInfo</span>()</span>
+<span id="cb206-61"><a href="hazards.html#cb206-61" aria-hidden="true" tabindex="-1"></a>Cmodel <span class="ot">&lt;-</span> <span class="fu">compileNimble</span>(Rmodel, <span class="at">showCompilerOutput =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb206-62"><a href="hazards.html#cb206-62" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span></span>
+<span id="cb206-63"><a href="hazards.html#cb206-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">configureMCMC</span>(Rmodel, <span class="at">monitors =</span> <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;b0&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;S&quot;</span>, <span class="st">&quot;p&quot;</span>))</span>
+<span id="cb206-64"><a href="hazards.html#cb206-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-65"><a href="hazards.html#cb206-65" aria-hidden="true" tabindex="-1"></a>Rmcmc <span class="ot">&lt;-</span> <span class="fu">buildMCMC</span>(conf)</span>
+<span id="cb206-66"><a href="hazards.html#cb206-66" aria-hidden="true" tabindex="-1"></a>Cmcmc <span class="ot">&lt;-</span></span>
+<span id="cb206-67"><a href="hazards.html#cb206-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compileNimble</span>(</span>
+<span id="cb206-68"><a href="hazards.html#cb206-68" aria-hidden="true" tabindex="-1"></a>    Rmcmc,</span>
+<span id="cb206-69"><a href="hazards.html#cb206-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">project =</span> Cmodel,</span>
+<span id="cb206-70"><a href="hazards.html#cb206-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">resetFunctions =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb206-71"><a href="hazards.html#cb206-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">showCompilerOutput =</span> <span class="cn">TRUE</span></span>
+<span id="cb206-72"><a href="hazards.html#cb206-72" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb206-73"><a href="hazards.html#cb206-73" aria-hidden="true" tabindex="-1"></a>niters <span class="ot">&lt;-</span> <span class="dv">60000</span></span>
+<span id="cb206-74"><a href="hazards.html#cb206-74" aria-hidden="true" tabindex="-1"></a>nburnins <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> niters</span>
+<span id="cb206-75"><a href="hazards.html#cb206-75" aria-hidden="true" tabindex="-1"></a>nchains <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb206-76"><a href="hazards.html#cb206-76" aria-hidden="true" tabindex="-1"></a>nthins <span class="ot">&lt;-</span> <span class="dv">14</span></span>
+<span id="cb206-77"><a href="hazards.html#cb206-77" aria-hidden="true" tabindex="-1"></a>post_samples <span class="ot">&lt;-</span> <span class="fu">runMCMC</span>(</span>
+<span id="cb206-78"><a href="hazards.html#cb206-78" aria-hidden="true" tabindex="-1"></a>  Cmcmc,</span>
+<span id="cb206-79"><a href="hazards.html#cb206-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> niters,</span>
+<span id="cb206-80"><a href="hazards.html#cb206-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> nburnins,</span>
+<span id="cb206-81"><a href="hazards.html#cb206-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> nthins,</span>
+<span id="cb206-82"><a href="hazards.html#cb206-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> nchains,</span>
+<span id="cb206-83"><a href="hazards.html#cb206-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb206-84"><a href="hazards.html#cb206-84" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary =</span> <span class="cn">TRUE</span></span>
+<span id="cb206-85"><a href="hazards.html#cb206-85" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="hazards.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;b0&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;b0&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-1.png" width="672" /></p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="hazards.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;b[1]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;b[1]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-2.png" width="672" /></p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="hazards.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;b[2]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;b[2]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-3.png" width="672" /></p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="hazards.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;b[3]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;b[3]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-4.png" width="672" /></p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="hazards.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;tau&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;tau&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-5.png" width="672" /></p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="hazards.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;sigma&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;sigma&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-6.png" width="672" /></p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="hazards.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;phi&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;phi&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-7.png" width="672" /></p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="hazards.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;S[1]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;S[1]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-8.png" width="672" /></p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="hazards.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;S[29]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;S[29]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-9.png" width="672" /></p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="hazards.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;p[1]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;p[1]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-10.png" width="672" /></p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="hazards.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(post_samples<span class="sc">$</span>samples[, <span class="fu">c</span>(<span class="st">&quot;p[1519]&quot;</span>)], <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;p[1519]&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20traceplots%20ESS-11.png" width="672" /></p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="hazards.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get minimum effective size (ESS) and which variable has the min ESS</span></span>
+<span id="cb218-2"><a href="hazards.html#cb218-2" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(post_samples<span class="sc">$</span>samples))</span></code></pre></div>
+<pre><code>## [1] 45.73089</code></pre>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="hazards.html#cb220-1" aria-hidden="true" tabindex="-1"></a>mcmc_variable_names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(post_samples<span class="sc">$</span>samples<span class="sc">$</span>chain1)</span>
+<span id="cb220-2"><a href="hazards.html#cb220-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb220-3"><a href="hazards.html#cb220-3" aria-hidden="true" tabindex="-1"></a>mcmc_variable_names[<span class="fu">which</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(post_samples<span class="sc">$</span>samples) <span class="sc">==</span> <span class="fu">min</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(post_samples<span class="sc">$</span>samples)))]</span></code></pre></div>
+<pre><code>## [1] &quot;S[24]&quot;</code></pre>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="hazards.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract samples</span></span>
+<span id="cb222-2"><a href="hazards.html#cb222-2" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;b0&quot;</span>, <span class="st">&quot;b[1]&quot;</span>, <span class="st">&quot;b[2]&quot;</span>, <span class="st">&quot;b[3]&quot;</span>, <span class="st">&quot;b[4]&quot;</span>, <span class="st">&quot;b[5]&quot;</span>, <span class="st">&quot;b[6]&quot;</span>, <span class="st">&quot;b[7]&quot;</span>, <span class="st">&quot;b[8]&quot;</span>,<span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
+<span id="cb222-3"><a href="hazards.html#cb222-3" aria-hidden="true" tabindex="-1"></a>summary_nimble <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span>
+<span id="cb222-4"><a href="hazards.html#cb222-4" aria-hidden="true" tabindex="-1"></a>summary_nimble[variables,]</span></code></pre></div>
+<pre><code>##              Mean      Median    St.Dev.   95%CI_low   95%CI_upp
+## b0    -0.07821017 -0.07866953 0.09530318 -0.26039853  0.11264327
+## b[1]   0.22737838  0.22767184 0.04618430  0.13803109  0.31885996
+## b[2]  -0.18731107 -0.18785547 0.08276566 -0.34833922 -0.02309801
+## b[3]  -0.13817965 -0.13780720 0.08756801 -0.30784114  0.03404314
+## b[4]   0.06743147  0.06740229 0.08364687 -0.09612806  0.22465669
+## b[5]  -0.09918825 -0.09961521 0.08919783 -0.27053548  0.07938004
+## b[6]  -0.04290904 -0.04314967 0.09870257 -0.23825054  0.14497246
+## b[7]  -0.07670637 -0.07766601 0.10591469 -0.27979292  0.13445184
+## b[8]  -0.01741855 -0.01903414 0.09674214 -0.20572518  0.17469427
+## tau    0.25217547  0.23193702 0.16586774  0.01191082  0.60044902
+## sigma  0.88004187  0.86970870 0.16759158  0.58301842  1.25010272
+## phi    6.77644110  6.12413226 3.70964466  1.50880349 15.74142491</code></pre>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="hazards.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot posterior summary for the spatial random effect by village</span></span>
+<span id="cb224-2"><a href="hazards.html#cb224-2" aria-hidden="true" tabindex="-1"></a>post_summary <span class="ot">&lt;-</span> post_samples<span class="sc">$</span>summary<span class="sc">$</span>all.chains</span>
+<span id="cb224-3"><a href="hazards.html#cb224-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb224-4"><a href="hazards.html#cb224-4" aria-hidden="true" tabindex="-1"></a>post_sum_S <span class="ot">&lt;-</span></span>
+<span id="cb224-5"><a href="hazards.html#cb224-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(post_summary) <span class="sc">|&gt;</span>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb224-6"><a href="hazards.html#cb224-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(rowname, <span class="st">&quot;S&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb224-7"><a href="hazards.html#cb224-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(rowname, <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, Mean, <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>)  <span class="sc">|&gt;</span></span>
+<span id="cb224-8"><a href="hazards.html#cb224-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">village =</span> <span class="fu">gsub</span>(<span class="st">&quot;.*?([0-9]+).*&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1&quot;</span>, rowname))</span>
+<span id="cb224-9"><a href="hazards.html#cb224-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb224-10"><a href="hazards.html#cb224-10" aria-hidden="true" tabindex="-1"></a>post_sum_S<span class="sc">$</span>village <span class="ot">&lt;-</span></span>
+<span id="cb224-11"><a href="hazards.html#cb224-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>(post_sum_S<span class="sc">$</span>village , <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">65</span>)</span>
+<span id="cb224-12"><a href="hazards.html#cb224-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb224-13"><a href="hazards.html#cb224-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> post_sum_S, <span class="fu">aes</span>(<span class="at">x =</span> village)) <span class="sc">+</span></span>
+<span id="cb224-14"><a href="hazards.html#cb224-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">95%CI_low</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">95%CI_upp</span><span class="st">`</span>, <span class="at">y =</span> Mean)) <span class="sc">+</span></span>
+<span id="cb224-15"><a href="hazards.html#cb224-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="sc">+</span></span>
+<span id="cb224-16"><a href="hazards.html#cb224-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(</span>
+<span id="cb224-17"><a href="hazards.html#cb224-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> post_sum_S<span class="sc">$</span>village[<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(post_sum_S<span class="sc">$</span>village), <span class="at">by =</span> <span class="dv">5</span>)]) <span class="sc">+</span></span>
+<span id="cb224-18"><a href="hazards.html#cb224-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>() <span class="sc">+</span>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&quot;village&quot;</span>) <span class="sc">+</span></span>
+<span id="cb224-19"><a href="hazards.html#cb224-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Posterior summary spatial random effect by village&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20nimble%20summary%20p-1.png" width="672" /></p>
+</div>
+<div id="stan-3" class="section level3 unnumbered hasAnchor">
+<h3>Stan<a href="hazards.html#stan-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre><code>data {
+  int&lt;lower=1&gt; n; //  number of children
+  int&lt;lower=1&gt; k; // number of covariates
+  int N; //  total number of villages
+  int y[n]; //  tests
+  matrix[N,N] dist_matrix; //  distance matrix
+  matrix[n, k] X; // matrix with covariates
+  int index_village[n];
+}
 
+parameters {
+  real&lt;lower=0&gt; phi_inv;
+  real&lt;lower=0&gt; tau;
+  real&lt;lower=0&gt; sigma;
+  vector[N] S; // spatial random effect
+  vector[k] betas;
+  real beta0;
+}
+
+transformed parameters {
+  // vector[n] p = inv_logit(logit_p);
+  real sigma_sq = square(sigma);
+  real tau_sq = square(tau);
+  real&lt;lower=0&gt; phi = 1/phi_inv;
+}
+
+model {
+  matrix[N, N] L;
+  matrix[N, N] Sigma;
+  vector[N] zeroes; // vector of zeroes
+  vector[n] logit_p;
+
+ for(i in 1:(N-1)){
+   for(j in (i+1):N){
+     Sigma[i,j] = sigma_sq*exp(-dist_matrix[i,j]/phi);
+     Sigma[j,i] = Sigma[i,j];
+   }
+ }
+   // diagonal elements covariances
+for(i in 1:N){
+  Sigma[i,i] = sigma_sq + tau_sq;
+}
+
+// sample spatial random effect
+  L = cholesky_decompose(Sigma);
+  zeroes = rep_vector(0, N);
+  S ~ multi_normal_cholesky(zeroes, L);
+
+  for(i in 1:n) {
+    logit_p[i] = beta0 + X[i,]*betas + S[index_village[i]];
+    y[i] ~ binomial_logit(1, logit_p[i]);
+  }
+
+  beta0 ~ normal(0,10);
+  betas ~ normal(0,10);
+  phi_inv ~ gamma(5, 5);
+  tau ~ cauchy(0,1);
+  sigma ~ cauchy(0,1);
+  
+
+}</code></pre>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="hazards.html#cb226-1" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>( <span class="at">n =</span> <span class="fu">nrow</span>(gambia), <span class="co"># number of children</span></span>
+<span id="cb226-2"><a href="hazards.html#cb226-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">k =</span> <span class="fu">ncol</span>(X), <span class="co"># number of covariates</span></span>
+<span id="cb226-3"><a href="hazards.html#cb226-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">N =</span> N, <span class="co"># number of villages</span></span>
+<span id="cb226-4"><a href="hazards.html#cb226-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> gambia<span class="sc">$</span>pos, <span class="co"># positive tests</span></span>
+<span id="cb226-5"><a href="hazards.html#cb226-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dist_matrix =</span> obs_dist_mat, <span class="co"># distance matrix in km</span></span>
+<span id="cb226-6"><a href="hazards.html#cb226-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">X =</span> X, <span class="co"># altitude per village</span></span>
+<span id="cb226-7"><a href="hazards.html#cb226-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">index_village =</span> index_village</span>
+<span id="cb226-8"><a href="hazards.html#cb226-8" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb226-9"><a href="hazards.html#cb226-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb226-10"><a href="hazards.html#cb226-10" aria-hidden="true" tabindex="-1"></a>Example10_14Stan  <span class="ot">&lt;-</span> <span class="fu">stan</span>(</span>
+<span id="cb226-11"><a href="hazards.html#cb226-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;functions/Example10_14.stan&quot;</span>,</span>
+<span id="cb226-12"><a href="hazards.html#cb226-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
+<span id="cb226-13"><a href="hazards.html#cb226-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">warmup =</span> <span class="dv">15000</span>,</span>
+<span id="cb226-14"><a href="hazards.html#cb226-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">30000</span>,</span>
+<span id="cb226-15"><a href="hazards.html#cb226-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">2</span>,</span>
+<span id="cb226-16"><a href="hazards.html#cb226-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">10</span>,</span>
+<span id="cb226-17"><a href="hazards.html#cb226-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;betas&quot;</span>,<span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;tau&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;S&quot;</span>),</span>
+<span id="cb226-18"><a href="hazards.html#cb226-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="cn">TRUE</span></span>
+<span id="cb226-19"><a href="hazards.html#cb226-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="hazards.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="co">#computing WAIC using the package loo</span></span>
+<span id="cb227-2"><a href="hazards.html#cb227-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb227-3"><a href="hazards.html#cb227-3" aria-hidden="true" tabindex="-1"></a>rstan<span class="sc">::</span><span class="fu">traceplot</span>(Example10_14Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;betas&quot;</span>,<span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;tau&quot;</span>, <span class="st">&quot;phi&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20stan%20traceplots-1.png" width="672" /></p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="hazards.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract samples</span></span>
+<span id="cb228-2"><a href="hazards.html#cb228-2" aria-hidden="true" tabindex="-1"></a>summary_stan <span class="ot">&lt;-</span></span>
+<span id="cb228-3"><a href="hazards.html#cb228-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(</span>
+<span id="cb228-4"><a href="hazards.html#cb228-4" aria-hidden="true" tabindex="-1"></a>    Example10_14Stan,</span>
+<span id="cb228-5"><a href="hazards.html#cb228-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>,<span class="st">&quot;betas&quot;</span>, <span class="st">&quot;tau&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;phi&quot;</span>),</span>
+<span id="cb228-6"><a href="hazards.html#cb228-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)</span>
+<span id="cb228-7"><a href="hazards.html#cb228-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb228-8"><a href="hazards.html#cb228-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb228-9"><a href="hazards.html#cb228-9" aria-hidden="true" tabindex="-1"></a>summary_stan<span class="sc">$</span>summary</span></code></pre></div>
+<pre><code>##                mean      se_mean         sd        2.5%        97.5%    n_eff
+## beta0     0.3490451 0.0051282900 0.25728225 -0.15151348  0.875478571 2516.950
+## betas[1]  0.2912213 0.0009596327 0.05229884  0.18811670  0.392865774 2970.120
+## betas[2] -0.3908343 0.0030259545 0.16316011 -0.70605474 -0.063518837 2907.389
+## betas[3] -0.3785223 0.0038144397 0.21299232 -0.79634664  0.035739200 3117.930
+## betas[4]  0.3145243 0.0027763006 0.14699922  0.01658576  0.601363474 2803.477
+## betas[5] -0.2085795 0.0045578093 0.24566762 -0.69379835  0.269366106 2905.250
+## betas[6] -0.5181247 0.0073406902 0.37862662 -1.25108288  0.215498657 2660.410
+## betas[7] -1.3862610 0.0062091338 0.30643964 -1.99545874 -0.800473741 2435.723
+## betas[8] -0.8418714 0.0079769210 0.43363536 -1.70718394  0.003663864 2955.145
+## betas[9]  0.0461154 0.0081532941 0.44032619 -0.84024075  0.867153432 2916.640
+## tau       0.4345580 0.0044134571 0.23570642  0.02162615  0.843863676 2852.233
+## sigma     0.5205217 0.0045896369 0.24275190  0.04129676  0.924030983 2797.491
+## phi       1.4707159 0.0207822658 1.07232778  0.51110101  4.048574525 2662.376
+##               Rhat
+## beta0    1.0006598
+## betas[1] 1.0001083
+## betas[2] 1.0008585
+## betas[3] 1.0001566
+## betas[4] 0.9996854
+## betas[5] 1.0001345
+## betas[6] 0.9997193
+## betas[7] 0.9995207
+## betas[8] 1.0023106
+## betas[9] 1.0011783
+## tau      0.9997155
+## sigma    0.9996924
+## phi      0.9996160</code></pre>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="hazards.html#cb230-1" aria-hidden="true" tabindex="-1"></a>S_summary <span class="ot">&lt;-</span></span>
+<span id="cb230-2"><a href="hazards.html#cb230-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(Example10_14Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>))<span class="sc">$</span>summary</span>
+<span id="cb230-3"><a href="hazards.html#cb230-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-4"><a href="hazards.html#cb230-4" aria-hidden="true" tabindex="-1"></a>S_summary_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(S_summary) <span class="sc">|&gt;</span></span>
+<span id="cb230-5"><a href="hazards.html#cb230-5" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb230-6"><a href="hazards.html#cb230-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rowname <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">&quot;S[&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">65</span>, <span class="st">&quot;]&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb230-7"><a href="hazards.html#cb230-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">village =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">65</span>) <span class="sc">|&gt;</span></span>
+<span id="cb230-8"><a href="hazards.html#cb230-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(mean,  X2.<span class="fl">5.</span>, X97.<span class="fl">5.</span>, village)</span>
+<span id="cb230-9"><a href="hazards.html#cb230-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-10"><a href="hazards.html#cb230-10" aria-hidden="true" tabindex="-1"></a>S_summary_df<span class="sc">$</span>village <span class="ot">&lt;-</span></span>
+<span id="cb230-11"><a href="hazards.html#cb230-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>(S_summary_df<span class="sc">$</span>village , <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">65</span>)</span>
+<span id="cb230-12"><a href="hazards.html#cb230-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-13"><a href="hazards.html#cb230-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-14"><a href="hazards.html#cb230-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(S_summary_df, <span class="fu">aes</span>(<span class="at">x =</span> village, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb230-15"><a href="hazards.html#cb230-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> X2.<span class="fl">5.</span>, <span class="at">ymax =</span> X97.<span class="fl">5.</span>, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb230-16"><a href="hazards.html#cb230-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dotted&quot;</span>) <span class="sc">+</span></span>
+<span id="cb230-17"><a href="hazards.html#cb230-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(</span>
+<span id="cb230-18"><a href="hazards.html#cb230-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> S_summary_df<span class="sc">$</span>village[<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(S_summary_df<span class="sc">$</span>village), <span class="at">by =</span> <span class="dv">5</span>)]) <span class="sc">+</span></span>
+<span id="cb230-19"><a href="hazards.html#cb230-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_clear</span>() <span class="sc">+</span>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&quot;village&quot;</span>) <span class="sc">+</span></span>
+<span id="cb230-20"><a href="hazards.html#cb230-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Posterior summary spatial random effect by village&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%2010.14%20stan%20posterior%20plots-1.png" width="672" /></p>
+
+</div>
 </div>
 </div>
             </section>
@@ -1268,7 +1394,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/10-Chpt10.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/10-Chpt10.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -1279,7 +1405,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"download": ["_main.pdf", "_main.epub"],
 "search": {
 "engine": "fuse",
 "options": null
