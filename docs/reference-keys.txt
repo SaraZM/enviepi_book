@@ -17,9 +17,6 @@ exposure
 causality
 solutions-to-selected-exercises-1
 question-13.16-load-the-italy-and-china-data-described-in-example-13.3-and-included-in-the-supplementary-bookdown-material-into-r.
-i-display-a-2-by-2-contingency-table-of-deathssurvivors-vs.-chinaitaly-aggregated-over-all-age-groups.
-ii-display-2-by-2-contingency-tables-stratified-by-the-age-groups-70-and-geq-70.
-iii-does-a-simpsons-disaggregation-sdis-empirically-occur-in-these-two-tables
 question-13.17-using-the-italy-and-china-data-stratified-by-the-age-groups-70-and-geq-70-obtain-empirical-estimates-of-p_1-and-p_2-as-defined-in-an-sdis.-in-the-following-questions-assume-that-p_1-and-p_2-are-the-population-values.
 i-what-are-the-possible-ranges-of-gamma_1-and-gamma_2-for-a-controlled-sdis-to-exist-can-you-visualize-it-in-the-rectangle-012-keep-all-intermediate-computations-to-three-decimal-precision.
 ii-suppose-a-centered-interval-for-the-gammas-are-desired-i.e.-gamma_1-1---gamma_2.-what-are-the-allowable-values-of-gamma_1-and-gamma_2-furthermore-what-choices-considering-three-decimal-points-yield-the-tightest-interval-for-beta_i

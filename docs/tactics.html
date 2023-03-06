@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-02-27" />
+<meta name="date" content="2023-03-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -198,7 +198,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a>
@@ -559,9 +558,9 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 <p>Given the convergence issues, we can also check the estimated sampled size and Rhat using the package <code>coda</code>.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tactics.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS a: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS a: 48.0412552413763&quot;</code></pre>
+<pre><code>## [1] &quot;ESS a: 63.7066406463849&quot;</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="tactics.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS b: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS b: 50.7520221626538&quot;</code></pre>
+<pre><code>## [1] &quot;ESS b: 61.7533118829279&quot;</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="tactics.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[1]: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>]))</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]: 2001&quot;</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="tactics.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[10]: &quot;</span>,coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>]))</span></code></pre></div>
@@ -679,11 +678,11 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="tactics.html#cb50-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.493
+## [1] 3049.387
 ## Field &quot;lppd&quot;:
-## [1] -1514.416
+## [1] -1514.449
 ## Field &quot;pWAIC&quot;:
-## [1] 10.33089</code></pre>
+## [1] 10.24445</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="tactics.html#cb52-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
 <span id="cb52-2"><a href="tactics.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -708,12 +707,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.1289039      0.0124046      0.0001961      0.0002059 
+##      1.1287881      0.0125292      0.0001981      0.0001981 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.105 1.121 1.129 1.137 1.154</code></pre>
+## 1.104 1.120 1.129 1.137 1.154</code></pre>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="tactics.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
 <span id="cb57-2"><a href="tactics.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
@@ -726,12 +725,12 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0149610      0.0177154      0.0002801      0.0004258 
+##      1.0146646      0.0174393      0.0002757      0.0004339 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## 0.9804 1.0031 1.0150 1.0267 1.0507</code></pre>
+## 0.9806 1.0028 1.0147 1.0261 1.0488</code></pre>
 
 </div>
 </div>

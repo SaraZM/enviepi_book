@@ -127,7 +127,6 @@ ggmap(NYmap) + geom_point(
 
 ## Example 10.5: Variogram {-}
 
-
 ```{r Ex 10.5 plot variogram}
 library(gstat)
 benzene_utm_geo <- benzene_utm_df
@@ -135,7 +134,7 @@ benzene_utm_geo <- benzene_utm_df
 benzene_utm_geo[,c("X", "Y")] <- benzene_utm_geo[,c("X", "Y")]/1000
 coordinates(benzene_utm_geo) <- ~ X + Y
 # Estimate variogram intercept only
-benzene_inter_vgm <- variogram(log(Benzene)~ 1, data = benzene_utm_geo,
+benzene_inter_vgm <- gstat::variogram(log(Benzene)~ 1, data = benzene_utm_geo,
                          cutoff = 20, # cutoff distance
                          width = 20/10 # bins width 
                          )
@@ -315,7 +314,7 @@ run_time
 
 ```
 
-```{r Ex 10.9 nimble WAIC, ESS and traceplots }
+```{r Ex 10.9 nimble WAIC, ESS and traceplots}
 mcmc.out$WAIC
 min(coda::effectiveSize(mcmc.out$samples))
 plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
@@ -446,7 +445,7 @@ rstan_options(auto_write = TRUE)
 ```
 
 
-```{r stan load data }
+```{r stan load data}
 benzene_data <- read.csv("data/montreal_benzene_apr.csv")
 # create a new variable in "sp" format and define coordinates
 benzene_data_geo <- benzene_data
@@ -716,7 +715,6 @@ plot(CA.vario4)
 
 ```{r Ex 10.14 clean, include = FALSE}
 rm(list=ls())
-# Vectorize(detach)(name=paste0("package:", c("raster")), unload=TRUE, character.only=TRUE)
 ```
 
 
@@ -724,13 +722,13 @@ Note: There might be a warning when loading the $\texttt{raster}$ package, if ne
 
 For this example we are using the same $\texttt{gambia}$ data set from the $\texttt{geoR}$ package but an $\texttt{id_area}$ column was added using QGIS to differentiate the different areas as in the original paper.
 
-```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE, eval = FALSE}
+```{r Ex 10.14 load libraries and data, message = FALSE, warning=FALSE, error=FALSE}
 
 library(dplyr) # to manipulate the data
 library(geoR) # to get the dataset
 library(ggmap) # to plot the map
 library(nimble) # for modeling
-library(raster) # to get the environmental data
+#library(raster) # to get the environmental data
 library(rgdal) # for adding and transforming coordinates
 library(sf) # manipulate spatial data
 library(sp) # for manipulating spatial data
@@ -755,7 +753,7 @@ theme_clear <- function(){
 Since the data is given at the individual level, we want to aggregate the malaria tests by village. 
 If we explore the data frame we see that there are 2035 individuals at 65 villages. 
 
-```{r Ex 10.14 explore data, eval = FALSE}
+```{r Ex 10.14 explore data}
 head(gambia)
 dim(gambia)
 dim(unique(gambia[, c("x", "y")]))
@@ -763,7 +761,7 @@ dim(unique(gambia[, c("x", "y")]))
 
 We create a new data frame aggregated by village containing the coordinates, the number of malaria tests, and the prevalence. 
 
-```{r Ex 10.14 aggregate data, eval = FALSE}
+```{r Ex 10.14 aggregate data}
 
 malaria_village <- group_by(gambia, x, y) |>
   summarize(total = n(),
@@ -805,15 +803,11 @@ ggmap(GambiaMap) + geom_point(data = malaria_village,
 
 ```
 
-
-
-
-
 <!-- NOTE: I am not doing a Matern cause I don't know how to code it, I'll use an exponential instead -->
 
 ###  Nimble {-} 
 
-```{r Ex 10.14 nimble model, eval = FALSE}
+```{r Ex 10.14 nimble model}
 
 Example10_14_Nimble <- nimbleCode({
   
@@ -846,7 +840,7 @@ Example10_14_Nimble <- nimbleCode({
 
 ```
 
-```{r Ex 10.14 run nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', eval = FALSE}
+```{r Ex 10.14 run nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
 # distance specification
 coords_sf <- sf::st_as_sf(malaria_village[,c("long","lat")], coords = c("long","lat")) |> 
   sf::st_set_crs(4326)
@@ -934,7 +928,7 @@ post_samples <- runMCMC(
 )
 ```
 
-```{r Ex 10.14 nimble traceplots ESS, eval = FALSE }
+```{r Ex 10.14 nimble traceplots ESS }
 
 plot(post_samples$samples[, c("b0")], bty = "n", main = "b0")
 plot(post_samples$samples[, c("b[1]")], bty = "n", main = "b[1]")
@@ -958,7 +952,7 @@ mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda:
 
 
 
-```{r Ex 10.14 nimble summary, echo = TRUE, eval = FALSE}
+```{r Ex 10.14 nimble summary, echo = TRUE}
 
 # Extract samples
 variables <- c("b0", "b[1]", "b[2]", "b[3]", "b[4]", "b[5]", "b[6]", "b[7]", "b[8]","tau", "sigma", "phi")
@@ -969,7 +963,7 @@ summary_nimble[variables,]
 
 
 
-```{r Ex 10.14 nimble summary p, echo = TRUE, eval = FALSE}
+```{r Ex 10.14 nimble summary p, echo = TRUE}
 # Plot posterior summary for the spatial random effect by village
 post_summary <- post_samples$summary$all.chains
 
@@ -997,7 +991,7 @@ ggplot(data = post_sum_S, aes(x = village)) +
 
 ### Stan {-}
 
-```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE, eval = FALSE}
+```{r Ex 10.14 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 # load rstan with options
 library(rstan)
 options(mc.cores = parallel::detectCores())
@@ -1005,18 +999,20 @@ rstan_options(auto_write = TRUE)
 ```
 
 
-```{r engine='bash', comment='', echo = FALSE, eval = FALSE}
+```{r engine='bash', comment='', echo = FALSE}
 cat functions/Example10_14.stan
 ```
 
 
-```{r Ex 10.14 stan data, warning = FALSE, eval = FALSE}
+```{r Ex 10.14 stan data, warning = FALSE}
 
-ex.data <- list(y = malaria_village$positive, # malaria prevalence
-                 N = malaria_village$total, # people sampled per village
-                 X = as.vector(scale(altitude)), # altitude per village
+ex.data <- list( n = nrow(gambia), # number of children
+                 k = ncol(X), # number of covariates
+                 N = N, # number of villages
+                 y = gambia$pos, # positive tests
                  dist_matrix = obs_dist_mat, # distance matrix in km
-                 n = nrow(malaria_village) # number of villages
+                 X = X, # altitude per village
+                 index_village = index_village
                  )
 
 Example10_14Stan  <- stan(
@@ -1026,27 +1022,27 @@ Example10_14Stan  <- stan(
   iter = 30000,
   chains = 2,
   thin = 10,
-  pars = c("beta0", "beta","sigma", "tau", "phi", "S", "p"),
+  pars = c("beta0", "betas","sigma", "tau", "phi", "S"),
   include = TRUE
 )
 
 ```
 
-```{r Ex 10.14 stan traceplots, eval = FALSE}
+```{r Ex 10.14 stan traceplots}
 #computing WAIC using the package loo
 
-rstan::traceplot(Example10_14Stan, pars = c("beta0","beta","sigma", "tau", "phi"))
+rstan::traceplot(Example10_14Stan, pars = c("beta0","betas","sigma", "tau", "phi"))
 
 ```
 
 
-```{r Ex 10.14 stan summary, echo = TRUE, eval = FALSE}
+```{r Ex 10.14 stan summary, echo = TRUE}
 
 # Extract samples
 summary_stan <-
   summary(
     Example10_14Stan,
-    pars = c("beta0","beta", "tau", "sigma", "phi"),
+    pars = c("beta0","betas", "tau", "sigma", "phi"),
     probs = c(0.025, 0.975)
   )
 
@@ -1056,7 +1052,7 @@ summary_stan$summary
 
 
 
-```{r Ex 10.14 stan posterior plots, eval = FALSE}
+```{r Ex 10.14 stan posterior plots}
 S_summary <-
   summary(Example10_14Stan, pars = c("S"))$summary
 
@@ -1079,23 +1075,6 @@ S_summary_df$village <-
   ggtitle("Posterior summary spatial random effect by village")
 
 
-p_summary <-
-  summary(Example10_14Stan, pars = c("p"))$summary
 
-p_summary_df <- data.frame(p_summary) |>
-  tibble::rownames_to_column() |>
-  filter(rowname %in% paste0("p[", 1:65, "]")) |>
-  mutate(village = 1:65) |>
-  dplyr::select(mean,  X2.5., X97.5., village)
-
-p_summary_df$village <-
-  factor(p_summary_df$village , levels = 1:65)
-
-  ggplot(p_summary_df, aes(x = village, group = 1)) +
-  geom_pointrange(aes(ymin = X2.5., ymax = X97.5., y = mean)) +
-  scale_x_discrete(
-    breaks = p_summary_df$village[seq(1, length(p_summary_df$village), by = 5)]) +
-  theme_clear() +  ylab("") + xlab("village") +
-  ggtitle("Posterior summary probabilities by village")
 ```
 
