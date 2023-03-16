@@ -812,29 +812,30 @@ ggmap(GambiaMap) + geom_point(data = malaria_village,
 Example10_14_Nimble <- nimbleCode({
   
   # Define priors
-  sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  sigma_sq <- sigma ^ 2
-  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
-  tau_sq <- tau  ^ 2
-  phi_inv ~ dgamma(shape =  5, rate = 5)
-  phi <- 1 / phi_inv
-  
-  Sigma[1:N, 1:N] <-
-     sigma_sq*(1 + (sqrt(3)*obs_dist_mat[1:N, 1:N])/phi) * exp(-sqrt(3)*obs_dist_mat[1:N, 1:N] / phi) + tau_sq  * identityMatrix(d = N)
-
-  S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
-  
+  # sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  # sigma_sq <- sigma ^ 2
+  # tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  # tau_sq <- tau  ^ 2
+  # phi_inv ~ dgamma(shape =  5, rate = 5)
+  # phi <- 1 / phi_inv
+  # 
+  # Sigma[1:N, 1:N] <-
+  #    sigma_sq*(1 + (sqrt(3)*obs_dist_mat[1:N, 1:N])/phi) * exp(-sqrt(3)*obs_dist_mat[1:N, 1:N] / phi) + tau_sq  * identityMatrix(d = N)
+  # 
+  # S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
+  # 
     for (j in 1:n) {  # by child
-    logit(p[j])  <-  b0 + inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
+    logit(p[j])  <-  b0 + inprod(b[1:k], X[j,1:k]) 
+    #+ S[index_village[j]]
     y[j] ~ dbinom(size = 1, prob = p[j])
     }
 
 
   for (l in 1:k){
-    b[l] ~ dnorm(0,100)
+    b[l] ~ dnorm(0,10)
   }
   
-  b0 ~  dnorm(0,100)
+  b0 ~  dnorm(0,10)
 
 })
 
@@ -866,11 +867,12 @@ X <- data.frame(age = as.vector(scale(gambia_df[,"age"])),
                 netuse = gambia_df[,"netuse"],
                 treated = gambia_df[,"treated"],
                 green = as.vector(scale(gambia_df[,"green"])),
-                phc = gambia_df[,"phc"],
-                area2 = gambia_df[,"2"],
-                area3 = gambia_df[,"3"],
-                area4 = gambia_df[,"4"],
-                area5 = gambia_df[,"5"] )
+                phc = gambia_df[,"phc"]
+                # area2 = gambia_df[,"2"],
+                # area3 = gambia_df[,"3"],
+                # area4 = gambia_df[,"4"],
+                # area5 = gambia_df[,"5"]
+                )
 
 index_village <- gambia_df[,"id_village"]
 
@@ -885,13 +887,15 @@ const_list <- list(n = n, # number of childs
                    k =  ncol(X) # number of predictors
 )
 
-dat_list <- list(y = gambia$pos, # malaria positive test 
-                 obs_dist_mat = obs_dist_mat, # distance matrix in km
-                 X = X, # predictors matrix
+dat_list <- list(y = gambia_df$pos, # malaria positive test 
+                 #obs_dist_mat = obs_dist_mat, # distance matrix in km
+                 X = gambia_df[,4:8], # predictors matrix
                  index_village = index_village
                  )
 
-init_list <- list(tau = 0.01, sigma = 0.01, p = rep(0.01, n))
+# init_list <- list(tau = 0.01, sigma = 0.01, p = rep(0.01, n), phi_inv = 6/max(obs_dist_mat))
+
+init_list <- list(p = rep(0.01, n))
 
 Rmodel <-
   nimbleModel(
@@ -903,7 +907,7 @@ Rmodel <-
 Rmodel$initializeInfo()
 Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
-  configureMCMC(Rmodel, monitors = c("sigma", "tau","phi", "b0", "b", "S", "p"))
+  configureMCMC(Rmodel, monitors = c( "b0", "b", "p"))
 
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
@@ -913,7 +917,7 @@ Cmcmc <-
     resetFunctions = TRUE,
     showCompilerOutput = TRUE
   )
-niters <- 60000
+niters <- 20000
 nburnins <- 0.5 * niters
 nchains <- 2
 nthins <- 14
@@ -935,11 +939,11 @@ plot(post_samples$samples[, c("b[1]")], bty = "n", main = "b[1]")
 plot(post_samples$samples[, c("b[2]")], bty = "n", main = "b[2]")
 plot(post_samples$samples[, c("b[3]")], bty = "n", main = "b[3]")
 plot(post_samples$samples[, c("b[4]")], bty = "n", main = "b[4]")
-plot(post_samples$samples[, c("tau")], bty = "n", main = "tau")
-plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
-plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
-plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]")
-plot(post_samples$samples[, c("S[29]")], bty = "n", main = "S[29]")
+#plot(post_samples$samples[, c("tau")], bty = "n", main = "tau")
+# plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
+# plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
+# plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]")
+# plot(post_samples$samples[, c("S[29]")], bty = "n", main = "S[29]")
 plot(post_samples$samples[, c("p[1]")], bty = "n", main = "p[1]")
 plot(post_samples$samples[, c("p[1519]")], bty = "n", main = "p[1519]")
 
@@ -956,7 +960,7 @@ mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda:
 ```{r Ex 10.14 nimble summary, echo = TRUE}
 
 # Extract samples
-variables <- c("b0", "b[1]", "b[2]", "b[3]", "b[4]", "b[5]", "b[6]", "b[7]", "b[8]","tau" ,"sigma", "phi")
+variables <- c("b0", "b[1]", "b[2]", "b[3]", "b[4]", "b[5]")
 summary_nimble <- post_samples$summary$all.chains
 summary_nimble[variables,]
 

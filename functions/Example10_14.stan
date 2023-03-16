@@ -32,7 +32,8 @@ model {
 
  for(i in 1:(N-1)){
    for(j in (i+1):N){
-     Sigma[i,j] = sigma_sq*exp(-dist_matrix[i,j]/phi);
+     //Sigma[i,j] = sigma_sq*exp(-dist_matrix[i,j]/phi);
+     Sigma[i,j] = sigma_sq*(1 + (sqrt(3)*dist_matrix[i,j])/phi) * exp(-sqrt(3)*dist_matrix[i,j] / phi);
      Sigma[j,i] = Sigma[i,j];
    }
  }
