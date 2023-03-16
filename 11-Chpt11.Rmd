@@ -949,3 +949,76 @@ ggplot(data = post_sum_theta, aes(x = time)) +
 # TODO: I am missing the fitted values here
 ```
 
+## Solutions to Selected Exercises
+
+## Exercise 11.11
+
+The joint distribution of $\mathbf{\gamma} = \{\gamma_1, \gamma_2, \dots, \gamma_{N_T}\}$ can be written as:
+$$
+p(\mathbf{\gamma}) = p(\gamma_1) \prod_{t=1}^{N_T-1}p(\gamma_{t+1}\mid\gamma)\\
+= p(\gamma_1)(2\pi\sigma_w^2)^{-(N_T-1)/2}\exp\{- \frac{1}{2\sigma_w^2} \sum_{t=1}^{N_T-1} (\gamma_{t+1} - \gamma)^2) \}\\
+\propto p(\gamma_1) \exp\{-\frac{1}{2\sigma_w^2}\mathbf{\gamma}^\top M \mathbf{\gamma}\},
+$$
+where the entries of $M$ are:
+$$
+M_{ij} = \begin{cases}
+1, & i = j = 1, N_T\\
+2, & i = j = 2, 3, \dots, N_T - 1 \\
+-1 & i = (j-1), \text{where } j = 2, 3, \dots, N_T\\
+-1 & i = (j+1), \text{where } j = 1, 2, \dots, N_T - 1 \\
+0 & \text{else}
+\end{cases}.
+$$
+Now, if we assume that $p(\gamma_1) \propto 1$, i.e., an uninformative, improper prior, we have that 
+$$
+p(\mathbf{\gamma}) \propto \exp\{-\frac{1}{2\sigma_w^2}\mathbf{\gamma}^\top M \mathbf{\gamma}\},
+$$
+which implies that, for any $t$, by Bayes rule,
+
+$$
+p(\gamma_t|\mathbf{\gamma}_{-t}) = \frac{p(\mathbf{\gamma})}{p(\mathbf{\gamma}_{-t})} \propto p(\mathbf{\gamma}).
+$$
+
+Eliminating terms in the joint distribution $P(\gamma)$ not related to $\gamma_t$, we obtain
+
+$$
+p(\gamma_t|\mathbf{\gamma}_{-t}) \propto 
+\begin{cases}
+\exp\{-\frac{1}{2\sigma_w^2}(\gamma_t^2 - 2\gamma_t\gamma_{t+1})\}, & t = 1\\
+\exp\{-\frac{1}{2\sigma_w^2}(2\gamma_t^2 - 2\gamma_t\gamma_{t+1} - 2\gamma_{t-1}\gamma_t)\}, & t = 2, 3, \dots, N_T-1 \\
+\exp\{-\frac{1}{2\sigma_w^2}(\gamma_t^2 - 2\gamma_{t-1}\gamma_{t})\}, & t = N_T
+\end{cases}.
+$$
+
+The proportional form implies that these are Normal densities. By completing the square, we can obtain 
+
+$$
+p(\gamma|\gamma_{-t}) \propto \begin{cases}
+N(\gamma_{t+1}, \sigma_w^2), & t = 1 \\
+N(\frac{\gamma_{t-1}+\gamma_{t+1}}{2}, \sigma^2_w/2), & t = 2, 3 \dots, N_T-1 \\
+N(\gamma_{t-1}, \sigma_w^2), & t = N_T
+\end{cases},
+$$
+as required. A necessary assumption for this conclusion was that $p(\gamma_1) \propto 1$. 
+## Exercise 11.12
+
+The joint density of $\gamma_t$ and $\tau_w$, given $\gamma_{t-1}$ is given by
+$$
+p(\gamma_t, \tau_w \mid \gamma_{t-1}) = \frac{\tau_w^{1/2}}{\sqrt{2\pi}}\exp \left(-\frac{\tau(\gamma_t - \gamma_{t-1})^2}{2} \right) \frac{b^a}{\Gamma(a)}\tau_w^{a-1}\exp(-b\tau_w).
+$$
+Marginalizing $\tau_w$ gives
+$$
+p(\gamma_t \mid \gamma_{t-1}) = \int_{0}^{\infty} \frac{\tau_2^{1/2}}{\sqrt{2\pi}}\exp \left(-\frac{\tau(\gamma_t - \gamma_{t-1})^2}{2} \right) \frac{b^a}{\Gamma(a)}\tau_w^{a-1}\exp(-b\tau_w) d\tau_w \\
+= \frac{b^2}{\Gamma(a)\sqrt{2\pi}} \int_{0}^\infty \tau_w^{a-0.5} \exp \left(-\tau_w \left[ \frac{(\gamma_t - \gamma_{t-1})^2}{2} + b\right] \right) d\tau_w \\
+= \frac{b^a \Gamma(a+0.5)}{\gamma(a)\sqrt{2\pi} ((\gamma_t - \gamma_{t-1})^2/2+b)^{a+0.5}} \int_{0}^\infty \frac{(\gamma_t - \gamma_{t-1})^2/2+b)^{a+0.5}}{\Gamma(a+0.5)} \tau_w^{(a +0.5) - 1} \exp\left( -\tau_w \left[ \frac{(\gamma_t - \gamma_{t-1})^2}{2} + b\right]\right)\\ 
+= \frac{b^a \Gamma(a+0.5)}{\gamma(a)\sqrt{2\pi} ((\gamma_t - \gamma_{t-1})^2/2+b)^{a+0.5}},
+$$
+where the last equality follows because the integrand was the density of a Gamma distribution. Now, by Bayes rule, we have the following expression for the posterior:
+$$
+p(\tau_{w}|\gamma_t, \gamma_{t-1}) = \frac{p(\gamma_t, \tau_w \mid \gamma_{t-1})}{p(\gamma_t \mid \gamma_{t-1}) } = \frac{((\gamma_t - \gamma_{t-1})^2/2+b)^{a+0.5}}{\Gamma(a + 0.5)}\tau^{(a+0.5)-1} \exp \left(-\tau_w \left[\frac{(\gamma_t - \gamma_{t-1})^2}{2} + b \right] \right),
+$$
+which is the density function of the $Ga(a + 0.5, (\gamma_t - \gamma_{t-1})^2/2 + b)$ distribution. The shape parameter of the posterior is the prior shape parameter shifted by $0.5$, and the rate parameter is the prior rate parameter shifted by the term $(\gamma_t - \gamma_{t-1})^2/2$. 
+
+## Exercise 11.13
+
+
