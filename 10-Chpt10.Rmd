@@ -820,7 +820,7 @@ Example10_14_Nimble <- nimbleCode({
   phi <- 1 / phi_inv
   
   Sigma[1:N, 1:N] <-
-     sigma_sq * exp(-obs_dist_mat[1:N, 1:N] / phi) + tau_sq  * identityMatrix(d = N)
+     sigma_sq*(1 + (sqrt(3)*obs_dist_mat[1:N, 1:N])/phi) * exp(-sqrt(3)*obs_dist_mat[1:N, 1:N] / phi) + tau_sq  * identityMatrix(d = N)
 
   S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
   
@@ -903,7 +903,7 @@ Rmodel <-
 Rmodel$initializeInfo()
 Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
-  configureMCMC(Rmodel, monitors = c("tau", "sigma", "phi", "b0", "b", "S", "p"))
+  configureMCMC(Rmodel, monitors = c("sigma", "tau","phi", "b0", "b", "S", "p"))
 
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
@@ -934,6 +934,7 @@ plot(post_samples$samples[, c("b0")], bty = "n", main = "b0")
 plot(post_samples$samples[, c("b[1]")], bty = "n", main = "b[1]")
 plot(post_samples$samples[, c("b[2]")], bty = "n", main = "b[2]")
 plot(post_samples$samples[, c("b[3]")], bty = "n", main = "b[3]")
+plot(post_samples$samples[, c("b[4]")], bty = "n", main = "b[4]")
 plot(post_samples$samples[, c("tau")], bty = "n", main = "tau")
 plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
@@ -955,7 +956,7 @@ mcmc_variable_names[which(coda::effectiveSize(post_samples$samples) == min(coda:
 ```{r Ex 10.14 nimble summary, echo = TRUE}
 
 # Extract samples
-variables <- c("b0", "b[1]", "b[2]", "b[3]", "b[4]", "b[5]", "b[6]", "b[7]", "b[8]","tau", "sigma", "phi")
+variables <- c("b0", "b[1]", "b[2]", "b[3]", "b[4]", "b[5]", "b[6]", "b[7]", "b[8]","tau" ,"sigma", "phi")
 summary_nimble <- post_samples$summary$all.chains
 summary_nimble[variables,]
 
