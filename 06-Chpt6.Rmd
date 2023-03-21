@@ -333,10 +333,10 @@ abline(a = 0, b = 1)
 ```
 
 
-## Example 6.3: Fitting a Poisson regression model in `Nimble` {-}
+## Example 6.3: Fitting a Poisson regression model 
+### Nimble {-}
 
-
-```{r Ex 6.3 clean, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
+```{r Ex 6.3 nimble clean, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
 
 rm(list=ls())
 
@@ -344,7 +344,7 @@ rm(list=ls())
 
 Load `nimble package`
 
-```{r Ex 6.3 prelim load, class.source = 'foldable', message=FALSE, echo = TRUE, warning=FALSE}
+```{r Ex 6.3 nimble prelim load, class.source = 'foldable', message=FALSE, echo = TRUE, warning=FALSE}
 
 library("nimble")
 
@@ -360,13 +360,13 @@ First, define the model in Nimble.
 Example5_3Code <- nimbleCode({
   for (i in 1:N) {
     Y[i] ~ dpois(mu[i])
-    log(mu[i]) <- log(E[i]) + beta0 + beta1 * X1[i] + betad * X2[i]
+    log(mu[i]) <- log(E[i]) + beta0 + beta1 * X1[i] + beta2 * X2[i]
   }
 
   # Priors
   beta0 ~ dnorm (0 , sd = 100)
   beta1 ~ dnorm (0 , sd = 100)
-  betad ~ dnorm (0 , sd = 100)
+  beta2 ~ dnorm (0 , sd = 100)
 
   # Functions of interest:
   base <- exp(beta0)
@@ -377,14 +377,14 @@ Example5_3Code <- nimbleCode({
 
 Read the data and define the constants, data and initials lists for the `Nimble` model.
 
-```{r Ex 6.3 read data, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 6.3 nimble read data, error = FALSE, message = FALSE, results='hide'}
 
 # REVIEW: Is this another version of the COPD data? Is there a data dictionary for this dataset?
 
 data <- read.csv("data/DataExample53.csv", sep = ",")
 
 ex.const <- list(
-  N = 393,
+  N = nrow(data),
   E = data$exp_lungc65pls,
   X1 = as.vector(scale(data$k3)),
   X2 = as.vector(scale(data$k2))
@@ -395,13 +395,13 @@ ex.data <- list(Y = data$lungc65pls)
 inits <- function()
   list(beta0 = rnorm(1),
        beta1 = rnorm(1),
-       betad = rnorm(1))
+       beta2 = rnorm(1))
 
 # Define parameters to monitor and run the model 
 
-params <- c("beta0", "beta1", "betad", "base", "RR")
+params <- c("beta0", "beta1", "beta2", "base", "RR")
 
-samples <- nimbleMCMC(
+mcmc.out <- nimbleMCMC(
   code = Example5_3Code,
   data = ex.data,
   constants = ex.const,
@@ -421,7 +421,7 @@ samples <- nimbleMCMC(
 
 Check the WAIC. 
 
-```{r Ex 6.3 WAIC}
+```{r Ex 6.3 nimble WAIC}
 
 samples$WAIC
 
@@ -429,9 +429,9 @@ samples$WAIC
 
 Show the trace plots and posterior summaries for each of the parameters.
 
-```{r Ex 6.3 traceplots}
+```{r Ex 6.3 nimble traceplots}
 
-mvSamples <- samples$samples
+mvSamples <- mcmc.out$samples
 
 #trace plots of beta1
 plot(mvSamples[, c("beta1")])
@@ -449,5 +449,65 @@ summary(mvSamples[, c("base")])
 summary(mvSamples[, c("RR")])
 
 ```
+
+
+### Stan {-}
+
+```{r Ex 6.3 clean stan, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}
+
+rm(list=ls())
+
+```
+
+Load `stan package` with options
+
+```{r Ex 6.3 stan prelim load, class.source = 'foldable', message=FALSE, echo = TRUE, warning=FALSE}
+
+library(rstan)
+
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+```
+
+
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/Example6_3.stan
+``` 
+
+```{r Ex 6.3 stan load data}
+
+data <- read.csv("data/DataExample53.csv", sep = ",")
+
+stan_data <- list(
+  N = nrow(data),
+  E = data$exp_lungc65pls,
+  X1 = as.vector(scale(data$k3)),
+  X2 = as.vector(scale(data$k2)),
+  Y = data$lungc65pls
+)
+
+```
+
+```{r Ex 6.3 run stan, message= FALSE, results='hide'}
+Example6_3_Stan  <- stan(
+  file = "functions/Example6_3.stan",
+  data = stan_data,
+  warmup = 5000,
+  iter = 10000,
+  chains = 3,
+  include = TRUE
+)
+
+```
+
+```{r Ex 6.3 stan traceplots}
+rstan::traceplot(Example6_3_Stan,
+                 pars = c("beta1", "base", "RR"))
+
+stan_summary <- summary(Example6_3_Stan, pars = c("RR", "base"))
+stan_summary$summary
+```
+
 
 

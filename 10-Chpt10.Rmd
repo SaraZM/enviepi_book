@@ -823,11 +823,11 @@ Example10_14_Nimble <- nimbleCode({
   Sigma[1:N, 1:N] <-
      sigma_sq*(1 + (sqrt(3)*obs_dist_mat[1:N, 1:N])/phi) * exp(-sqrt(3)*obs_dist_mat[1:N, 1:N] / phi) 
 
-  mean_S[1:N] <- b0*ones[1:N]
-  S[1:N] ~ dmnorm(mean_S[1:N], cov = Sigma[1:N,1:N])
+   #mean_S[1:N] <- b0*ones[1:N]
+  S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
   # 
     for (j in 1:n) {  # by child
-    logit(p[j])  <- inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
+    logit(p[j])  <-  b0 + inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
     y[j] ~ dbern(p[j])
     }
 
@@ -835,7 +835,7 @@ Example10_14_Nimble <- nimbleCode({
     b[l] ~ dnorm(0, var = 10)
   }
   
-  b0 ~  dnorm(0, var = 100)
+  b0 ~  dnorm(0, sd = 5)
 
 })
 
@@ -891,7 +891,7 @@ ones <- rep(1, N)
 
 const_list <- list(n = n, # number of childs
                    N = N, # number of villages
-                   ones = ones, # vector of zeroes 
+                   zeroes = zeroes, # vector of zeroes 
                    prior_max_dist = max(obs_dist_mat)/6, # max dist for phi prior
                    k =  ncol(X),# number of predictors
                    index_village = index_village) 
@@ -922,6 +922,9 @@ Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
   configureMCMC(Rmodel, monitors = c( "b0", "b", "p", "S", "sigma", "phi"))
 
+conf$removeSamplers(c('S'))
+conf$addSampler(target = c('S'), type = 'AF_slice')
+
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
   compileNimble(
@@ -930,7 +933,7 @@ Cmcmc <-
     resetFunctions = TRUE,
     showCompilerOutput = TRUE
   )
-niters <- 60000
+niters <- 30000
 nburnins <- 0.5 * niters
 nchains <- 2
 nthins <- 14
@@ -954,11 +957,13 @@ plot(post_samples$samples[, c("b[1]")], bty = "n", main = "b[1]")
 plot(post_samples$samples[, c("b[2]")], bty = "n", main = "b[2]")
 plot(post_samples$samples[, c("b[3]")], bty = "n", main = "b[3]")
 plot(post_samples$samples[, c("b[4]")], bty = "n", main = "b[4]")
+plot(post_samples$samples[, c("b[5]")], bty = "n", main = "b[5]")
+plot(post_samples$samples[, c("b[6]")], bty = "n", main = "b[6]")
 plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
 plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]")
-plot(post_samples$samples[, c("S[29]")], bty = "n", main = "S[29]")
-plot(post_samples$samples[, c("S[31]")], bty = "n", main = "S[29]")
+plot(post_samples$samples[, c("S[45]")], bty = "n", main = "S[45]")
+plot(post_samples$samples[, c("S[54]")], bty = "n", main = "S[54]")
 plot(post_samples$samples[, c("p[1]")], bty = "n", main = "p[1]")
 plot(post_samples$samples[, c("p[1805]")], bty = "n", main = "p[1805]")
 

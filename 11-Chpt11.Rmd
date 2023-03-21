@@ -296,7 +296,7 @@ plot(volcano_dust_forecast, bty = "n")
 
 ```
 
-## Example 11.16 implementation of a dynamic linear model {-}
+## Example 11.16 Implementation of a dynamic linear model: UK ozone data {-}
 
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
@@ -307,9 +307,8 @@ The code for the implementation of DLMs in Stan and Nimble was developed by Pari
 
 ::::
 
-### UK ozone data {-}
 
-#### Stan
+### Stan
 
 ```{r Ex 11.16 ozone clean stan, include = FALSE}
 rm(list = ls())
@@ -339,25 +338,26 @@ theme_clear <- function(){
 }
 ```
 
+#### Time-varying level model
 
-```{r  Ex 11.16 ozone prepare data stan}
-y <- UK_ozone$ozone
+```{r  Ex 11.16 o3 prepare data stan}
+y <- sqrt(UK_ozone$ozone)
 temp <- UK_ozone$temp
 wind <- UK_ozone$wind
 
-J <- length(y)
+Tt <- length(y)
 p <- 3 # (intercept, wind, temp)
 
-Ft <- array(0, dim = c(J, p))
+Ft <- array(0, dim = c(Tt, p))
 Ft[, 1] <- 1
-Ft[, 2] <- (wind[1:J] - mean(wind[1:J])) / sd(wind[1:J])
-Ft[, 3] <- (temp[1:J] - mean(temp[1:J])) / sd(temp[1:J])
+Ft[, 2] <- (wind[1:Tt] - mean(wind[1:Tt])) / sd(wind[1:Tt])
+Ft[, 3] <- (temp[1:Tt] - mean(temp[1:Tt])) / sd(temp[1:Tt])
 
 Gt <- diag(x = 1, nrow = p, ncol = p)
 m0 <- c(mean(y), 0, 0)
 C0 <- diag(x = 1, nrow = p, ncol = p)
 
-stan_data <- list(T = J, p = p, y = y, F = Ft, G = Gt, m0= m0, C0 = C0)
+stan_data <- list(T = Tt, p = p, y = y, F = Ft, G = Gt, m0= m0, C0 = C0)
 
 ```
 
@@ -365,7 +365,7 @@ stan_data <- list(T = J, p = p, y = y, F = Ft, G = Gt, m0= m0, C0 = C0)
 cat functions/Example11_16_UK.stan
 ``` 
 
-```{r Ex 11.16 ozone run stan}
+```{r Ex 11.16 o3 run stan}
 Example11_16_UK_Stan  <- stan(
   file = "functions/Example11_16_UK.stan",
   data = stan_data,
@@ -378,7 +378,7 @@ Example11_16_UK_Stan  <- stan(
 ```
 
 
-```{r Ex 11.16 ozone post summaries stan}
+```{r Ex 11.16 o3 post summaries stan}
 
 rstan::traceplot(Example11_16_UK_Stan,
                  pars = c("tau", "sqrt_W_diag", "theta[1,1]"))
@@ -439,7 +439,133 @@ grid.arrange(p1,p2,p3, ncol = 2)
 
 ```
 
-#### Nimble
+
+#### Trend model
+
+```{r  Ex 11.16 o3 trend data stan}
+y <- sqrt(UK_ozone$ozone)
+temp <- UK_ozone$temp
+wind <- UK_ozone$wind
+
+Tt <- length(y)
+p <- 4 # (intercept, trend, wind, temp)
+
+Ft <- array(0, dim = c(J, p))
+Ft[, 1] <- 1
+Ft[, 2] <- 0
+Ft[, 3] <- (wind[1:Tt] - mean(wind[1:Tt])) / sd(wind[1:Tt])
+Ft[, 4] <- (temp[1:Tt] - mean(temp[1:Tt])) / sd(temp[1:Tt])
+
+Gt <- diag(x = 1, nrow = p, ncol = p)
+Gt[1, 2] <- 1 
+
+
+m0 <- c(mean(y), 0, 0, 0)
+C0 <- diag(x = 1, nrow = p, ncol = p)
+
+stan_data_trend <- list(
+  T = Tt,
+  p = p,
+  y = y,
+  F = Ft,
+  G = Gt,
+  m0 = m0,
+  C0 = C0
+)
+
+```
+
+```{r Ex 11.16 trend o3 run stan}
+Example11_16_UK_trend_Stan  <- stan(
+  file = "functions/Example11_16_UK.stan",
+  data = stan_data_trend,
+  warmup = 5000,
+  iter = 10000,
+  chains = 3,
+  include = TRUE
+)
+
+```
+
+```{r  Ex 11.16 o3 traceplots stan}
+rstan::traceplot(Example11_16_UK_trend_Stan,
+                 pars = c("tau", "sqrt_W_diag", "theta[1,1]"))
+rstan::traceplot(Example11_16_UK_trend_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",1]"))
+rstan::traceplot(Example11_16_UK_trend_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",2]"))
+rstan::traceplot(Example11_16_UK_trend_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",3]"))
+rstan::traceplot(Example11_16_UK_trend_Stan, 
+                 pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), ",4]"))
+
+```
+
+```{r Ex 11.16 o3 post summaries stan}
+
+fixedpars_summary <-
+  summary(Example11_16_UK_trend_Stan, pars = c("tau", "sqrt_W_diag"))$summary
+fixedpars_summary
+
+theta_summary <-
+  summary(Example11_16_UK_trend_Stan, pars = c("theta"))$summary
+
+p1 <- data.frame(theta_summary) |>
+  rownames_to_column() |>
+  filter(rowname %in% paste0("theta[", 1:J, ",1]")) |>
+  mutate(date = as.Date(UK_ozone$date[1:J])) |>
+  ggplot(aes(x = date, group = 1)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Intercept") + theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p2 <- data.frame(theta_summary) |>
+  rownames_to_column() |>
+  filter(rowname %in% paste0("theta[", 1:J, ",4]")) |>
+  mutate(date = as.Date(UK_ozone$date[1:J])) |>
+  ggplot(aes(x = date)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Trend") +  theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p3 <- data.frame(theta_summary) |>
+  rownames_to_column() |>
+  filter(rowname %in% paste0("theta[", 1:J, ",2]")) |>
+  mutate(date = as.Date(UK_ozone$date[1:J])) |>
+  ggplot(aes(x = date)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Wind") +  theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+p4 <- data.frame(theta_summary) |>
+  rownames_to_column() |>
+  filter(rowname %in% paste0("theta[", 1:J, ",3]")) |>
+  mutate(date = as.Date(UK_ozone$date[1:J])) |>
+  ggplot(aes(x = date)) +
+  geom_path(aes(y = mean), color = "blue", linewidth = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "lightgray") +
+  ggtitle("Temperature") +  theme_clear() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+
+grid.arrange(p1,p2,p3, p4, ncol = 2)
+# TODO: I am still missing the plots for the fitted values here
+
+```
+### Nimble
 
 ```{r Ex 11.16 o3 clean nimble, include = FALSE}
 rm(list = ls())
@@ -515,10 +641,12 @@ Example11_16_O3_Nimble <- nimbleCode({
 
 ```
 
+#### Time-varying level model
+
 ```{r run o3 nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
 
 # Model specification
-yt <- UK_ozone$ozone
+yt <- sqrt(UK_ozone$ozone)
 temp <- UK_ozone$temp
 wind <- UK_ozone$wind
 
@@ -642,4 +770,144 @@ ggplot(data = post_sum_theta, aes(x = time)) +
 
 # TODO: I am missing the fitted values here
 ```
+
+#### Trend model
+
+```{r run o3 nimble trend model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+
+# Model specification
+yt <- sqrt(UK_ozone$ozone)
+temp <- UK_ozone$temp
+wind <- UK_ozone$wind
+
+Tt <- length(y)
+p <- 4 # (intercept, trend, wind, temp)
+
+Ft <- array(0, dim = c( p, Tt))
+Ft[1,] <- 1
+Ft[2,] <- 0
+Ft[3,] <- (wind[1:Tt] - mean(wind[1:Tt])) / sd(wind[1:Tt])
+Ft[4,] <- (temp[1:Tt] - mean(temp[1:Tt])) / sd(temp[1:Tt])
+
+
+Gt <- diag(x = 1, nrow = p, ncol = p)
+Gt[1, 2] <- 1 
+
+m0 <- c(mean(yt), 0, 0, 0)
+C0 <- diag(x = 1, nrow = p, ncol = p)
+
+const_list <- list(Tt = Tt,
+                   p = p,
+                   m0 = m0,
+                   C0 = C0)
+dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
+init_list <- list(tau = 0.01, sqrt_Wt_diag = sqrt(rep(0.1, p)))
+
+Rmodel <-
+  nimbleModel(
+    Example11_16_O3_Nimble,
+    constants = const_list,
+    data = dat_list,
+    inits = init_list
+  )
+Rmodel$initializeInfo()
+Rmodel$calculate()
+Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
+conf <-
+  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt_diag", "theta", "ft"))
+
+Rmcmc <- buildMCMC(conf)
+Cmcmc <-
+  compileNimble(
+    Rmcmc,
+    project = Cmodel,
+    resetFunctions = TRUE,
+    showCompilerOutput = FALSE
+  )
+niter <- 10000
+nburnin <- 0.5 * niter
+nthin <- 1
+start_time <- Sys.time()
+post_samples <-
+  runMCMC(
+    Cmcmc,
+    niter = niter,
+    nburnin = nburnin,
+    thin = nthin,
+    nchains = 2,
+    samplesAsCodaMCMC = TRUE
+  )
+end_time <- Sys.time()
+run_time <- end_time - start_time
+run_time
+
+
+```
+
+```{r Ex 11.16 o3 nimble trend traceplots}
+
+post_summary <- nimSummary(post_samples)
+tidy_post_samples <- post_samples |> tidy_draws()
+
+tidy_post_samples |>
+   dplyr::select(
+    .chain,
+    .iteration,
+    .draw,
+    'tau',
+    'sqrt_Wt_diag[1]',
+    'sqrt_Wt_diag[2]',
+    'sqrt_Wt_diag[3]',
+    'sqrt_Wt_diag[4]'
+  ) |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), linewidth = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free", nrow = 2) +
+  theme_clear() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+
+
+```
+
+```{r Ex 11.16 o3 nimble trend posterior summary}
+
+post_summary[c('tau',
+               'sqrt_Wt_diag[1]',
+               'sqrt_Wt_diag[2]',
+               'sqrt_Wt_diag[3]',
+               'sqrt_Wt_diag[4]'), ]
+
+post_sum_theta <-
+  as.data.frame(post_summary) |>  rownames_to_column() |>
+  filter(str_detect(rowname, "theta")) |>
+  dplyr::select(rowname, q2.5, q50, q97.5) |>
+  separate(rowname, into = c("x1", "x2"), sep = ",") |>
+  mutate(component = as.numeric(gsub(".*?([0-9]+).*", "\\1", x1))) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", x2))) |>
+  dplyr::select(component, time, q2.5, q50, q97.5)
+
+ggplot(data = post_sum_theta, aes(x = time)) +
+  geom_ribbon(aes(ymin = q2.5, ymax = q97.5),
+              fill = "lightgray",
+              alpha = 0.7) +
+  geom_path(aes(y = q50), col = "blue", linewidth = 0.4) +
+  facet_wrap(
+    ~ component,
+    nrow = 2,
+    scales = "free",
+    labeller = label_bquote(theta[.(component)])
+  ) +
+  ylab("") +
+  xlab("Time") +
+  theme_clear() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+# TODO: I am missing the fitted values here
+```
+
 
