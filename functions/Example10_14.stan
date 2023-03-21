@@ -10,7 +10,6 @@ data {
 
 parameters {
   real<lower=0> phi_inv;
-  real<lower=0> tau;
   real<lower=0> sigma;
   vector[N] S; // spatial random effect
   vector[k] betas;
@@ -20,7 +19,6 @@ parameters {
 transformed parameters {
   // vector[n] p = inv_logit(logit_p);
   real sigma_sq = square(sigma);
-  real tau_sq = square(tau);
   real<lower=0> phi = 1/phi_inv;
 }
 
@@ -39,7 +37,7 @@ model {
  }
    // diagonal elements covariances
 for(i in 1:N){
-  Sigma[i,i] = sigma_sq + tau_sq;
+  Sigma[i,i] = sigma_sq;
 }
 
 // sample spatial random effect
@@ -55,7 +53,6 @@ for(i in 1:N){
   beta0 ~ normal(0,10);
   betas ~ normal(0,10);
   phi_inv ~ gamma(5, 5);
-  tau ~ cauchy(0,1);
   sigma ~ cauchy(0,1);
   
 
