@@ -1021,4 +1021,72 @@ which is the density function of the $Ga(a + 0.5, (\gamma_t - \gamma_{t-1})^2/2 
 
 ## Exercise 11.13
 
+```{r}
+library(rjags)
+library(tidyverse)
 
+data <- source("data/11_13_data.txt")
+inits1 <- source("data/11_13_model1_inits1.txt")
+
+model_ar <- jags.model(file = "data/11_13_model1.txt",
+                    data = data$value,
+                    inits = inits1$value,
+                    n.chains = 3)
+
+update(model_ar, 5000) ## burn in
+
+samples_sigmas <- coda.samples(model_ar, 
+                           variable.names = c(
+                                              "sigma.v",
+                                              "sigma.w"
+                                              ),
+                           n.iter = 100, 
+                           thin = 2)
+
+plot(samples_sigmas)
+apply(samples_sigmas[[1]], 2, quantile)
+
+
+samples_gamma <- coda.samples(model_ar, 
+                              variable.names = c(
+                                "gamma",
+                                "y"
+                              ),
+                              n.iter = 2000, 
+                              thin = 1)
+
+missings <- which(is.na(data$value$y))
+nonmissing <- tibble(var = "y", time = as.double(seq(1, length(data$value$y))),
+                         value = data$value$y) |>
+  filter(!(time %in% missings))
+
+plot_df <- data.frame(samples_gamma[[1]])
+plot_df <- plot_df |> pivot_longer(cols = everything(),
+                                   names_to = "variable") |>
+  separate(variable, c("var", "time")) |>
+  mutate(time = as.numeric(time)) |>
+  filter(!(var == "y" & !(time %in% missings))) |>
+  rbind(nonmissing) |>
+  group_by(var, time) |> 
+  summarise(q025 = quantile(value, prob = 0.025),
+            q975 = quantile(value, prob = 0.975),
+            median = median(value))|>
+  mutate(range = q975-q025)
+
+
+plot_scatter_df <- plot_df |> select(var, time, median) |>
+  pivot_wider(names_from = var, values_from = median)
+
+plot_scatter <- ggplot(plot_scatter_df, aes(x = y, y = gamma)) +
+  geom_point(alpha = 0.5)
+
+plot_scatter
+
+plot <- ggplot(filter(plot_df, var == "gamma"), aes(x = time)) + 
+  geom_line(aes(y = median), alpha = 0.5) + 
+  geom_line(aes(y = q025), alpha = 0.5, linetype = "dashed")+ 
+  geom_line(aes(y = q975), alpha = 0.5, linetype = "dashed")+
+  geom_point(data = filter(plot_df, (var == "y" & time %in% missings)), aes(x = time, y = 0), color = "blue")
+
+plot
+```

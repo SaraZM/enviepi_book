@@ -1,0 +1,26 @@
+model {
+    
+    ## Data Model
+
+    for (t in 2:(T-1)) {
+        # observation model
+        y[t] ~ dnorm(gamma[t], sigma.v)
+    } # t loop
+    y[1] ~ dnorm(gamma[1], sigma.v)
+    y[T]~ dnorm(gamma[T], sigma.v)
+
+    ## Process Model
+
+    for (t in 2:(T-1)) {
+        gamma[t] ~ dnorm(gamma[t-1], sigma.w)
+    }
+    gamma[T] ~ dnorm(gamma[T-1], sigma.w)
+
+    ## Priors
+
+    gamma[1] ~ dnorm(0, sigma.w)
+    tau.w ~ dgamma(5,10)
+    sigma.w = 1/(sqrt(tau.w))
+    tau.v ~ dgamma(1,0.01)
+    sigma.v = 1/(sqrt(tau.v))
+} 
