@@ -423,7 +423,7 @@ Check the WAIC.
 
 ```{r Ex 6.3 nimble WAIC}
 
-samples$WAIC
+mcmc.out$WAIC
 
 ```
 

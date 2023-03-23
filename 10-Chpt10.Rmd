@@ -919,8 +919,8 @@ Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
 conf <-
   configureMCMC(Rmodel, monitors = c( "b0", "b", "p", "S", "sigma", "phi"))
 
-conf$removeSamplers(c('S'))
-conf$addSampler(target = c('S'), type = 'AF_slice')
+# conf$removeSamplers(c('S'))
+# conf$addSampler(target = c('S'), type = 'AF_slice')
 
 Rmcmc <- buildMCMC(conf)
 Cmcmc <-
@@ -1053,7 +1053,7 @@ Example10_14Stan  <- stan(
 ```{r Ex 10.14 stan traceplots}
 #computing WAIC using the package loo
 
-rstan::traceplot(Example10_14Stan, pars = c("beta0","betas","sigma", "tau", "phi"))
+rstan::traceplot(Example10_14Stan, pars = c("beta0","betas","sigma",  "phi"))
 
 ```
 
@@ -1064,7 +1064,7 @@ rstan::traceplot(Example10_14Stan, pars = c("beta0","betas","sigma", "tau", "phi
 summary_stan <-
   summary(
     Example10_14Stan,
-    pars = c("beta0","betas", "tau", "sigma", "phi"),
+    pars = c("beta0","betas", "sigma", "phi"),
     probs = c(0.025, 0.975)
   )
 

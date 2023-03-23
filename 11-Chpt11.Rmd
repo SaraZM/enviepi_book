@@ -451,11 +451,11 @@ run_time
 
 ```
 
-```{r Ex 11.16 o3 nimble trend traceplots}
+```{r Ex 11.16 o3 nimble traceplots}
 
 post_summary <- nimSummary(post_samples)
 tidy_post_samples <- post_samples |> tidy_draws()
-
+ 
 tidy_post_samples |>
    dplyr::select(
     .chain,
@@ -464,8 +464,7 @@ tidy_post_samples |>
     'tau',
     'sqrt_Wt_diag[1]',
     'sqrt_Wt_diag[2]',
-    'sqrt_Wt_diag[3]',
-    'sqrt_Wt_diag[4]'
+    'sqrt_Wt_diag[3]'
   ) |>
   gather(vars, value, -.chain, -.iteration, -.draw) |>
   ggplot(aes(x = .iteration, y = value)) +
@@ -480,13 +479,12 @@ tidy_post_samples |>
 
 ```
 
-```{r Ex 11.16 o3 nimble trend posterior summary}
+```{r Ex 11.16 o3 nimble posterior summary}
 
 post_summary[c('tau',
                'sqrt_Wt_diag[1]',
                'sqrt_Wt_diag[2]',
-               'sqrt_Wt_diag[3]',
-               'sqrt_Wt_diag[4]'), ]
+               'sqrt_Wt_diag[3]'), ]
 
 post_sum_theta <-
   as.data.frame(post_summary) |>  rownames_to_column() |>
@@ -526,7 +524,7 @@ yt <- sqrt(UK_ozone$ozone)
 temp <- UK_ozone$temp
 wind <- UK_ozone$wind
 
-Tt <- length(y)
+Tt <- length(yt)
 p <- 4 # (intercept, trend, wind, temp)
 
 Ft <- array(0, dim = c( p, Tt))
@@ -590,7 +588,7 @@ run_time
 
 ```
 
-```{r Ex 11.16 o3 nimble traceplots}
+```{r Ex 11.16 o3 nimble trend traceplots}
 
 post_summary <- nimSummary(post_samples)
 tidy_post_samples <- post_samples |> tidy_draws()
@@ -620,9 +618,13 @@ tidy_post_samples |>
 
 ```
 
-```{r Ex 11.16 o3 nimble posterior summary}
+```{r Ex 11.16 o3 nimble trend posterior summary}
 
-post_summary[c('tau','sqrt_Wt_diag[1]','sqrt_Wt_diag[2]','sqrt_Wt_diag[3]', 'sqrt_Wt_diag[4]'),]
+post_summary[c('tau',
+               'sqrt_Wt_diag[1]',
+               'sqrt_Wt_diag[2]',
+               'sqrt_Wt_diag[3]',
+               'sqrt_Wt_diag[4]'), ]
 
 post_sum_theta <-
   as.data.frame(post_summary) |>  rownames_to_column() |>
