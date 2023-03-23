@@ -631,6 +631,7 @@ stan_var <-
 plot_grid(stan_pred, stan_var, labels = "auto")
 
 ```
+
 ## Example 10.11: INLA, creating a mesh {-}
 
 ```{r Ex 10.11 load data for INLA, message = FALSE, warning=FALSE, error=FALSE}
@@ -659,10 +660,6 @@ benzene_utm_df <- data.frame( ID = 1:nrow(benzene_data),
 mesh = inla.mesh.create(locations_df, cutoff = 0.01, 
                        refine =(list(min.angle =20)))
 plot(mesh , col="gray", main="") 
-
-# ukmap <- readShapeLines("uk_BNG.shp") plot(mesh , col="gray", main="") 
-# lines(ukmap)
-# points(locations , col="red", pch=20,bg="red") 
 
 
 ```
