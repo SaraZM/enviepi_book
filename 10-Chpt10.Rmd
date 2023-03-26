@@ -246,7 +246,7 @@ obsDist <- fields::rdist(obsCoords)
 ```
 
 
-```{r Ex 10.9 nimble model}
+```{r Ex 10.9 nimble model, error = FALSE, message = FALSE, results='hide', cache = TRUE}
 
 Example10_9Code <-  nimbleCode ({
   # Covariance matrix spatial effect
@@ -272,11 +272,6 @@ Example10_9Code <-  nimbleCode ({
   
 }) 
 
-```
-
-Define the constants, data and initials lists for the `nimble` model.
-
-```{r nimble Ex 10.9 set constants and inits, error = FALSE, message = FALSE, results='hide'}
 # Define the constants, data, parameters and initial values
 set.seed(1)
 easting_scaled <- as.vector(scale(Mtl_benzene_sample$easting))
@@ -337,7 +332,7 @@ predCoords <- unname(as.matrix(Mtl_centroids_df))
 
 Following the posterior predictive distribution we have to define a model for the predictions. 
 
-```{r Ex 10.9 nimble predictions}
+```{r Ex 10.9 nimble predictions using Rcpp, cache=TRUE}
 # Extract samples from nimble model
 tidy_post_samples <- mcmc.out$samples %>% tidy_draws()
 
@@ -365,10 +360,6 @@ predMu <- cbind(1, as.matrix(predCoords_sc)) %*% t(cbind(post_beta0, post_beta1,
 
 pred2obsDist <- fields::rdist(predCoords, obsCoords)
 
-```
-
-
-```{r Ex 10.9 nimble predictions using Rcpp}
 
 Rcpp::sourceCpp("functions/prediction_marginal_gp12.cpp")
 args(prediction_marginal_gp12)
@@ -477,7 +468,7 @@ cat functions/Example10_9.stan
 ``` 
 
 
-```{r Ex 10.9 stan exponential model, warning = FALSE, message = FALSE}
+```{r Ex 10.9 stan exponential model, warning = FALSE, message = FALSE, cache = TRUE}
 set.seed(1)
 easting_scaled <- as.vector(scale(Mtl_benzene_sample$easting))
 northing_scaled <- as.vector(scale(Mtl_benzene_sample$northing))
@@ -537,7 +528,7 @@ predCoords <- unname(as.matrix(Mtl_centroids_df))
 
 ```
 
-```{r Ex 10.9 stan predictions}
+```{r Ex 10.9 stan predictions using Rcpp, cache = TRUE}
 # Extract samples from nimble model
 stan_post_samples <- rstan::extract(Example10_9Stan,
     pars = c("beta0","beta", "phi", "sigma_sq", "tau_sq"))
@@ -565,11 +556,6 @@ obsMu <- cbind(1, easting_scaled, northing_scaled) %*% t(cbind(post_beta0, post_
 predMu <- cbind(1, as.matrix(predCoords_sc)) %*% t(cbind(post_beta0, post_beta))
 
 pred2obsDist <- fields::rdist(predCoords, obsCoords)
-
-```
-
-
-```{r Ex 10.9 stan predictions using Rcpp}
 
 Rcpp::sourceCpp("functions/prediction_marginal_gp12.cpp")
 args(prediction_marginal_gp12)
@@ -838,7 +824,7 @@ Example10_14_Nimble <- nimbleCode({
 
 ```
 
-```{r Ex 10.14 prepare data nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 10.14 prepare data nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', cache = TRUE}
 # distance specification
 coords_sf <- sf::st_as_sf(malaria_village[,c("long","lat")], 
                           coords = c("long","lat")) |> 
@@ -879,12 +865,6 @@ n <- nrow(X) # child number
 N <- nrow(malaria_village) # number of villages
 zeroes <- rep(0, N) # auxiliary vector of zeroes for model
 ones <- rep(1, N)
-
-```
-
-
-
-```{r Ex 10.14 run nimble}
 
 const_list <- list(n = n, # number of childs
                    N = N, # number of villages
@@ -1026,7 +1006,7 @@ cat functions/Example10_14.stan
 ```
 
 
-```{r Ex 10.14 stan data, warning = FALSE}
+```{r Ex 10.14 stan data, warning = FALSE, cache = TRUE}
 
 ex.data <- list( n = nrow(gambia), # number of children
                  k = ncol(X), # number of covariates

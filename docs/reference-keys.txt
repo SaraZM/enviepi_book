@@ -4,6 +4,7 @@ uncertainty
 data
 embracing
 tactics
+example-6.3-fitting-a-poisson-regression-model
 Strategies
 trusted
 solutions-to-selected-exercises
@@ -11,8 +12,12 @@ placeholder-repeat-the-black-smoke-analysis-conducted-in-watson-et-al.-2019.-in-
 Disease
 hazards
 Time
-stan-5
 nimble-5
+time-varying-level-model
+trend-model
+stan-5
+time-varying-level-model-1
+trend-model-1
 exposure
 causality
 solutions-to-selected-exercises-1

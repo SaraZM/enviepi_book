@@ -110,7 +110,7 @@ points(BlackSmokePrefData$east, BlackSmokePrefData$north, col = "red")
 
 Now we define and fit our INLA model.
 
-```{r model, results = 'hide', eval = FALSE}
+```{r model, results = 'hide', eval = FALSE, message = FALSE, cache = TRUE}
 spde_obj = inla.spde2.pcmatern(
   mesh = mesh,
   alpha = 2,
