@@ -11,13 +11,13 @@ collected. From this chapter, the reader will have gained an understanding of th
 - Preferential sampling, where the process that determines the locations of monitoring sites and the process being modelled are in some ways dependent.
 - How preferential sampling can bias the measurements that arise from environmental monitoring networks
 
-## Solutions to Selected Exercises
+## Solutions to Selected Exercises {-}
 
-### PLACEHOLDER: Repeat the Black Smoke analysis conducted in Watson et al. 2019. in the "naive" model. 
+### PLACEHOLDER: Repeat the Black Smoke analysis conducted in Watson et al. 2019. in the "naive" model. {-}
 
 If INLA is not already installed, it needs to be done manually (https://www.r-inla.org/download-install):
 
-```{r install inla, eval=FALSE}
+```{r install inla}
 install.packages(
   "INLA",
   repos = c(getOption("repos"), INLA = "https://inla.r-inla-download.org/R/stable"),
@@ -27,7 +27,7 @@ install.packages(
 
 After INLA is installed load all the necessary packages.
 
-```{r Ex load packages , eval = FALSE}
+```{r Ex load packages }
 library(INLA)
 library(mvtnorm)
 library(boot)
@@ -39,7 +39,7 @@ library(ggplot2)
 
 Assuming the data is held in the file `BlackSmokePrefData.csv` in a `/data` directory:
 
-```{r data clean and standardize, eval = FALSE}
+```{r data clean and standardize}
 
 BlackSmokePrefData <- read.csv("data/BlackSmokePrefData.csv")
 
@@ -56,7 +56,7 @@ BlackSmokePrefData[, 3] <- BlackSmokePrefData[, 3] / sd_y
 
 We need to reshape the data to have one observation per row, as required by INLA.
 
-```{r reshape, eval = FALSE}
+```{r reshape}
 yearmeans = colMeans(BlackSmokePrefData[,-c(1, 2, 3)], na.rm = T)  ## save means for each year
 
 BlackSmokePrefData <-
@@ -76,7 +76,7 @@ BlackSmokePrefData$bsmoke = log(BlackSmokePrefData$bsmoke)
 
 Producing the 2-d mesh of the UK:
 
-```{r mesh analysis, eval = FALSE}
+```{r mesh analysis, cache = TRUE}
 no_sites = as.numeric(length(unique(BlackSmokePrefData$site))) # number of sites
 no_T = as.numeric(length(unique(BlackSmokePrefData$year))) # number of years
 
@@ -110,7 +110,7 @@ points(BlackSmokePrefData$east, BlackSmokePrefData$north, col = "red")
 
 Now we define and fit our INLA model.
 
-```{r model, results = 'hide', eval = FALSE, message = FALSE, cache = TRUE}
+```{r model, results = 'hide', message = FALSE, cache = TRUE}
 spde_obj = inla.spde2.pcmatern(
   mesh = mesh,
   alpha = 2,
@@ -215,7 +215,7 @@ out.naive = inla(
 
 We can now take posteriors from the model.
 
-```{r posterior, eval = FALSE}
+```{r posterior}
 
 m_samples = 50
 
@@ -229,7 +229,7 @@ samp[[i]]$latent = samp[[i]]$latent[-c(grep('Predictor', rownames(samp[[i]]$late
 
 Finally, summarize and plot the outputs:
 
-```{r summarize, eval = FALSE}
+```{r summarize}
 stepsize = 5000 / sd_x
 nxy = round(c(diff(range(
   BlackSmokePrefData$east

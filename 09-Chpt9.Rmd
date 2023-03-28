@@ -41,7 +41,8 @@ Example9_1Nimble <- nimbleCode({
     Y[i] ~ dpois(mu[i])
     # REVIEW: There is an intercept in the book, 
     # but then we wouldn't be able to compare it to example 5.2
-    mu[i] <- E[i] * theta[i]
+    mu[i] <- E[i]*exp(beta0)* theta[i]
+    #mu[i] <- E[i]* theta[i]
     # REVIEW: Same as before, the example in the book has theta[i] ~ Ga(a,a)
     theta[i] ~ dgamma(a, b)
     Y.fit[i] ~ dpois(mu[i])
@@ -49,6 +50,7 @@ Example9_1Nimble <- nimbleCode({
   # Priors
   a ~ dexp(lambda_a)
   b ~ dexp(lambda_b)
+  beta0 ~ dnorm(0, 10)
 
 })
 
@@ -78,10 +80,11 @@ inits <-
       theta = rgamma(N, 1, 1),
       a = rexp(1, lambda_a),
       b = rexp(1, lambda_b),
+      beta0 = 0,
       Y.fit = rpois(N, E)
     )
 # parameters to monitor
-params <- c("theta", "a", "b", "Y.fit")
+params <- c("theta", "a", "b", "beta0", "Y.fit")
 
 # Run model in nimble
 mcmc.out <- nimbleMCMC(
@@ -92,7 +95,7 @@ mcmc.out <- nimbleMCMC(
   monitors = params,
   niter = 50000,
   nburnin = 20000,
-  thin = 30,
+  thin = 14,
   WAIC = TRUE,
   nchains = 2,
   summary = TRUE,
@@ -115,6 +118,8 @@ mvSamples <- mcmc.out$samples
 plot(mvSamples[, c("a")], bty = "n")
 # trace plot of b
 plot(mvSamples[, c("b")], bty = "n")
+# trace plot of beta0
+plot(mvSamples[, c("beta0")], bty = "n")
 # trace plots of theta
 for (i in 1:3)
   plot(mvSamples[, c(paste("theta[", i, "]", sep = ""))], bty = "n")
@@ -126,7 +131,7 @@ Now that we have checked the convergence of the chains we can plot the posterior
 
 ```{r Ex 9.1 nimble posterior summary}
 # Print posterior summary for parameters a and b
-summary(mvSamples[, c("a", "b")])
+summary(mvSamples[, c("a", "b", "beta0")])
 # posterior summaries of theta_i
 post_summary <- mcmc.out$summary$all.chains |> as.data.frame() |>
   tibble::rownames_to_column("variable")

@@ -802,19 +802,21 @@ Example10_14_Nimble <- nimbleCode({
   Sigma[1:N, 1:N] <-
      sigma_sq*(1 + (sqrt(3)*obs_dist_mat[1:N, 1:N])/phi) * exp(-sqrt(3)*obs_dist_mat[1:N, 1:N] / phi) 
 
-   #mean_S[1:N] <- b0*ones[1:N]
-  S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
+  #b0[1:N] ~ dmnorm(zeroes[1:N], cov = Id10[1:N, 1:N])
+  mean_S[1:N] <- nimRep(b0, N)
+  S[1:N] ~ dmnorm(mean_S[1:N], cov = Sigma[1:N,1:N])
   # 
     for (j in 1:n) {  # by child
-    logit(p[j])  <-  b0 + inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
+    logit(p[j])  <-  inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
     y[j] ~ dbern(p[j])
     }
 
   for (l in 1:k){
-    b[l] ~ dnorm(0, var = 10)
+    b[l] ~ dnorm(0, sd = 5)
   }
+  b0 ~ dnorm(0, sd = 5)
   
-  b0 ~  dnorm(0, sd = 5)
+
 
 })
 
@@ -867,7 +869,8 @@ const_list <- list(n = n, # number of childs
                    zeroes = zeroes, # vector of zeroes 
                    prior_max_dist = max(obs_dist_mat)/6, # max dist for phi prior
                    k =  ncol(X),# number of predictors
-                   index_village = index_village) 
+                   index_village = index_village,
+                   Id10 = 10*diag(N)) 
 
 dat_list <- list(y = gambia_df$pos, # malaria positive test 
                  obs_dist_mat = obs_dist_mat, # distance matrix in km
@@ -906,7 +909,7 @@ Cmcmc <-
     resetFunctions = TRUE,
     showCompilerOutput = TRUE
   )
-niters <- 30000
+niters <- 60000
 nburnins <- 0.5 * niters
 nchains <- 2
 nthins <- 14

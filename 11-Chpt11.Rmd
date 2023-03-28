@@ -104,11 +104,11 @@ ozone.predict <- predict(ozone.loess, data.frame(day = 1:nrow(site_daily)))
 ozone.predict_df <- data.frame(day = 1:nrow(site_daily),
                                ozone.prediction = ozone.predict)
 
-ggplot(data = site_daily) +
+plot_SMA1 <- ggplot(data = site_daily) +
   geom_line(aes(x = day, y = max.ozone, group = 1)) +
   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
-  xlab("Day in 2013 at Los Angeles Site 060379033") +
-  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  xlab("Day in 2013 at LA Site 060379033") +
+  ylab("Ozone Level (ppm)") +
   ggtitle("Single day") +
   theme_clear()
 
@@ -116,11 +116,11 @@ ggplot(data = site_daily) +
 ozone_SMA3 <- data.frame(sma = SMA(site_daily$max.ozone, n = 3),
                          day = 1:nrow(site_daily))
 
-ggplot(data = ozone_SMA3) +
+plot_SMA3 <- ggplot(data = ozone_SMA3) +
   geom_line(aes(x = day, y = sma, group = 1)) +
   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
-  xlab("Day in 2013 at Los Angeles Site 060379033") +
-  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  xlab("Day in 2013 at LA Site 060379033") +
+  ylab("Ozone Level (ppm)") +
   ggtitle("Three days") +
   theme_clear()
 
@@ -129,11 +129,11 @@ ggplot(data = ozone_SMA3) +
 ozone_SMA6 <- data.frame(sma = SMA(site_daily$max.ozone, n = 6),
                          day = 1:nrow(site_daily))
 
-ggplot(data = ozone_SMA6) +
+plot_SMA6 <- ggplot(data = ozone_SMA6) +
   geom_line(aes(x = day, y = sma, group = 1)) +
   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
-  xlab("Day in 2013 at Los Angeles Site 060379033") +
-  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  xlab("Day in 2013 at LA Site 060379033") +
+  ylab("Ozone Level (ppm)") +
   ggtitle("Six days") +
   theme_clear()
 
@@ -142,13 +142,17 @@ ggplot(data = ozone_SMA6) +
 ozone_SMA12 <- data.frame(sma = SMA(site_daily$max.ozone, n = 12),
                          day = 1:nrow(site_daily))
 
-ggplot(data = ozone_SMA12) +
+plot_SMA12 <- ggplot(data = ozone_SMA12) +
   geom_line(aes(x = day, y = sma, group = 1)) +
   geom_line(data = ozone.predict_df, aes(x = day, y = ozone.predict)) +
-  xlab("Day in 2013 at Los Angeles Site 060379033") +
-  ylab("Max Daily 8hr Ozone Level (ppm)") +
+  xlab("Day in 2013 at LA Site 060379033") +
+  ylab("Ozone Level (ppm)") +
   ggtitle("Twelve days") +
   theme_clear()
+
+cowplot::plot_grid(plot_SMA1, plot_SMA3, plot_SMA6, plot_SMA12, labels = "auto")
+
+
 
 ```
 
