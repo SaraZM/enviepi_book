@@ -803,17 +803,23 @@ Example10_14_Nimble <- nimbleCode({
      sigma_sq*(1 + (sqrt(3)*obs_dist_mat[1:N, 1:N])/phi) * exp(-sqrt(3)*obs_dist_mat[1:N, 1:N] / phi) 
 
   #b0[1:N] ~ dmnorm(zeroes[1:N], cov = Id10[1:N, 1:N])
-  mean_S[1:N] <- nimRep(b0, N)
-  S[1:N] ~ dmnorm(mean_S[1:N], cov = Sigma[1:N,1:N])
-  # 
+  #mean_S[1:N] <- nimRep(b0, N)
+    for(i in 1:N){
+    mean_S[i] <- b0
+    }
+  
+  #S[1:N] ~ dmnorm(mean_S[1:N], cov = Sigma[1:N,1:N])
+    S[1:N] ~ dmnorm(zeroes[1:N], cov = Sigma[1:N,1:N])
+  
     for (j in 1:n) {  # by child
-    logit(p[j])  <-  inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
+    logit(p[j])  <- b0 + inprod(b[1:k], X[j,1:k]) + S[index_village[j]]
     y[j] ~ dbern(p[j])
     }
 
   for (l in 1:k){
     b[l] ~ dnorm(0, sd = 5)
   }
+  
   b0 ~ dnorm(0, sd = 5)
   
 
@@ -881,7 +887,7 @@ init_list <- list(sigma = 0.5,
                   p = rep(expit(rnorm(1, 0, 1)), n), 
                   phi_inv = 6/max(obs_dist_mat),
                   b = rep(0, ncol(X)), 
-                  b0 = 0,
+                  b0 = rnorm(1, 0, 1),
                   S = rnorm(N, 0, 1))
 
 #init_list <- list(p = runif(n, 0, 1), b = rnorm(ncol(X), 0,  1), b0 = rnorm(1, 0, 1))
@@ -909,7 +915,7 @@ Cmcmc <-
     resetFunctions = TRUE,
     showCompilerOutput = TRUE
   )
-niters <- 60000
+niters <- 80000
 nburnins <- 0.5 * niters
 nchains <- 2
 nthins <- 14
@@ -938,7 +944,7 @@ plot(post_samples$samples[, c("b[6]")], bty = "n", main = "b[6]")
 plot(post_samples$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(post_samples$samples[, c("phi")], bty = "n", main = "phi")
 plot(post_samples$samples[, c("S[1]")], bty = "n", main = "S[1]")
-plot(post_samples$samples[, c("S[45]")], bty = "n", main = "S[45]")
+plot(post_samples$samples[, c("S[24]")], bty = "n", main = "S[24]")
 plot(post_samples$samples[, c("S[54]")], bty = "n", main = "S[54]")
 plot(post_samples$samples[, c("p[1]")], bty = "n", main = "p[1]")
 plot(post_samples$samples[, c("p[1805]")], bty = "n", main = "p[1805]")

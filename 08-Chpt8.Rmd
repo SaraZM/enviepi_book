@@ -17,7 +17,7 @@ collected. From this chapter, the reader will have gained an understanding of th
 
 If INLA is not already installed, it needs to be done manually (https://www.r-inla.org/download-install):
 
-```{r install inla}
+```{r install inla, eval = FALSE}
 install.packages(
   "INLA",
   repos = c(getOption("repos"), INLA = "https://inla.r-inla-download.org/R/stable"),

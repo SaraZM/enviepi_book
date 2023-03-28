@@ -998,7 +998,7 @@ which is the density function of the $Ga(a + 0.5, (\gamma_t - \gamma_{t-1})^2/2 
 
 We use the `rjags` package here, as it most closely resembles WinBUGS, but is compatible with all operating systems. 
 
-```{r}
+```{r Exercise 11.13, cache = TRUE}
 library(rjags)
 library(tidyverse)
 
