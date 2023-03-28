@@ -34,7 +34,7 @@ expected <-
 
 The following is the code for the Poisson-Gamma model implemented in `nimble`.
 
-```{r Ex 9.1 nimble model, results='hide', warning=FALSE, message= FALSE}
+```{r Ex 9.1 nimble model, results='hide', warning=FALSE, message= FALSE, cache = TRUE}
 
 Example9_1Nimble <- nimbleCode({
   for (i in 1:N) {
@@ -52,11 +52,7 @@ Example9_1Nimble <- nimbleCode({
 
 })
 
-```
-
-Define the constants, data and initials lists for the `nimble` model.
-
-```{r Ex 9.1 nimble set constants and inits, error = FALSE, message = FALSE, results='hide'}
+# Define the constants, data and initials lists for the `nimble` model.
 
 # observations
 y <- observed$Y2010
@@ -208,7 +204,7 @@ cat functions/Example9_1.stan
 
 Define the data for the model, similar to `nimble`. 
 
-```{r Ex 9.1 stan define data, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 9.1 stan define data, error = FALSE, message = FALSE, results='hide', cache=TRUE}
 # observations
 y <- observed$Y2010
 # offset
@@ -387,7 +383,7 @@ numneigh  <- apply(W.mat,2,sum)
 
 ```
 
-```{r Ex 9.3 nimble car model, warning=FALSE}
+```{r Ex 9.3 nimble car model, warning=FALSE, message = FALSE, results='hide', cache = TRUE}
 
 Example9_3Nimble <- nimbleCode({
   # Likelihood
@@ -408,11 +404,8 @@ Example9_3Nimble <- nimbleCode({
   }
 })
 
-```
+#  Define the constants, data and initial values lists and run the model. 
 
-Define the constants, data and initial values lists and run the model. 
-
-```{r Ex 9.3 nimble car run, error = FALSE, message = FALSE, results='hide'}
 # constants list
 constants <- list(
   N = N,
@@ -584,56 +577,46 @@ mungeCARdata4stan = function(adjBUGS, numBUGS) {
 ```
 
 
-<!-- REVIEW: I am missing the adjacency matrix but I calculated like they did for the CARBayes example, is that right? -->
-
-Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
-
-```{r Ex 9.3 stan neighborhood}
-
-# Create the neighborhood
-W.nb <-
-  poly2nb(england, row.names = rownames(england))
-# Creates a matrix for following function call
-W.mat <- nb2mat(W.nb, style = "B")
-# Define the spatial structure to use in stan
-N <- length(unique(england$ID))
-neigh <- adjlist(W.mat, N)
-numneigh  <-  apply(W.mat, 2, sum)
-nbs <- mungeCARdata4stan(neigh, numneigh)
-N <- nbs$N
-node1 <- nbs$node1
-node2 <- nbs$node2
-N_edges <- nbs$N_edges
-
-```
-
 
 This model is in a separate file called `Example8_3.stan` that will be called later.
 
 ```{r engine='bash', comment='', echo = FALSE}
 cat functions/Example9_3.stan
 ``` 
+<!-- REVIEW: I am missing the adjacency matrix but I calculated like they did for the CARBayes example, is that right? -->
+
+Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
 
 
-```{r Ex 9.3 stan car effects, warning=FALSE}
+```{r Ex 9.3 stan car effects, warning=FALSE, results='hide', message = FALSE, cache=TRUE}
 
-N_edges <- N_edges
-node1 <- node1
-node2 <- node2
-N <- N
+# Create the neighborhood
+W.nb <-
+  poly2nb(england, row.names = rownames(england))
+# Creates a matrix for following function call
+W.mat <- nb2mat(W.nb, style = "B")
+
+# Define the spatial structure to use in stan
+N <- length(unique(england$ID))
+neigh <- adjlist(W.mat, N)
+numneigh  <-  apply(W.mat, 2, sum)
+nbs <- mungeCARdata4stan(neigh, numneigh)
+
+
+# Define data and variables for Stan model
 y <- copd_df$Y2010
 E <- copd_df$E2010
 X <- as.numeric(scale(copd_df$Average.Score))
 
 ex.data <- list(
-  N = N,
+  N =  nbs$N,
   y = y,
   E = E,
   p = 1,
   X = as.matrix(X),
-  N_edges = N_edges,
-  node1 = node1,
-  node2 = node2
+  N_edges = nbs$N_edges,
+  node1 = nbs$node1,
+  node2 = nbs$node2
 )
 
 Example9_3Stan  <- stan(
@@ -777,7 +760,7 @@ Here, we use *first neighbors* to define the structure, so any local authority s
 The function `S.CARleroux()` allows us to use the neighborhood structure and performs a Bayesian analysis to create a smoothed set of observed values.
 
 
-```{r Ex 9.4 carbayes run, results='hide', message = FALSE}
+```{r Ex 9.4 carbayes run, results='hide', message = FALSE, cache = TRUE}
 
 # Running smoothing model
 Ex9_4 <-

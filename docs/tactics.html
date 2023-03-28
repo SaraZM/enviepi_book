@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-03-03" />
+<meta name="date" content="2023-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -161,7 +161,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#modelling-the-raw-standardized-mortality-rates-smrs"><i class="fa fa-check"></i>Modelling the raw standardized mortality rates (SMRs)</a></li>
 <li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#modelling-a-poisson-gamma-with-an-mcmc-implemented-in-r"><i class="fa fa-check"></i>Modelling a Poisson-Gamma with an MCMC implemented in <code>R</code></a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble"><i class="fa fa-check"></i>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code></a></li>
+<li class="chapter" data-level="6.1" data-path="tactics.html"><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model"><i class="fa fa-check"></i><b>6.1</b> Example 6.3: Fitting a Poisson regression model</a>
+<ul>
+<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#nimble"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="tactics.html"><a href="tactics.html#stan"><i class="fa fa-check"></i>Stan</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="Strategies.html"><a href="Strategies.html"><i class="fa fa-check"></i><b>7</b> Strategies implementing uncertainty models</a></li>
 <li class="chapter" data-level="8" data-path="trusted.html"><a href="trusted.html"><i class="fa fa-check"></i><b>8</b> But can the data be trusted</a>
@@ -175,13 +179,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.1-empirical-bayes-and-bayes-smoothing-of-copd-mortality-for-2010"><i class="fa fa-check"></i>Example 9.1: Empirical Bayes and Bayes smoothing of COPD mortality for 2010</a>
 <ul>
-<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#nimble"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#stan"><i class="fa fa-check"></i>Stan</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#nimble-1"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#stan-1"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.3-fitting-a-conditional-spatial-model-in-nimble-and-stan"><i class="fa fa-check"></i>Example 9.3: Fitting a conditional spatial model in <code>nimble</code> and <code>stan</code></a>
 <ul>
-<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#nimble-1"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#stan-1"><i class="fa fa-check"></i>Stan</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#stan-2"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.4-fitting-a-conditional-spatial-model-using-carbayes"><i class="fa fa-check"></i>Example 9.4: Fitting a conditional spatial model using CARBayes</a></li>
 <li class="chapter" data-level="" data-path="Disease.html"><a href="Disease.html#example-9.5-fitting-a-conditional-model-using-inla"><i class="fa fa-check"></i>Example 9.5: Fitting a conditional model using INLA</a></li>
@@ -195,15 +199,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.6-basic-spatial-modelling-and-prediction-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.6 Basic spatial modelling and prediction of benzene in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.9-spatial-modelling-of-benzene-in-montreal"><i class="fa fa-check"></i>Example 10.9 Spatial modelling of Benzene in Montreal</a>
 <ul>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-2"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-2"><i class="fa fa-check"></i>Stan</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-3"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-3"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.11-inla-creating-a-mesh"><i class="fa fa-check"></i>Example 10.11: INLA, creating a mesh</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.12-fitting-an-spde-model-using-rinla-benzene-concentration-in-montreal"><i class="fa fa-check"></i>Example 10.12: Fitting an SPDE model using R–INLA: benzene concentration in Montreal</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.13-directional-variograms"><i class="fa fa-check"></i>Example 10.13: Directional variograms</a></li>
 <li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#example-10.14-spatial-modeling-of-malaria-in-gambia"><i class="fa fa-check"></i>Example 10.14: Spatial modeling of malaria in Gambia</a>
 <ul>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-3"><i class="fa fa-check"></i>Nimble</a></li>
-<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-3"><i class="fa fa-check"></i>Stan</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#nimble-4"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="hazards.html"><a href="hazards.html#stan-4"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="Time.html"><a href="Time.html"><i class="fa fa-check"></i><b>11</b> Time-why it also matters</a>
@@ -212,10 +217,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.2-low-pass-filtering-of-carbon-monoxide-levels-using-the-moving-average"><i class="fa fa-check"></i>Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.13-forecasting-ozone-levels"><i class="fa fa-check"></i>Example 11.13 Forecasting ozone levels</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.14-forecasting-volcanic-ash"><i class="fa fa-check"></i>Example 11.14 Forecasting volcanic ash</a></li>
-<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model"><i class="fa fa-check"></i>Example 11.16 implementation of a dynamic linear model</a>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model-uk-ozone-data"><i class="fa fa-check"></i>Example 11.16 Implementation of a dynamic linear model: UK ozone data</a>
 <ul>
-<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#nile-river-data"><i class="fa fa-check"></i>Nile river data</a></li>
-<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#uk-ozone-data"><i class="fa fa-check"></i>UK ozone data</a></li>
+<li class="chapter" data-level="11.0.1" data-path="Time.html"><a href="Time.html#nimble-5"><i class="fa fa-check"></i><b>11.0.1</b> Nimble</a></li>
+<li class="chapter" data-level="11.0.2" data-path="Time.html"><a href="Time.html#stan-5"><i class="fa fa-check"></i><b>11.0.2</b> Stan</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
@@ -492,211 +497,220 @@ the areas.</p>
 <span id="cb33-32"><a href="tactics.html#cb33-32" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>, lambda_a)</span>
 <span id="cb33-33"><a href="tactics.html#cb33-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial value sampled from the prior for b</span></span>
 <span id="cb33-34"><a href="tactics.html#cb33-34" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>, lambda_b) </span>
-<span id="cb33-35"><a href="tactics.html#cb33-35" aria-hidden="true" tabindex="-1"></a>fitted[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(N, E <span class="sc">*</span> theta[<span class="dv">1</span>, ])</span></code></pre></div>
-<p>Once all the constants and initial values are set we can run the MCMC.
-The following code shows the MCMC implementation of a Poisson-Gamma model using only <code>R</code>.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="tactics.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Starting from l=2 as l=1 contains the initial values</span></span>
-<span id="cb34-2"><a href="tactics.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>L) {</span>
-<span id="cb34-3"><a href="tactics.html#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sampling from the posterior full conditional of each theta_i</span></span>
-<span id="cb34-4"><a href="tactics.html#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
-<span id="cb34-5"><a href="tactics.html#cb34-5" aria-hidden="true" tabindex="-1"></a>    theta[l, i] <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, (y[i] <span class="sc">+</span> a[(l <span class="sc">-</span> <span class="dv">1</span>)]), <span class="at">rate =</span> (E[i] <span class="sc">+</span> b[(l <span class="sc">-</span></span>
-<span id="cb34-6"><a href="tactics.html#cb34-6" aria-hidden="true" tabindex="-1"></a>                                                                      <span class="dv">1</span>)]))</span>
-<span id="cb34-7"><a href="tactics.html#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sampling from the posterior full conditional of b</span></span>
-<span id="cb34-8"><a href="tactics.html#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># b[l] &lt;- b[l-1]</span></span>
-<span id="cb34-9"><a href="tactics.html#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># REVIEW: is this part of the comment?</span></span>
-<span id="cb34-10"><a href="tactics.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  b[l] <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, (N <span class="sc">*</span> a[(l <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">+</span> <span class="dv">1</span>), <span class="at">rate =</span> (<span class="fu">sum</span>(theta[l, ]) <span class="sc">+</span> lambda_b))</span>
-<span id="cb34-11"><a href="tactics.html#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Metropolis-Hastings step to sample from the full conditional of &quot;a&quot;</span></span>
-<span id="cb34-12"><a href="tactics.html#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the new value receives the current value in case the proposed</span></span>
-<span id="cb34-13"><a href="tactics.html#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># value is rejected</span></span>
-<span id="cb34-14"><a href="tactics.html#cb34-14" aria-hidden="true" tabindex="-1"></a>  a[l] <span class="ot">&lt;-</span> a[l <span class="sc">-</span> <span class="dv">1</span>]</span>
-<span id="cb34-15"><a href="tactics.html#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Proposal in the log-scale</span></span>
-<span id="cb34-16"><a href="tactics.html#cb34-16" aria-hidden="true" tabindex="-1"></a>  laprop <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="fu">log</span>(a[l <span class="sc">-</span> <span class="dv">1</span>]), u)</span>
-<span id="cb34-17"><a href="tactics.html#cb34-17" aria-hidden="true" tabindex="-1"></a>  aprop <span class="ot">&lt;-</span> <span class="fu">exp</span>(laprop)</span>
-<span id="cb34-18"><a href="tactics.html#cb34-18" aria-hidden="true" tabindex="-1"></a>  num <span class="ot">&lt;-</span></span>
-<span id="cb34-19"><a href="tactics.html#cb34-19" aria-hidden="true" tabindex="-1"></a>    N <span class="sc">*</span> (aprop <span class="sc">*</span> (<span class="fu">log</span>(b[l])) <span class="sc">-</span> <span class="fu">lgamma</span>(aprop)) <span class="sc">+</span> (aprop <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">log</span>(theta[l, ])) <span class="sc">-</span></span>
-<span id="cb34-20"><a href="tactics.html#cb34-20" aria-hidden="true" tabindex="-1"></a>    aprop <span class="sc">*</span> lambda_a <span class="sc">+</span> <span class="fu">log</span>(aprop)</span>
-<span id="cb34-21"><a href="tactics.html#cb34-21" aria-hidden="true" tabindex="-1"></a>  den <span class="ot">&lt;-</span></span>
-<span id="cb34-22"><a href="tactics.html#cb34-22" aria-hidden="true" tabindex="-1"></a>    N <span class="sc">*</span> (a[l <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">*</span> (<span class="fu">log</span>(b[l])) <span class="sc">-</span> <span class="fu">lgamma</span>(a[l <span class="sc">-</span> <span class="dv">1</span>])) <span class="sc">+</span></span>
-<span id="cb34-23"><a href="tactics.html#cb34-23" aria-hidden="true" tabindex="-1"></a>    (a[(l <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">log</span>(theta[l, ])) <span class="sc">-</span></span>
-<span id="cb34-24"><a href="tactics.html#cb34-24" aria-hidden="true" tabindex="-1"></a>    a[(l <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">*</span> lambda_a <span class="sc">+</span> <span class="fu">log</span>(a[(l <span class="sc">-</span> <span class="dv">1</span>)])</span>
-<span id="cb34-25"><a href="tactics.html#cb34-25" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">&lt;-</span> <span class="fu">exp</span>(num <span class="sc">-</span> den)</span>
-<span id="cb34-26"><a href="tactics.html#cb34-26" aria-hidden="true" tabindex="-1"></a>  unif <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb34-27"><a href="tactics.html#cb34-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Change the current value if the proposed value is accepted</span></span>
-<span id="cb34-28"><a href="tactics.html#cb34-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (unif <span class="sc">&lt;</span> ratio)</span>
-<span id="cb34-29"><a href="tactics.html#cb34-29" aria-hidden="true" tabindex="-1"></a>    a[l] <span class="ot">&lt;-</span> aprop</span>
-<span id="cb34-30"><a href="tactics.html#cb34-30" aria-hidden="true" tabindex="-1"></a>  fitted[l,] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(N, E <span class="sc">*</span> theta[l,])</span>
-<span id="cb34-31"><a href="tactics.html#cb34-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb33-35"><a href="tactics.html#cb33-35" aria-hidden="true" tabindex="-1"></a>fitted[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(N, E <span class="sc">*</span> theta[<span class="dv">1</span>, ])</span>
+<span id="cb33-36"><a href="tactics.html#cb33-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-37"><a href="tactics.html#cb33-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-38"><a href="tactics.html#cb33-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Once all the constants and initial values are set we can run the MCMC. </span></span>
+<span id="cb33-39"><a href="tactics.html#cb33-39" aria-hidden="true" tabindex="-1"></a><span class="co"># The following code shows the MCMC implementation of a Poisson-Gamma model using only `R`.</span></span>
+<span id="cb33-40"><a href="tactics.html#cb33-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-41"><a href="tactics.html#cb33-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-42"><a href="tactics.html#cb33-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Starting from l=2 as l=1 contains the initial values</span></span>
+<span id="cb33-43"><a href="tactics.html#cb33-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>L) {</span>
+<span id="cb33-44"><a href="tactics.html#cb33-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sampling from the posterior full conditional of each theta_i</span></span>
+<span id="cb33-45"><a href="tactics.html#cb33-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
+<span id="cb33-46"><a href="tactics.html#cb33-46" aria-hidden="true" tabindex="-1"></a>    theta[l, i] <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, (y[i] <span class="sc">+</span> a[(l <span class="sc">-</span> <span class="dv">1</span>)]), <span class="at">rate =</span> (E[i] <span class="sc">+</span> b[(l <span class="sc">-</span></span>
+<span id="cb33-47"><a href="tactics.html#cb33-47" aria-hidden="true" tabindex="-1"></a>                                                                      <span class="dv">1</span>)]))</span>
+<span id="cb33-48"><a href="tactics.html#cb33-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sampling from the posterior full conditional of b</span></span>
+<span id="cb33-49"><a href="tactics.html#cb33-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># b[l] &lt;- b[l-1]</span></span>
+<span id="cb33-50"><a href="tactics.html#cb33-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># REVIEW: is this part of the comment?</span></span>
+<span id="cb33-51"><a href="tactics.html#cb33-51" aria-hidden="true" tabindex="-1"></a>  b[l] <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, (N <span class="sc">*</span> a[(l <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">+</span> <span class="dv">1</span>), <span class="at">rate =</span> (<span class="fu">sum</span>(theta[l, ]) <span class="sc">+</span> lambda_b))</span>
+<span id="cb33-52"><a href="tactics.html#cb33-52" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Metropolis-Hastings step to sample from the full conditional of &quot;a&quot;</span></span>
+<span id="cb33-53"><a href="tactics.html#cb33-53" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the new value receives the current value in case the proposed</span></span>
+<span id="cb33-54"><a href="tactics.html#cb33-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># value is rejected</span></span>
+<span id="cb33-55"><a href="tactics.html#cb33-55" aria-hidden="true" tabindex="-1"></a>  a[l] <span class="ot">&lt;-</span> a[l <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb33-56"><a href="tactics.html#cb33-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Proposal in the log-scale</span></span>
+<span id="cb33-57"><a href="tactics.html#cb33-57" aria-hidden="true" tabindex="-1"></a>  laprop <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="fu">log</span>(a[l <span class="sc">-</span> <span class="dv">1</span>]), u)</span>
+<span id="cb33-58"><a href="tactics.html#cb33-58" aria-hidden="true" tabindex="-1"></a>  aprop <span class="ot">&lt;-</span> <span class="fu">exp</span>(laprop)</span>
+<span id="cb33-59"><a href="tactics.html#cb33-59" aria-hidden="true" tabindex="-1"></a>  num <span class="ot">&lt;-</span></span>
+<span id="cb33-60"><a href="tactics.html#cb33-60" aria-hidden="true" tabindex="-1"></a>    N <span class="sc">*</span> (aprop <span class="sc">*</span> (<span class="fu">log</span>(b[l])) <span class="sc">-</span> <span class="fu">lgamma</span>(aprop)) <span class="sc">+</span> (aprop <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">log</span>(theta[l, ])) <span class="sc">-</span></span>
+<span id="cb33-61"><a href="tactics.html#cb33-61" aria-hidden="true" tabindex="-1"></a>    aprop <span class="sc">*</span> lambda_a <span class="sc">+</span> <span class="fu">log</span>(aprop)</span>
+<span id="cb33-62"><a href="tactics.html#cb33-62" aria-hidden="true" tabindex="-1"></a>  den <span class="ot">&lt;-</span></span>
+<span id="cb33-63"><a href="tactics.html#cb33-63" aria-hidden="true" tabindex="-1"></a>    N <span class="sc">*</span> (a[l <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">*</span> (<span class="fu">log</span>(b[l])) <span class="sc">-</span> <span class="fu">lgamma</span>(a[l <span class="sc">-</span> <span class="dv">1</span>])) <span class="sc">+</span></span>
+<span id="cb33-64"><a href="tactics.html#cb33-64" aria-hidden="true" tabindex="-1"></a>    (a[(l <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">log</span>(theta[l, ])) <span class="sc">-</span></span>
+<span id="cb33-65"><a href="tactics.html#cb33-65" aria-hidden="true" tabindex="-1"></a>    a[(l <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">*</span> lambda_a <span class="sc">+</span> <span class="fu">log</span>(a[(l <span class="sc">-</span> <span class="dv">1</span>)])</span>
+<span id="cb33-66"><a href="tactics.html#cb33-66" aria-hidden="true" tabindex="-1"></a>  ratio <span class="ot">&lt;-</span> <span class="fu">exp</span>(num <span class="sc">-</span> den)</span>
+<span id="cb33-67"><a href="tactics.html#cb33-67" aria-hidden="true" tabindex="-1"></a>  unif <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb33-68"><a href="tactics.html#cb33-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Change the current value if the proposed value is accepted</span></span>
+<span id="cb33-69"><a href="tactics.html#cb33-69" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (unif <span class="sc">&lt;</span> ratio)</span>
+<span id="cb33-70"><a href="tactics.html#cb33-70" aria-hidden="true" tabindex="-1"></a>    a[l] <span class="ot">&lt;-</span> aprop</span>
+<span id="cb33-71"><a href="tactics.html#cb33-71" aria-hidden="true" tabindex="-1"></a>  fitted[l,] <span class="ot">&lt;-</span> <span class="fu">rpois</span>(N, E <span class="sc">*</span> theta[l,])</span>
+<span id="cb33-72"><a href="tactics.html#cb33-72" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>After running the MCMC, we should check if the chains have converged</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="tactics.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of burn in samples</span></span>
-<span id="cb35-2"><a href="tactics.html#cb35-2" aria-hidden="true" tabindex="-1"></a>burnin <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
-<span id="cb35-3"><a href="tactics.html#cb35-3" aria-hidden="true" tabindex="-1"></a>thin <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb35-4"><a href="tactics.html#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># MCMC samples</span></span>
-<span id="cb35-5"><a href="tactics.html#cb35-5" aria-hidden="true" tabindex="-1"></a>seqaux <span class="ot">&lt;-</span> <span class="fu">seq</span>(burnin, L, <span class="at">by =</span> thin)</span>
-<span id="cb35-6"><a href="tactics.html#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="tactics.html#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace-plots of the parameters</span></span>
-<span id="cb35-8"><a href="tactics.html#cb35-8" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="at">length =</span> <span class="dv">2000</span>)</span>
-<span id="cb35-9"><a href="tactics.html#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-10"><a href="tactics.html#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb35-11"><a href="tactics.html#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for &quot;a&quot;</span></span>
-<span id="cb35-12"><a href="tactics.html#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(a[seqaux], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb35-13"><a href="tactics.html#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(a[seqaux], <span class="at">prob =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb35-14"><a href="tactics.html#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">dexp</span>(xx, lambda_a), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb35-15"><a href="tactics.html#cb35-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-16"><a href="tactics.html#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="co"># COMBAK: This chains are not looking great</span></span>
-<span id="cb35-17"><a href="tactics.html#cb35-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-18"><a href="tactics.html#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for &quot;b&quot;</span></span>
-<span id="cb35-19"><a href="tactics.html#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(b[seqaux], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb35-20"><a href="tactics.html#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(b[seqaux], <span class="at">prob =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb35-21"><a href="tactics.html#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">dexp</span>(xx, lambda_b), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="tactics.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of burn in samples</span></span>
+<span id="cb34-2"><a href="tactics.html#cb34-2" aria-hidden="true" tabindex="-1"></a>burnin <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb34-3"><a href="tactics.html#cb34-3" aria-hidden="true" tabindex="-1"></a>thin <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb34-4"><a href="tactics.html#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># MCMC samples</span></span>
+<span id="cb34-5"><a href="tactics.html#cb34-5" aria-hidden="true" tabindex="-1"></a>seqaux <span class="ot">&lt;-</span> <span class="fu">seq</span>(burnin, L, <span class="at">by =</span> thin)</span>
+<span id="cb34-6"><a href="tactics.html#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="tactics.html#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace-plots of the parameters</span></span>
+<span id="cb34-8"><a href="tactics.html#cb34-8" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="at">length =</span> <span class="dv">2000</span>)</span>
+<span id="cb34-9"><a href="tactics.html#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="tactics.html#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb34-11"><a href="tactics.html#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for &quot;a&quot;</span></span>
+<span id="cb34-12"><a href="tactics.html#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(a[seqaux], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb34-13"><a href="tactics.html#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(a[seqaux], <span class="at">prob =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb34-14"><a href="tactics.html#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">dexp</span>(xx, lambda_a), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb34-15"><a href="tactics.html#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="tactics.html#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="co"># COMBAK: This chains are not looking great</span></span>
+<span id="cb34-17"><a href="tactics.html#cb34-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-18"><a href="tactics.html#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for &quot;b&quot;</span></span>
+<span id="cb34-19"><a href="tactics.html#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(b[seqaux], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb34-20"><a href="tactics.html#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(b[seqaux], <span class="at">prob =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb34-21"><a href="tactics.html#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">dexp</span>(xx, lambda_b), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20convergence-1.png" width="672" /></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="tactics.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Traceplots of theta&#39;s</span></span>
-<span id="cb36-2"><a href="tactics.html#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="tactics.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
-<span id="cb36-4"><a href="tactics.html#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
-<span id="cb36-5"><a href="tactics.html#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(theta[seqaux, i], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="tactics.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Traceplots of theta&#39;s</span></span>
+<span id="cb35-2"><a href="tactics.html#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="tactics.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb35-4"><a href="tactics.html#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb35-5"><a href="tactics.html#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(theta[seqaux, i], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20convergence-2.png" width="672" /></p>
 <!-- TODO: Add effective size and paragraph about acceptance ratio -->
 <p>Given the convergence issues, we can also check the estimated sampled size and Rhat using the package <code>coda</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="tactics.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS a: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS a: 63.7066406463849&quot;</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="tactics.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS b: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux]))</span></code></pre></div>
-<pre><code>## [1] &quot;ESS b: 61.7533118829279&quot;</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="tactics.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[1]: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="tactics.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS a: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(a[seqaux]))</span></code></pre></div>
+<pre><code>## [1] &quot;ESS a: 50.0892164646561&quot;</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="tactics.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS b: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(b[seqaux]))</span></code></pre></div>
+<pre><code>## [1] &quot;ESS b: 54.1012433947017&quot;</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="tactics.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[1]: &quot;</span>, coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">1</span>]))</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[1]: 2001&quot;</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="tactics.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[10]: &quot;</span>,coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="tactics.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;ESS theta[10]: &quot;</span>,coda<span class="sc">::</span><span class="fu">effectiveSize</span>(theta[seqaux, <span class="dv">10</span>]))</span></code></pre></div>
 <pre><code>## [1] &quot;ESS theta[10]: 2001&quot;</code></pre>
 <p>The variances for the parameters <code>a</code> and <code>b</code> is lower than the recommended minimum of 100. We will go back to this in Chapter 8.</p>
 <p>Now that we have guaranteed the convergence of the chains, we can look at the posterior summaries.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="tactics.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summaries of theta_i</span></span>
-<span id="cb45-2"><a href="tactics.html#cb45-2" aria-hidden="true" tabindex="-1"></a>meantheta <span class="ot">&lt;-</span> <span class="fu">apply</span>(theta, <span class="dv">2</span>, mean)</span>
-<span id="cb45-3"><a href="tactics.html#cb45-3" aria-hidden="true" tabindex="-1"></a>q025theta <span class="ot">&lt;-</span> <span class="fu">apply</span>(theta, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
-<span id="cb45-4"><a href="tactics.html#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.025</span>))</span>
-<span id="cb45-5"><a href="tactics.html#cb45-5" aria-hidden="true" tabindex="-1"></a>q975theta <span class="ot">&lt;-</span> <span class="fu">apply</span>(theta, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
-<span id="cb45-6"><a href="tactics.html#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.975</span>))</span>
-<span id="cb45-7"><a href="tactics.html#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-8"><a href="tactics.html#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the mean and 95% CIs for the thetas</span></span>
-<span id="cb45-9"><a href="tactics.html#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-10"><a href="tactics.html#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb45-11"><a href="tactics.html#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb45-12"><a href="tactics.html#cb45-12" aria-hidden="true" tabindex="-1"></a>  meantheta,</span>
-<span id="cb45-13"><a href="tactics.html#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>,</span>
-<span id="cb45-14"><a href="tactics.html#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.8</span>,</span>
-<span id="cb45-15"><a href="tactics.html#cb45-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
-<span id="cb45-16"><a href="tactics.html#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Borough&quot;</span>,</span>
-<span id="cb45-17"><a href="tactics.html#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Posterior Summary Rate&quot;</span>,</span>
-<span id="cb45-18"><a href="tactics.html#cb45-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(q025theta), <span class="fu">max</span>(q975theta))</span>
-<span id="cb45-19"><a href="tactics.html#cb45-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb45-20"><a href="tactics.html#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
-<span id="cb45-21"><a href="tactics.html#cb45-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(i, q025theta[i], i, q975theta[i])</span>
-<span id="cb45-22"><a href="tactics.html#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="tactics.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summaries of theta_i</span></span>
+<span id="cb44-2"><a href="tactics.html#cb44-2" aria-hidden="true" tabindex="-1"></a>meantheta <span class="ot">&lt;-</span> <span class="fu">apply</span>(theta, <span class="dv">2</span>, mean)</span>
+<span id="cb44-3"><a href="tactics.html#cb44-3" aria-hidden="true" tabindex="-1"></a>q025theta <span class="ot">&lt;-</span> <span class="fu">apply</span>(theta, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
+<span id="cb44-4"><a href="tactics.html#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.025</span>))</span>
+<span id="cb44-5"><a href="tactics.html#cb44-5" aria-hidden="true" tabindex="-1"></a>q975theta <span class="ot">&lt;-</span> <span class="fu">apply</span>(theta, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
+<span id="cb44-6"><a href="tactics.html#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.975</span>))</span>
+<span id="cb44-7"><a href="tactics.html#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="tactics.html#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the mean and 95% CIs for the thetas</span></span>
+<span id="cb44-9"><a href="tactics.html#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="tactics.html#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb44-11"><a href="tactics.html#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb44-12"><a href="tactics.html#cb44-12" aria-hidden="true" tabindex="-1"></a>  meantheta,</span>
+<span id="cb44-13"><a href="tactics.html#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb44-14"><a href="tactics.html#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.8</span>,</span>
+<span id="cb44-15"><a href="tactics.html#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>,</span>
+<span id="cb44-16"><a href="tactics.html#cb44-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Borough&quot;</span>,</span>
+<span id="cb44-17"><a href="tactics.html#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Posterior Summary Rate&quot;</span>,</span>
+<span id="cb44-18"><a href="tactics.html#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(q025theta), <span class="fu">max</span>(q975theta))</span>
+<span id="cb44-19"><a href="tactics.html#cb44-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-20"><a href="tactics.html#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
+<span id="cb44-21"><a href="tactics.html#cb44-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(i, q025theta[i], i, q975theta[i])</span>
+<span id="cb44-22"><a href="tactics.html#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="tactics.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary of fitted values</span></span>
-<span id="cb46-2"><a href="tactics.html#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="tactics.html#cb46-3" aria-hidden="true" tabindex="-1"></a>meanfit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, mean)</span>
-<span id="cb46-4"><a href="tactics.html#cb46-4" aria-hidden="true" tabindex="-1"></a>q025fit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
-<span id="cb46-5"><a href="tactics.html#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.025</span>))</span>
-<span id="cb46-6"><a href="tactics.html#cb46-6" aria-hidden="true" tabindex="-1"></a>q975fit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
-<span id="cb46-7"><a href="tactics.html#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.975</span>))</span>
-<span id="cb46-8"><a href="tactics.html#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-9"><a href="tactics.html#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mean and 95% CIs for the fitted values</span></span>
-<span id="cb46-10"><a href="tactics.html#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-11"><a href="tactics.html#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb46-12"><a href="tactics.html#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb46-13"><a href="tactics.html#cb46-13" aria-hidden="true" tabindex="-1"></a>  y,</span>
-<span id="cb46-14"><a href="tactics.html#cb46-14" aria-hidden="true" tabindex="-1"></a>  meanfit,</span>
-<span id="cb46-15"><a href="tactics.html#cb46-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(q025fit), <span class="fu">max</span>(q975fit)),</span>
-<span id="cb46-16"><a href="tactics.html#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Observed&quot;</span>,</span>
-<span id="cb46-17"><a href="tactics.html#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Fitted&quot;</span>,</span>
-<span id="cb46-18"><a href="tactics.html#cb46-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>,</span>
-<span id="cb46-19"><a href="tactics.html#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.7</span>,</span>
-<span id="cb46-20"><a href="tactics.html#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span></span>
-<span id="cb46-21"><a href="tactics.html#cb46-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb46-22"><a href="tactics.html#cb46-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
-<span id="cb46-23"><a href="tactics.html#cb46-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(y[i], q025fit[i], y[i], q975fit[i])</span>
-<span id="cb46-24"><a href="tactics.html#cb46-24" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="tactics.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summary of fitted values</span></span>
+<span id="cb45-2"><a href="tactics.html#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="tactics.html#cb45-3" aria-hidden="true" tabindex="-1"></a>meanfit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, mean)</span>
+<span id="cb45-4"><a href="tactics.html#cb45-4" aria-hidden="true" tabindex="-1"></a>q025fit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
+<span id="cb45-5"><a href="tactics.html#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.025</span>))</span>
+<span id="cb45-6"><a href="tactics.html#cb45-6" aria-hidden="true" tabindex="-1"></a>q975fit <span class="ot">&lt;-</span> <span class="fu">apply</span>(fitted, <span class="dv">2</span>, <span class="cf">function</span>(x)</span>
+<span id="cb45-7"><a href="tactics.html#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">quantile</span>(x, <span class="fl">0.975</span>))</span>
+<span id="cb45-8"><a href="tactics.html#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="tactics.html#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mean and 95% CIs for the fitted values</span></span>
+<span id="cb45-10"><a href="tactics.html#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-11"><a href="tactics.html#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb45-12"><a href="tactics.html#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb45-13"><a href="tactics.html#cb45-13" aria-hidden="true" tabindex="-1"></a>  y,</span>
+<span id="cb45-14"><a href="tactics.html#cb45-14" aria-hidden="true" tabindex="-1"></a>  meanfit,</span>
+<span id="cb45-15"><a href="tactics.html#cb45-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(q025fit), <span class="fu">max</span>(q975fit)),</span>
+<span id="cb45-16"><a href="tactics.html#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Observed&quot;</span>,</span>
+<span id="cb45-17"><a href="tactics.html#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Fitted&quot;</span>,</span>
+<span id="cb45-18"><a href="tactics.html#cb45-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb45-19"><a href="tactics.html#cb45-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.7</span>,</span>
+<span id="cb45-20"><a href="tactics.html#cb45-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;n&quot;</span></span>
+<span id="cb45-21"><a href="tactics.html#cb45-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-22"><a href="tactics.html#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N)</span>
+<span id="cb45-23"><a href="tactics.html#cb45-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">segments</span>(y[i], q025fit[i], y[i], q975fit[i])</span>
+<span id="cb45-24"><a href="tactics.html#cb45-24" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/Ex%206.2%20MCMC%20posterior%20summary-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="example-6.3-fitting-a-poisson-regression-model-in-nimble" class="section level2 unnumbered hasAnchor">
-<h2>Example 6.3: Fitting a Poisson regression model in <code>Nimble</code><a href="tactics.html#example-6.3-fitting-a-poisson-regression-model-in-nimble" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="example-6.3-fitting-a-poisson-regression-model" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Example 6.3: Fitting a Poisson regression model<a href="tactics.html#example-6.3-fitting-a-poisson-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="nimble" class="section level3 unnumbered hasAnchor">
+<h3>Nimble<a href="tactics.html#nimble" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Load <code>nimble package</code></p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r foldable"><code class="sourceCode r"><span id="cb47-1"><a href="tactics.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;nimble&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r foldable"><code class="sourceCode r"><span id="cb46-1"><a href="tactics.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;nimble&quot;</span>)</span></code></pre></div>
 <p>The following code is used to fit the Poisson log-linear model seen in Chapter 2 Section … using <code>Nimble</code></p>
 <p>First, define the model in Nimble.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="tactics.html#cb48-1" aria-hidden="true" tabindex="-1"></a>Example5_3Code <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
-<span id="cb48-2"><a href="tactics.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
-<span id="cb48-3"><a href="tactics.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    Y[i] <span class="sc">~</span> <span class="fu">dpois</span>(mu[i])</span>
-<span id="cb48-4"><a href="tactics.html#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(mu[i]) <span class="ot">&lt;-</span> <span class="fu">log</span>(E[i]) <span class="sc">+</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> X1[i] <span class="sc">+</span> betad <span class="sc">*</span> X2[i]</span>
-<span id="cb48-5"><a href="tactics.html#cb48-5" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb48-6"><a href="tactics.html#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-7"><a href="tactics.html#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Priors</span></span>
-<span id="cb48-8"><a href="tactics.html#cb48-8" aria-hidden="true" tabindex="-1"></a>  beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
-<span id="cb48-9"><a href="tactics.html#cb48-9" aria-hidden="true" tabindex="-1"></a>  beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
-<span id="cb48-10"><a href="tactics.html#cb48-10" aria-hidden="true" tabindex="-1"></a>  betad <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
-<span id="cb48-11"><a href="tactics.html#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-12"><a href="tactics.html#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Functions of interest:</span></span>
-<span id="cb48-13"><a href="tactics.html#cb48-13" aria-hidden="true" tabindex="-1"></a>  base <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta0)</span>
-<span id="cb48-14"><a href="tactics.html#cb48-14" aria-hidden="true" tabindex="-1"></a>  RR <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta1)</span>
-<span id="cb48-15"><a href="tactics.html#cb48-15" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
-<p>Read the data and define the constants, data and initials lists for the <code>Nimble</code> model.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="tactics.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># REVIEW: Is this another version of the COPD data? Is there a data dictionary for this dataset?</span></span>
-<span id="cb49-2"><a href="tactics.html#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="tactics.html#cb49-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/DataExample53.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb49-4"><a href="tactics.html#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="tactics.html#cb49-5" aria-hidden="true" tabindex="-1"></a>ex.const <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb49-6"><a href="tactics.html#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="dv">393</span>,</span>
-<span id="cb49-7"><a href="tactics.html#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">E =</span> data<span class="sc">$</span>exp_lungc65pls,</span>
-<span id="cb49-8"><a href="tactics.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">X1 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k3)),</span>
-<span id="cb49-9"><a href="tactics.html#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">X2 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k2))</span>
-<span id="cb49-10"><a href="tactics.html#cb49-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-11"><a href="tactics.html#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-12"><a href="tactics.html#cb49-12" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> data<span class="sc">$</span>lungc65pls)</span>
-<span id="cb49-13"><a href="tactics.html#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-14"><a href="tactics.html#cb49-14" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="cf">function</span>()</span>
-<span id="cb49-15"><a href="tactics.html#cb49-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">beta0 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>),</span>
-<span id="cb49-16"><a href="tactics.html#cb49-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">beta1 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>),</span>
-<span id="cb49-17"><a href="tactics.html#cb49-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">betad =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>))</span>
-<span id="cb49-18"><a href="tactics.html#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-19"><a href="tactics.html#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters to monitor and run the model </span></span>
-<span id="cb49-20"><a href="tactics.html#cb49-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-21"><a href="tactics.html#cb49-21" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;betad&quot;</span>, <span class="st">&quot;base&quot;</span>, <span class="st">&quot;RR&quot;</span>)</span>
-<span id="cb49-22"><a href="tactics.html#cb49-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-23"><a href="tactics.html#cb49-23" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
-<span id="cb49-24"><a href="tactics.html#cb49-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example5_3Code,</span>
-<span id="cb49-25"><a href="tactics.html#cb49-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
-<span id="cb49-26"><a href="tactics.html#cb49-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> ex.const,</span>
-<span id="cb49-27"><a href="tactics.html#cb49-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
-<span id="cb49-28"><a href="tactics.html#cb49-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
-<span id="cb49-29"><a href="tactics.html#cb49-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">22000</span>,</span>
-<span id="cb49-30"><a href="tactics.html#cb49-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">2000</span>,</span>
-<span id="cb49-31"><a href="tactics.html#cb49-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">10</span>,</span>
-<span id="cb49-32"><a href="tactics.html#cb49-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb49-33"><a href="tactics.html#cb49-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
-<span id="cb49-34"><a href="tactics.html#cb49-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
-<span id="cb49-35"><a href="tactics.html#cb49-35" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="tactics.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the model </span></span>
+<span id="cb47-2"><a href="tactics.html#cb47-2" aria-hidden="true" tabindex="-1"></a>Example5_3Code <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
+<span id="cb47-3"><a href="tactics.html#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb47-4"><a href="tactics.html#cb47-4" aria-hidden="true" tabindex="-1"></a>    Y[i] <span class="sc">~</span> <span class="fu">dpois</span>(mu[i])</span>
+<span id="cb47-5"><a href="tactics.html#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(mu[i]) <span class="ot">&lt;-</span> <span class="fu">log</span>(E[i]) <span class="sc">+</span> beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> X1[i] <span class="sc">+</span> beta2 <span class="sc">*</span> X2[i]</span>
+<span id="cb47-6"><a href="tactics.html#cb47-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb47-7"><a href="tactics.html#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="tactics.html#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Priors</span></span>
+<span id="cb47-9"><a href="tactics.html#cb47-9" aria-hidden="true" tabindex="-1"></a>  beta0 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
+<span id="cb47-10"><a href="tactics.html#cb47-10" aria-hidden="true" tabindex="-1"></a>  beta1 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
+<span id="cb47-11"><a href="tactics.html#cb47-11" aria-hidden="true" tabindex="-1"></a>  beta2 <span class="sc">~</span> <span class="fu">dnorm</span> (<span class="dv">0</span> , <span class="at">sd =</span> <span class="dv">100</span>)</span>
+<span id="cb47-12"><a href="tactics.html#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="tactics.html#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Functions of interest:</span></span>
+<span id="cb47-14"><a href="tactics.html#cb47-14" aria-hidden="true" tabindex="-1"></a>  base <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta0)</span>
+<span id="cb47-15"><a href="tactics.html#cb47-15" aria-hidden="true" tabindex="-1"></a>  RR <span class="ot">&lt;-</span> <span class="fu">exp</span>(beta1)</span>
+<span id="cb47-16"><a href="tactics.html#cb47-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb47-17"><a href="tactics.html#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-18"><a href="tactics.html#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the data and define the constants, data and initials lists for the `Nimble` model.</span></span>
+<span id="cb47-19"><a href="tactics.html#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-20"><a href="tactics.html#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co"># REVIEW: Is this another version of the COPD data? Is there a data dictionary for this dataset?</span></span>
+<span id="cb47-21"><a href="tactics.html#cb47-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-22"><a href="tactics.html#cb47-22" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/DataExample53.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb47-23"><a href="tactics.html#cb47-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-24"><a href="tactics.html#cb47-24" aria-hidden="true" tabindex="-1"></a>ex.const <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb47-25"><a href="tactics.html#cb47-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="fu">nrow</span>(data),</span>
+<span id="cb47-26"><a href="tactics.html#cb47-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">E =</span> data<span class="sc">$</span>exp_lungc65pls,</span>
+<span id="cb47-27"><a href="tactics.html#cb47-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">X1 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k3)),</span>
+<span id="cb47-28"><a href="tactics.html#cb47-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">X2 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k2))</span>
+<span id="cb47-29"><a href="tactics.html#cb47-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-30"><a href="tactics.html#cb47-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-31"><a href="tactics.html#cb47-31" aria-hidden="true" tabindex="-1"></a>ex.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> data<span class="sc">$</span>lungc65pls)</span>
+<span id="cb47-32"><a href="tactics.html#cb47-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-33"><a href="tactics.html#cb47-33" aria-hidden="true" tabindex="-1"></a>inits <span class="ot">&lt;-</span> <span class="cf">function</span>()</span>
+<span id="cb47-34"><a href="tactics.html#cb47-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">beta0 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>),</span>
+<span id="cb47-35"><a href="tactics.html#cb47-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">beta1 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>),</span>
+<span id="cb47-36"><a href="tactics.html#cb47-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">beta2 =</span> <span class="fu">rnorm</span>(<span class="dv">1</span>))</span>
+<span id="cb47-37"><a href="tactics.html#cb47-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-38"><a href="tactics.html#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters to monitor and run the model </span></span>
+<span id="cb47-39"><a href="tactics.html#cb47-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-40"><a href="tactics.html#cb47-40" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;beta0&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;beta2&quot;</span>, <span class="st">&quot;base&quot;</span>, <span class="st">&quot;RR&quot;</span>)</span>
+<span id="cb47-41"><a href="tactics.html#cb47-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-42"><a href="tactics.html#cb47-42" aria-hidden="true" tabindex="-1"></a>mcmc.out <span class="ot">&lt;-</span> <span class="fu">nimbleMCMC</span>(</span>
+<span id="cb47-43"><a href="tactics.html#cb47-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">code =</span> Example5_3Code,</span>
+<span id="cb47-44"><a href="tactics.html#cb47-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ex.data,</span>
+<span id="cb47-45"><a href="tactics.html#cb47-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">constants =</span> ex.const,</span>
+<span id="cb47-46"><a href="tactics.html#cb47-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">inits =</span> inits,</span>
+<span id="cb47-47"><a href="tactics.html#cb47-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">monitors =</span> params,</span>
+<span id="cb47-48"><a href="tactics.html#cb47-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">niter =</span> <span class="dv">22000</span>,</span>
+<span id="cb47-49"><a href="tactics.html#cb47-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">nburnin =</span> <span class="dv">2000</span>,</span>
+<span id="cb47-50"><a href="tactics.html#cb47-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">thin =</span> <span class="dv">10</span>,</span>
+<span id="cb47-51"><a href="tactics.html#cb47-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb47-52"><a href="tactics.html#cb47-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">nchains =</span> <span class="dv">2</span>,</span>
+<span id="cb47-53"><a href="tactics.html#cb47-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">samplesAsCodaMCMC =</span> <span class="cn">TRUE</span></span>
+<span id="cb47-54"><a href="tactics.html#cb47-54" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Check the WAIC.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="tactics.html#cb50-1" aria-hidden="true" tabindex="-1"></a>samples<span class="sc">$</span>WAIC</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="tactics.html#cb48-1" aria-hidden="true" tabindex="-1"></a>mcmc.out<span class="sc">$</span>WAIC</span></code></pre></div>
 <pre><code>## nimbleList object of type waicList
 ## Field &quot;WAIC&quot;:
-## [1] 3049.387
+## [1] 3049.327
 ## Field &quot;lppd&quot;:
-## [1] -1514.449
+## [1] -1514.466
 ## Field &quot;pWAIC&quot;:
-## [1] 10.24445</code></pre>
+## [1] 10.19779</code></pre>
 <p>Show the trace plots and posterior summaries for each of the parameters.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="tactics.html#cb52-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> samples<span class="sc">$</span>samples</span>
-<span id="cb52-2"><a href="tactics.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-3"><a href="tactics.html#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of beta1</span></span>
-<span id="cb52-4"><a href="tactics.html#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-1.png" width="672" /></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="tactics.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of base</span></span>
-<span id="cb53-2"><a href="tactics.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-2.png" width="672" /></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="tactics.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of RR</span></span>
-<span id="cb54-2"><a href="tactics.html#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
-<p><img src="_main_files/figure-html/Ex%206.3%20traceplots-3.png" width="672" /></p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="tactics.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of base</span></span>
-<span id="cb55-2"><a href="tactics.html#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="tactics.html#cb50-1" aria-hidden="true" tabindex="-1"></a>mvSamples <span class="ot">&lt;-</span> mcmc.out<span class="sc">$</span>samples</span>
+<span id="cb50-2"><a href="tactics.html#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="tactics.html#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of beta1</span></span>
+<span id="cb50-4"><a href="tactics.html#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%206.3%20nimble%20traceplots-1.png" width="672" /></p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="tactics.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of base</span></span>
+<span id="cb51-2"><a href="tactics.html#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%206.3%20nimble%20traceplots-2.png" width="672" /></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="tactics.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">#trace plots of RR</span></span>
+<span id="cb52-2"><a href="tactics.html#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%206.3%20nimble%20traceplots-3.png" width="672" /></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="tactics.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of base</span></span>
+<span id="cb53-2"><a href="tactics.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;base&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
 ## Iterations = 1:2000
 ## Thinning interval = 1 
@@ -707,14 +721,14 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.1287881      0.0125292      0.0001981      0.0001981 
+##      1.1288621      0.0123903      0.0001959      0.0001959 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##  2.5%   25%   50%   75% 97.5% 
-## 1.104 1.120 1.129 1.137 1.154</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="tactics.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
-<span id="cb57-2"><a href="tactics.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
+## 1.104 1.121 1.129 1.137 1.154</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="tactics.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#posterior summary of RR</span></span>
+<span id="cb55-2"><a href="tactics.html#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mvSamples[, <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>)])</span></code></pre></div>
 <pre><code>## 
 ## Iterations = 1:2000
 ## Thinning interval = 1 
@@ -725,13 +739,82 @@ The following code shows the MCMC implementation of a Poisson-Gamma model using 
 ##    plus standard error of the mean:
 ## 
 ##           Mean             SD       Naive SE Time-series SE 
-##      1.0146646      0.0174393      0.0002757      0.0004339 
+##      1.0147062      0.0174258      0.0002755      0.0004217 
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##   2.5%    25%    50%    75%  97.5% 
-## 0.9806 1.0028 1.0147 1.0261 1.0488</code></pre>
+## 0.9806 1.0029 1.0143 1.0267 1.0486</code></pre>
+</div>
+<div id="stan" class="section level3 unnumbered hasAnchor">
+<h3>Stan<a href="tactics.html#stan" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Load <code>stan package</code> with options</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r foldable"><code class="sourceCode r"><span id="cb57-1"><a href="tactics.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb57-2"><a href="tactics.html#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="tactics.html#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
+<span id="cb57-4"><a href="tactics.html#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>data {
+  int&lt;lower=0&gt; N;
+  vector[N] E; // expected cases?
+  vector[N] X1; // what are these covariates?
+  vector[N] X2;
+  int Y[N] ;
+}
 
+parameters {
+  real beta0;
+  real beta1;
+  real beta2;
+}
+transformed parameters{
+  real base = exp(beta0);
+  real RR = exp(beta1);
+}
+
+model {
+  vector[N] mu;
+  
+  for(i in 1:N){
+    mu[i] = log(E[i])+ beta0 + beta1*X1[i] + beta2*X2[i];
+    Y[i] ~ poisson_log(mu[i]);
+  }
+
+  beta0 ~ normal(0 , 100);
+  beta1 ~ normal(0 , 100);
+  beta2 ~ normal(0 , 100);
+  
+}</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="tactics.html#cb59-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/DataExample53.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb59-2"><a href="tactics.html#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="tactics.html#cb59-3" aria-hidden="true" tabindex="-1"></a>stan_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb59-4"><a href="tactics.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">N =</span> <span class="fu">nrow</span>(data),</span>
+<span id="cb59-5"><a href="tactics.html#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">E =</span> data<span class="sc">$</span>exp_lungc65pls,</span>
+<span id="cb59-6"><a href="tactics.html#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">X1 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k3)),</span>
+<span id="cb59-7"><a href="tactics.html#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">X2 =</span> <span class="fu">as.vector</span>(<span class="fu">scale</span>(data<span class="sc">$</span>k2)),</span>
+<span id="cb59-8"><a href="tactics.html#cb59-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y =</span> data<span class="sc">$</span>lungc65pls</span>
+<span id="cb59-9"><a href="tactics.html#cb59-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb59-10"><a href="tactics.html#cb59-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-11"><a href="tactics.html#cb59-11" aria-hidden="true" tabindex="-1"></a>Example6_3_Stan  <span class="ot">&lt;-</span> <span class="fu">stan</span>(</span>
+<span id="cb59-12"><a href="tactics.html#cb59-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;functions/Example6_3.stan&quot;</span>,</span>
+<span id="cb59-13"><a href="tactics.html#cb59-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> stan_data,</span>
+<span id="cb59-14"><a href="tactics.html#cb59-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">warmup =</span> <span class="dv">5000</span>,</span>
+<span id="cb59-15"><a href="tactics.html#cb59-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">10000</span>,</span>
+<span id="cb59-16"><a href="tactics.html#cb59-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">3</span>,</span>
+<span id="cb59-17"><a href="tactics.html#cb59-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="cn">TRUE</span></span>
+<span id="cb59-18"><a href="tactics.html#cb59-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="tactics.html#cb60-1" aria-hidden="true" tabindex="-1"></a>rstan<span class="sc">::</span><span class="fu">traceplot</span>(Example6_3_Stan,</span>
+<span id="cb60-2"><a href="tactics.html#cb60-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;base&quot;</span>, <span class="st">&quot;RR&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/Ex%206.3%20stan%20traceplots-1.png" width="672" /></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="tactics.html#cb61-1" aria-hidden="true" tabindex="-1"></a>stan_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(Example6_3_Stan, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;RR&quot;</span>, <span class="st">&quot;base&quot;</span>))</span>
+<span id="cb61-2"><a href="tactics.html#cb61-2" aria-hidden="true" tabindex="-1"></a>stan_summary<span class="sc">$</span>summary</span></code></pre></div>
+<pre><code>##          mean      se_mean         sd      2.5%      25%      50%      75%
+## RR   1.015277 0.0002199196 0.01758635 0.9810819 1.003394 1.015282 1.027100
+## base 1.128823 0.0001406853 0.01272524 1.1041418 1.120047 1.128823 1.137338
+##         97.5%    n_eff     Rhat
+## RR   1.050307 6394.753 1.000196
+## base 1.153955 8181.535 1.000037</code></pre>
+
+</div>
 </div>
 </div>
             </section>

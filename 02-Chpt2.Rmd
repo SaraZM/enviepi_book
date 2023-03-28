@@ -60,7 +60,7 @@ Perform tests between the deviances of two models.
 
 ```{r Ex 2.11 tests, eval = FALSE}
 
-# Test 1: Effect on Quasi-Poisson models with and without deprivation
+## Test 1: Effect on Quasi-Poisson models with and without deprivation
 anova(
   glm(Y ~ offset(log(E)) + X1, family = "quasipoisson", data = data),
   # Model 1
@@ -69,7 +69,7 @@ anova(
   test = "Chisq"
 ) # Chi-Squared test
 
-# Test 2: Effect on Quasi-Poisson models with and without air pollution
+## Test 2: Effect on Quasi-Poisson models with and without air pollution
 anova(
   glm(Y ~ offset(log(E)) + X1 + X2, family = "quasipoisson", data = data),
   # Model 1
@@ -83,7 +83,7 @@ anova(
 ## Example 2.12: Modelling the risks associated with lagged effects of air pollution {-}
 
 ```{r Ex 2.12 lagged effects, eval = FALSE}
-# Fitting quasi-poisson model
+## Fitting quasi-poisson model
 glm(
   formula = Y ~ offset(log(E)) + X1 + X1t1 + X1t2,
   family  = "quasipoisson",
@@ -94,7 +94,7 @@ glm(
 ## Example 2.13: Estimating the odds ratio in a case-control study using a logistic model {-}  
 
 ```{r Ex 2.13 odds ratio, eval = FALSE}
-# Fitting Odds Ratio
+## Fitting Odds Ratio
 glm(formula = Y ~ 1,
     family = "binomial",
     data = data)
@@ -103,7 +103,7 @@ glm(formula = Y ~ 1,
 ## Example 2.14: Estimating the odds ratio of asthma associated with proximity to roads {-}
 
 ```{r Ex 2.14 odds ratio asma, eval = FALSE}
-# Fitting Odds Ratio
+## Fitting Odds Ratio
 glm(Y ~ X, family = "binomial", data = data)
 
 ```
