@@ -328,7 +328,7 @@ abline(a = 0, b = 1)
 ```
 
 
-## Example 6.3: Fitting a Poisson regression model 
+## Example 6.3: Fitting a Poisson regression model {-}
 ### Nimble {-}
 
 ```{r Ex 6.3 nimble clean, echo = FALSE, include=FALSE, warning=FALSE, message= FALSE, results='hide'}

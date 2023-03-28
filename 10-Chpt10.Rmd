@@ -786,10 +786,6 @@ ggmap(GambiaMap) + geom_point(data = malaria_village,
 
 ```
 
-<!-- NOTE: I am not doing a Matern cause I don't know how to code it, I'll use an exponential instead -->
-
-
-
 
 ###  Nimble {-} 
 

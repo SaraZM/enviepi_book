@@ -32,3 +32,12 @@ i-does-an-sdis-still-occur-why-or-why-not
 ii-compute-hatbeta_1-and-hatbeta_2-and-repeat-the-bonus-question-of-exercise-13.17.-what-has-changed-do-the-changes-match-your-observations
 monitoring
 frontiers
+tab:unnamed-chunk-1
+tab:unnamed-chunk-2
+tab:unnamed-chunk-3
+tab:unnamed-chunk-4
+tab:unnamed-chunk-5
+tab:unnamed-chunk-6
+i-display-a-2-by-2-contingency-table-of-deathssurvivors-vs.-chinaitaly-aggregated-over-all-age-groups.
+ii-display-2-by-2-contingency-tables-stratified-by-the-age-groups-70-and-geq-70.
+iii-does-a-simpsons-disaggregation-sdis-empirically-occur-in-these-two-tables
