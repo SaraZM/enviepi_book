@@ -249,9 +249,9 @@ waic0 <- waic(loglik0)
 waic0
 
 # traceplots of parameters a and b
-traceplot(Ex9_1Stan, pars = c("a", "b"))
+rstan::traceplot(Ex9_1Stan, pars = c("a", "b"))
 # traceplots of parameter theta
-traceplot(Ex9_1Stan, pars = c("theta[1]", "theta[2]", "theta[3]"))
+rstan::traceplot(Ex9_1Stan, pars = c("theta[1]", "theta[2]", "theta[3]"))
 
 ```
 

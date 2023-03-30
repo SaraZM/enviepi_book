@@ -330,6 +330,7 @@ predCoords <- unname(as.matrix(Mtl_centroids_df))
 
 ```
 
+
 Following the posterior predictive distribution we have to define a model for the predictions. 
 
 ```{r Ex 10.9 nimble predictions using Rcpp, cache=TRUE}
@@ -617,6 +618,154 @@ stan_var <-
 plot_grid(stan_pred, stan_var, labels = "auto")
 
 ```
+
+## Example 10.10: Spatial predictions {-}
+
+NOTE: To Alex, I just added the spatial predictions for nimble, do we want it for Stan too?
+Also note that I am just doing for 5 locations (please double-check my equations) and it instead of running in 2 minutes it runs in 6 (in case you want to highlight that). But we should discuss the order of this cause I am doing the predictions with Paritosh's code in the previous section.
+
+```{r Ex 10.10 nimble prediction mcmc}
+# Obtain coordinates for predictions 
+# note that we are using the same coordinates as the one generated for 
+# the kriging example
+Mtl_centroids_df <- as.data.frame(MtlPred)
+predCoords <- unname(as.matrix(Mtl_centroids_df))
+
+# Scale coordinates for predictive locations
+predCoords_sc <- predCoords 
+predCoords_sc[,1] <-
+  (predCoords_sc[,1] - mean(Mtl_benzene_sample$easting)) / sd(Mtl_benzene_sample$easting)
+predCoords_sc[,2] <- 
+  (predCoords_sc[,2] - mean(Mtl_benzene_sample$northing)) / sd(Mtl_benzene_sample$northing)
+
+# As an example we are only going to predict 5 locations  
+
+nu <- 5
+predCoords_five <- predCoords_sc[1:nu,]
+
+obs2predDist <- fields::rdist(obsCoords, predCoords[1:nu,])
+pred2predDist <- fields::rdist(predCoords[1:nu,])
+
+```
+
+```{r Example 10.10 spatial predictions nimble, message=FALSE, cache = TRUE}
+
+Example10_10Code <-  nimbleCode ({
+  # Covariance matrix spatial effect
+  Sigma_obs[1:n, 1:n] <-
+    sigma_sq * exp(-distMatrix[1:n, 1:n] / phi) + tau_sq * identityMatrix(d = n)
+  
+  Sigma_unobs[1:nu, 1:nu] <-
+    sigma_sq * exp(-distMatrixUnobs[1:nu, 1:nu] / phi) + tau_sq * identityMatrix(d = nu)
+  
+  Sigma_obs_unobs[1:n, 1:nu] <-
+    sigma_sq * exp(-distMatrixObsUnobs[1:n, 1:nu] / phi) 
+  
+  for (site in 1:n) {
+    mean.site[site] <-
+      beta0 + beta1 * easting[site] + beta2 * northing[site]
+  }
+  y[1:n]  ~  dmnorm(mean.site[1:n], cov = Sigma_obs[1:n, 1:n])
+  
+  # Spatial predictions
+  
+  for (usite in 1:nu) {
+    mean.unobs.site[usite] <-
+      beta0 + beta1 * easting_unobs[usite] + beta2 * northing_unobs[usite]
+  }
+  
+  mean_sigma[1:nu] <- t(Sigma_obs_unobs[1:n, 1:nu])%*% 
+    inverse(Sigma_obs[1:n, 1:n])%*%(y[1:n] - mean.site[1:n])
+  
+  mu_unobs[1:nu] <-
+    mean.unobs.site[1:nu] + mean_sigma[1:nu]
+  
+  cov_unobs[1:nu, 1:nu] <-
+    Sigma_unobs[1:nu, 1:nu] - t(Sigma_obs_unobs[1:n, 1:nu]) %*% inverse(Sigma_obs[1:n, 1:n]) %*% Sigma_obs_unobs[1:n, 1:nu]
+  
+  y_unobs[1:nu]  ~  dmnorm(mu_unobs[1:nu], cov = cov_unobs[1:nu, 1:nu])
+  
+  # Set up the priors for the spatial model
+  
+  sigma ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  sigma_sq <- sigma ^ 2
+  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  tau_sq <- tau ^ 2
+  phi_inv ~ dgamma(shape =  5, rate = 5)
+  phi <- 1 / phi_inv
+  # prior for the coefficients
+  beta0 ~ dnorm (0, 10)
+  beta1 ~ dnorm (0, 10)
+  beta2 ~ dnorm (0, 10)
+  
+}) 
+
+# Define the constants, data, parameters and initial values
+set.seed(1)
+easting_scaled <- as.vector(scale(Mtl_benzene_sample$easting))
+northing_scaled <- as.vector(scale(Mtl_benzene_sample$northing))
+
+constants <-
+  list(n = nrow(Mtl_benzene_sample), nu = nu)
+ex.data <-
+  list(
+    y = Mtl_benzene_sample$y,
+    easting = easting_scaled,
+    northing = northing_scaled,
+    easting_unobs = predCoords_five[,1],
+    northing_unobs = predCoords_five[,2],
+    distMatrix = obsDist,
+    distMatrixUnobs = pred2predDist,
+    distMatrixObsUnobs = obs2predDist
+  )
+params <-
+  c("beta0",
+    "beta1",
+    "beta2",
+    "phi",
+    "tau",
+    "sigma",
+    "tau_sq",
+    "y_unobs",
+    "sigma_sq")
+inits <- list(sigma = 0.1,
+              phi_inv = 6 / max(obsDist),
+              tau = 0.1)
+# Run model in nimble
+start_time <- Sys.time()
+
+mcmc.out <- nimbleMCMC(
+  code = Example10_10Code,
+  constants = constants,
+  data = ex.data,
+  inits = inits,
+  monitors = params,
+  niter = 40000,
+  nburnin = 20000,
+  thin = 14,
+  WAIC = TRUE,
+  nchains = 2,
+  summary = TRUE,
+  samplesAsCodaMCMC = TRUE
+)
+end_time <- Sys.time()
+run_time <- end_time - start_time
+run_time
+
+```
+
+```{r Ex 10.10 nimble WAIC, ESS and traceplots}
+mcmc.out$WAIC
+min(coda::effectiveSize(mcmc.out$samples))
+plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
+plot(mcmc.out$samples[, c("beta1")], bty = "n", main = "beta1")
+plot(mcmc.out$samples[, c("beta2")], bty = "n", main = "beta2")
+plot(mcmc.out$samples[, c("sigma")], bty = "n", main = "sigma")
+plot(mcmc.out$samples[, c("tau")], bty = "n", main = "tau")
+plot(mcmc.out$samples[, c("phi")], bty = "n", main = "phi")
+mcmc.out$summary$all.chains[c("beta0", "beta1", "beta2", "sigma_sq", "tau_sq", "phi"), ]
+```
+
 
 ## Example 10.11: INLA, creating a mesh {-}
 
