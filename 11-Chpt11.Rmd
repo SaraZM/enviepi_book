@@ -300,7 +300,313 @@ plot(volcano_dust_forecast, bty = "n")
 
 ```
 
-## Example 11.16 Implementation of a dynamic linear model: UK ozone data {-}
+## Example 11.16 Fitting a random walk model to PM10 concentrations in London {-}
+
+### Nimble {-}
+
+```{r Ex 11.16 pm10 clean nimble, include = FALSE}
+rm(list = ls())
+```
+
+```{r  Ex 11.16 pm10 load nimble, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
+library(coda)
+library(ggplot2)
+library(nimble)
+library(tidybayes)
+library(tidyverse)
+source("functions/FFBS_functions_nimble.R") # load necessary functions for ffbs
+# Load data 
+pm10 <- source("data/11_13_data.txt")[["value"]][["y"]] |> unlist()
+
+pm10_250 <- pm10[385:634]
+
+```
+
+```{r Ex 11.16 pm10 nimble model, warning = FALSE}
+
+Example11_16_PM10_Nimble <- nimbleCode({
+  
+  tau ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  Vt <- tau^2
+  sqrt_Wt_diag ~ T(dt(mu = 0, sigma = 1, df = 1), 0, Inf)
+  Wt <- sqrt_Wt_diag^2
+  
+  theta_mean[1] <- m0
+  theta[1] ~ dnorm(theta_mean[1], var = C0)
+  
+  for(t in 1:J) {
+    theta_mean[t+1] <- Gt * theta[t]
+    theta[t+1] ~ dnorm(theta_mean[t+1], var = Wt)
+    yt_mean[t] <- Ft[t] * theta[t+1]
+    yt[t] ~ dnorm(yt_mean[t], var = Vt)
+  }
+  
+})
+```
+
+```{r Ex 11.16 run pm10 nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+# Model specification
+J <- length(pm10_250)
+yt <- pm10_250
+Ft <- rep(1, J)
+Gt <- 1
+m0 <- mean(yt, na.rm = TRUE)
+C0 <- 100
+  
+const_list <- list(J = J)
+dat_list <- list(
+  yt = yt,
+  Ft = Ft,
+  Gt = Gt,
+  m0 = m0,
+  C0 = C0
+)
+init_list <-
+  list(tau = 0.01,
+       sqrt_Wt_diag = 0.1,
+       theta = rep(0, J + 1))
+Rmodel <-
+  nimbleModel(
+    Example11_16_PM10_Nimble,
+    constants = const_list,
+    data = dat_list,
+    inits = init_list
+  )
+Rmodel$initializeInfo()
+Cmodel <- compileNimble(Rmodel, showCompilerOutput = FALSE)
+conf <-
+  configureMCMC(Rmodel, monitors = c("tau", "sqrt_Wt_diag", "theta", "yt"))
+conf$removeSampler(target = "theta[]")
+conf$addSampler(
+  target = "theta",
+  type = "ffbs_uous",
+  control = list(
+    ytName = "yt",
+    FtName = "Ft",
+    VtName = "Vt",
+    GtName = "Gt",
+    WtName = "Wt",
+    m0Name = "m0",
+    C0Name = "C0"
+  )
+)
+conf$printSamplers(byType = TRUE)
+conf$removeSampler(target = "sqrt_Wt_diag")
+conf$addSampler(target = "sqrt_Wt_diag",
+                type = "RW",
+                control = list(log = TRUE))
+conf$removeSampler(target = "tau")
+conf$addSampler(target = "tau",
+                type = "RW",
+                control = list(log = TRUE))
+conf$printSamplers(byType = TRUE)
+conf$printSamplers(executionOrder = TRUE)
+Rmcmc <- buildMCMC(conf)
+Cmcmc <-
+  compileNimble(
+    Rmcmc,
+    project = Cmodel,
+    resetFunctions = TRUE,
+    showCompilerOutput = TRUE
+  )
+niters <- 60000
+nburnins <- 0.5 * niters
+nchains <- 2
+nthins <- 14
+post_samples <- runMCMC(
+  Cmcmc,
+  niter = niters,
+  nburnin = nburnins,
+  thin = nthins,
+  nchains = nchains,
+  samplesAsCodaMCMC = TRUE
+)
+```
+
+```{r Ex 11.16 pm10 nimble extract posterior summary}
+post_summary <- nimSummary(post_samples)
+tidy_post_samples <- post_samples |> tidy_draws()
+# Traceplots
+tidy_post_samples |>
+  select(.chain, .iteration, .draw, 'tau') |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), linewidth = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 1) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+tidy_post_samples |>
+  select(.chain, .iteration, .draw, 'sqrt_Wt_diag') |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), linewidth = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 1) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+tidy_post_samples |>
+  select(.chain, .iteration, .draw, paste0('theta[', sample.int(J, size = 4, replace = FALSE),"]")) |>
+  gather(vars, value, -.chain, -.iteration, -.draw) |>
+  ggplot(aes(x = .iteration, y = value)) +
+  geom_path(aes(color = factor(.chain)), linewidth = 0.25,
+            show.legend = FALSE) +
+  facet_wrap( ~ vars, scales = "free_y", nrow = 2) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+```
+
+```{r 11.16 pm10 nimble posterior summary}
+head(post_summary)
+post_sum_theta <-
+  as.data.frame(post_summary) |>  rownames_to_column() |>
+  filter(str_detect(rowname, "theta")) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname))) |>
+  select(time, post.mean, post.sd, q2.5, q50, q97.5)
+ggplot(data = post_sum_theta, aes(x = time)) +
+  geom_ribbon(aes(ymin = q2.5, ymax = q97.5),
+              fill = "lightgray",
+              alpha = 0.7) +
+  geom_path(aes(y = q50), col = "blue", linewidth = 0.6) +
+  ylab("") + xlab("Time") + theme_classic()
+# REVIEW: it is not giving the same results as Stan and the credible intervals
+# are wider
+```
+
+```{r Ex 11.16 pm10 nimble fitted values, eval = FALSE }
+# REVIEW: This part is not working because of the missing values in yt, we need to review this part of the code 
+
+npsamples <- floor((niters - nburnins)/14)
+
+Cnim_postfit_uous <-
+  compileNimble(nim_postfit_uous, showCompilerOutput = FALSE)
+post_tau <- tidy_post_samples$tau
+post_sqrt_Wt_diag <- tidy_post_samples$sqrt_Wt_diag
+# post_yt <- tidy_post_samples$yt
+
+post_ft_list <- lapply(1:(nchains * npsamples), function(i) {
+  post_Vt <- post_tau[i] ^ 2
+  post_Wt <- post_sqrt_Wt_diag[i] ^ 2
+  post_ft <- Cnim_postfit_uous(
+    yt = dat_list$yt,
+    Ft = dat_list$Ft,
+    Vt = post_Vt,
+    Gt = dat_list$Gt,
+    Wt = post_Wt,
+    m0 = dat_list$m0,
+    C0 = dat_list$C0
+  )
+  post_ft <-
+    data.frame(ft = post_ft) %>% mutate(time = row_number())
+  return(post_ft)
+})
+tidy_post_ft <- do.call("rbind", post_ft_list)
+## posterior summaries of ft
+post_sum_ft <- tidy_post_ft |> group_by(time) |>
+  summarise(
+    post.mean = mean(ft),
+    post.sd = sd(ft),
+    q2.5 = quantile(ft, prob = 0.025),
+    q50 = quantile(ft, prob = 0.50),
+    q97.5 = quantile(ft, prob = 0.975)
+  ) |>
+  ungroup()
+ggplot(data = post_sum_ft, aes(x = time)) +
+  geom_ribbon(aes(ymin = q2.5, ymax = q97.5), fill = "lightblue") +
+  geom_path(aes(y = post.mean), col = "red", linewidth = 0.25) +
+  geom_point(aes(y = yt), size = 0.25) +
+  ylab("") +
+  xlab("Time") +
+  theme_clear()
+```
+
+
+### Stan
+
+```{r Ex 11.16 pm10 stan clean, include = FALSE}
+rm(list = ls())
+```
+
+```{r Ex 11.16 book load data}
+
+library(coda)
+library(ggplot2)
+library(rstan)
+library(tidyverse)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+
+# TODO: change the name of this dataset cause it is used here and in the exercises
+pm10 <- source("data/11_13_data.txt")[["value"]][["y"]] |> unlist()
+pm10_250 <- pm10[385:634]
+
+
+# TODO: check if theme_classic does the same thing as my theme_clear (it is the same thing)
+
+```
+
+
+
+```{r Ex 11.16 pm10 prepare data stan}
+J <- length(pm10_250)
+y <- pm10_250
+Ft <- rep(1, J)
+Gt <- 1
+m0 <- mean(y)
+C0 <- 100
+  
+stan_data <- list(
+  Tt = J,
+  y = y,
+  Ft = Ft,
+  G = Gt,
+  m0 = m0,
+  C0 = C0
+)
+```
+
+
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/Example11_16_PM10.stan
+``` 
+
+
+```{r Ex 11.16 nile run stan}
+Example11_16_PM10_Stan  <- stan(
+  file = "functions/Example11_16_PM10.stan",
+  data = stan_data,
+  warmup = 5000,
+  iter = 10000,
+  chains = 3,
+  include = TRUE
+)
+rstan::traceplot(Example11_16_PM10_Stan, pars = c("tau","sqrt_W"))
+rstan::traceplot(Example11_16_PM10_Stan, pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), "]"))
+
+stanfit_summary <- summary(Example11_16_PM10_Stan, pars = c("tau","sqrt_W","theta"))
+head(stanfit_summary$summary)
+
+stan_fit_df <- data.frame(stanfit_summary$summary) |>
+  rownames_to_column() |>
+  filter(str_detect(rowname, "theta")) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname)))
+
+ggplot(data = stan_fit_df, aes(x = time)) +
+  geom_path(aes(y = mean), col = "blue", size = 0.6) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "gray99") +
+  theme_classic() + xlab("year")
+# TODO: I am still missing the plots for the fitted values here
+```
+
+
+
+## Example 11.16 EXTRA Implementation of a dynamic linear model: UK ozone data {-}
 
 :::: {.blackbox data-latex=""}
 ::: {.center data-latex=""}
@@ -924,9 +1230,9 @@ grid.arrange(p1,p2,p3, p4, ncol = 2)
 
 
 
-## Solutions to Selected Exercises
+## Solutions to Selected Exercises {-}
 
-## Exercise 11.11
+## Exercise 11.11 {-}
 
 The joint distribution of $\mathbf{\gamma} = \{\gamma_1, \gamma_2, \dots, \gamma_{N_T}\}$ can be written as:
 $$
@@ -975,7 +1281,7 @@ N(\gamma_{t-1}, \sigma_w^2), & t = N_T
 \end{cases},
 $$
 as required. A necessary assumption for this conclusion was that $p(\gamma_1) \propto 1$. 
-## Exercise 11.12
+## Exercise 11.12 {-}
 
 The joint density of $\gamma_t$ and $\tau_w$, given $\gamma_{t-1}$ is given by
 $$
@@ -994,13 +1300,17 @@ p(\tau_{w}|\gamma_t, \gamma_{t-1}) = \frac{p(\gamma_t, \tau_w \mid \gamma_{t-1})
 $$
 which is the density function of the $Ga(a + 0.5, (\gamma_t - \gamma_{t-1})^2/2 + b)$ distribution. The shape parameter of the posterior is the prior shape parameter shifted by $0.5$, and the rate parameter is the prior rate parameter shifted by the term $(\gamma_t - \gamma_{t-1})^2/2$. 
 
-## Exercise 11.13
+## Exercise 11.13 {-}
 
 We use the `rjags` package here, as it most closely resembles WinBUGS, but is compatible with all operating systems. 
 
-```{r Exercise 11.13, cache = TRUE}
+```{r  Exercise 11.13 load libraries, results='hide', message = FALSE, warnings = FALSE}
 library(rjags)
 library(tidyverse)
+```
+
+
+```{r Exercise 11.13, cache = TRUE}
 
 data <- source("data/11_13_data.txt")
 inits1 <- source("data/11_13_model1_inits1.txt")
