@@ -1,11 +1,11 @@
 functions {
-    real uous_dlm_ldensity(array[] real y, array[] real Ft, real G, real V, real W, real m0, real C0, int T){
-    array[T+1] real a;
-    array[T+1] real R;
-    array[T] real lldata;
+    real uous_dlm_ldensity(array[] real y, array[] real Ft, real G, real V, real W, real m0, real C0, int Tt){
+    array[Tt+1] real a;
+    array[Tt+1] real R;
+    array[Tt] real lldata;
     a[1] = m0;
     R[1] = C0;
-    for (i in 1:T) {
+    for (i in 1:Tt) {
       real u;
       real Q;
       real A;
@@ -22,20 +22,20 @@ functions {
   }
   
   
-  array[] real uous_ffbs_rng(array[] real y, array[] real Ft, real G, real V, real W, real m0, real C0, int T){
+  array[] real uous_ffbs_rng(array[] real y, array[] real Ft, real G, real V, real W, real m0, real C0, int Tt){
     
-    array[T] real theta;
-    array[T] real a;
-    array[T] real R;
-    array[T] real m;
-    array[T] real C;
+    array[Tt] real theta;
+    array[Tt] real a;
+    array[Tt] real R;
+    array[Tt] real m;
+    array[Tt] real C;
     
     // Kalman filtering
     
     real mt = m0;
     real Ct = C0;
     
-    for(i in 1:T){
+    for(i in 1:Tt){
       
       real ft;
       real Qt;
@@ -58,8 +58,8 @@ functions {
       C[i] = Ct;
   }
     // backward sampling
-    array[T-1] int ind = sort_indices_desc(linspaced_int_array(T-1,1,T-1));
-    theta[T] = normal_rng(m[T], sqrt(C[T]));
+    array[Tt-1] int ind = sort_indices_desc(linspaced_int_array(Tt-1,1,Tt-1));
+    theta[Tt] = normal_rng(m[Tt], sqrt(C[Tt]));
     for(i in ind) {
       real Bt;
       real ht;
@@ -71,13 +71,41 @@ functions {
     }
   return theta;
 }
+
+
+  array[] real uous_dlm_one_step_ahead_rng(array[] real y, array[] real Ft, real G, real V, real W, real m0, real C0, int Tt){
+    array[Tt] real yfit;
+    array[Tt+1] real a;
+    array[Tt+1] real R;
+    array[Tt] real lldata;
+    
+    a[1] = m0;
+    R[1] = C0;
+    
+    for (i in 1:Tt) {
+      real u;
+      real Q;
+      real A;
+      real L;
+      u = y[i] - Ft[i] * a[i];
+      Q = Ft[i] * R[i] * Ft[i] + V; //F[i]' * R[i] * F[i] + V;
+      A = G * R[i] * Ft[i] * inv(Q);
+      L = G - A * Ft[i];
+      yfit[i] = normal_rng(Ft[i] * a[i], sqrt(Q)); // univariate
+      a[i+1] = G * a[i] + A * u;
+      R[i+1] = G * R[i] * L + W;
+    }
+  return yfit;
+  }
+  
+  
 }
   
 
 data{
-  int T;
-  array[T] real y;
-  array[T] real Ft;
+  int Tt;
+  array[Tt] real y;
+  array[Tt] real Ft;
   real G;
   real m0;
   real<lower=0> C0;
@@ -93,12 +121,16 @@ model {
   real W = square(sqrt_W);
   tau ~ std_normal();
   sqrt_W ~ std_normal();
-  target += uous_dlm_ldensity(y, Ft, G, V, W, m0, C0, T);
+  target += uous_dlm_ldensity(y, Ft, G, V, W, m0, C0, Tt);
 }
 
 generated quantities{
-  array[T] real theta;
+  array[Tt] real theta;
+  array[Tt] real yfit;
+
   real V = square(tau);
   real W = square(sqrt_W);
-  theta = uous_ffbs_rng(y, Ft, G, V, W, m0, C0, T);
+  theta = uous_ffbs_rng(y, Ft, G, V, W, m0, C0, Tt);
+  yfit = uous_dlm_one_step_ahead_rng(y, Ft, G, V, W, m0, C0, Tt);
+
 }
