@@ -272,6 +272,15 @@ plot(volcano_dust_forecast, bty = "n")
 
 ## Example 11.16 Fitting a random walk model to PM10 concentrations in London {-}
 
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+**NOTE**
+:::
+
+The code for the implementation of DLMs in Stan and Nimble was developed by Paritosh Kumar Roy. This code and other more complex DLM structures are available through his [github](https://github.com/paritoshkroy). 
+
+::::
+
 ### Nimble {-}
 
 ```{r Ex 11.16 pm10 clean nimble, include = FALSE}
@@ -597,14 +606,6 @@ ggplot(yfit_summary_dt, aes(x = time)) +
 
 ## Example 11.16 EXTRA Implementation of a dynamic linear model: UK ozone data {-}
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-**NOTE**
-:::
-
-The code for the implementation of DLMs in Stan and Nimble was developed by Paritosh Kumar Roy. This code and other more complex DLM structures are available through his [github](https://github.com/paritoshkroy). 
-
-::::
 
 ### Nimble {-}
 
