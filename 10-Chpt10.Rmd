@@ -46,12 +46,14 @@ location = c(latLongBox[1, 1] - 0.05,
 MontrelBenzeneMap <-
   get_stamenmap(bbox =  location,
                 zoom = 10)
-ggmap(MontrelBenzeneMap) + geom_point(data = benzene,
-                                      aes(x = lon,
-                                          y = lat,
-                                          size = Benzene), 
-                                      col = "#011f4b",
-                                      alpha = 0.45) + theme_void()
+ggmap(MontrelBenzeneMap) + geom_point(
+  data = benzene,
+  aes(x = lon,
+      y = lat,
+      size = Benzene),
+  col = "#011f4b",
+  alpha = 0.45
+) + theme_void()
 
 ```
 
@@ -64,13 +66,13 @@ Using the `geoR` package we can also plot the following:
 ```{r Ex 10.1 geoR plot}
 # convert data to utm coordinates
 benzene_utm <- spTransform(benzene_geo,
-                        CRS("+proj=utm +zone=18 +ellps=WGS72"))
+                           CRS("+proj=utm +zone=18 +ellps=WGS72"))
 # Save the utm as a data frame
 benzene_utm_df <- as.data.frame(benzene_utm)
 colnames(benzene_utm_df) <- c("Benzene", "X", "Y")
 # Save as geodata to generate the geodata plot
 benzene_geodata <- as.geodata(benzene_utm_df,
-                          coords.col = 2:3, data.col = 1)
+                              coords.col = 2:3, data.col = 1)
 plot(benzene_geodata)
 ```
 
@@ -79,8 +81,9 @@ plot(benzene_geodata)
 
 ```{r Ex 10.2 plot hist and qqplot log}
 # Histogram for the log of the benzene concentration
-par(mfrow=c(1,2))
-log_histogram <- hist(log(benzene$Benzene), main = "", xlab = "log(Benzene)")
+par(mfrow = c(1, 2))
+log_histogram <-
+  hist(log(benzene$Benzene), main = "", xlab = "log(Benzene)")
 qqnorm(log(benzene$Benzene), bty = "n")
 qqline(log(benzene$Benzene))
 
@@ -91,29 +94,25 @@ qqline(log(benzene$Benzene))
 
 ```{r Ex 10.3 plot ozone sites NY, message = FALSE, warning=FALSE, error=FALSE}
 # Load the metadata giving the site coordinates 
-ny_data <- read.csv("data/NY_metadata.txt", sep="") 
-# Now copy ny_data into ny_data_sp and convert data to "sp" format 
+ny_data <- read.csv("data/NY_metadata.txt", sep = "")
+# Now copy ny_data into ny_data_sp and convert data to "sp" format
 ny_data_sp <- ny_data
-coordinates(ny_data_sp) <- ~Longitude+Latitude 
+coordinates(ny_data_sp) <- ~ Longitude + Latitude
 
-# assign a reference system to ny_data_sp 
-proj4string(ny_data_sp) <- CRS("+proj=longlat +ellps=WGS84") 
+# assign a reference system to ny_data_sp
+proj4string(ny_data_sp) <- CRS("+proj=longlat +ellps=WGS84")
 
-# We next specify a bounding box - a 2 x 2 matrix of corners of the geographic 
-# area. Then specify the range of locations within the box. 
-# Note: location must bounding box format be in left -bottom -right -top 
+# We next specify a bounding box - a 2 x 2 matrix of corners of the geographic
+# area. Then specify the range of locations within the box.
+# Note: location must bounding box format be in left -bottom -right -top
 latLongBox  <-  bbox(ny_data_sp)
 location <-  c(latLongBox [1, 1] - 0.2 ,
                latLongBox [2, 1] - 0.2,
                latLongBox [1, 2] + 0.2 ,
                latLongBox [2, 2] + 0.2)
 
-# Now create the map with location dots 
-NYmap <-
-  get_stamenmap(
-   bbox = location,
-   zoom = 8
-  )
+# Now create the map with location dots
+NYmap <- get_stamenmap(bbox = location, zoom = 8)
 
 ggmap(NYmap) + geom_point(
   data = ny_data,
@@ -134,24 +133,25 @@ benzene_utm_geo <- benzene_utm_df
 benzene_utm_geo[,c("X", "Y")] <- benzene_utm_geo[,c("X", "Y")]/1000
 coordinates(benzene_utm_geo) <- ~ X + Y
 # Estimate variogram intercept only
-benzene_inter_vgm <- gstat::variogram(log(Benzene)~ 1, data = benzene_utm_geo,
-                         cutoff = 20, # cutoff distance
-                         width = 20/10 # bins width 
-                         )
+benzene_inter_vgm <- variogram(log(Benzene) ~ 1,
+                               data = benzene_utm_geo,
+                               cutoff = 20,# cutoff distance
+                               width = 20 / 10) # bins width 
+
 
 benzene_inter_vgm_fit <- fit.variogram(benzene_inter_vgm,
-                                model = vgm(0.1, "Exp", 15, 0.02))
+                                       model = vgm(0.1, "Exp", 15, 0.02))
 
 benzene_inter_vgm_fit
 
 # Estimate variogram using coordinates
-benzene_vgm <- variogram(log(Benzene)~ X + Y, data = benzene_utm_geo,
+benzene_vgm <- variogram(log(Benzene) ~ X + Y, 
+                         data = benzene_utm_geo,
                          cutoff = 20, # cutoff distance
-                         width = 20/10 # bins width
-                         )
+                         width = 20 / 10) # bins width
 
-benzene_vgm_fit <- fit.variogram(benzene_vgm,
-                                model = vgm(0.1, "Exp", 3, 0.02))
+
+benzene_vgm_fit <- fit.variogram(benzene_vgm, model = vgm(0.1, "Exp", 3, 0.02))
 benzene_vgm_fit
 
 plot_inter_variog <- plot(benzene_inter_vgm, benzene_inter_vgm_fit, bty = "n")
@@ -335,7 +335,7 @@ Following the posterior predictive distribution we have to define a model for th
 
 ```{r Ex 10.9 nimble predictions using Rcpp, cache=TRUE}
 # Extract samples from nimble model
-tidy_post_samples <- mcmc.out$samples %>% tidy_draws()
+tidy_post_samples <- mcmc.out$samples |> tidy_draws()
 
 # Extract posterior samples for each of the parameters of interest
 post_beta0 <- tidy_post_samples$beta0
@@ -871,15 +871,6 @@ library(viridis) # for a more cheerful color palette
 # attribute has been added using QGIS to a
 gambia <- read.csv("data/gambia_area.csv") # gambia dataset from geoR package
 
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black"), # keep axis line
-    text=element_text(size=12)
-  )
-}
 ```
 
 Since the data is given at the individual level, we want to aggregate the malaria tests by village. 
@@ -1137,7 +1128,7 @@ ggplot(data = post_sum_S, aes(x = village)) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   scale_x_discrete(
     breaks = post_sum_S$village[seq(1, length(post_sum_S$village), by = 5)]) +
-  theme_clear() +  ylab("") + xlab("village") +
+  theme_classic() +  ylab("") + xlab("village") +
   ggtitle("Posterior summary spatial random effect by village")
 
 ```
@@ -1227,7 +1218,7 @@ S_summary_df$village <-
   geom_hline(yintercept = 0, linetype = "dotted") +
   scale_x_discrete(
     breaks = S_summary_df$village[seq(1, length(S_summary_df$village), by = 5)]) +
-  theme_clear() +  ylab("") + xlab("village") +
+  theme_classic() +  ylab("") + xlab("village") +
   ggtitle("Posterior summary spatial random effect by village")
 
 

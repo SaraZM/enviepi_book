@@ -57,7 +57,7 @@ BlackSmokePrefData[, 3] <- BlackSmokePrefData[, 3] / sd_y
 We need to reshape the data to have one observation per row, as required by INLA.
 
 ```{r reshape}
-yearmeans = colMeans(BlackSmokePrefData[,-c(1, 2, 3)], na.rm = T)  ## save means for each year
+yearmeans = colMeans(BlackSmokePrefData[, -c(1, 2, 3)], na.rm = T)  ## save means for each year
 
 BlackSmokePrefData <-
   melt(
@@ -98,10 +98,10 @@ max.edge = 100000 / sd_x # 100km max edge as in Shaddick and Zidek
 mesh = inla.mesh.2d(
   loc = cbind(BlackSmokePrefData$east, BlackSmokePrefData$north),
   boundary = hull,
-   offset = c(0.1, 0.2),
-   max.edge = c(cutoff_dist, 0.5),
-   #cutoff = c(cutoff_dist, 1), 
-   min.angle = 26
+  offset = c(0.1, 0.2),
+  max.edge = c(cutoff_dist, 0.5),
+  #cutoff = c(cutoff_dist, 1),
+  min.angle = 26
 )
 
 plot(mesh)
@@ -187,19 +187,9 @@ formula_naive = y ~ -1 + Intercept +
   f(spatial_ind2, year, copy = "spatial_ind")
 
 theta.ini = c(
-  1.597900,
-  -1.277423,
-  -0.443820,
-  -1.441220,
-  0.036510,
-  -1.441336,
-  0.016919,
-  4.462918,
-  1.437147,
-  4,
-  4,
-  4
-)
+  1.597900,-1.277423,-0.443820,-1.441220,
+  0.036510,-1.441336, 0.016919, 4.462918,
+  1.437147, 4, 4, 4)
 out.naive = inla(
   formula_naive,
   family = 'gaussian',
@@ -223,7 +213,7 @@ samp <- inla.posterior.sample(m_samples, out.naive)
 
 for (i in 1:m_samples)
 {
-samp[[i]]$latent = samp[[i]]$latent[-c(grep('Predictor', rownames(samp[[i]]$latent), fixed = T)), ]
+  samp[[i]]$latent = samp[[i]]$latent[-c(grep('Predictor', rownames(samp[[i]]$latent), fixed = T)),]
 }
 ```
 
@@ -262,23 +252,23 @@ for (i in 1:m_samples) {
   for (j in 1:no_T)
     # loop over the years
   {
-    Post_Array2[i, j, ] <- samp[[i]]$latent['Intercept:1'] + # Intercept
+    Post_Array2[i, j,] <- samp[[i]]$latent['Intercept:1'] + # Intercept
       samp[[i]]$latent[which(startsWith(prefix = 'year:', x = names(samp[[i]]$latent)))][j] * year[j] + # linear fixed effect
       #samp[[i]]$latent['year_2'] * year2[j] + # quadratic fixed effect
       as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial.field:', x = names(samp[[i]]$latent)))]) + # Spatial Intercept
       as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial.field.copy:', x = names(samp[[i]]$latent)))]) * year[j] + # Spatial linear slope
       as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial.field.copy2:', x = names(samp[[i]]$latent)))]) * year2[j]  # Spatial quadratic slope
     # Project onto the site locations and add random site-specific effects #
-    Post_Sites_Array2[i, j, ] = as.numeric(A.grid %*% Post_Array2[i, j, ]) +
+    Post_Sites_Array2[i, j,] = as.numeric(A.grid %*% Post_Array2[i, j,]) +
       as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial_ind:', x = names(samp[[i]]$latent)))[1:no_sites]]) + # random Intercept
       as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial_ind2:', x = names(samp[[i]]$latent)))[no_sites +
                                                                                                              (1:no_sites)]]) * year[j] # random slope
     # Extract the random intercepts #
-    RI_array[i, j, ] = as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial_ind:', x = names(samp[[i]]$latent)))[1:no_sites]])
+    RI_array[i, j,] = as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial_ind:', x = names(samp[[i]]$latent)))[1:no_sites]])
     
     # Extract the random slopes #
-    RS_array[i, j, ] = as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial_ind2:', x = names(samp[[i]]$latent)))[no_sites +
-                                                                                                                              (1:no_sites)]])
+    RS_array[i, j,] = as.numeric(samp[[i]]$latent[which(startsWith(prefix = 'spatial_ind2:', x = names(samp[[i]]$latent)))[no_sites +
+                                                                                                                             (1:no_sites)]])
   }
 }
 

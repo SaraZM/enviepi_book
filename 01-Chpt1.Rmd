@@ -48,8 +48,9 @@ ggmap(MeuseMap) + geom_point(
     color = "red"
   )) + theme_void() + theme(legend.position="none")
 
-
 ```
+
+
 ```{r Ex 1.5 write ogr data, eval = FALSE}
 
 # Finally we write the result that can be read by Google maps

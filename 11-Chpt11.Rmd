@@ -480,7 +480,7 @@ post_ft_list <- lapply(1:(nchain * npsample), function(i) {
     C0 = dat_list$C0
   )
   post_ft <-
-    data.frame(ft = post_ft) %>% mutate(time = row_number())
+    data.frame(ft = post_ft) |> mutate(time = row_number())
   return(post_ft)
 })
 tidy_post_ft <- do.call("rbind", post_ft_list)
@@ -834,7 +834,7 @@ post_ft_list <- lapply(1:(nchains*npsample), function(i) {
                                Wt = post_Wt,
                                m0 = dat_list$m0, 
                                C0 = dat_list$C0)
-  post_ft <- data.frame(ft = post_ft) %>% mutate(time = row_number())
+  post_ft <- data.frame(ft = post_ft) |> mutate(time = row_number())
   return(post_ft)
 })
 
@@ -844,15 +844,15 @@ head(tidy_post_ft)
 
 ## posterior summaries of ft
 head(tidy_post_ft)
-post_sum_ft <- tidy_post_ft %>% group_by(time) %>% 
+post_sum_ft <- tidy_post_ft |> group_by(time) |> 
   summarise(post.mean = mean(ft),
             post.sd = sd(ft),
             q2.5 = quantile(ft, prob = 0.025),
             q50 = quantile(ft, prob = 0.50),
-            q97.5 = quantile(ft, prob = 0.975)) %>%
+            q97.5 = quantile(ft, prob = 0.975)) |>
   ungroup()
 str(post_sum_ft)
-post_sum_ft %>% head()
+post_sum_ft |> head()
 
 ggplot(data = post_sum_ft, aes(x = time)) + 
   geom_ribbon(aes(ymin = q2.5,ymax = q97.5), fill = "lightgray") +
@@ -1026,7 +1026,7 @@ post_ft_list <- lapply(1:(nchains*npsample), function(i) {
                                Wt = post_Wt,
                                m0 = dat_list$m0, 
                                C0 = dat_list$C0)
-  post_ft <- data.frame(ft = post_ft) %>% mutate(time = row_number())
+  post_ft <- data.frame(ft = post_ft) |> mutate(time = row_number())
   return(post_ft)
 })
 

@@ -21,9 +21,10 @@ E <- 19.88 # Expected deaths
 summary(glm(y ~ offset(log(E)), family = "poisson"))
 
 ```
+
 ```{r Ex 2.9 smr poisson multiple locations, eval = FALSE}
 # Finding MLE and SE of log(SMR) = beta0 over multiple areas
-summary(glm(Y ~ offset(log(E)),family="poisson", data=data))
+summary(glm(Y ~ offset(log(E)), family = "poisson", data = data))
 
 ```
 

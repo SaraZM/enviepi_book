@@ -96,8 +96,6 @@ head(SMR_raw)
 # Summarising raw SMRs
 summary(SMR_raw)
 
-
-
 ```
 
 
@@ -358,12 +356,12 @@ Example5_3Code <- nimbleCode({
     Y[i] ~ dpois(mu[i])
     log(mu[i]) <- log(E[i]) + beta0 + beta1 * X1[i] + beta2 * X2[i]
   }
-
+  
   # Priors
   beta0 ~ dnorm (0 , sd = 100)
   beta1 ~ dnorm (0 , sd = 100)
   beta2 ~ dnorm (0 , sd = 100)
-
+  
   # Functions of interest:
   base <- exp(beta0)
   RR <- exp(beta1)
@@ -389,7 +387,7 @@ inits <- function()
        beta1 = rnorm(1),
        beta2 = rnorm(1))
 
-# Define parameters to monitor and run the model 
+# Define parameters to monitor and run the model
 
 params <- c("beta0", "beta1", "beta2", "base", "RR")
 

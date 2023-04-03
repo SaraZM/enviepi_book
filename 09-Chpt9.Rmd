@@ -136,7 +136,8 @@ summary(mvSamples[, c("a", "b", "beta0")])
 post_summary <- mcmc.out$summary$all.chains |> as.data.frame() |>
   tibble::rownames_to_column("variable")
 # plot the mean and 95% CIs for the thetas
-post_theta <-  post_summary[grepl("theta\\[", post_summary$variable), ]
+post_theta <-
+  post_summary[grepl("theta\\[", post_summary$variable),]
 
 par(mfrow = c(1, 1))
 plot(
@@ -153,7 +154,8 @@ for (i in 1:N)
 abline(h = 1, lwd = 2, lty = 2)
 
 # posterior summary of fitted values
-post_fitted <-  post_summary[grepl("Y.fit\\[", post_summary$variable), ]
+post_fitted <-
+  post_summary[grepl("Y.fit\\[", post_summary$variable),]
 # plot mean and 95% CIs for the fitted values
 par(mfrow = c(1, 1))
 plot(
@@ -183,7 +185,7 @@ rm(list=ls())
 
 ```{r Ex 9.1 stan load, message=FALSE, echo = TRUE, warning=FALSE, message= FALSE}
 
-library(rstan) 
+library(rstan)
 library(sf) # to read shapefile
 library(loo) # To calculate WAIC
 options(mc.cores = parallel::detectCores())
@@ -215,7 +217,7 @@ y <- observed$Y2010
 # offset
 E <- expected$E2010
 N <- length(y)
-# data list 
+# data list
 ex.data <- list(
   N = length(y),
   Y = y,
@@ -232,7 +234,7 @@ Ex9_1Stan <- stan(
   warmup = 3000,
   thin = 14,
   # QUESTION: should we explain this?
-  control = list(adapt_delta = 0.8, max_treedepth = 15), 
+  control = list(adapt_delta = 0.8, max_treedepth = 15),
   init = "random",
   pars = c("a", "b", "theta", "log_lik", "yfit"),
   include = TRUE
@@ -259,7 +261,9 @@ rstan::traceplot(Ex9_1Stan, pars = c("theta[1]", "theta[2]", "theta[3]"))
 ```{r Ex 9.1 stan posterior summary}
 
 summary_theta <-
-  summary(Ex9_1Stan, pars = c("theta"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+  summary(Ex9_1Stan,
+          pars = c("theta"),
+          probs = c(0.05, 0.95))$summary |> as.data.frame()
 
 par(mfrow = c(1, 1))
 plot(
@@ -277,7 +281,9 @@ abline(h = 1, lwd = 2, lty = 2)
 
 # Posterior summary of fitted values
 summary_fit <-
-  summary(Ex9_1Stan, pars = c("yfit"), probs = c(0.05, 0.95))$summary |> as.data.frame()
+  summary(Ex9_1Stan,
+          pars = c("yfit"),
+          probs = c(0.05, 0.95))$summary |> as.data.frame()
 # Plot mean and 95% CIs for the fitted values
 par(mfrow = c(1, 1))
 plot(
@@ -311,15 +317,6 @@ rm(list=ls())
 library(ggplot2) # to plot map
 library(spdep) # read the shapefile (read_sf) and build neighbors list (poly2nb)
 library(nimble)
-# Add a theme to clear axes and background in ggplot (optional)
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # remove axis line
-  )
-}
 
 # Load data
 # Reading in borders
@@ -348,7 +345,8 @@ Analyze the relationship between COPD data and the average deprivation score whi
 
 copd_df$SMR2010 = copd_df$Y2010 / copd_df$E2010
 
-ggplot(copd_df) + geom_point(aes(x = Average.Score, y = SMR2010)) + theme_clear() + ylab("SMR 2010") + xlab("Average deprivation score")
+ggplot(copd_df) + geom_point(aes(x = Average.Score, y = SMR2010)) + 
+  theme_classic() + ylab("SMR 2010") + xlab("Average deprivation score")
 
 ```
 
@@ -716,15 +714,7 @@ library(CARBayes)
 library(ggplot2)
 library(sf)
 library(spdep)
-# Add a theme to clear axes and background in ggplot (optional)
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_blank()# remove axis line
-  )
-}
+
 # Reading in borders
 england <- read_sf("data/englandlocalauthority.shp")
 # Reading in data
