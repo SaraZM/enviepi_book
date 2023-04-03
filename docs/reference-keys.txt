@@ -1,9 +1,9 @@
-tab:unnamed-chunk-7
 tab:unnamed-chunk-8
 tab:unnamed-chunk-9
 tab:unnamed-chunk-10
 tab:unnamed-chunk-11
 tab:unnamed-chunk-12
+tab:unnamed-chunk-13
 why
 basics
 uncertainty
@@ -15,15 +15,6 @@ trusted
 Disease
 hazards
 Time
-nimble-5
-time-varying-level-model
-trend-model
-stan-5
-time-varying-level-model-1
-trend-model-1
-solutions-to-selected-exercises-1
-exercise-11.11
-exercise-11.13
 exposure
 causality
 monitoring

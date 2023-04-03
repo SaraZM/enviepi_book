@@ -28,16 +28,6 @@ site_daily$date <- as.Date(site_daily$date, "%m/%d/%Y")
 # load hourly data from that same site
 site_hourly <- read.csv("data/LA_ozone_hourly.csv", header = TRUE)
 
-# Add a theme to clear axes and background in ggplot (optional)
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
-  )
-}
-
 ```
 
 
@@ -52,7 +42,7 @@ ggplot(data = site_daily) +
   # 8 hour regulatory standard of 0.075 (ppm)
   geom_hline(yintercept = 0.075, color = "grey") +
   xlab("Day in 2013 at Los Angeles Site 060379033") +
-  ylab("Max Daily 8hr Ozone Level (ppm)") + theme_clear()
+  ylab("Max Daily 8hr Ozone Level (ppm)") + theme_classic()
 
 
 # Plot hourly data
@@ -62,7 +52,7 @@ ggplot(data = site_hourly,) +
    # 8 hour regulatory standard of 0.075 (ppm).
   geom_hline(yintercept = 0.075, color = "grey") +
   xlab("Hour in 2013's ozone season") +
-  ylab("Hourly Ozone Concentration (ppm)") +  theme_clear()
+  ylab("Hourly Ozone Concentration (ppm)") +  theme_classic()
 
 ```
 
@@ -82,15 +72,6 @@ library(TTR)
 site_daily <- read.csv("data/LA_ozone_daily.csv", header = TRUE)
 # add an identifier column for each day in the sample
 site_daily$day <- 1:nrow(site_daily)
-# add a theme to clear axes and background in ggplot
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black"), # keep axis line
-  )
-}
 
 ```
 
@@ -110,8 +91,7 @@ plot_SMA1 <- ggplot(data = site_daily) +
   xlab("Day in 2013 at LA Site 060379033") +
   ylab("Ozone Level (ppm)") +
   ggtitle("Single day") +
-  theme_clear()
-
+ theme_classic()
 # Three days
 ozone_SMA3 <- data.frame(sma = SMA(site_daily$max.ozone, n = 3),
                          day = 1:nrow(site_daily))
@@ -122,7 +102,7 @@ plot_SMA3 <- ggplot(data = ozone_SMA3) +
   xlab("Day in 2013 at LA Site 060379033") +
   ylab("Ozone Level (ppm)") +
   ggtitle("Three days") +
-  theme_clear()
+  theme_classic()
 
 
 # Six days
@@ -135,7 +115,7 @@ plot_SMA6 <- ggplot(data = ozone_SMA6) +
   xlab("Day in 2013 at LA Site 060379033") +
   ylab("Ozone Level (ppm)") +
   ggtitle("Six days") +
-  theme_clear()
+  theme_classic()
 
 
 # Twelve days
@@ -148,7 +128,7 @@ plot_SMA12 <- ggplot(data = ozone_SMA12) +
   xlab("Day in 2013 at LA Site 060379033") +
   ylab("Ozone Level (ppm)") +
   ggtitle("Twelve days") +
-  theme_clear()
+  theme_classic()
 
 cowplot::plot_grid(plot_SMA1, plot_SMA3, plot_SMA6, plot_SMA12, labels = "auto")
 
@@ -232,16 +212,6 @@ library(TTR)
 volcano_dust <-
   scan("https://robjhyndman.com/tsdldata/annual/dvi.dat", skip = 1)
 
-# Add a theme to clear axes and background in ggplot
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black"), # keep axis line
-  )
-}
-
 
 ```
 
@@ -256,7 +226,7 @@ volcano_dust_df <- data.frame(year = 1500:(1500+length(volcano_dust)-1),
 ggplot(data = volcano_dust_df) +
   geom_line(aes(x = year, y = dust, group = 1)) +
   xlab("Year") +
-  ylab("Atmospheric levels of volcanic ash") + theme_clear()
+  ylab("Atmospheric levels of volcanic ash") + theme_classic()
 
 ```
 
@@ -302,6 +272,15 @@ plot(volcano_dust_forecast, bty = "n")
 
 ## Example 11.16 Fitting a random walk model to PM10 concentrations in London {-}
 
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+**NOTE**
+:::
+
+The code for the implementation of DLMs in Stan and Nimble was developed by Paritosh Kumar Roy. This code and other more complex DLM structures are available through his [github](https://github.com/paritoshkroy). 
+
+::::
+
 ### Nimble {-}
 
 ```{r Ex 11.16 pm10 clean nimble, include = FALSE}
@@ -318,6 +297,7 @@ source("functions/FFBS_functions_nimble.R") # load necessary functions for ffbs
 # Load data 
 pm10 <- source("data/11_13_data.txt")[["value"]][["y"]] |> unlist()
 
+# Choose 250 days for example
 pm10_250 <- pm10[385:634]
 
 ```
@@ -344,14 +324,14 @@ Example11_16_PM10_Nimble <- nimbleCode({
 })
 ```
 
-```{r Ex 11.16 run pm10 nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+```{r Ex 11.16 run pm10 nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', cache = TRUE}
 # Model specification
 J <- length(pm10_250)
-yt <- pm10_250
+yt <-pm10_250
 Ft <- rep(1, J)
 Gt <- 1
 m0 <- mean(yt, na.rm = TRUE)
-C0 <- 100
+C0 <- 10
   
 const_list <- list(J = J)
 dat_list <- list(
@@ -409,16 +389,16 @@ Cmcmc <-
     resetFunctions = TRUE,
     showCompilerOutput = TRUE
   )
-niters <- 60000
-nburnins <- 0.5 * niters
-nchains <- 2
-nthins <- 14
+niter <- 60000
+nburnin <- 0.5 * niter
+nchain <- 2
+nthin <- 14
 post_samples <- runMCMC(
   Cmcmc,
-  niter = niters,
-  nburnin = nburnins,
-  thin = nthins,
-  nchains = nchains,
+  niter = niter,
+  nburnin = nburnin,
+  thin = nthin,
+  nchains = nchain,
   samplesAsCodaMCMC = TRUE
 )
 ```
@@ -471,15 +451,15 @@ ggplot(data = post_sum_theta, aes(x = time)) +
               fill = "lightgray",
               alpha = 0.7) +
   geom_path(aes(y = q50), col = "blue", linewidth = 0.6) +
-  ylab("") + xlab("Time") + theme_classic()
-# REVIEW: it is not giving the same results as Stan and the credible intervals
-# are wider
+  ylab("") + xlab("Time (days)") + 
+  ggtitle(expression(paste("Trend ", PM[10], " London site"))) +
+  theme_classic()
+
 ```
 
-```{r Ex 11.16 pm10 nimble fitted values, eval = FALSE }
-# REVIEW: This part is not working because of the missing values in yt, we need to review this part of the code 
+```{r Ex 11.16 pm10 nimble fitted values, cache = TRUE }
 
-npsamples <- floor((niters - nburnins)/14)
+npsample <- floor((niter - nburnin)/nthin)
 
 Cnim_postfit_uous <-
   compileNimble(nim_postfit_uous, showCompilerOutput = FALSE)
@@ -487,7 +467,7 @@ post_tau <- tidy_post_samples$tau
 post_sqrt_Wt_diag <- tidy_post_samples$sqrt_Wt_diag
 # post_yt <- tidy_post_samples$yt
 
-post_ft_list <- lapply(1:(nchains * npsamples), function(i) {
+post_ft_list <- lapply(1:(nchain * npsample), function(i) {
   post_Vt <- post_tau[i] ^ 2
   post_Wt <- post_sqrt_Wt_diag[i] ^ 2
   post_ft <- Cnim_postfit_uous(
@@ -511,26 +491,28 @@ post_sum_ft <- tidy_post_ft |> group_by(time) |>
     post.sd = sd(ft),
     q2.5 = quantile(ft, prob = 0.025),
     q50 = quantile(ft, prob = 0.50),
-    q97.5 = quantile(ft, prob = 0.975)
-  ) |>
+    q97.5 = quantile(ft, prob = 0.975)) |>
   ungroup()
+
 ggplot(data = post_sum_ft, aes(x = time)) +
-  geom_ribbon(aes(ymin = q2.5, ymax = q97.5), fill = "lightblue") +
-  geom_path(aes(y = post.mean), col = "red", linewidth = 0.25) +
+  geom_ribbon(aes(ymin = q2.5, ymax = q97.5), fill = "lightgray") +
+  geom_path(aes(y = post.mean), linewidth = 0.25) +
   geom_point(aes(y = yt), size = 0.25) +
-  ylab("") +
-  xlab("Time") +
-  theme_clear()
+  ylab(bquote("PM"[10]~"Concentration")) +
+  xlab("Time (days)") + 
+  ggtitle(expression(paste("Fitted values ", PM[10], " London site"))) +
+  theme_classic()
+
 ```
 
 
-### Stan
+### Stan {-}
 
 ```{r Ex 11.16 pm10 stan clean, include = FALSE}
 rm(list = ls())
 ```
 
-```{r Ex 11.16 book load data}
+```{r Ex 11.16 pm10 load data, echo = TRUE, warning=FALSE, message= FALSE}
 
 library(coda)
 library(ggplot2)
@@ -545,8 +527,6 @@ pm10 <- source("data/11_13_data.txt")[["value"]][["y"]] |> unlist()
 pm10_250 <- pm10[385:634]
 
 
-# TODO: check if theme_classic does the same thing as my theme_clear (it is the same thing)
-
 ```
 
 
@@ -557,7 +537,7 @@ y <- pm10_250
 Ft <- rep(1, J)
 Gt <- 1
 m0 <- mean(y)
-C0 <- 100
+C0 <- 10
   
 stan_data <- list(
   Tt = J,
@@ -575,7 +555,8 @@ cat functions/Example11_16_PM10.stan
 ``` 
 
 
-```{r Ex 11.16 nile run stan}
+```{r Ex 11.16 pm10 run stan, cache = TRUE}
+
 Example11_16_PM10_Stan  <- stan(
   file = "functions/Example11_16_PM10.stan",
   data = stan_data,
@@ -587,7 +568,7 @@ Example11_16_PM10_Stan  <- stan(
 rstan::traceplot(Example11_16_PM10_Stan, pars = c("tau","sqrt_W"))
 rstan::traceplot(Example11_16_PM10_Stan, pars = paste0("theta[", sample.int(J, size = 4, replace = FALSE), "]"))
 
-stanfit_summary <- summary(Example11_16_PM10_Stan, pars = c("tau","sqrt_W","theta"))
+stanfit_summary <- summary(Example11_16_PM10_Stan, pars = c("tau","sqrt_W","theta", "yfit"))
 head(stanfit_summary$summary)
 
 stan_fit_df <- data.frame(stanfit_summary$summary) |>
@@ -600,23 +581,33 @@ ggplot(data = stan_fit_df, aes(x = time)) +
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "gray99") +
-  theme_classic() + xlab("year")
-# TODO: I am still missing the plots for the fitted values here
+  xlab("Time (days)") + ylab(" ") + 
+  ggtitle(expression(paste("Trend ", PM[10], " London site"))) +
+  theme_classic()
+
+yfit_summary_dt <- data.frame(stanfit_summary$summary) |>
+  rownames_to_column() |>
+  filter(str_detect(rowname, "yfit")) |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname)))
+
+ggplot(yfit_summary_dt, aes(x = time)) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "gray99") +
+  geom_point(aes(y = y)) +
+  geom_path(aes(y = mean), linewidth = 0.1, size = 1) + 
+  xlab("Time (days)") + ylab(" ") +
+  ggtitle(expression(paste("Fitted values ", PM[10], " London site"))) +
+  theme_classic()
+ 
 ```
 
 
 
 ## Example 11.16 EXTRA Implementation of a dynamic linear model: UK ozone data {-}
 
-:::: {.blackbox data-latex=""}
-::: {.center data-latex=""}
-**NOTE**
-:::
 
-The code for the implementation of DLMs in Stan and Nimble was developed by Paritosh Kumar Roy. This code and other more complex DLM structures are available through his [github](https://github.com/paritoshkroy). 
-
-::::
-### Nimble
+### Nimble {-}
 
 ```{r Ex 11.16 o3 clean nimble, include = FALSE}
 rm(list = ls())
@@ -636,16 +627,6 @@ library(tidyverse)
 source("functions/FFBS_functions_nimble.R")
 
 UK_ozone <- read.csv("data/uk_ozone_one_site.csv")
-# Add a theme to clear axes and background in ggplot (optional)
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
-  )
-}
-
 ```
 
 
@@ -693,9 +674,9 @@ Example11_16_O3_Nimble <- nimbleCode({
 
 ```
 
-#### Time-varying level model
+#### Time-varying level model {-}
 
-```{r run o3 nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+```{r run o3 nimble model, warning = FALSE, error = FALSE, message = FALSE, results='hide', cache=TRUE}
 
 # Model specification
 yt <- sqrt(UK_ozone$ozone)
@@ -714,11 +695,16 @@ Gt <- diag(x = 1, nrow = p, ncol = p)
 m0 <- c(mean(yt), 0, 0)
 C0 <- diag(x = 1, nrow = p, ncol = p)
 
+
 const_list <- list(Tt = Tt,
-                   p = p,
-                   m0 = m0,
-                   C0 = C0)
-dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
+                   p = p)
+dat_list <- list(
+  yt = yt,
+  Ft = Ft,
+  Gt = Gt,
+  m0 = m0,
+  C0 = C0
+)
 init_list <- list(tau = 0.01, sqrt_Wt_diag = sqrt(rep(0.1, p)))
 
 Rmodel <-
@@ -745,6 +731,7 @@ Cmcmc <-
 niter <- 10000
 nburnin <- 0.5 * niter
 nthin <- 1
+nchains <- 2
 start_time <- Sys.time()
 post_samples <-
   runMCMC(
@@ -752,7 +739,7 @@ post_samples <-
     niter = niter,
     nburnin = nburnin,
     thin = nthin,
-    nchains = 2,
+    nchains = nchains,
     samplesAsCodaMCMC = TRUE
   )
 end_time <- Sys.time()
@@ -782,7 +769,7 @@ tidy_post_samples |>
   geom_path(aes(color = factor(.chain)), linewidth = 0.25,
             show.legend = FALSE) +
   facet_wrap( ~ vars, scales = "free", nrow = 2) +
-  theme_clear() +
+  theme_classic() +
   theme(panel.grid = element_blank(),
         strip.background = element_blank())
 
@@ -817,18 +804,68 @@ ggplot(data = post_sum_theta, aes(x = time)) +
     scales = "free",
     labeller = label_bquote(theta[.(component)])
   ) +
-  ylab("") +
-  xlab("Time") +
-  theme_clear() +
-  theme(panel.grid = element_blank(),
-        strip.background = element_blank())
+  ylab("") + xlab("Time") +
+  theme_classic() 
 
-# TODO: I am missing the fitted values here
+
 ```
 
-#### Trend model
 
-```{r run o3 nimble trend model, warning = FALSE, error = FALSE, message = FALSE, results='hide'}
+
+```{r Ex 11.16 o3  nimble fitted values}
+
+npsample <- floor((niter - nburnin)/nthin)
+str(tidy_post_samples)
+
+Cnim_postfit_uoms <- compileNimble(nim_postfit_uoms, showCompilerOutput = FALSE)
+
+post_tau <- tidy_post_samples$tau
+post_sqrt_Wt_diag <-
+  tidy_post_samples  |>  select(starts_with("sqrt_Wt_diag")) |> 
+  as.matrix()|>  unname()
+
+post_ft_list <- lapply(1:(nchains*npsample), function(i) {
+  post_Vt <- post_tau[i]^2
+  post_Wt <- nim_diag(post_sqrt_Wt_diag[i,]^2)
+  post_ft <- Cnim_postfit_uoms(yt = dat_list$yt, 
+                               Ft = dat_list$Ft, 
+                               Vt = post_Vt,
+                               Gt = dat_list$Gt, 
+                               Wt = post_Wt,
+                               m0 = dat_list$m0, 
+                               C0 = dat_list$C0)
+  post_ft <- data.frame(ft = post_ft) %>% mutate(time = row_number())
+  return(post_ft)
+})
+
+tidy_post_ft <- do.call("rbind", post_ft_list)
+str(tidy_post_ft)
+head(tidy_post_ft)
+
+## posterior summaries of ft
+head(tidy_post_ft)
+post_sum_ft <- tidy_post_ft %>% group_by(time) %>% 
+  summarise(post.mean = mean(ft),
+            post.sd = sd(ft),
+            q2.5 = quantile(ft, prob = 0.025),
+            q50 = quantile(ft, prob = 0.50),
+            q97.5 = quantile(ft, prob = 0.975)) %>%
+  ungroup()
+str(post_sum_ft)
+post_sum_ft %>% head()
+
+ggplot(data = post_sum_ft, aes(x = time)) + 
+  geom_ribbon(aes(ymin = q2.5,ymax = q97.5), fill = "lightgray") +
+  geom_path(aes(y = post.mean),  size = 0.25) +
+  geom_point(aes(y=yt), size = 0.25) +
+  ylab("Ozone Level (ppm)") +
+  xlab("Time") + ggtitle("Fitted values Ozone level UK") +
+  theme_classic() 
+```
+
+#### Trend model {-}
+
+```{r run o3 nimble trend model, warning = FALSE, error = FALSE, message = FALSE, results='hide', cache = TRUE}
 
 # Model specification
 yt <- sqrt(UK_ozone$ozone)
@@ -852,10 +889,14 @@ m0 <- c(mean(yt), 0, 0, 0)
 C0 <- diag(x = 1, nrow = p, ncol = p)
 
 const_list <- list(Tt = Tt,
-                   p = p,
-                   m0 = m0,
-                   C0 = C0)
-dat_list <- list(yt = yt, Ft = Ft, Gt = Gt)
+                   p = p)
+dat_list <- list(
+  yt = yt,
+  Ft = Ft,
+  Gt = Gt,
+  m0 = m0,
+  C0 = C0
+)
 init_list <- list(tau = 0.01, sqrt_Wt_diag = sqrt(rep(0.1, p)))
 
 Rmodel <-
@@ -882,6 +923,7 @@ Cmcmc <-
 niter <- 10000
 nburnin <- 0.5 * niter
 nthin <- 1
+nchains <- 2
 start_time <- Sys.time()
 post_samples <-
   runMCMC(
@@ -889,7 +931,7 @@ post_samples <-
     niter = niter,
     nburnin = nburnin,
     thin = nthin,
-    nchains = 2,
+    nchains = nchains,
     samplesAsCodaMCMC = TRUE
   )
 end_time <- Sys.time()
@@ -921,7 +963,7 @@ tidy_post_samples |>
   geom_path(aes(color = factor(.chain)), linewidth = 0.25,
             show.legend = FALSE) +
   facet_wrap( ~ vars, scales = "free", nrow = 2) +
-  theme_clear() +
+  theme_classic() +
   theme(panel.grid = element_blank(),
         strip.background = element_blank())
 
@@ -959,15 +1001,57 @@ ggplot(data = post_sum_theta, aes(x = time)) +
   ) +
   ylab("") +
   xlab("Time") +
-  theme_clear() +
-  theme(panel.grid = element_blank(),
-        strip.background = element_blank())
+  theme_classic() 
 
-# TODO: I am missing the fitted values here
 ```
 
+```{r  Ex 11.16 nimble trend fitted values, cache=TRUE, messages = FALSE}
 
-### Stan
+npsample <- floor((niter - nburnin)/nthin)
+
+Cnim_postfit_uoms <- compileNimble(nim_postfit_uoms, showCompilerOutput = FALSE)
+
+post_tau <- tidy_post_samples$tau
+post_sqrt_Wt_diag <-
+  tidy_post_samples  |>  select(starts_with("sqrt_Wt_diag")) |> 
+  as.matrix()|>  unname()
+
+post_ft_list <- lapply(1:(nchains*npsample), function(i) {
+  post_Vt <- post_tau[i]^2
+  post_Wt <- nim_diag(post_sqrt_Wt_diag[i,]^2)
+  post_ft <- Cnim_postfit_uoms(yt = dat_list$yt, 
+                               Ft = dat_list$Ft, 
+                               Vt = post_Vt,
+                               Gt = dat_list$Gt, 
+                               Wt = post_Wt,
+                               m0 = dat_list$m0, 
+                               C0 = dat_list$C0)
+  post_ft <- data.frame(ft = post_ft) %>% mutate(time = row_number())
+  return(post_ft)
+})
+
+tidy_post_ft <- do.call("rbind", post_ft_list)
+
+## posterior summaries of ft
+post_sum_ft <- tidy_post_ft |> group_by(time) |>  
+  summarise(post.mean = mean(ft),
+            post.sd = sd(ft),
+            q2.5 = quantile(ft, prob = 0.025),
+            q50 = quantile(ft, prob = 0.50),
+            q97.5 = quantile(ft, prob = 0.975)) |> 
+  ungroup()
+
+
+ggplot(data = post_sum_ft, aes(x = time)) + 
+  geom_ribbon(aes(ymin = q2.5,ymax = q97.5), fill = "lightgray") +
+  geom_path(aes(y = post.mean),  size = 0.25) +
+  geom_point(aes(y=yt), size = 0.25) +
+  ylab("Ozone Level (ppm)") +
+  xlab("Time") + ggtitle("Fitted values Ozone level UK") +
+  theme_classic() 
+```
+
+### Stan {-}
 
 ```{r Ex 11.16 ozone clean stan, include = FALSE}
 rm(list = ls())
@@ -986,18 +1070,10 @@ rstan_options(auto_write = TRUE)
 
 # Load data for RW case
 UK_ozone <- read.csv("data/uk_ozone_one_site.csv")
-# Add a theme to clear axes and background in ggplot (optional)
-theme_clear <- function(){
-  theme(
-    panel.grid.major = element_blank(), # remove background grid
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), # remove grey background
-    axis.line = element_line(colour = "black") # keep axis line
-  )
-}
+
 ```
 
-#### Time-varying level model
+#### Time-varying level model {-}
 
 ```{r  Ex 11.16 o3 prepare data stan}
 y <- sqrt(UK_ozone$ozone)
@@ -1024,7 +1100,7 @@ stan_data <- list(T = Tt, p = p, y = y, F = Ft, G = Gt, m0= m0, C0 = C0)
 cat functions/Example11_16_UK.stan
 ``` 
 
-```{r Ex 11.16 o3 run stan}
+```{r Ex 11.16 o3 run stan, cache = TRUE}
 Example11_16_UK_Stan  <- stan(
   file = "functions/Example11_16_UK.stan",
   data = stan_data,
@@ -1056,6 +1132,9 @@ fixedpars_summary
 theta_summary <-
   summary(Example11_16_UK_Stan, pars = c("theta"))$summary
 
+yfit_summary <-
+  summary(Example11_16_UK_Stan, pars = c("yfit"))$summary
+
 p1 <- data.frame(theta_summary) |>
   rownames_to_column() |>
   filter(rowname %in% paste0("theta[", 1:Tt, ",1]")) |>
@@ -1065,7 +1144,7 @@ p1 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Intercept") + theme_clear() +
+  ggtitle("Intercept") + theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 p2 <- data.frame(theta_summary) |>
@@ -1077,7 +1156,7 @@ p2 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Wind") +  theme_clear() +
+  ggtitle("Wind") +  theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -1090,18 +1169,31 @@ p3 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Temperature") +  theme_clear() +
+  ggtitle("Temperature") +  theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 grid.arrange(p1,p2,p3, ncol = 2)
-# TODO: I am still missing the plots for the fitted values here
 
+# Fitted values
+yfit_summary_dt <- data.frame(yfit_summary) |>
+  rownames_to_column() |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname)))
+
+ggplot(yfit_summary_dt, aes(x = time)) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "gray99") +
+  geom_point(aes(y = y)) +
+  geom_path(aes(y = mean), linewidth = 0.1, size = 1) + 
+ ylab("Ozone Level (ppm)") +
+  xlab("Time") + ggtitle("Fitted values Ozone level UK") +
+  theme_classic()
 ```
 
 
-#### Trend model
+#### Trend model {-}
 
-```{r  Ex 11.16 o3 trend data stan}
+```{r  Ex 11.16 o3 trend data stan, cache = TRUE}
 y <- sqrt(UK_ozone$ozone)
 temp <- UK_ozone$temp
 wind <- UK_ozone$wind
@@ -1132,9 +1224,6 @@ stan_data_trend <- list(
   C0 = C0
 )
 
-```
-
-```{r Ex 11.16 trend o3 run stan}
 Example11_16_UK_trend_Stan  <- stan(
   file = "functions/Example11_16_UK.stan",
   data = stan_data_trend,
@@ -1170,6 +1259,10 @@ fixedpars_summary
 theta_summary <-
   summary(Example11_16_UK_trend_Stan, pars = c("theta"))$summary
 
+yfit_summary <-
+  summary(Example11_16_UK_trend_Stan, pars = c("yfit"))$summary
+
+
 p1 <- data.frame(theta_summary) |>
   rownames_to_column() |>
   filter(rowname %in% paste0("theta[", 1:Tt, ",1]")) |>
@@ -1179,7 +1272,7 @@ p1 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Intercept") + theme_clear() +
+  ggtitle("Intercept") + theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 p2 <- data.frame(theta_summary) |>
@@ -1191,7 +1284,7 @@ p2 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Trend") +  theme_clear() +
+  ggtitle("Trend") +  theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 p3 <- data.frame(theta_summary) |>
@@ -1203,7 +1296,7 @@ p3 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Wind") +  theme_clear() +
+  ggtitle("Wind") +  theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -1216,17 +1309,29 @@ p4 <- data.frame(theta_summary) |>
   geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
               alpha = 0.25,
               col = "lightgray") +
-  ggtitle("Temperature") +  theme_clear() +
+  ggtitle("Temperature") +  theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 
 
 
 grid.arrange(p1,p2,p3, p4, ncol = 2)
-# TODO: I am still missing the plots for the fitted values here
+
+# Fitted values
+yfit_summary_dt <- data.frame(yfit_summary) |>
+  rownames_to_column() |>
+  mutate(time = as.numeric(gsub(".*?([0-9]+).*", "\\1", rowname)))
+
+ggplot(yfit_summary_dt, aes(x = time)) +
+  geom_ribbon(aes(ymin = X2.5., ymax = X97.5.),
+              alpha = 0.25,
+              col = "gray99") +
+  geom_point(aes(y = y)) +
+  geom_path(aes(y = mean), linewidth = 0.1, size = 1) + 
+ ylab("Ozone Level (ppm)") +
+  xlab("Time") + ggtitle("Fitted values Ozone level UK") +
+  theme_classic()
 
 ```
-
-
 
 
 
@@ -1330,7 +1435,7 @@ samples_sigmas <- coda.samples(model_ar,
                            n.iter = 100, 
                            thin = 2)
 
-plot(samples_sigmas)
+plot(samples_sigmas, bty = "n")
 apply(samples_sigmas[[1]], 2, quantile)
 
 
@@ -1361,19 +1466,22 @@ plot_df <- plot_df |> pivot_longer(cols = everything(),
   mutate(range = q975-q025)
 
 
-plot_scatter_df <- plot_df |> select(var, time, median) |>
+plot_scatter_df <- dplyr::select(plot_df, var, time, median) |>
   pivot_wider(names_from = var, values_from = median)
 
 plot_scatter <- ggplot(plot_scatter_df, aes(x = y, y = gamma)) +
-  geom_point(alpha = 0.5)
+  geom_point(alpha = 0.5) + theme_classic()
 
 plot_scatter
 
-plot <- ggplot(filter(plot_df, var == "gamma"), aes(x = time)) + 
-  geom_line(aes(y = median), alpha = 0.5) + 
-  geom_line(aes(y = q025), alpha = 0.5, linetype = "dashed")+ 
-  geom_line(aes(y = q975), alpha = 0.5, linetype = "dashed")+
-  geom_point(data = filter(plot_df, (var == "y" & time %in% missings)), aes(x = time, y = 0), color = "blue")
+plot <- ggplot(filter(plot_df, var == "gamma"), aes(x = time)) +
+  geom_line(aes(y = median), alpha = 0.5) +
+  geom_line(aes(y = q025), alpha = 0.5, linetype = "dashed") +
+  geom_line(aes(y = q975), alpha = 0.5, linetype = "dashed") +
+  geom_point(data = filter(plot_df, (var == "y" &
+                                       time %in% missings)),
+             aes(x = time, y = 0),
+             color = "blue") + theme_classic()
 
 plot
 ```

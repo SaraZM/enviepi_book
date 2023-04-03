@@ -23,7 +23,7 @@
 <meta name="author" content="Gavin Shaddick, James V. Zidek, and Alexandra M. Schmidt" />
 
 
-<meta name="date" content="2023-03-29" />
+<meta name="date" content="2023-03-31" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -218,14 +218,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.2-low-pass-filtering-of-carbon-monoxide-levels-using-the-moving-average"><i class="fa fa-check"></i>Example 11.2 Low-pass filtering of carbon monoxide levels using the moving average</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.13-forecasting-ozone-levels"><i class="fa fa-check"></i>Example 11.13 Forecasting ozone levels</a></li>
 <li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.14-forecasting-volcanic-ash"><i class="fa fa-check"></i>Example 11.14 Forecasting volcanic ash</a></li>
-<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-implementation-of-a-dynamic-linear-model-uk-ozone-data"><i class="fa fa-check"></i>Example 11.16 Implementation of a dynamic linear model: UK ozone data</a>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-fitting-a-random-walk-model-to-pm10-concentrations-in-london"><i class="fa fa-check"></i>Example 11.16 Fitting a random walk model to PM10 concentrations in London</a>
 <ul>
-<li class="chapter" data-level="11.0.1" data-path="Time.html"><a href="Time.html#nimble-5"><i class="fa fa-check"></i><b>11.0.1</b> Nimble</a></li>
-<li class="chapter" data-level="11.0.2" data-path="Time.html"><a href="Time.html#stan-5"><i class="fa fa-check"></i><b>11.0.2</b> Stan</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#nimble-5"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#stan-5"><i class="fa fa-check"></i>Stan</a></li>
 </ul></li>
-<li class="chapter" data-level="11.1" data-path="Time.html"><a href="Time.html#solutions-to-selected-exercises-1"><i class="fa fa-check"></i><b>11.1</b> Solutions to Selected Exercises</a></li>
-<li class="chapter" data-level="11.2" data-path="Time.html"><a href="Time.html#exercise-11.11"><i class="fa fa-check"></i><b>11.2</b> Exercise 11.11</a></li>
-<li class="chapter" data-level="11.3" data-path="Time.html"><a href="Time.html#exercise-11.13"><i class="fa fa-check"></i><b>11.3</b> Exercise 11.13</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#example-11.16-extra-implementation-of-a-dynamic-linear-model-uk-ozone-data"><i class="fa fa-check"></i>Example 11.16 EXTRA Implementation of a dynamic linear model: UK ozone data</a>
+<ul>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#nimble-6"><i class="fa fa-check"></i>Nimble</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#stan-6"><i class="fa fa-check"></i>Stan</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#solutions-to-selected-exercises-1"><i class="fa fa-check"></i>Solutions to Selected Exercises</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#exercise-11.11"><i class="fa fa-check"></i>Exercise 11.11</a></li>
+<li class="chapter" data-level="" data-path="Time.html"><a href="Time.html#exercise-11.13"><i class="fa fa-check"></i>Exercise 11.13</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="exposure.html"><a href="exposure.html"><i class="fa fa-check"></i><b>12</b> Exposure assessment-over space and time</a></li>
 <li class="chapter" data-level="13" data-path="causality.html"><a href="causality.html"><i class="fa fa-check"></i><b>13</b> Causality-roadblocks on the way to it</a>
@@ -1096,14 +1101,14 @@ Also note that I am just doing for 5 locations (please double-check my equations
 <span id="cb217-25"><a href="hazards.html#cb217-25" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb217-26"><a href="hazards.html#cb217-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb217-27"><a href="hazards.html#cb217-27" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>summary.fixed</span></code></pre></div>
-<pre><code>##                     mean           sd    0.025quant     0.5quant   0.975quant
-## (Intercept)  8.263245418 118.01725386 -189.26676108 -5.472126510 298.73628481
-## X            0.014532837   0.02130264   -0.02563712  0.013291090   0.06340346
-## Y           -0.003363593   0.02371938   -0.06108402 -0.000648258   0.03642512
+<pre><code>##                     mean           sd    0.025quant      0.5quant   0.975quant
+## (Intercept)  8.263107109 118.01744834 -189.26686123 -5.4724133487 298.73720629
+## X            0.014532810   0.02130267   -0.02563718  0.0132910509   0.06340354
+## Y           -0.003363563   0.02371941   -0.06108419 -0.0006481981   0.03642514
 ##                      mode          kld
-## (Intercept) -20.057233541 5.350248e-05
-## X             0.011915234 7.754876e-05
-## Y             0.002407345 3.418529e-05</code></pre>
+## (Intercept) -20.057620990 5.350437e-05
+## X             0.011915185 7.755183e-05
+## Y             0.002407428 3.418641e-05</code></pre>
 </div>
 <div id="example-10.13-directional-variograms" class="section level2 unnumbered hasAnchor">
 <h2>Example 10.13: Directional variograms<a href="hazards.html#example-10.13-directional-variograms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1161,9 +1166,8 @@ If we explore the data frame we see that there are 2035 individuals at 65 villag
 <span id="cb227-2"><a href="hazards.html#cb227-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total =</span> <span class="fu">n</span>(),</span>
 <span id="cb227-3"><a href="hazards.html#cb227-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">positive =</span> <span class="fu">sum</span>(pos),</span>
 <span id="cb227-4"><a href="hazards.html#cb227-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">prev =</span> positive <span class="sc">/</span> total) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span></code></pre></div>
-<pre><code>## `summarise()` has grouped output
-## by &#39;x&#39;. You can override using
-## the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;x&#39;. You can override using the `.groups`
+## argument.</code></pre>
 <div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="hazards.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(malaria_village)</span></code></pre></div>
 <pre><code>##          x       y total positive      prev
 ## 1 349631.3 1458055    33       17 0.5151515
