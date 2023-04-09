@@ -23,17 +23,11 @@ model {
   vector[N] mu;
   matrix[N, N] L;
   matrix[N, N] Sigma;
+  
+  Sigma = sigma_sq * exp(-dist_matrix/ phi) + tau_sq *diag_matrix(rep_vector(1, N));
 
- for(i in 1:(N-1)){
-   for(j in (i+1):N){
-     Sigma[i,j] = sigma_sq*exp(-dist_matrix[i,j]/phi);
-     Sigma[j,i] = Sigma[i,j];
-   }
- }
-   // diagonal elements
 
   for(i in 1:N) {
-    Sigma[i,i] = sigma_sq + tau_sq;
     mu[i] = beta0 + X[i,]*beta;
   }
   

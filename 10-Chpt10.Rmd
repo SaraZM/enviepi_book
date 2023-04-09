@@ -378,8 +378,6 @@ system.time(
   )
 )
 
-str(pred_samples)
-
 predict_res_dt <- data.frame(
   xcoord = predCoords[, 1],
   ycoord = predCoords[, 2],
@@ -423,11 +421,13 @@ nimble_var <-
 
 plot_grid(nimble_pred, nimble_var, labels = "auto")
 
+predict_res_dt$post.mean[1:5]
+predict_res_dt$post.var[1:5]
 ```
 
 ### Stan {-}
 
-```{r load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+```{r Ex 10.9 load stan, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
 # load rstan with options
 library(geoR)
 library(rstan)
@@ -437,7 +437,7 @@ rstan_options(auto_write = TRUE)
 ```
 
 
-```{r stan load data}
+```{r Ex 10.9 stan load data}
 benzene_data <- read.csv("data/montreal_benzene_apr.csv")
 # create a new variable in "sp" format and define coordinates
 benzene_data_geo <- benzene_data
@@ -511,7 +511,7 @@ rstan::traceplot(Example10_9Stan, pars = c("beta0","beta","sigma_sq", "tau_sq", 
 summary_exp_stan <-
   summary(
     Example10_9Stan,
-    pars = c("beta0","beta", "phi", "sigma_sq", "tau_sq"),
+    pars = c("beta0","beta", "sigma_sq", "tau_sq",  "phi"),
     probs = c(0.025, 0.975)
   )
 
@@ -624,6 +624,7 @@ plot_grid(stan_pred, stan_var, labels = "auto")
 NOTE: To Alex, I just added the spatial predictions for nimble, do we want it for Stan too?
 Also note that I am just doing for 5 locations (please double-check my equations) and it instead of running in 2 minutes it runs in 6 (in case you want to highlight that). But we should discuss the order of this cause I am doing the predictions with Paritosh's code in the previous section.
 
+### Nimble {-}
 ```{r Ex 10.10 nimble prediction mcmc}
 # Obtain coordinates for predictions 
 # note that we are using the same coordinates as the one generated for 
@@ -648,17 +649,17 @@ pred2predDist <- fields::rdist(predCoords[1:nu,])
 
 ```
 
-```{r Example 10.10 spatial predictions nimble, message=FALSE, cache = TRUE}
+```{r Example 10.10 spatial predictions nimble, results='hide', warning=FALSE, message=FALSE, cache = TRUE}
 
 Example10_10Code <-  nimbleCode ({
   # Covariance matrix spatial effect
   Sigma_obs[1:n, 1:n] <-
     sigma_sq * exp(-distMatrix[1:n, 1:n] / phi) + tau_sq * identityMatrix(d = n)
   
-  Sigma_unobs[1:nu, 1:nu] <-
+  Sigma_pred[1:nu, 1:nu] <-
     sigma_sq * exp(-distMatrixUnobs[1:nu, 1:nu] / phi) + tau_sq * identityMatrix(d = nu)
   
-  Sigma_obs_unobs[1:n, 1:nu] <-
+  Sigma_obs_pred[1:n, 1:nu] <-
     sigma_sq * exp(-distMatrixObsUnobs[1:n, 1:nu] / phi) 
   
   for (site in 1:n) {
@@ -670,20 +671,20 @@ Example10_10Code <-  nimbleCode ({
   # Spatial predictions
   
   for (usite in 1:nu) {
-    mean.unobs.site[usite] <-
-      beta0 + beta1 * easting_unobs[usite] + beta2 * northing_unobs[usite]
+    mean.pred.site[usite] <-
+      beta0 + beta1 * easting_pred[usite] + beta2 * northing_pred[usite]
   }
   
-  mean_sigma[1:nu] <- t(Sigma_obs_unobs[1:n, 1:nu])%*% 
+  mean_sigma[1:nu] <- t(Sigma_obs_pred[1:n, 1:nu])%*% 
     inverse(Sigma_obs[1:n, 1:n])%*%(y[1:n] - mean.site[1:n])
   
-  mu_unobs[1:nu] <-
-    mean.unobs.site[1:nu] + mean_sigma[1:nu]
+  mu_pred[1:nu] <-
+    mean.pred.site[1:nu] + mean_sigma[1:nu]
   
-  cov_unobs[1:nu, 1:nu] <-
-    Sigma_unobs[1:nu, 1:nu] - t(Sigma_obs_unobs[1:n, 1:nu]) %*% inverse(Sigma_obs[1:n, 1:n]) %*% Sigma_obs_unobs[1:n, 1:nu]
+  cov_pred[1:nu, 1:nu] <-
+    Sigma_pred[1:nu, 1:nu] - t(Sigma_obs_pred[1:n, 1:nu]) %*% inverse(Sigma_obs[1:n, 1:n]) %*% Sigma_obs_pred[1:n, 1:nu]
   
-  y_unobs[1:nu]  ~  dmnorm(mu_unobs[1:nu], cov = cov_unobs[1:nu, 1:nu])
+  y_pred[1:nu]  ~  dmnorm(mu_pred[1:nu], cov = cov_pred[1:nu, 1:nu])
   
   # Set up the priors for the spatial model
   
@@ -712,8 +713,8 @@ ex.data <-
     y = Mtl_benzene_sample$y,
     easting = easting_scaled,
     northing = northing_scaled,
-    easting_unobs = predCoords_five[,1],
-    northing_unobs = predCoords_five[,2],
+    easting_pred = predCoords_five[,1],
+    northing_pred = predCoords_five[,2],
     distMatrix = obsDist,
     distMatrixUnobs = pred2predDist,
     distMatrixObsUnobs = obs2predDist
@@ -726,13 +727,12 @@ params <-
     "tau",
     "sigma",
     "tau_sq",
-    "y_unobs",
+    "y_pred",
     "sigma_sq")
 inits <- list(sigma = 0.1,
               phi_inv = 6 / max(obsDist),
               tau = 0.1)
 # Run model in nimble
-start_time <- Sys.time()
 
 mcmc.out <- nimbleMCMC(
   code = Example10_10Code,
@@ -748,9 +748,7 @@ mcmc.out <- nimbleMCMC(
   summary = TRUE,
   samplesAsCodaMCMC = TRUE
 )
-end_time <- Sys.time()
-run_time <- end_time - start_time
-run_time
+
 
 ```
 
@@ -763,8 +761,99 @@ plot(mcmc.out$samples[, c("beta2")], bty = "n", main = "beta2")
 plot(mcmc.out$samples[, c("sigma")], bty = "n", main = "sigma")
 plot(mcmc.out$samples[, c("tau")], bty = "n", main = "tau")
 plot(mcmc.out$samples[, c("phi")], bty = "n", main = "phi")
-mcmc.out$summary$all.chains[c("beta0", "beta1", "beta2", "sigma_sq", "tau_sq", "phi"), ]
+mcmc.out$summary$all.chains
 ```
+### Stan{-}
+
+
+```{r Ex 10.10 stan load data}
+
+# Load data predictions
+# Obtain coordinates for predictions 
+# note that we are using the same coordinates as the one generated for 
+# the kriging example
+Mtl_centroids_df <- as.data.frame(MtlPred)
+predCoords <- unname(as.matrix(Mtl_centroids_df))
+
+# Scale coordinates for predictive locations
+predCoords_sc <- predCoords 
+predCoords_sc[,1] <-
+  (predCoords_sc[,1] - mean(Mtl_benzene_sample$easting)) / sd(Mtl_benzene_sample$easting)
+predCoords_sc[,2] <- 
+  (predCoords_sc[,2] - mean(Mtl_benzene_sample$northing)) / sd(Mtl_benzene_sample$northing)
+
+# As an example we are only going to predict 5 locations  
+
+nu <- 5
+predCoords_five <- predCoords_sc[1:nu,]
+
+obs2predDist <- fields::rdist(obsCoords, predCoords[1:nu,])
+pred2predDist <- fields::rdist(predCoords[1:nu,])
+
+```
+
+
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/Example10_10.stan
+``` 
+
+
+```{r Ex 10.10 stan exponential model, warning = FALSE, message = FALSE, cache = TRUE}
+set.seed(1)
+easting_scaled <- as.vector(scale(Mtl_benzene_sample$easting))
+northing_scaled <- as.vector(scale(Mtl_benzene_sample$northing))
+
+N <- nrow(benzene_utm_df)
+# Change coordinates to kilometers
+X <- data.frame(easting = easting_scaled,
+                northing = northing_scaled) 
+
+ex.data <- list(
+  N = N,
+  N_pred = nrow(predCoords_five),
+  p = 2,
+  y =   log(benzene_utm_df$Benzene),
+  obs_dist_matrix = obsDist,
+  obs_pred_dist_matrix = obs2predDist,
+  pred_dist_matrix = pred2predDist,
+  X = as.matrix(X),
+  X_pred = predCoords_five
+)
+
+Example10_10Stan  <- stan(
+  file = "functions/Example10_10.stan",
+  data = ex.data,
+  warmup = 10000,
+  iter = 20000,
+  chains = 2,
+  thin = 10,
+  pars = c("beta0", "beta", "sigma_sq", "tau_sq", "phi", "y_pred"),
+  include = TRUE
+)
+
+```
+
+
+```{r  Ex 10.10 stan exp traceplots, warning = FALSE}
+
+rstan::traceplot(Example10_10Stan, pars = c("beta0","beta","sigma_sq", "tau_sq", "phi", "y_pred[1]", "y_pred[5]"))
+
+```
+
+```{r Ex 10.10 stan exp results}
+summary_exp_stan <-
+  summary(
+    Example10_10Stan,
+    pars = c("beta0","beta", "sigma_sq", "tau_sq",  "phi", "y_pred"),
+    probs = c(0.025, 0.975)
+  )
+
+summary_exp_stan$summary
+
+```
+
+
+
 
 
 ## Example 10.11: INLA, creating a mesh {-}

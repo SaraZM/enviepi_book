@@ -645,7 +645,7 @@ loglikcar <- extract_log_lik(Example9_3Stan)
 waiccar <- waic(loglikcar)
 waiccar
 
-traceplot(Example9_3Stan, pars = c("beta0","beta","sigma_s"))
+rstan::traceplot(Example9_3Stan, pars = c("beta0","beta","sigma_s"))
 
 ```
 
