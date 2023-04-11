@@ -1092,6 +1092,209 @@ ggplot() +
 
 ### Stan
 
+Here, we implement the CAR model using `stan`.
+
+```{r Ex 9.6 stan clean, include = FALSE}
+rm(list=ls())
+```
+
+
+```{r Ex 9.6 stan load, message=FALSE, echo = FALSE, warning=FALSE, message= FALSE}
+
+library(ggplot2)
+library(loo) # To calculate WAIC and loo later
+library(rstan) 
+library(spdep) 
+
+# Additional settings for stan
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+# Load data
+# Reading in borders
+england <- read_sf("data/englandlocalauthority.shp")
+# Reading in data
+observed <-
+  read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
+expected <-
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv")
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
+
+```
+
+
+We will need two functions to structure the matrix of neighbors that will be needed in `stan`.
+
+```{r Ex 9.6 stan munge functions, echo = TRUE}
+
+adjlist = function(W, N) {
+  adj = 0
+  for (i in 1:N) {
+    for (j in 1:N) {
+      if (W[i, j] == 1) {
+        adj = append(adj, j)
+      }
+    }
+  }
+  adj = adj[-1]
+  return(adj)
+}
+
+mungeCARdata4stan = function(adjBUGS, numBUGS) {
+  N = length(numBUGS)
+  nn = numBUGS
+  N_edges = length(adjBUGS) / 2
+  node1 = vector(mode = "numeric", length = N_edges)
+  node2 = vector(mode = "numeric", length = N_edges)
+  iAdj = 0
+  iEdge = 0
+  
+  for (i in 1:N) {
+    for (j in 1:nn[i]) {
+      iAdj = iAdj + 1
+      if (i < adjBUGS[iAdj]) {
+        iEdge = iEdge + 1
+        node1[iEdge] = i
+        node2[iEdge] = adjBUGS[iAdj]
+      }
+    }
+  }
+  return (list(
+    "N" = N,
+    "N_edges" = N_edges,
+    "node1" = node1,
+    "node2" = node2
+  ))
+  
+}
+```
+
+
+
+This model is in a separate file called `Example8_3.stan` that will be called later.
+
+```{r engine='bash', comment='', echo = FALSE}
+cat functions/Example9_6.stan
+``` 
+<!-- REVIEW: I am missing the adjacency matrix but I calculated like they did for the CARBayes example, is that right? -->
+
+Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
+
+
+```{r Ex 9.6 stan car effects, warning=FALSE, results='hide', message = FALSE, cache=TRUE}
+
+# Create the neighborhood
+W.nb <-
+  poly2nb(england, row.names = rownames(england))
+# Creates a matrix for following function call
+W.mat <- nb2mat(W.nb, style = "B")
+
+# Define the spatial structure to use in stan
+N <- length(unique(england$ID))
+neigh <- adjlist(W.mat, N)
+numneigh  <-  apply(W.mat, 2, sum)
+nbs <- mungeCARdata4stan(neigh, numneigh)
+
+
+# Define data and variables for Stan model
+y <- copd_df$Y2010
+E <- copd_df$E2010
+X <- as.numeric(scale(copd_df$Average.Score))
+
+ex.data <- list(
+  N =  nbs$N,
+  y = y,
+  E = E,
+  p = 1,
+  X = as.matrix(X),
+  N_edges = nbs$N_edges,
+  node1 = nbs$node1,
+  node2 = nbs$node2
+)
+
+Example9_6Stan  <- stan(
+  file = "functions/Example9_6.stan",
+  data = ex.data,
+  warmup = 10000,
+  iter = 20000,
+  chains = 2,
+  thin = 10,
+  pars = c("beta0", "beta","sigma_s", "b", "log_lik", "rho"),
+  include = TRUE
+)
+
+```
+
+
+Show traceplots.
+
+```{r Ex 9.6 stan CAR traceplots}
+#computing WAIC using the package loo
+
+loglikcar <- extract_log_lik(Example9_3Stan)
+waiccar <- waic(loglikcar)
+waiccar
+
+rstan::traceplot(Example9_3Stan, pars = c("beta0","beta","sigma_s"))
+
+```
+
+Show the posterior summary for the parameters if interest. 
+Keep in mind that in the stan model the we are sampling the standard deviation of the random effect unlike `CARBayes` where the variance is obtained.
+
+```{r Ex 9.6 stan CAR results, echo = TRUE}
+
+# Extract samples
+summary_CAR_stan <-
+  summary(
+    Example9_3Stan,
+    pars = c("beta0", "beta","sigma_s"),
+    probs = c(0.025, 0.975)
+  )
+
+summary_CAR_stan$summary
+
+```
+
+
+
+Map the mean of the posterior estimate for the latent effect.
+
+```{r Ex 9.6 plot map stan}
+
+summary_CAR_stan_b <-
+  summary(
+    Example9_6Stan,
+    pars = c("b"),
+    probs = c(0.025, 0.975)
+  )
+
+observed <- tibble::rownames_to_column(observed, "ID")
+
+summary_CAR_stan_b$ID <- observed$ID
+
+CAR_stan_merge <- merge(england, summary_CAR_stan_b, by = "ID") 
+
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = CAR_stan_merge, aes(fill = summary.mean)) + 
+  # Change legend's label
+  labs(fill = 'Latent effects stan') +
+  # Clear background and plot borders
+  theme_void()
+
+
+```
+
 ### CARBayes
 
 
