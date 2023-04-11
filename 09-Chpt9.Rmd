@@ -430,7 +430,7 @@ inits <-  list(
   sigma_b = 1,
   b = rnorm(N)
 )
-params <- c("beta0","beta1", "fitted", "b", "sigma_b")
+params <- c("beta0","beta1", "fitted", "b", "tau")
 # Run model in nimble
 mcmc.out <- nimbleMCMC(
   code = Example9_3Nimble,
@@ -459,14 +459,14 @@ min(coda::effectiveSize(mcmc.out$samples))
 plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
 plot(mcmc.out$samples[, c("beta1")], bty = "n")
 plot(mcmc.out$samples[, c("b[2]")], bty = "n")
-plot(mcmc.out$samples[, c("sigma_b")], bty = "n")
+plot(mcmc.out$samples[, c("tau")], bty = "n")
 ```
 
 
 ```{r Ex 9.3 nimble CAR summary, echo = TRUE}
 
 # Extract samples
-variables <- c("beta0", "beta1","sigma_b")
+variables <- c("beta0", "beta1","tau")
 summary_CAR_nimble <- mcmc.out$summary$all.chains
 summary_CAR_nimble[variables,]
 
@@ -700,7 +700,6 @@ ggplot() +
 
 ## Example 9.4: Fitting a conditional spatial model using CARBayes {-}
 
-
 ```{r Ex 9.4 clean, include=FALSE}
 rm(list=ls())
 ```
@@ -906,3 +905,302 @@ ggplot() +
   theme_void()
 
 ```
+
+## Example 9.6: Fitting a Leroux Model using Nimble, Stan and CARBayes
+
+### Nimble
+
+```{r Ex 9.6 nimble clean, include = FALSE}
+rm(list=ls())
+```
+
+
+```{r Ex 9.6 nimble load, message=FALSE, warning=FALSE, message= FALSE}
+
+library(ggplot2) # to plot map
+library(spdep) # read the shapefile (read_sf) and build neighbors list (poly2nb)
+library(nimble)
+
+# Load data
+# Reading in borders
+england <- read_sf("data/englandlocalauthority.shp")
+# Reading in data
+observed <-
+  read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
+expected <-
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv")
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
+
+```
+
+
+Define a function to obtain the number of neighbors. 
+
+```{r Ex 9.6 nimble munge functions, echo = TRUE}
+
+adjlist = function(W, N) {
+  adj = 0
+  for (i in 1:N) {
+    for (j in 1:N) {
+      if (W[i, j] == 1) {
+        adj = append(adj, j)
+      }
+    }
+  }
+  adj = adj[-1]
+  return(adj)
+}
+
+```
+
+Define the adjacency matrix and indexes for `stan` using the `nb2mat` and `adjlist`
+
+```{r Ex 9.6 nimble neighborhood}
+
+# Create the neighborhood
+W.nb <-
+  poly2nb(england, row.names = rownames(england))
+# Creates a matrix for following function call
+W.mat <- nb2mat(W.nb, zero.policy = TRUE, style = "B")
+# Define the spatial structure to use in stan
+N <- length(unique(england$ID))
+neigh  <- adjlist(W.mat, N)
+numneigh  <- apply(W.mat,2,sum)
+
+# Define the precision matrix of Leroux
+Q <- matrix(0, nrow = nrow(W.mat), ncol = ncol(W.mat))
+diag(Q) <- apply(W.mat, 1, sum)
+Q <- Q - W.mat
+
+```
+
+```{r Ex 9.6 nimble leroux model, warning=FALSE, message = FALSE, results='hide', cache = TRUE}
+
+Example9_6Nimble <- nimbleCode({
+  # Likelihood
+  for (i in 1:N) {
+    y[i] ~ dpois(lambda[i])
+    log(lambda[i]) <- log(E[i]) + b[i] + beta1*x[i]
+    b_centered[i] <- b[i] - b_mean
+  }
+  
+  PrecMat[1:N, 1:N] <- tau*(rho*Q[1:N, 1:N] + (1-rho)*diag(N))
+  mean_b[1:N] <- nimRep(beta0, N)
+
+  b_mean <- sum(b[1:N])/N
+    # Priors
+  beta0 ~ dnorm(0, sd = 1) 
+  beta1 ~ dnorm(0, sd = 1)
+  b[1:N] ~ dmnorm(mean = mean_b[1:N], prec = PrecMat[1:N, 1:N])
+  tau <- 1 / (sigma_b ^ 2)
+  sigma_b ~ T(dt(0,1,1),0,)
+  rho ~ dunif(0, 1)
+  # Fitted values and likelihood for WAIC
+  for (i in 1:N) {
+    fitted[i] ~ dpois(lambda[i])
+  }
+})
+
+#  Define the constants, data and initial values lists and run the model. 
+
+# constants list
+constants <- list(
+  N = N,
+  E = copd_df$E2010,
+  Q = Q
+)
+# data list
+ex.data <-
+  list(y = copd_df$Y2010, 
+       x = as.vector(scale(copd_df$Average.Score))) # vector of covariates
+inits <-  list(
+  beta0 = rnorm(1),
+  beta1 = rnorm(1),
+  fitted = rpois(N, 2),
+  sigma_b = 1,
+  b = rnorm(N),
+  rho = 0.5
+)
+params <- c("beta0", "beta1","fitted", "b", "sigma_b", "tau" ,"rho")
+# Run model in nimble
+mcmc.out <- nimbleMCMC(
+  code = Example9_6Nimble,
+  constants = constants,
+  data = ex.data,
+  inits = inits,
+  monitors = params,
+  niter = 40000,
+  nburnin = 20000,
+  thin = 14,
+  WAIC = TRUE,
+  nchains = 2,
+  summary = TRUE,
+  samplesAsCodaMCMC = TRUE
+)
+
+```
+
+Show the WAIC, effective sample size, and trace plots for some of the parameters.
+
+
+```{r Ex 9.6 WAIC, ESS and traceplots }
+
+mcmc.out$WAIC
+min(coda::effectiveSize(mcmc.out$samples))
+plot(mcmc.out$samples[, c("beta0")], bty = "n", main = "beta0")
+plot(mcmc.out$samples[, c("beta1")], bty = "n",  main = "beta1")
+plot(mcmc.out$samples[, c("b[2]")], bty = "n",  main = "b[2]")
+plot(mcmc.out$samples[, c("sigma_b")], bty = "n", main = "sigma_b")
+```
+
+
+```{r Ex 9.6 nimble leroux summary, echo = TRUE}
+
+# Extract samples
+variables <- c("beta0", "beta1","sigma_b", "rho")
+summary_CAR_nimble <- mcmc.out$summary$all.chains
+summary_CAR_nimble[variables,]
+
+```
+
+Map the mean of the posterior estimate for the latent effect.
+
+```{r Ex 9.6 plot map nimble}
+
+samples_CAR_b <-
+  summary_CAR_nimble[grepl("b\\[", rownames(summary_CAR_nimble)), ] |> as.data.frame()
+observed <- tibble::rownames_to_column(observed, "ID")
+samples_CAR_b$ID <- observed$ID
+CAR_nimble_merge <- merge(england, samples_CAR_b, by = "ID")
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = CAR_nimble_merge, aes(fill = Mean)) +
+  # Change legend's label
+  labs(fill = 'Latent effects nimble') +
+  # Clear background and plot borders
+ theme_void()
+```
+
+### Stan
+
+### CARBayes
+
+
+```{r Ex 9.6 clean, include=FALSE}
+rm(list=ls())
+```
+
+
+```{r Ex 9.6 carbayes load, message=FALSE, warning=FALSE, message= FALSE}
+
+library(CARBayes)
+library(ggplot2)
+library(sf)
+library(spdep)
+
+# Reading in borders
+england <- read_sf("data/englandlocalauthority.shp")
+# Reading in data
+observed <-
+  read.csv(file = "data/copdmortalityobserved.csv", row.names = 1)
+expected <-
+  read.csv(file = "data/copdmortalityexpected.csv")
+covariates <- read.csv(file = "data/copdavgscore.csv") 
+# Merge everything into one data frame
+copd_df <-
+  cbind(observed,  expected) |> merge(
+    covariates,
+    by.x = "code",
+    by.y = "LA.CODE",
+    all.x = TRUE,
+    all.y = FALSE
+  )
+copd_df$Average.Score <- as.numeric(scale(copd_df$Average.Score))
+
+```
+
+
+```{r Ex 9.6 carbayes neighborhood}
+
+# Create the neighborhood
+W.nb <-
+  poly2nb(england, row.names = rownames(england))
+
+# Creates a matrix for following function call
+W.mat <- nb2mat(W.nb, style = "B")
+
+```
+
+```{r Ex 9.6 carbayes run, results='hide', message = FALSE, cache = TRUE}
+
+# Running smoothing model
+Ex9_6 <-
+  S.CARleroux(
+    # Model Formula
+    formula = Y2010 ~ offset(log(E2010)) + Average.Score,
+    # data frame with data
+    data = copd_df,
+    # Choosing Poisson Regression
+    family = "poisson",
+    # Neighborhood matrix
+    W = W.mat,
+    # Number of burn in samples
+    burnin = 20000,
+    # Number of MCMC samples
+    n.sample = 100000,
+    thin = 10 
+    # Note that here we don't set rho to any value as it need to be estimated
+  )
+
+```
+
+We can extract the new smoother values from the model output and divide them by the expected values in order to compare both methods. 
+
+
+```{r Ex 9.6 carbayes smoothed SMRs, class.source = 'foldable' }
+
+# Creating a dataset with smoothed SMRs in 2010
+SMR2010 <- Ex9_6$fitted.values /  copd_df$E2010
+SMR_smooth <- as.data.frame(SMR2010, row.names = rownames(observed))
+# Printing first six rows of smoothed SMRs
+head(SMR_smooth)
+# Summarizing smoothed SMRs
+summary(SMR_smooth)
+# Summary of the parameters under the CAR model.
+Ex9_6$summary.results[]
+```
+
+<!-- QUESTION: What do we want the latent effect or the fitted values? -->
+
+Use `ggplot()` and `geom_sf()` to plot the map of the latent spatial effect.
+
+```{r Ex 9.6 carbayes map smoothed SMRs, class.source = 'foldable'}
+
+observed <- tibble::rownames_to_column(observed, "ID")
+phi_car <-  Ex9_6$samples$phi
+
+latent_car_df  <-  data.frame(
+  phi_mean = apply(phi_car, 2, mean),
+  phi_sd = apply(phi_car, 2, sd)
+)
+# Combine latent spatial effect with england dataset
+latent_car_df$ID <- observed$ID
+latent_car_england <-  merge(england, latent_car_df, by = "ID")
+# Creating map of smoothed SMRs in England in 2010
+ggplot() +
+  # Choose spatial object and column for plotting
+  geom_sf(data = latent_car_england, aes(fill = phi_mean)) +
+  labs(fill = 'Latent effects CARbayes Leroux model') +
+  # Clear background and plot borders
+  theme_void()
+```
+
